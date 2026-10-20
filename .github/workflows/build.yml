@@ -107,6 +107,14 @@ jobs:
           Write-Host "签名者：$($s.SignerCertificate.Subject)"
           Write-Host "状态：$($s.Status) $($s.StatusMessage)"
           if (-not $s.SignerCertificate) { exit 1 }
+          # 自动更新的签名比较：同一份签名应通过，签名后被改过的副本应被拒绝
+          New-Item -ItemType Directory -Force sigcheck | Out-Null
+          Copy-Item dist/Folio/Folio.exe sigcheck/Folio.exe
+          $b = [IO.File]::ReadAllBytes("sigcheck/Folio.exe"); $b[4096] = $b[4096] -bxor 0xFF
+          [IO.File]::WriteAllBytes("sigcheck/Folio.exe", $b)
+          python -c "from folio import update as u; a=u.signer('dist/Folio/Folio.exe'); t=u.signer('sigcheck/Folio.exe'); print('same:', u.same_signer(a, a), 'tampered:', u.same_signer(a, t)); assert u.same_signer(a, a) and not u.same_signer(a, t)"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Remove-Item -Recurse -Force sigcheck
       - name: 签名（Windows，Azure Artifact Signing）
         if: runner.os == 'Windows' && env.HAS_AZURE == 'true'
         uses: azure/artifact-signing-action@v2

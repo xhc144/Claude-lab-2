@@ -260,3 +260,17 @@ def test_manifest_signature(tmp_path, monkeypatch):
     other = update_key.public_b64(Ed25519PrivateKey.generate())
     with pytest.raises(update.UpdateError, match="签名无效"):
         update.verify_manifest(signed, other)
+
+
+def test_same_signer_rules():
+    def sig(status, thumb="AA", subject="CN=xhc144"):
+        return {"signed": status != "NotSigned", "valid": status == "Valid",
+                "intact": status in ("Valid", "UnknownError"), "id": subject, "thumb": thumb}
+    self_signed = sig("UnknownError")
+    assert update.same_signer(self_signed, sig("UnknownError"))                   # 同一张自签名证书
+    assert not update.same_signer(self_signed, sig("UnknownError", thumb="BB"))   # 别人用同名自签名证书
+    assert not update.same_signer(self_signed, sig("HashMismatch"))               # 签名后被改过
+    assert not update.same_signer(self_signed, sig("NotSigned", thumb=""))
+    trusted = sig("Valid")
+    assert update.same_signer(trusted, sig("Valid", thumb="CC"))                  # 正式证书续期
+    assert not update.same_signer(trusted, sig("Valid", thumb="CC", subject="CN=other"))

@@ -241,7 +241,10 @@ def _no_window() -> dict:
 
 
 def signer(path: str) -> dict:
-    """读取代码签名：{'signed': bool, 'valid': bool, 'id': 签名者标识}。"""
+    """读取代码签名：{'signed': bool, 'valid': bool, 'intact': bool, 'id': 签名者标识, 'thumb': 证书指纹}。
+
+    valid：签名完整且证书链受信任；intact：签名完整（文件没被改过），但证书可能是自签名的。
+    """
     try:
         if sys.platform == "win32":
             ps = ("$s = Get-AuthenticodeSignature -LiteralPath $env:FOLIO_SIG_PATH; "
@@ -251,16 +254,19 @@ def signer(path: str) -> dict:
                                text=True, timeout=30, env={**os.environ, "FOLIO_SIG_PATH": path}, **_no_window())
             d = json.loads(r.stdout or "{}")
             status = d.get("status") or ""
-            return {"signed": status not in ("", "NotSigned"), "valid": status == "Valid", "id": d.get("subject") or ""}
+            # UnknownError：签名完整，但证书链的根不受信任（自签名证书）
+            return {"signed": status not in ("", "NotSigned"), "valid": status == "Valid",
+                    "intact": status in ("Valid", "UnknownError"), "id": d.get("subject") or "",
+                    "thumb": (d.get("thumb") or "").upper()}
         if sys.platform == "darwin":
             ok = subprocess.run(["codesign", "--verify", "--deep", "--strict", path], capture_output=True).returncode == 0
             r = subprocess.run(["codesign", "-dv", "--verbose=2", path], capture_output=True, text=True)
             team = re.search(r"TeamIdentifier=(\S+)", r.stderr or "")
             team_id = team.group(1) if team and team.group(1) != "not" else ""
-            return {"signed": bool(team_id), "valid": ok, "id": team_id}
+            return {"signed": bool(team_id), "valid": ok, "intact": ok, "id": team_id, "thumb": ""}
     except Exception:
         pass
-    return {"signed": False, "valid": False, "id": ""}
+    return {"signed": False, "valid": False, "intact": False, "id": "", "thumb": ""}
 
 
 def _main_binary(root: str) -> str:
@@ -274,8 +280,16 @@ def verify_same_signer(current_root: str, new_root: str):
     if not cur["signed"]:
         return  # 当前版本没有签名，只能依赖 HTTPS 和 SHA-256
     new = signer(_main_binary(new_root))
-    if not new["valid"] or new["id"] != cur["id"]:
+    if not same_signer(cur, new):
         raise UpdateError("新版本的数字签名与当前版本不一致，已停止更新。")
+
+
+def same_signer(cur: dict, new: dict) -> bool:
+    if not new["intact"]:
+        return False  # 没签名，或者签名后文件被改过
+    if cur.get("thumb") and new.get("thumb") == cur["thumb"]:
+        return True   # 同一张证书（自签名证书也可以）
+    return new["valid"] and bool(new["id"]) and new["id"] == cur["id"]  # 受信任证书续期后指纹会变，按签名者比较
 
 
 # ---------------------------------------------------------------- 安装

@@ -134,6 +134,8 @@ git push origin v0.2.0
 | `WINDOWS_CERT_PFX_BASE64`（也认 `WINDOWS_CERT_PFX`） | 代码签名证书 .pfx 文件的 Base64（PowerShell：`[Convert]::ToBase64String([IO.File]::ReadAllBytes("cert.pfx"))`） |
 | `WINDOWS_CERT_PASSWORD` | .pfx 的密码 |
 
+自签名证书（自己生成的 .pfx）也能用：程序会带上签名、自动更新会按证书指纹确认新版本来自同一张证书，但 Windows 不信任它，SmartScreen 仍会提示「未知发布者」。要去掉这个提示需要受信任机构签发的证书。
+
 注意：2023 年 6 月以后新签发的代码签名证书，私钥必须存放在硬件（U 盾）或云端签名服务里，一般拿不到 .pfx 文件。这种情况推荐用微软的 [Azure Artifact Signing](https://learn.microsoft.com/azure/artifact-signing/)（原 Trusted Signing），设置下面这些 Secret：
 
 | Secret 名称 | 内容 |

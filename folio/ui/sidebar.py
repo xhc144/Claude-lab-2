@@ -378,6 +378,7 @@ class SearchPanel(QWidget):
         row.addWidget(self.next_btn)
         lay.addLayout(row)
         self.info = QLabel("")
+        self.info.setWordWrap(True)
         self.info.setObjectName("Faint")
         lay.addWidget(self.info)
         self.list = QListWidget()
@@ -460,7 +461,12 @@ class SearchPanel(QWidget):
         if end >= n:
             self._step.stop()
             total = len(self._results)
-            self.info.setText(f"共找到 {total} 处" if total else "没有找到")
+            if total:
+                self.info.setText(f"共找到 {total} 处")
+            elif self.doc.looks_scanned():
+                self.info.setText("没有找到。这是扫描件，先用「工具 → 文字识别」识别文字后才能搜索。")
+            else:
+                self.info.setText("没有找到")
             if total and self._cur < 0:
                 self.select(0)
         else:

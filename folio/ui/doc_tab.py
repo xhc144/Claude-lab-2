@@ -1,9 +1,9 @@
 """一个文档标签页：侧栏 + 页面视图 + 朗读条，以及右键菜单。"""
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QIcon, QPixmap
-from PySide6.QtWidgets import QMenu, QSplitter, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QMenu, QPushButton, QSplitter, QVBoxLayout, QWidget
 
 from ..config import Settings
 from ..model.document import ANNOT_LABELS, PdfDocument
@@ -13,6 +13,7 @@ from .page_view import PageView
 from .sidebar import Sidebar
 from .signature import SignTool
 from .tools import TOOL_CLASSES, rgb
+from .widgets import IconButton
 
 
 def color_icon(color: str) -> QIcon:
@@ -43,6 +44,9 @@ class DocTab(QWidget):
         host = ViewHost()
         hl = QVBoxLayout(host)
         hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(0)
+        self.scan_bar = self._build_scan_bar()
+        hl.addWidget(self.scan_bar)
         hl.addWidget(self.view)
         self.host = host
         self.read_bar = ReadBar(main.reader, host)
@@ -73,6 +77,36 @@ class DocTab(QWidget):
         self.view.set_tool(self.tools["select"])
         self.view.contextMenuAt.connect(self._context_menu)
         self.view.readRequested.connect(lambda i, k: main.reader.start(doc, i, k))
+        QTimer.singleShot(400, self._check_scanned)
+
+    # ---------- 扫描件提示 ----------
+    def _build_scan_bar(self) -> QFrame:
+        bar = QFrame()
+        bar.setObjectName("InfoBar")
+        lay = QHBoxLayout(bar)
+        lay.setContentsMargins(14, 6, 8, 6)
+        lay.setSpacing(10)
+        icon = IconButton("scan-text", size=16, color_key="accent")
+        icon.setEnabled(True)
+        lay.addWidget(icon)
+        lay.addWidget(QLabel("这是扫描件，页面上没有文字。识别文字后就能搜索、选择和朗读。"), 1)
+        go = QPushButton("识别文字")
+        go.setProperty("primary", True)
+        go.clicked.connect(lambda: self.main.run_ocr(self))
+        lay.addWidget(go)
+        close = IconButton("x", "不再提示", size=14)
+        close.clicked.connect(bar.hide)
+        lay.addWidget(close)
+        bar.hide()
+        return bar
+
+    def _check_scanned(self):
+        if not self.doc.closed and self.doc.looks_scanned():
+            self.scan_bar.show()
+
+    def refresh_scan_bar(self):
+        if self.scan_bar.isVisible() and not self.doc.looks_scanned():
+            self.scan_bar.hide()
 
     # ---------- 工具 ----------
     def set_tool(self, name: str):

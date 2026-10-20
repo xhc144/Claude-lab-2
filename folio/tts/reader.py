@@ -24,6 +24,7 @@ class ReadAloud(QObject):
     stateChanged = Signal(str)        # idle / loading / playing / paused
     highlight = Signal(object, int, list)  # (doc, 页码, 未旋转矩形列表)；页码 -1 表示清除
     message = Signal(str)
+    needsOcr = Signal(object, int)    # (doc, 页码)：扫描页没有文字，需要先识别
 
     def __init__(self, settings: Settings):
         super().__init__()
@@ -65,12 +66,9 @@ class ReadAloud(QObject):
     def engine_label(self) -> str:
         if self.engine is not None:
             return f"{self.engine.name} · {getattr(self.engine, 'voice_label', '')}"
-        if self.settings.get("tts/engine") == "system":
-            return "系统语音"
-        from .qwen import VOICES
+        from .engines import describe
 
-        v = self.settings.get("tts/voice")
-        return "千问 AI 语音 · " + next((n for k, n, _ in VOICES if k == v), v)
+        return describe(self.settings)
 
     def set_rate(self, rate: float):
         self.settings.set("tts/rate", rate)
@@ -106,6 +104,9 @@ class ReadAloud(QObject):
 
     def start(self, doc, page: int, char_index: int):
         self.stop()
+        if doc.text(page).empty and doc.pages_needing_ocr([page]):
+            self.needsOcr.emit(doc, page)  # 扫描页：先识别文字
+            return
         if not self._ensure_engine():
             return
         self.doc = doc
@@ -119,7 +120,7 @@ class ReadAloud(QObject):
         self.pos = 0
         self._extend()
         if not self.items:
-            self.message.emit("这里没有可朗读的文字（可能是扫描件或图片）。")
+            self.message.emit("这里没有可朗读的文字。")
             return
         self._play_current()
 

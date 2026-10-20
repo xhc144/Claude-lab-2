@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import time
 
 from PySide6.QtCore import QSize, Qt, QTimer
 from PySide6.QtGui import QAction, QActionGroup, QKeySequence, QShortcut
@@ -48,6 +49,8 @@ class MainWindow(QMainWindow):
         self.reader = ReadAloud(settings)
         self.reader.highlight.connect(self._on_read_highlight)
         self.reader.message.connect(lambda m: self.toast(m, 4000))
+        self.reader.needsOcr.connect(self._offer_ocr)
+        self.pending_update: str | None = None
         self.setWindowIcon(app_icon())
         self.setWindowTitle(APP_DISPLAY_NAME)
         self.resize(1360, 880)
@@ -79,6 +82,7 @@ class MainWindow(QMainWindow):
         self._toast = Toast(root)
         self._build_shortcuts()
         self._sync_ui()
+        QTimer.singleShot(6000, self._auto_check_update)
 
     # ================================================================ 构建界面
     def _build_tabstrip(self) -> QWidget:
@@ -232,12 +236,14 @@ class MainWindow(QMainWindow):
         m.addAction("合并文件…", lambda: self.open_tool("merge"))
         m.addAction("拆分 PDF…", lambda: self.open_tool("split"))
         m.addSeparator()
+        self.act_ocr = m.addAction("文字识别（OCR）…", lambda: self.run_ocr())
+        m.addSeparator()
         self.act_insert_blank = m.addAction("在当前页后插入空白页", lambda: self.cur and self.cur.doc.insert_blank(self.cur.view.current_page))
         self.act_insert_file = m.addAction("在当前页后插入文件…", lambda: self.cur and self.cur.sidebar.thumbs._insert_file(self.cur.view.current_page + 1))
         self.act_rotate = m.addAction("旋转当前页", lambda: self.cur and self.cur.doc.rotate_pages([self.cur.view.current_page], 90))
         self.act_delete_page = m.addAction("删除当前页", self._delete_current_page)
         self.act_extract = m.addAction("提取页面…", self._extract_pages)
-        self.page_actions = [self.act_insert_blank, self.act_insert_file, self.act_rotate, self.act_delete_page]
+        self.page_actions = [self.act_insert_blank, self.act_insert_file, self.act_rotate, self.act_delete_page, self.act_ocr]
         return m
 
     def _build_tone_menu(self) -> QMenu:
@@ -276,6 +282,8 @@ class MainWindow(QMainWindow):
         m.addAction("全屏\tF11", self.toggle_fullscreen)
         m.addSeparator()
         m.addAction("设置…", lambda: self.open_settings())
+        m.addAction("AI 中台…", lambda: self.open_settings("ai"))
+        m.addAction("检查更新…", lambda: self.check_update(silent=False))
         m.addAction("关于 Folio", self.about)
         m.addSeparator()
         m.addAction("退出", self.close)
@@ -696,6 +704,103 @@ class MainWindow(QMainWindow):
                 if page >= 0:
                     t.show_read_bar()
 
+    # ================================================================ 文字识别
+    def run_ocr(self, tab: DocTab | None = None, pages: list[int] | None = None, autostart: bool = False) -> bool:
+        """打开识别窗口；返回是否识别了至少一页。"""
+        tab = tab or self.cur
+        if tab is None:
+            return False
+        if not tab.doc.editable:
+            self.toast("只有 PDF 文件可以识别文字，可以先「另存为」PDF")
+            return False
+        from .dialogs.ocr_dialog import OcrDialog
+
+        d = OcrDialog(self, tab, pages, autostart)
+        done = []
+        d.recognized.connect(done.append)
+        d.exec()
+        if done:
+            tab.refresh_scan_bar()
+            if tab.sidebar.search.edit.text().strip():
+                tab.sidebar.search.run(force=True)
+            self._sync_ui()
+        return bool(done)
+
+    def _offer_ocr(self, doc, page: int):
+        tab = next((t for t in self.tabs_widgets if t.doc is doc), None)
+        if tab is None:
+            return
+        from ..ocr.runner import describe_plan
+
+        todo = doc.pages_needing_ocr()
+        box = QMessageBox(self)
+        box.setWindowTitle("朗读扫描件")
+        box.setIcon(QMessageBox.Question)
+        box.setText(f"第 {page + 1} 页是扫描件或图片，还没有可以朗读的文字。\n先识别文字就能朗读了。")
+        box.setInformativeText(f"识别方式：{describe_plan(self.settings)}")
+        one = box.addButton("识别这一页并朗读", QMessageBox.AcceptRole)
+        allb = box.addButton(f"识别全部 {len(todo)} 页", QMessageBox.AcceptRole) if len(todo) > 1 else None
+        box.addButton("取消", QMessageBox.RejectRole)
+        box.setDefaultButton(one)
+        box.exec()
+        clicked = box.clickedButton()
+        if clicked is one:
+            pages = [page]
+        elif allb is not None and clicked is allb:
+            pages = [p for p in todo if p >= page] + [p for p in todo if p < page]
+        else:
+            return
+        self.run_ocr(tab, pages, autostart=True)
+        if not doc.closed and not doc.pages_needing_ocr([page]):
+            tab.show_read_bar()
+            self.reader.start(doc, page, 0)
+
+    # ================================================================ 更新
+    def _auto_check_update(self):
+        from .. import update
+
+        st = self.settings
+        if not st.get("update/auto") or os.environ.get("FOLIO_NO_UPDATE"):
+            return
+        if time.time() - float(st.get("update/last_check") or 0) < update.CHECK_INTERVAL:
+            return
+        self.check_update(silent=True)
+
+    def check_update(self, silent: bool = False, dialog_parent=None, status=None):
+        from .. import update
+        from .dialogs.base import Worker
+
+        feed = self.settings.get("update/feed") or ""
+        worker = Worker(lambda progress, cancel: update.check(feed), self)
+
+        def done(info):
+            self.settings.set("update/last_check", time.time())
+            if info is None:
+                msg = f"已经是最新版本（{__version__}）"
+                if status:
+                    status(msg)
+                elif not silent:
+                    QMessageBox.information(dialog_parent or self, "检查更新", msg)
+                return
+            if silent and info.version == self.settings.get("update/skip"):
+                return
+            if status:
+                status(f"发现新版本 {info.version}")
+            from .dialogs.update_dialog import UpdateDialog
+
+            UpdateDialog(self, info, dialog_parent).exec()
+
+        def failed(msg):
+            if status:
+                status(f"⚠ {msg}")
+            elif not silent:
+                QMessageBox.warning(dialog_parent or self, "检查更新", msg)
+        worker.done.connect(done)
+        worker.failed.connect(failed)
+        worker.finished.connect(worker.deleteLater)
+        self._update_worker = worker
+        worker.start()
+
     # ================================================================ 其它窗口
     def open_tool(self, key: str, paths: list[str] | None = None):
         from .dialogs.tool_dialogs import open_tool_dialog
@@ -772,4 +877,11 @@ class MainWindow(QMainWindow):
         for tab in self.tabs_widgets:
             tab.cleanup()
         self.settings.sync()
+        if self.pending_update:
+            from .. import update
+
+            try:
+                update.launch_installer(self.pending_update)
+            except Exception as ex:  # noqa: BLE001
+                QMessageBox.warning(self, "更新", f"无法安装更新：{ex}")
         super().closeEvent(e)

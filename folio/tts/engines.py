@@ -46,20 +46,20 @@ class TtsEngine(QObject):
         self.stop()
 
 
-# ============================================================ 千问
+# ============================================================ 在线语音（千问 / OpenAI 兼容）
 class _Bridge(QObject):
     ready = Signal(int, str, str)  # token, 音频文件路径, 错误信息
 
 
 class _SynthTask(QRunnable):
-    def __init__(self, token: int, text: str, path: str, params: dict, bridge: _Bridge):
+    def __init__(self, token: int, text: str, path: str, synth, bridge: _Bridge):
         super().__init__()
-        self.token, self.text, self.path, self.params, self.bridge = token, text, path, params, bridge
+        self.token, self.text, self.path, self.synth, self.bridge = token, text, path, synth, bridge
 
     def run(self):
         try:
             if not os.path.exists(self.path):
-                data = qwen.synthesize(self.text, **self.params)
+                data = self.synth(self.text)
                 tmp = self.path + f".{self.token}.part"
                 with open(tmp, "wb") as f:
                     f.write(data)
@@ -75,16 +75,16 @@ class _SynthTask(QRunnable):
             pass  # 引擎已关闭（例如切换了音色或退出程序）
 
 
-class QwenEngine(TtsEngine):
-    name = "千问 AI 语音"
+class CloudEngine(TtsEngine):
+    """联网合成：每句合成为 wav 文件缓存到本地再播放，同时预合成后面几句。"""
 
-    def __init__(self, settings: Settings):
+    def __init__(self, name: str, voice_label: str, cache_tag: str, synth, rate: float = 1.0):
         super().__init__()
-        self.params = dict(api_key=settings.api_key(), model=settings.get("tts/model"),
-                           voice=settings.get("tts/voice"), language=settings.get("tts/language"),
-                           region=settings.get("tts/region"), custom_url=settings.get("tts/base_url") or "")
-        self.rate = float(settings.get("tts/rate") or 1.0)
-        self.voice_label = next((f"{n}" for v, n, _ in qwen.VOICES if v == self.params["voice"]), self.params["voice"])
+        self.name = name
+        self.voice_label = voice_label
+        self.cache_tag = cache_tag
+        self.synth = synth
+        self.rate = rate
         self._dir = cache_dir("tts")
         self._pool = QThreadPool(self)
         self._pool.setMaxThreadCount(2)
@@ -106,15 +106,14 @@ class QwenEngine(TtsEngine):
         _trim_cache(self._dir)
 
     def _path_for(self, text: str) -> str:
-        p = self.params
-        key = hashlib.sha1(f"{p['model']}|{p['voice']}|{p['language']}|{text}".encode("utf-8")).hexdigest()
+        key = hashlib.sha1(f"{self.cache_tag}|{text}".encode("utf-8")).hexdigest()
         return os.path.join(self._dir, key + ".wav")
 
     def _request(self, token: int, text: str):
         if token in self._requested:
             return
         self._requested.add(token)
-        self._pool.start(_SynthTask(token, text, self._path_for(text), self.params, self._bridge))
+        self._pool.start(_SynthTask(token, text, self._path_for(text), self.synth, self._bridge))
 
     def prefetch(self, token: int, text: str):
         self._request(token, text)
@@ -274,8 +273,52 @@ class SystemEngine(TtsEngine):
         self._tts.setRate(max(-1.0, min(1.0, (rate - 1.0) if rate >= 1 else (rate - 1.0) * 2)))
 
 
+# OpenAI 语音接口的内置音色
+OPENAI_VOICES = ["alloy", "ash", "ballad", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer", "verse"]
+
+
+def tts_connection(settings: Settings):
+    """当前选用的 AI 语音连接；选的连接被删掉时退回第一个支持语音的连接。"""
+    from ..ai.hub import Hub
+
+    hub = Hub(settings)
+    conn = hub.get(settings.get("tts/engine"))
+    if conn is None or not conn.tts:
+        conn = next(iter(hub.tts_connections()), None)
+    return conn
+
+
+def describe(settings: Settings) -> str:
+    if settings.get("tts/engine") == "system":
+        return "系统语音"
+    conn = tts_connection(settings)
+    if conn is None:
+        return "AI 语音（未设置）"
+    if conn.tts == "qwen":
+        v = settings.get("tts/voice")
+        return "千问 AI 语音 · " + next((n for k, n, _ in qwen.VOICES if k == v), v)
+    return f"{conn.name} · {settings.get('tts/oa_voice') or 'alloy'}"
+
+
 def make_engine(settings: Settings) -> TtsEngine:
     if settings.get("tts/engine") == "system":
         return SystemEngine(settings)
-    return QwenEngine(settings)
+    from ..ai import client
+    from ..ai.hub import dashscope_host
+
+    conn = tts_connection(settings)
+    if conn is None:
+        raise RuntimeError("没有可用的 AI 语音，请到「设置 → 朗读」选择语音来源，或改用系统语音。")
+    rate = float(settings.get("tts/rate") or 1.0)
+    if conn.tts == "qwen":
+        params = dict(api_key=conn.key(), model=settings.get("tts/model") or "qwen3-tts-flash",
+                      voice=settings.get("tts/voice"), language=settings.get("tts/language"),
+                      host=dashscope_host(conn.base_url))
+        label = next((n for v, n, _ in qwen.VOICES if v == params["voice"]), params["voice"])
+        tag = f"{params['model']}|{params['voice']}|{params['language']}"  # 与旧版缓存保持一致
+        return CloudEngine("千问 AI 语音", label, tag, lambda text: qwen.synthesize(text, **params), rate)
+    model = settings.get("tts/oa_model") or (conn.p.tts_models[0] if conn.p.tts_models else "tts-1")
+    voice = settings.get("tts/oa_voice") or "alloy"
+    return CloudEngine(conn.name, voice, f"{conn.base_url}|{model}|{voice}",
+                       lambda text: client.speech(conn, model, voice, text), rate)
 

@@ -9,11 +9,7 @@ import json
 import urllib.error
 import urllib.request
 
-REGIONS = {
-    "beijing": ("中国大陆（北京）", "https://dashscope.aliyuncs.com"),
-    "singapore": ("国际（新加坡）", "https://dashscope-intl.aliyuncs.com"),
-    "custom": ("自定义地址", ""),
-}
+DEFAULT_HOST = "https://dashscope.aliyuncs.com"
 
 MODELS = ["qwen3-tts-flash", "qwen-tts", "qwen-tts-latest"]
 
@@ -65,16 +61,10 @@ class QwenError(RuntimeError):
     pass
 
 
-def base_url(region: str, custom: str = "") -> str:
-    if region == "custom" and custom.strip():
-        return custom.strip().rstrip("/")
-    return REGIONS.get(region, REGIONS["beijing"])[1]
-
-
 def _friendly(code: str, message: str, status: int) -> str:
     code_l = (code or "").lower()
     if status == 401 or "invalidapikey" in code_l or "apikey" in code_l:
-        return "千问 API Key 无效，请在「设置 → 朗读」中检查（注意北京和新加坡地域的 Key 不通用）。"
+        return "千问 API Key 无效，请在「设置 → AI 中台」中检查（注意国内版和国际版的 Key 不通用）。"
     if status == 429 or "throttl" in code_l or "ratelimit" in code_l:
         return "千问语音请求太频繁或额度不足，请稍后再试。"
     if "arrearage" in code_l or "quota" in code_l:
@@ -120,13 +110,12 @@ def normalize_wav(data: bytes) -> bytes:
 
 
 def synthesize(text: str, *, api_key: str, model: str = "qwen3-tts-flash", voice: str = "Cherry",
-               language: str = "Auto", region: str = "beijing", custom_url: str = "", timeout: float = 60,
-               retries: int = 1) -> bytes:
-    """合成一段文字，返回 wav 音频字节。"""
+               language: str = "Auto", host: str = DEFAULT_HOST, timeout: float = 60, retries: int = 1) -> bytes:
+    """合成一段文字，返回 wav 音频字节。host 是 DashScope 域名（国内版 / 国际版）。"""
     if not api_key:
-        raise QwenError("还没有设置千问 API Key。请到「设置 → 朗读」填写，或改用系统语音。")
+        raise QwenError("还没有设置千问 API Key。请到「设置 → AI 中台」填写，或改用系统语音。")
     text = text[:MAX_CHARS]
-    url = base_url(region, custom_url) + "/api/v1/services/aigc/multimodal-generation/generation"
+    url = (host or DEFAULT_HOST).rstrip("/") + "/api/v1/services/aigc/multimodal-generation/generation"
     payload = {"model": model, "input": {"text": text, "voice": voice}}
     if language and language != "Auto":
         payload["input"]["language_type"] = language
@@ -145,8 +134,8 @@ def synthesize(text: str, *, api_key: str, model: str = "qwen3-tts-flash", voice
         raise QwenError(_friendly(err.get("code", ""), err.get("message", ""), ex.code)) from None
     except (urllib.error.URLError, OSError) as ex:  # 网络错误或超时：重试一次
         if retries > 0:
-            return synthesize(text, api_key=api_key, model=model, voice=voice, language=language, region=region,
-                              custom_url=custom_url, timeout=timeout, retries=retries - 1)
+            return synthesize(text, api_key=api_key, model=model, voice=voice, language=language, host=host,
+                              timeout=timeout, retries=retries - 1)
         reason = getattr(ex, "reason", ex)
         if isinstance(ex, TimeoutError) or "timed out" in str(reason):
             raise QwenError("连接千问服务超时，请检查网络") from None

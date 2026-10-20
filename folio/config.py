@@ -31,16 +31,23 @@ DEFAULTS: dict = {
     "sign/path": "",
     "sign/width": 140,
     "laser/color": "#FF3B30",
-    "tts/engine": "qwen",           # qwen / system
-    "tts/api_key": "",
-    "tts/region": "beijing",        # beijing / singapore / custom
-    "tts/base_url": "",
+    "tts/engine": "qwen",           # system，或 AI 中台里某个连接的 id
     "tts/model": "qwen3-tts-flash",
     "tts/voice": "Cherry",
     "tts/language": "Auto",
     "tts/rate": 1.0,
     "tts/skip_margins": True,
     "tts/system_voice": "",
+    "tts/oa_model": "",             # OpenAI 兼容语音的模型和音色
+    "tts/oa_voice": "alloy",
+    "ocr/engine": "system",         # system，或 AI 中台里某个连接的 id
+    "ocr/model": "",
+    "ocr/language": "",             # 系统识别的语言，空为自动
+    "ocr/fix": "",                  # AI 校对用的连接 id，空为不校对
+    "ocr/fix_model": "",
+    "update/auto": True,
+    "update/last_check": 0,
+    "update/skip": "",
     "print/annots": True,
     "print/gray": False,
     "print/nup": 1,
@@ -70,10 +77,6 @@ class Settings:
 
     def sync(self):
         self._qs.sync()
-
-    # ---------- 千问 Key ----------
-    def api_key(self) -> str:
-        return (self.get("tts/api_key") or os.environ.get("DASHSCOPE_API_KEY", "")).strip()
 
     # ---------- 最近文件 ----------
     def recent(self) -> list[dict]:

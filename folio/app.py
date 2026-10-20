@@ -31,6 +31,11 @@ def _send_to_running(paths: list[str]) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv if argv is None else argv)
+    if "--selftest" in argv:
+        from .selftest import run
+
+        k = argv.index("--selftest")
+        return run(argv[k + 1] if k + 1 < len(argv) else "folio-selftest.json")
     if hasattr(Qt, "HighDpiScaleFactorRoundingPolicy"):
         QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     app = QApplication(argv)

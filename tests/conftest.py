@@ -5,6 +5,7 @@ import tempfile
 import pytest
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+os.environ["FOLIO_NO_UPDATE"] = "1"  # 测试时不联网检查更新
 # 测试时把设置写到临时目录，避免污染真实配置
 _cfg = tempfile.mkdtemp(prefix="folio-test-cfg-")
 os.environ["XDG_CONFIG_HOME"] = _cfg

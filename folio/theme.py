@@ -156,6 +156,11 @@ QFrame#Card {{
     border: 1px solid {c['border']};
     border-radius: 12px;
 }}
+QFrame#InfoBar {{
+    background: {c['accent_soft']};
+    border: none;
+    border-bottom: 1px solid {c['border']};
+}}
 QFrame#Hairline {{ background: {c['border']}; max-height: 1px; min-height: 1px; border: none; }}
 QFrame#VHairline {{ background: {c['border']}; max-width: 1px; min-width: 1px; border: none; }}
 QLabel {{ background: transparent; }}

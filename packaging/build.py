@@ -4,6 +4,10 @@
     python packaging/build.py
 
 Windows 生成 dist/Folio/Folio.exe，macOS 生成 dist/Folio.app。
+
+环境变量：
+    FOLIO_VERSION          写入程序的版本号（CI 发布时取自标签，例如 0.2.0）
+    MACOS_SIGN_IDENTITY    macOS 代码签名身份（Developer ID Application: …），由 CI 导入证书后设置
 """
 from __future__ import annotations
 
@@ -47,7 +51,18 @@ def make_icons() -> str | None:
     return None
 
 
+def write_version() -> str | None:
+    version = os.environ.get("FOLIO_VERSION", "").strip().lstrip("v")
+    path = os.path.join(ROOT, "folio", "_version.py")
+    if version:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(f'VERSION = "{version}"\n')
+        print("version:", version)
+    return version or None
+
+
 def main():
+    write_version()
     icon = make_icons()
     sep = os.pathsep
     args = [
@@ -64,6 +79,18 @@ def main():
         "--exclude-module", "onnxruntime", "--exclude-module", "networkx",
         "--hidden-import", "PySide6.QtTextToSpeech", "--hidden-import", "PySide6.QtMultimedia",
     ]
+    if sys.platform == "win32":  # Windows 自带文字识别（WinRT）
+        args += ["--collect-submodules", "winrt"]
+        for m in ("winrt.windows.media.ocr", "winrt.windows.graphics.imaging", "winrt.windows.storage.streams",
+                  "winrt.windows.globalization", "winrt.windows.foundation", "winrt.windows.foundation.collections"):
+            args += ["--hidden-import", m]
+    if sys.platform == "darwin":  # macOS 自带文字识别（Vision）
+        for m in ("objc", "Foundation", "Quartz", "Vision"):
+            args += ["--hidden-import", m]
+        identity = os.environ.get("MACOS_SIGN_IDENTITY", "").strip()
+        if identity:
+            args += ["--codesign-identity", identity,
+                     "--osx-entitlements-file", os.path.join(ROOT, "packaging", "entitlements.plist")]
     if icon:
         args += ["--icon", icon]
     if sys.platform == "darwin":

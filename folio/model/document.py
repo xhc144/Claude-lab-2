@@ -401,10 +401,11 @@ class PdfDocument(QObject):
         return out
 
     # ---------- 页面管理 ----------
-    def _structural(self, label: str, fn):
-        before = self._fz.tobytes(garbage=0) if self.file_size < SNAPSHOT_LIMIT else None
-        fn()
-        self._structure_touched()
+    def snapshot(self) -> bytes | None:
+        """整份文档的快照，用于撤销大范围改动；文档太大时不做（返回 None）。"""
+        return self._fz.tobytes(garbage=0) if self.file_size < SNAPSHOT_LIMIT else None
+
+    def commit_snapshot(self, label: str, before: bytes | None):
         if before is None:
             self._undo = U.UndoStack()
             self._undo.clean_index = -1  # 标记为已修改
@@ -412,6 +413,48 @@ class PdfDocument(QObject):
             self.modifiedChanged.emit(True)
         else:
             self._push(_LazySnapshot(label, before))
+
+    def _structural(self, label: str, fn):
+        before = self.snapshot()
+        fn()
+        self._structure_touched()
+        self.commit_snapshot(label, before)
+
+    # ---------- 文字识别 ----------
+    def pages_needing_ocr(self, pages: list[int] | None = None) -> list[int]:
+        from ..ocr.layer import needs_ocr
+
+        if not self.is_pdf:
+            return []
+        out = []
+        for i in (range(self.page_count) if pages is None else pages):
+            try:
+                if needs_ocr(self.page(i)):
+                    out.append(i)
+            except Exception:
+                pass
+        return out
+
+    def looks_scanned(self, sample: int = 3) -> bool:
+        """前几页都没有文字但有图片：大概率是扫描件。"""
+        n = min(sample, self.page_count)
+        return self.is_pdf and n > 0 and len(self.pages_needing_ocr(list(range(n)))) == n
+
+    def ocr_image(self, i: int, gray: bool = True):
+        from ..ocr.layer import render_for_ocr
+        from ..ocr.system import OcrImage
+
+        pix = render_for_ocr(self.page(i), gray=gray)
+        return OcrImage(pix.width, pix.height, pix.samples, pix.tobytes("png"), pix.tobytes("jpeg", jpg_quality=85))
+
+    def apply_ocr(self, i: int, lines) -> int:
+        """写入识别出的文字层（调用方负责用 snapshot/commit_snapshot 包成一次撤销）。"""
+        from ..ocr.layer import add_text_layer
+
+        n = add_text_layer(self.page(i), lines)
+        self._text_cache.pop(i, None)
+        self._page_touched(i)
+        return n
 
     def rotate_pages(self, pages: list[int], delta: int):
         xrefs = [self._fz.page_xref(i) for i in pages]

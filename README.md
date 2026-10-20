@@ -1,6 +1,6 @@
 # Folio PDF
 
-一个桌面 PDF 阅读器，可以阅读、批注、朗读和处理 PDF。基于 PySide6 (Qt) 和 PyMuPDF，支持 Windows / macOS / Linux。
+一个桌面 PDF 阅读器，可以阅读、批注、朗读、识别扫描件和处理 PDF。基于 PySide6 (Qt) 和 PyMuPDF，支持 Windows / macOS / Linux。
 
 ![阅读界面](docs/screenshots/reader-light.png)
 
@@ -23,9 +23,21 @@
 
 **朗读**
 - **点哪读哪**：选中「点读」工具后点击任意文字，从那一句开始朗读；正在读的句子会高亮，页面自动跟着翻
-- 两种语音引擎：**千问 AI 语音**（qwen3-tts-flash，30 多种音色，含粤语、四川话等方言）和**系统语音**（离线）
+- 语音来源：**千问 AI 语音**（qwen3-tts-flash，30 多种音色，含粤语、四川话等方言）、**OpenAI 兼容语音**（OpenAI 或本机的语音服务）和**系统语音**（离线）
+- 点读扫描页时会提示先识别文字，识别完自动开始朗读
 - 会提前合成后面两句，句子之间不用等待；合成好的语音缓存在本地，同一段重复朗读不再计费
 - 可以只读选中的文字，也可以设置跳过页眉、页脚和页码
+
+**AI 中台**
+- 在一个地方统一管理 AI 服务的地址和 Key，朗读、文字识别、AI 校对都从这里选用，不用重复填写
+- 预设了通义千问（国内版 / 国际版）、DeepSeek、Kimi、智谱 GLM、硅基流动、OpenAI，以及本机运行的 Ollama、LM Studio；其它兼容 OpenAI 接口的服务（vLLM、llama.cpp、LocalAI、中转服务等）选「其他」填地址即可
+- 「测试连接」会列出这个服务上可用的模型，之后选模型时直接下拉选择
+
+**文字识别（OCR）**
+- 扫描件、拍照的文档识别后可以搜索、选择、复制和朗读。识别结果作为隐藏文字写进 PDF，页面外观不变，可以撤销
+- 识别方式可选：**系统自带**（Windows 10/11 的 Windows OCR、macOS 的文字识别、Linux 上的 Tesseract，离线免费）或 **AI 视觉模型**（千问 qwen3.5-ocr、本机 Ollama 的 qwen3-vl / glm-ocr 等）
+- 可选 **AI 校对**：识别后用 DeepSeek、千问等文字模型改正错别字和标点，按行校对，不改写内容
+- 打开扫描件时顶部会提示「识别文字」；也可以在「工具 → 文字识别」里选择页面范围
 
 **PDF 工具**
 - **压缩**：直接填写「每个文件不超过 X MB」，程序先做无损优化，不够再逐级降低图片分辨率，用二分法找到满足上限的最高画质。实在压不到时会告诉你最小能压到多少。也可以按压缩程度压缩，或批量处理多个文件
@@ -51,13 +63,17 @@
 |---|---|---|
 | ![](docs/screenshots/print.png) | ![](docs/screenshots/present.png) | ![](docs/screenshots/reader-dark.png) |
 
+| AI 中台 | 扫描件识别文字 |
+|---|---|
+| ![](docs/screenshots/ai-hub.png) | ![](docs/screenshots/ocr.png) |
+
 ## 安装与运行
 
 ### 直接下载（Windows / macOS）
 
 每次推送代码，GitHub Actions 都会自动打包。打开仓库的 **Actions → 测试与打包**，选择最新一次运行，在 Artifacts 里下载 `Folio-windows` 或 `Folio-macos`。解压后运行 `Folio.exe` 或 `Folio.app` 即可，不用安装 Python。
 
-推送 `v*` 标签（例如 `v0.1.0`）时，安装包还会自动发布到 Releases。
+推送 `v*` 标签（例如 `v0.2.0`）时，安装包和自动更新用的 `latest.json` 会自动发布到 Releases。
 
 ### 从源码运行
 
@@ -75,15 +91,67 @@ pip install -r requirements.txt pyinstaller
 python packaging/build.py  # 输出到 dist/Folio
 ```
 
-## 千问 AI 朗读设置
+## AI 设置
 
-1. 到[阿里云百炼控制台](https://bailian.console.aliyun.com/)开通服务并创建 API Key（新用户有免费额度）
-2. 在 Folio 中打开 **更多（右上角 ⋯）→ 设置 → 朗读**，粘贴 API Key，选择地域、音色，然后点「试听」确认能用
-   - 北京地域和新加坡（国际）地域的 Key 不通用，要选对地域
-   - 也可以不在界面里填，改为设置环境变量 `DASHSCOPE_API_KEY`
-3. 没有 Key 或不想联网时，把语音引擎切换成「系统语音」即可离线朗读。Windows 自带中文语音；Linux 需要安装 speech-dispatcher
+所有 AI 服务都在 **更多（右上角 ⋯）→ AI 中台** 里设置，填一次 Key，朗读和文字识别都能用。
 
-API Key 只保存在本机的设置文件里。
+1. **千问**：到[阿里云百炼控制台](https://bailian.console.aliyun.com/)创建 API Key（新用户有免费额度），粘贴到「通义千问」连接里，点「测试连接」。一个 Key 同时支持 AI 朗读、文字识别和校对。国内版和国际版（新加坡）的 Key 不通用
+2. **DeepSeek**：到 [DeepSeek 开放平台](https://platform.deepseek.com/api_keys)创建 Key。适合放在「文字识别 → AI 校对」里改错别字
+3. **本机模型（不联网、不花钱）**：安装 [Ollama](https://ollama.com/download) 后运行 `ollama pull qwen3-vl`，在「设置 → 文字识别」里选「AI 识别：Ollama（本地）」即可。LM Studio 需要先在软件里启动本地服务
+4. 选用哪个服务：
+   - **设置 → 朗读**：选择语音来源（千问 AI 语音 / OpenAI 兼容语音 / 系统语音）、音色和语言
+   - **设置 → 文字识别**：选择系统自带识别或某个 AI 连接和视觉模型，以及是否用 AI 校对
+
+API Key 只保存在本机的设置文件里。不想在界面里填写时，也可以设置环境变量 `DASHSCOPE_API_KEY`、`DEEPSEEK_API_KEY`、`OPENAI_API_KEY` 等。没有 Key 或不想联网时，朗读用「系统语音」、识别用「系统自带」即可完全离线使用。
+
+## 自动更新
+
+打包版启动后会在后台检查新版本（每天最多一次，可在「设置 → 关于与更新」关闭）。发现新版本时显示更新说明，点「立即更新」后：
+
+1. 下载对应系统的安装包，校验 SHA-256
+2. 如果当前程序有数字签名，确认新版本是同一个签名者签的
+3. 关闭 Folio（有未保存的文件会先提示保存），替换程序文件后自动重新打开
+
+更新信息来自 GitHub Releases 里的 `latest.json`。访问 GitHub 慢时，可以把 `latest.json` 和安装包放到自己的服务器上，在「设置 → 关于与更新」里填写更新地址。
+
+发布新版本：修改 `folio/__init__.py` 里的 `__version__`，在 `docs/CHANGELOG.md` 写好这一版的说明，然后推送标签：
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+## 代码签名
+
+签名能让 Windows 不再弹出「未知发布者」警告、macOS 不再提示「无法验证开发者」，自动更新也会用签名确认新版本来源可靠。
+
+证书和密码放在 GitHub 仓库的 **Settings → Secrets and variables → Actions → New repository secret** 里。Secrets 加密保存，保存后任何人都看不到内容（包括仓库所有者自己），只有打包流程运行时能读取。没有设置的项目会自动跳过，不影响打包。
+
+**Windows**（二选一）
+
+| Secret 名称 | 内容 |
+|---|---|
+| `WINDOWS_CERT_PFX` | 代码签名证书 .pfx 文件的 Base64（PowerShell：`[Convert]::ToBase64String([IO.File]::ReadAllBytes("cert.pfx"))`） |
+| `WINDOWS_CERT_PASSWORD` | .pfx 的密码 |
+
+注意：2023 年 6 月以后新签发的代码签名证书，私钥必须存放在硬件（U 盾）或云端签名服务里，一般拿不到 .pfx 文件。这种情况推荐用微软的 [Azure Artifact Signing](https://learn.microsoft.com/azure/artifact-signing/)（原 Trusted Signing），设置下面这些 Secret：
+
+| Secret 名称 | 内容 |
+|---|---|
+| `AZURE_TENANT_ID`、`AZURE_CLIENT_ID`、`AZURE_CLIENT_SECRET` | 有「Artifact Signing Certificate Profile Signer」权限的应用注册 |
+| `AZURE_SIGNING_ENDPOINT` | 签名服务地址，例如 `https://eus.codesigning.azure.net/` |
+| `AZURE_SIGNING_ACCOUNT` | 签名账户名称 |
+| `AZURE_CERT_PROFILE` | 证书配置文件名称 |
+
+**macOS**（需要 Apple Developer 账号）
+
+| Secret 名称 | 内容 |
+|---|---|
+| `MACOS_CERT_P12` | 「Developer ID Application」证书导出的 .p12 文件的 Base64（`base64 -i cert.p12 \| pbcopy`） |
+| `MACOS_CERT_PASSWORD` | 导出 .p12 时设置的密码 |
+| `APPLE_ID` | Apple 账号邮箱（用于公证） |
+| `APPLE_TEAM_ID` | 开发者团队 ID |
+| `APPLE_APP_PASSWORD` | 在 appleid.apple.com 生成的 App 专用密码 |
 
 ## 快捷键
 
@@ -107,21 +175,26 @@ API Key 只保存在本机的设置文件里。
 
 ```
 folio/
+  ai/          AI 中台：服务预设、连接管理、OpenAI 兼容接口客户端
   core/        与界面无关的处理逻辑：压缩、图片转 PDF、合并、拆分、文字定位与句子切分
   model/       文档模型：渲染、批注、页面管理、撤销/重做、保存
+  ocr/         文字识别：系统识别引擎、AI 识别与校对、隐藏文字层、识别任务调度
   tts/         千问 TTS 客户端、语音引擎、朗读控制
   ui/          主窗口、页面视图、工具、侧栏、各种对话框
+  update.py    自动更新
   assets/      图标（Lucide，ISC 许可）和 Logo
 tests/         pytest：核心逻辑 + 无界面模式下的界面测试
-packaging/     PyInstaller 打包脚本
+packaging/     PyInstaller 打包、代码签名、更新清单脚本
 ```
 
-运行测试：
+运行测试（Linux 上测试文字识别需要安装 `tesseract-ocr tesseract-ocr-chi-sim`，没有时相关测试会跳过）：
 
 ```bash
 pip install pytest
 QT_QPA_PLATFORM=offscreen python -m pytest -q
 ```
+
+打包后的程序可以用 `Folio --selftest result.json` 自检（CI 每次打包后都会运行）。
 
 ## 说明
 

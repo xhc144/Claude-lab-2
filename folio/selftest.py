@@ -82,10 +82,24 @@ def run(out_path: str) -> int:
             raise RuntimeError(f"缺少资源文件：{missing}")
         return "ok"
 
+    def upd():
+        from . import update
+
+        if not update.UPDATE_PUBKEY:
+            return "no update public key"
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey  # noqa: F401
+
+        try:
+            update.verify_manifest({"version": "0"})
+        except update.UpdateError:
+            return f"pubkey {update.UPDATE_PUBKEY[:8]}…, unsigned manifest rejected"
+        raise RuntimeError("未签名的清单没有被拒绝")
+
     step("gui", gui)
     step("pdf", pdf)
     step("assets", assets)
     step("ocr", ocr)
+    step("update", upd)
     step("tts", tts, critical=False)
     result["ok"] = all(c["ok"] or not c.get("critical", True) for c in checks.values())
     with open(out_path, "w", encoding="utf-8") as f:

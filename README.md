@@ -131,7 +131,7 @@ git push origin v0.2.0
 
 | Secret 名称 | 内容 |
 |---|---|
-| `WINDOWS_CERT_PFX` | 代码签名证书 .pfx 文件的 Base64（PowerShell：`[Convert]::ToBase64String([IO.File]::ReadAllBytes("cert.pfx"))`） |
+| `WINDOWS_CERT_PFX_BASE64`（也认 `WINDOWS_CERT_PFX`） | 代码签名证书 .pfx 文件的 Base64（PowerShell：`[Convert]::ToBase64String([IO.File]::ReadAllBytes("cert.pfx"))`） |
 | `WINDOWS_CERT_PASSWORD` | .pfx 的密码 |
 
 注意：2023 年 6 月以后新签发的代码签名证书，私钥必须存放在硬件（U 盾）或云端签名服务里，一般拿不到 .pfx 文件。这种情况推荐用微软的 [Azure Artifact Signing](https://learn.microsoft.com/azure/artifact-signing/)（原 Trusted Signing），设置下面这些 Secret：
@@ -142,6 +142,16 @@ git push origin v0.2.0
 | `AZURE_SIGNING_ENDPOINT` | 签名服务地址，例如 `https://eus.codesigning.azure.net/` |
 | `AZURE_SIGNING_ACCOUNT` | 签名账户名称 |
 | `AZURE_CERT_PROFILE` | 证书配置文件名称 |
+
+**自动更新清单签名**（推荐设置，不需要买证书）
+
+| Secret 名称 | 内容 |
+|---|---|
+| `UPDATE_SIGNING_KEY` | Ed25519 私钥，用 `python packaging/update_key.py gen` 生成；也支持 PEM 格式（`openssl genpkey -algorithm ed25519`） |
+
+设置后，打包时把对应的公钥写进程序，发布时给 `latest.json` 签名；程序只安装签名正确的更新。
+可以在本机用 `UPDATE_SIGNING_KEY=… python packaging/update_key.py check` 检查格式（不会显示密钥内容）。
+注意：换密钥后，用旧密钥打包的版本将无法自动更新到新版本，需要手动下载一次。
 
 **macOS**（需要 Apple Developer 账号）
 

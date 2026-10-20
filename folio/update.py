@@ -4,10 +4,12 @@
     {"version": "0.2.0", "date": "...", "notes": "...", "page": "https://…",
      "assets": {"windows-x64": {"url": "...", "sha256": "...", "size": 123}, "macos-arm64": {...}}}
 
-安全措施：只从 HTTPS 下载；校验 SHA-256；当前程序带有代码签名时，新版本必须由同一签名者签名。
+安全措施：只从 HTTPS 下载；校验 SHA-256；当前程序带有代码签名时，新版本必须由同一签名者签名；
+打包时写入了更新公钥（仓库密钥 UPDATE_SIGNING_KEY 对应的公钥）时，清单必须带有这把密钥的 Ed25519 签名。
 """
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import os
@@ -24,6 +26,11 @@ import zipfile
 from dataclasses import dataclass
 
 from . import APP_NAME, __version__
+
+try:  # 打包时由 packaging/build.py 写入
+    from ._version import UPDATE_PUBKEY
+except ImportError:
+    UPDATE_PUBKEY = ""
 
 REPO = "xhc144/Claude-lab-2"
 DEFAULT_FEED = f"https://github.com/{REPO}/releases/latest/download/latest.json"
@@ -101,6 +108,32 @@ def parse_manifest(data: dict, key: str | None = None) -> UpdateInfo | None:
                       page=str(data.get("page") or RELEASES_PAGE), date=str(data.get("date") or ""))
 
 
+def _canonical(data: dict) -> bytes:
+    """与 packaging/update_key.py 的 canonical() 一致。"""
+    body = {k: v for k, v in data.items() if k != "signature"}
+    return json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+
+
+def verify_manifest(data: dict, pubkey: str | None = None):
+    """程序内置了更新公钥时，清单必须带有对应的有效签名。"""
+    pubkey = UPDATE_PUBKEY if pubkey is None else pubkey
+    if not pubkey:
+        return
+    sig = data.get("signature") or {}
+    if not isinstance(sig, dict) or not sig.get("sig"):
+        raise UpdateError("更新清单没有签名，已拒绝安装")
+    try:
+        from cryptography.exceptions import InvalidSignature
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+    except ImportError:
+        raise UpdateError("缺少验证更新签名所需的组件") from None
+    try:
+        Ed25519PublicKey.from_public_bytes(base64.b64decode(pubkey)).verify(
+            base64.b64decode(sig["sig"]), _canonical(data))
+    except (InvalidSignature, ValueError, TypeError):
+        raise UpdateError("更新清单签名无效，可能被篡改，已拒绝安装") from None
+
+
 def check(feed: str = "", timeout: float = 15) -> UpdateInfo | None:
     """有新版本时返回 UpdateInfo，否则 None。"""
     try:
@@ -114,6 +147,7 @@ def check(feed: str = "", timeout: float = 15) -> UpdateInfo | None:
         raise UpdateError(f"检查更新失败（{ex.code}）") from None
     except Exception as ex:  # noqa: BLE001
         raise UpdateError(f"检查更新失败：{getattr(ex, 'reason', ex)}") from None
+    verify_manifest(data)
     info = parse_manifest(data)
     return info if info and is_newer(info.version) else None
 

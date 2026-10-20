@@ -44,10 +44,11 @@ jobs:
     env:
       # 代码签名用的密钥放在仓库的 Settings → Secrets and variables → Actions 里，没有设置时跳过签名。
       # 这里只记录"有没有设置"，密钥本身只交给用到它的那一步。
-      HAS_WIN_PFX: ${{ secrets.WINDOWS_CERT_PFX != '' }}
+      HAS_WIN_PFX: ${{ secrets.WINDOWS_CERT_PFX_BASE64 != '' || secrets.WINDOWS_CERT_PFX != '' }}
       HAS_AZURE: ${{ secrets.AZURE_CLIENT_ID != '' }}
       HAS_MAC_CERT: ${{ secrets.MACOS_CERT_P12 != '' }}
       HAS_NOTARY: ${{ secrets.APPLE_ID != '' && secrets.APPLE_APP_PASSWORD != '' }}
+      HAS_UPDATE_KEY: ${{ secrets.UPDATE_SIGNING_KEY != '' }}
       PYTHONUTF8: "1"   # Windows 上 Python 默认用系统编码输出，中文会出错
     steps:
       - uses: actions/checkout@v5
@@ -64,6 +65,20 @@ jobs:
           echo "版本号：$v"
       - name: 安装依赖
         run: pip install -r requirements.txt pyinstaller pytest
+      - name: 读取更新签名公钥（写进程序，用来验证更新清单）
+        if: env.HAS_UPDATE_KEY == 'true'
+        shell: bash
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          if pub=$(python packaging/update_key.py pubkey); then
+            echo "FOLIO_UPDATE_PUBKEY=$pub" >> "$GITHUB_ENV"
+            echo "更新签名公钥：$pub"
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            exit 1   # 发布版本必须带上公钥
+          else
+            echo "::warning::UPDATE_SIGNING_KEY 格式无法识别，本次打包不校验更新签名"
+          fi
       - name: 在本系统上测试文字识别和自动更新
         env:
           QT_QPA_PLATFORM: offscreen
@@ -81,9 +96,17 @@ jobs:
       - name: 签名（Windows，.pfx 证书）
         if: runner.os == 'Windows' && env.HAS_WIN_PFX == 'true'
         env:
-          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX }}
+          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX_BASE64 || secrets.WINDOWS_CERT_PFX }}
           WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
         run: python packaging/sign_windows.py dist/Folio/Folio.exe
+      - name: 检查签名结果（Windows）
+        if: runner.os == 'Windows' && (env.HAS_WIN_PFX == 'true' || env.HAS_AZURE == 'true')
+        shell: pwsh
+        run: |
+          $s = Get-AuthenticodeSignature dist/Folio/Folio.exe
+          Write-Host "签名者：$($s.SignerCertificate.Subject)"
+          Write-Host "状态：$($s.Status) $($s.StatusMessage)"
+          if (-not $s.SignerCertificate) { exit 1 }
       - name: 签名（Windows，Azure Artifact Signing）
         if: runner.os == 'Windows' && env.HAS_AZURE == 'true'
         uses: azure/artifact-signing-action@v2
@@ -159,11 +182,16 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
           merge-multiple: true
       - name: 生成更新清单
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
         run: |
           v="${GITHUB_REF_NAME#v}"
           python packaging/make_manifest.py --version "$v" \
@@ -171,6 +199,10 @@ jobs:
             --page "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${GITHUB_REF_NAME}" \
             --asset windows-x64=artifacts/Folio-windows.zip --asset macos-arm64=artifacts/Folio-macos.zip \
             --notes docs/CHANGELOG.md --out latest.json
+          if [ -n "$UPDATE_SIGNING_KEY" ]; then
+            pip install cryptography
+            python packaging/update_key.py sign latest.json
+          fi
           cat latest.json
           python -c "import json;print(json.load(open('latest.json'))['notes'])" > release-notes.md
       - uses: softprops/action-gh-release@v2

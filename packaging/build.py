@@ -12,6 +12,7 @@ Windows 生成 dist/Folio/Folio.exe，macOS 生成 dist/Folio.app。
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 
@@ -52,13 +53,18 @@ def make_icons() -> str | None:
 
 
 def write_version() -> str | None:
+    """写入 folio/_version.py：版本号，以及更新清单签名公钥（可以公开）。"""
     version = os.environ.get("FOLIO_VERSION", "").strip().lstrip("v")
-    path = os.path.join(ROOT, "folio", "_version.py")
-    if version:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(f'VERSION = "{version}"\n')
-        print("version:", version)
-    return version or None
+    pubkey = os.environ.get("FOLIO_UPDATE_PUBKEY", "").strip()
+    if not version and not pubkey:
+        return None
+    if not version:
+        with open(os.path.join(ROOT, "folio", "__init__.py"), encoding="utf-8") as f:
+            version = re.search(r'__version__ = "([^"]+)"', f.read()).group(1)
+    with open(os.path.join(ROOT, "folio", "_version.py"), "w", encoding="utf-8") as f:
+        f.write(f'VERSION = "{version}"\nUPDATE_PUBKEY = "{pubkey}"\n')
+    print("version:", version, "| update pubkey:", pubkey or "(none)")
+    return version
 
 
 def main():

@@ -217,3 +217,46 @@ def test_update_dialog_installs_on_close(qapp, monkeypatch):
         time.sleep(0.01)
     assert launched == ["/new/Folio"]
     assert not win.isVisible() and not other.isVisible()
+
+
+def test_manifest_signature(tmp_path, monkeypatch):
+    import base64
+
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    monkeypatch.syspath_prepend(os.path.join(root, "packaging"))
+    import update_key
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    key = Ed25519PrivateKey.generate()
+    seed = key.private_bytes(serialization.Encoding.Raw, serialization.PrivateFormat.Raw, serialization.NoEncryption())
+    pem = key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption())
+    pub = update_key.public_b64(key)
+    # 几种常见写法都能读出同一把密钥
+    for text in (base64.b64encode(seed).decode(), seed.hex(), pem.decode(), base64.b64encode(pem).decode(),
+                 base64.b64encode(seed + key.public_key().public_bytes(serialization.Encoding.Raw,
+                                                                       serialization.PublicFormat.Raw)).decode()):
+        assert update_key.public_b64(update_key.load_private(text)) == pub
+    for bad in ("", "not a key!", base64.b64encode(b"x" * 20).decode(),
+                "untrusted comment: minisign secret key\nRWRTY0Iy"):
+        with pytest.raises(update_key.KeyFormatError):
+            update_key.load_private(bad)
+
+    manifest = {"version": "9.0.0", "notes": "更新", "assets": {"windows-x64": {"url": "https://x/a.zip",
+                                                                                "sha256": "ab", "size": 1}}}
+    path = tmp_path / "latest.json"
+    path.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("UPDATE_SIGNING_KEY", base64.b64encode(seed).decode())
+    assert update_key.main(["sign", str(path)]) == 0
+    signed = json.loads(path.read_text(encoding="utf-8"))
+    update.verify_manifest(signed, pub)
+    update.verify_manifest(manifest, "")                      # 程序没内置公钥：不要求签名
+    with pytest.raises(update.UpdateError, match="没有签名"):
+        update.verify_manifest(manifest, pub)
+    tampered = json.loads(json.dumps(signed))
+    tampered["assets"]["windows-x64"]["url"] = "https://evil/a.zip"
+    with pytest.raises(update.UpdateError, match="签名无效"):
+        update.verify_manifest(tampered, pub)
+    other = update_key.public_b64(Ed25519PrivateKey.generate())
+    with pytest.raises(update.UpdateError, match="签名无效"):
+        update.verify_manifest(signed, other)

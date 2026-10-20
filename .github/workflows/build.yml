@@ -42,15 +42,12 @@ jobs:
             name: Folio-macos
     runs-on: ${{ matrix.os }}
     env:
-      # 代码签名用的密钥都放在仓库的 Settings → Secrets and variables → Actions 里；没有设置时跳过签名
-      WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX }}
-      WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
-      MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+      # 代码签名用的密钥放在仓库的 Settings → Secrets and variables → Actions 里，没有设置时跳过签名。
+      # 这里只记录"有没有设置"，密钥本身只交给用到它的那一步。
+      HAS_WIN_PFX: ${{ secrets.WINDOWS_CERT_PFX != '' }}
+      HAS_AZURE: ${{ secrets.AZURE_CLIENT_ID != '' }}
+      HAS_MAC_CERT: ${{ secrets.MACOS_CERT_P12 != '' }}
+      HAS_NOTARY: ${{ secrets.APPLE_ID != '' && secrets.APPLE_APP_PASSWORD != '' }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -72,16 +69,22 @@ jobs:
         run: python -m pytest -q tests/test_ocr.py tests/test_update.py tests/test_ai.py
 
       - name: 导入签名证书（macOS）
-        if: runner.os == 'macOS' && env.MACOS_CERT_P12 != ''
+        if: runner.os == 'macOS' && env.HAS_MAC_CERT == 'true'
+        env:
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
         run: bash packaging/macos_keychain.sh
       - name: 打包
         run: python packaging/build.py
 
       - name: 签名（Windows，.pfx 证书）
-        if: runner.os == 'Windows' && env.WINDOWS_CERT_PFX != ''
+        if: runner.os == 'Windows' && env.HAS_WIN_PFX == 'true'
+        env:
+          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
         run: python packaging/sign_windows.py dist/Folio/Folio.exe
       - name: 签名（Windows，Azure Artifact Signing）
-        if: runner.os == 'Windows' && env.AZURE_CLIENT_ID != ''
+        if: runner.os == 'Windows' && env.HAS_AZURE == 'true'
         uses: azure/artifact-signing-action@v2
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -96,7 +99,7 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
       - name: 检查签名脚本（Windows，用临时自签名证书签一份副本，不影响发布文件）
-        if: runner.os == 'Windows' && env.WINDOWS_CERT_PFX == '' && env.AZURE_CLIENT_ID == ''
+        if: runner.os == 'Windows' && env.HAS_WIN_PFX != 'true' && env.HAS_AZURE != 'true'
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force sigtest | Out-Null
@@ -114,7 +117,11 @@ jobs:
           Remove-Item -Recurse -Force sigtest
           Remove-Item $cert.PSPath
       - name: 公证（macOS）
-        if: runner.os == 'macOS' && env.MACOS_CERT_P12 != '' && env.APPLE_ID != ''
+        if: runner.os == 'macOS' && env.HAS_MAC_CERT == 'true' && env.HAS_NOTARY == 'true'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
         run: bash packaging/macos_notarize.sh dist/Folio.app
 
       - name: 自检打包结果（Windows）
@@ -162,7 +169,7 @@ jobs:
             --base-url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}" \
             --page "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${GITHUB_REF_NAME}" \
             --asset windows-x64=artifacts/Folio-windows.zip --asset macos-arm64=artifacts/Folio-macos.zip \
-            --notes docs/CHANGELOG.md > latest.json
+            --notes docs/CHANGELOG.md --out latest.json
           cat latest.json
           python -c "import json;print(json.load(open('latest.json'))['notes'])" > release-notes.md
       - uses: softprops/action-gh-release@v2

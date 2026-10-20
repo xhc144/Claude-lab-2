@@ -174,14 +174,46 @@ def test_manifest_script(tmp_path):
     notes = tmp_path / "CHANGELOG.md"
     notes.write_text("# 更新记录\n\n## 0.3.0\n\n- 新功能\n\n## 0.2.0\n\n- 旧功能\n", encoding="utf-8")
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    out = subprocess.run([sys.executable, os.path.join(root, "packaging", "make_manifest.py"), "--version", "v0.3.0",
-                          "--base-url", "https://example.com/dl/v0.3.0", "--asset", f"windows-x64={zw}",
-                          "--asset", f"macos-arm64={tmp_path / 'missing.zip'}", "--notes", str(notes)],
-                         capture_output=True, text=True, check=True).stdout
-    m = json.loads(out)
+    out = tmp_path / "latest.json"
+    subprocess.run([sys.executable, os.path.join(root, "packaging", "make_manifest.py"), "--version", "v0.3.0",
+                    "--base-url", "https://example.com/dl/v0.3.0", "--asset", f"windows-x64={zw}",
+                    "--asset", f"macos-arm64={tmp_path / 'missing.zip'}", "--notes", str(notes), "--out", str(out)],
+                   check=True)
+    m = json.loads(out.read_text(encoding="utf-8"))
     assert m["version"] == "0.3.0" and m["notes"] == "- 新功能"
     assert m["assets"]["windows-x64"] == {"url": "https://example.com/dl/v0.3.0/Folio-windows.zip",
                                           "sha256": hashlib.sha256(b"windows-build").hexdigest(), "size": 13}
     assert "macos-arm64" not in m["assets"]
     info = update.parse_manifest(m, "windows-x64")
     assert info.sha256 == m["assets"]["windows-x64"]["sha256"]
+
+
+def test_update_dialog_installs_on_close(qapp, monkeypatch):
+    from folio.config import Settings
+    from folio.ui.dialogs.update_dialog import UpdateDialog
+    from folio.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog
+
+    win = MainWindow(Settings())
+    win.show()
+    info = update.UpdateInfo("9.9.9", "- 新功能", "https://example.com/Folio.zip", "ab" * 32, 1)
+    d = UpdateDialog(win, info)
+    assert d.ok_btn.text() == "打开下载页面"  # 从源码运行时不能自动安装
+    d.reject()
+
+    monkeypatch.setattr(update, "can_self_update", lambda: (True, ""))
+    monkeypatch.setattr(update, "prepare", lambda info, progress=None, cancelled=None: "/new/Folio")
+    launched = []
+    monkeypatch.setattr(update, "launch_installer", launched.append)
+    other = QDialog(win)  # 例如从「设置」里检查更新时，设置窗口还开着
+    other.show()
+    d = UpdateDialog(win, info)
+    assert d.ok_btn.text() == "立即更新"
+    d.show()
+    d._install()
+    end = time.time() + 10
+    while time.time() < end and not launched:
+        qapp.processEvents()
+        time.sleep(0.01)
+    assert launched == ["/new/Folio"]
+    assert not win.isVisible() and not other.isVisible()

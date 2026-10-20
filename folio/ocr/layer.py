@@ -13,15 +13,19 @@ def page_has_text(page: pymupdf.Page) -> bool:
 
 
 def needs_ocr(page: pymupdf.Page) -> bool:
-    """没有文字、但有图片（或大量矢量路径，例如转曲的扫描件）的页面。"""
-    if page_has_text(page):
+    """有图片、但没有文字的页面。
+
+    先查图片（纯文字的 PDF 很快跳过），再看内容流里有没有文字指令（BT）：
+    扫描页通常只有一条画图指令，这样不用真的提取文字（那会解码整张图片，慢很多）。
+    """
+    if not page.get_images(full=False):
         return False
-    if page.get_images(full=False):
-        return True
     try:
-        return len(page.get_drawings()) > 50
+        if b"BT" not in page.read_contents() and not page.get_xobjects():
+            return True
     except Exception:
-        return False
+        pass
+    return not page_has_text(page)
 
 
 def _font_for(text: str) -> str:

@@ -1,10 +1,10 @@
 """发现新版本时的提示窗口：显示更新说明，下载、校验并在退出后安装。"""
 from __future__ import annotations
 
-from PySide6.QtCore import QUrl
+from PySide6.QtCore import QTimer, QUrl
 from PySide6.QtGui import QDesktopServices
-from PySide6.QtWidgets import (QDialog, QFrame, QHBoxLayout, QLabel, QProgressBar, QPushButton, QTextBrowser,
-                               QVBoxLayout)
+from PySide6.QtWidgets import (QApplication, QDialog, QFrame, QHBoxLayout, QLabel, QProgressBar, QPushButton,
+                               QTextBrowser, QVBoxLayout)
 
 from ... import __version__, update
 from ..widgets import label
@@ -104,4 +104,8 @@ class UpdateDialog(QDialog):
         self.main.pending_update = new_root
         self.status.setText("✓ 新版本已准备好。Folio 会关闭并自动重新打开（有未保存的文件会先提示保存）。")
         self.accept()
-        self.main.close()
+        # 先关掉其它打开着的窗口（例如从设置里检查的更新），否则程序不会退出，替换脚本会一直等
+        for w in QApplication.topLevelWidgets():
+            if isinstance(w, QDialog) and w.isVisible() and w is not self:
+                w.reject()
+        QTimer.singleShot(0, self.main.close)

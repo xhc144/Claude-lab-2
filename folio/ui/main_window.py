@@ -31,6 +31,7 @@ TOOL_BUTTONS = [
     ("shape", "square", "形状 (S)", "S"),
     ("text", "type", "文本框 (T)", "T"),
     ("note", "sticky-note", "便签 (N)", "N"),
+    ("sign", "signature", "签名 (G)", "G"),
     ("eraser", "eraser", "橡皮擦 (E)", "E"),
     ("laser", "laser", "激光笔 (L)", "L"),
     ("read", "audio-lines", "点读：点哪读哪 (R)", "R"),
@@ -633,6 +634,14 @@ class MainWindow(QMainWindow):
         if name in EDIT_TOOLS and not tab.doc.editable:
             self.toast("只有 PDF 文件可以批注，可以先「另存为」PDF")
             name = "select"
+        if name == "sign" and not tab.tools["sign"].current_path():
+            from .signature import SignatureDialog
+
+            path = SignatureDialog.create(self)
+            if not path:
+                self._sync_ui()
+                return
+            self.settings.set("sign/path", path)
         tab.set_tool(name)
         self._sync_ui()
 

@@ -11,6 +11,7 @@ from .bars import HL_COLORS, PEN_COLORS, ReadBar
 from .dialogs.note_dialog import NoteDialog
 from .page_view import PageView
 from .sidebar import Sidebar
+from .signature import SignTool
 from .tools import TOOL_CLASSES, rgb
 
 
@@ -67,6 +68,7 @@ class DocTab(QWidget):
         lay.addWidget(self.splitter)
 
         self.tools = {name: cls(self.view, settings) for name, cls in TOOL_CLASSES.items()}
+        self.tools["sign"] = SignTool(self.view, settings)
         self.tool_name = "select"
         self.view.set_tool(self.tools["select"])
         self.view.contextMenuAt.connect(self._context_menu)

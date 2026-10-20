@@ -28,6 +28,8 @@ DEFAULTS: dict = {
     "text/size": 14,
     "note/color": "#F5A524",
     "eraser/size": 12,
+    "sign/path": "",
+    "sign/width": 140,
     "laser/color": "#FF3B30",
     "tts/engine": "qwen",           # qwen / system
     "tts/api_key": "",

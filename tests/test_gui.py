@@ -3,7 +3,7 @@ import time
 
 import pymupdf
 import pytest
-from PySide6.QtCore import QPoint, Qt, QTimer
+from PySide6.QtCore import QPoint, QPointF, Qt, QTimer
 from PySide6.QtTest import QTest
 
 from .test_core import make_text_pdf
@@ -258,3 +258,24 @@ def test_thumbnail_reorder(win, qapp, tmp_path):
     assert tab.sidebar.thumbs.count() == 3
     tab.doc.undo()
     assert tab.doc.page(0).get_text().startswith("Page 1")
+
+
+def test_signature_stamp(win, qapp, tmp_path):
+    from PySide6.QtGui import QColor, QImage
+
+    from folio.ui.signature import SignaturePad, save_signature
+
+    pad = SignaturePad()
+    pad.strokes = [[QPointF(10, 50), QPointF(60, 20), QPointF(120, 60)]]
+    png = pad.to_png()
+    assert png and QImage.fromData(png).pixelColor(0, 0) == QColor(0, 0, 0, 0)  # 背景透明
+    path = save_signature(png)
+    tab = open_doc(win, qapp, tmp_path)
+    win.settings.set("sign/path", path)
+    win.select_tool("sign")
+    assert tab.tool_name == "sign"
+    QTest.mouseClick(tab.view.viewport(), Qt.LeftButton, Qt.NoModifier, vp_point(tab, 0, 300, 600))
+    pump(qapp, 30)
+    assert types(tab) == ["Stamp"]
+    tab.doc.undo()
+    assert types(tab) == []

@@ -4,7 +4,7 @@ from __future__ import annotations
 import sys
 
 from PySide6.QtCore import QObject, Qt, Signal
-from PySide6.QtGui import QColor, QGuiApplication, QPalette
+from PySide6.QtGui import QColor, QFont, QGuiApplication, QPalette
 
 LIGHT = {
     "bg": "#F4F5F7",
@@ -62,12 +62,13 @@ DARK = {
     "tooltip_text": "#1B1C1F",
 }
 
+# 界面字体：西文字体在前，中文字体作为回退
 if sys.platform == "win32":
-    FONT_STACK = '"Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif'
+    FONT_FAMILIES = ["Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei"]
 elif sys.platform == "darwin":
-    FONT_STACK = '"SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif'
+    FONT_FAMILIES = [".AppleSystemUIFont", "PingFang SC", "Helvetica Neue"]
 else:
-    FONT_STACK = '"Inter", "Noto Sans CJK SC", "WenQuanYi Zen Hei", sans-serif'
+    FONT_FAMILIES = ["Inter", "Noto Sans CJK SC", "WenQuanYi Zen Hei"]
 
 
 class ThemeManager(QObject):
@@ -78,6 +79,7 @@ class ThemeManager(QObject):
         self.mode = "system"     # system / light / dark
         self.colors = dict(LIGHT)
         self.dark = False
+        self._styled = False
 
     def c(self, key: str) -> str:
         return self.colors[key]
@@ -96,6 +98,12 @@ class ThemeManager(QObject):
     def apply(self, app, mode: str | None = None):
         if mode:
             self.mode = mode
+        if not self._styled:
+            self._styled = True
+            app.setStyle("Fusion")  # 各平台外观一致，且与样式表配合最好
+            font = QFont(app.font())
+            font.setFamilies(FONT_FAMILIES)
+            app.setFont(font)
         self.dark = self.mode == "dark" or (self.mode == "system" and self.system_is_dark())
         self.colors = dict(DARK if self.dark else LIGHT)
         from .icons import themed_file
@@ -137,7 +145,6 @@ theme = ThemeManager()
 def stylesheet(c: dict) -> str:
     return f"""
 * {{
-    font-family: {FONT_STACK};
     font-size: 13px;
     color: {c['text']};
     outline: none;

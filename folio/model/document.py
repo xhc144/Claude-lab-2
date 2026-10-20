@@ -278,6 +278,10 @@ class PdfDocument(QObject):
         annot = self.page(i).add_text_annot(pymupdf.Point(point), text, icon="Comment")
         return self._finish_new_annot(i, annot, "便签", color)
 
+    def add_image_stamp(self, i: int, rect, png: bytes, label: str = "图章"):
+        annot = self.page(i).add_stamp_annot(pymupdf.Rect(rect), stamp=png)
+        return self._finish_new_annot(i, annot, label)
+
     def add_shape(self, i: int, kind: str, p0, p1, color, width: float):
         pg = self.page(i)
         if kind in ("rect", "ellipse"):

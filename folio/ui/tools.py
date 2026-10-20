@@ -781,4 +781,4 @@ TOOL_CLASSES = {
     "laser": LaserTool, "read": ReadTool,
 }
 
-EDIT_TOOLS = {"highlight", "pen", "shape", "text", "note", "eraser"}
+EDIT_TOOLS = {"highlight", "pen", "shape", "text", "note", "sign", "eraser"}

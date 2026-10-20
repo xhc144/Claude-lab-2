@@ -1,10 +1,15 @@
 """工具选项栏（颜色/粗细等）和浮动朗读控制条。"""
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QComboBox, QFrame, QHBoxLayout, QLabel, QSlider, QSpinBox, QWidget
+import os
+
+from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import (QButtonGroup, QComboBox, QFrame, QHBoxLayout, QLabel, QPushButton, QSlider, QSpinBox,
+                               QToolButton, QWidget)
 
 from ..config import Settings
+from .signature import SignatureDialog, signature_paths
 from .widgets import ColorRow, IconButton, Segmented, Spinner, vline
 
 PEN_COLORS = ["#1F2329", "#E5484D", "#F5A524", "#2BA471", "#3D6DF2", "#8E4EC6"]
@@ -19,6 +24,7 @@ HINTS = {
     "shape": "拖动绘制，按住 Shift 画正方形 / 正圆 / 45° 线",
     "text": "点击页面放置文本框，Ctrl+Enter 或点空白处完成，Esc 取消",
     "note": "点击页面添加便签",
+    "sign": "点击页面放置签名，Ctrl+Z 可撤销",
     "eraser": "在批注上点击或拖动擦除（整条擦除）",
     "laser": "移动鼠标显示激光点，按住拖动画出会自动消失的轨迹",
     "read": "点击任意文字，从那一句开始朗读",
@@ -137,6 +143,8 @@ class OptionsBar(QFrame):
             cr = ColorRow(["#F5A524", "#FFD43B", "#7CE38B", "#74C0FC", "#FFA8D5"], st.get("note/color"))
             cr.changed.connect(lambda c: self._set("note/color", c))
             self._add(cr)
+        elif tool == "sign":
+            self._sign_options()
         elif tool == "eraser":
             self._caption("橡皮大小")
             s = QSlider(Qt.Horizontal)
@@ -150,7 +158,45 @@ class OptionsBar(QFrame):
             cr = ColorRow(LASER_COLORS, st.get("laser/color"))
             cr.changed.connect(lambda c: self._set("laser/color", c))
             self._add(cr)
-        self.setVisible(tool in ("pen", "highlight", "shape", "text", "note", "eraser", "laser", "read"))
+        self.setVisible(tool in ("pen", "highlight", "shape", "text", "note", "sign", "eraser", "laser", "read"))
+
+    def _sign_options(self):
+        paths = signature_paths()
+        cur = self.settings.get("sign/path") or (paths[0] if paths else "")
+        group = QButtonGroup(self._content)
+        for path in paths:
+            b = QToolButton()
+            b.setCheckable(True)
+            b.setIcon(QIcon(QPixmap(path)))
+            b.setIconSize(QSize(72, 26))
+            b.setToolTip("使用这个签名")
+            b.setChecked(path == cur)
+            b.clicked.connect(lambda _=False, p=path: self._set("sign/path", p))
+            group.addButton(b)
+            self._add(b)
+
+        def new():
+            p = SignatureDialog.create(self.window())
+            if p:
+                self._set("sign/path", p)
+                self.show_tool("sign")
+
+        def remove():
+            p = self.settings.get("sign/path")
+            if p and os.path.exists(p):
+                os.remove(p)
+                self._set("sign/path", "")
+                self.show_tool("sign")
+        nb = QPushButton("新建签名")
+        nb.clicked.connect(new)
+        self._add(nb)
+        if paths:
+            db = QPushButton("删除当前")
+            db.clicked.connect(remove)
+            self._add(db)
+        self._add(vline())
+        self._caption("宽度")
+        self._width_slider("sign/width", 40, 300, step=5)
 
 
 class ReadBar(QFrame):

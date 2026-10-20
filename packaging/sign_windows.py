@@ -3,7 +3,7 @@
     python packaging/sign_windows.py dist/Folio/Folio.exe [更多文件…]
 
 证书来自环境变量（在 GitHub 仓库 Settings → Secrets and variables → Actions 里添加）：
-    WINDOWS_CERT_PFX        .pfx 文件的 Base64 内容
+    WINDOWS_CERT_PFX        .pfx 文件的 Base64 内容（仓库密钥 WINDOWS_CERT_PFX_BASE64）
     WINDOWS_CERT_PASSWORD   .pfx 的密码
 """
 from __future__ import annotations
@@ -26,6 +26,31 @@ def find_signtool() -> str:
     return found[-1]
 
 
+def decode_pfx(text: str) -> bytes:
+    """Base64 → .pfx；兼容 certutil -encode 生成的带 -----BEGIN/END----- 行的格式。"""
+    body = "".join(ln for ln in text.splitlines() if not ln.strip().startswith("-----"))
+    return base64.b64decode("".join(body.split()))
+
+
+def diagnose(pfx: bytes, passwords: list[str]) -> tuple[str | None, str]:
+    """用 cryptography 打开 .pfx：返回能打开它的密码，以及说明（不含密码和证书内容）。"""
+    try:
+        from cryptography.hazmat.primitives.serialization import pkcs12
+    except ImportError:
+        return passwords[0], ""
+    for pw in passwords:
+        try:
+            key, cert, _ = pkcs12.load_key_and_certificates(pfx, pw.encode() if pw else None)
+        except ValueError:
+            continue
+        if cert is None or key is None:
+            return None, ".pfx 里没有证书或私钥（导出时要勾选「导出私钥」）"
+        info = f"证书：{cert.subject.rfc4514_string()}，有效期至 {cert.not_valid_after_utc:%Y-%m-%d}"
+        return pw, info
+    return None, (f".pfx 文件 {len(pfx)} 字节，用 WINDOWS_CERT_PASSWORD 打不开："
+                  "密码不对，或者 WINDOWS_CERT_PFX_BASE64 不是这个 .pfx 文件的完整 Base64")
+
+
 def main(files: list[str]) -> int:
     if hasattr(sys.stdout, "reconfigure"):  # Windows 控制台默认编码无法输出中文
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -33,12 +58,25 @@ def main(files: list[str]) -> int:
     if not data:
         print("没有设置 WINDOWS_CERT_PFX，跳过签名")
         return 0
-    password = os.environ.get("WINDOWS_CERT_PASSWORD", "")
+    try:
+        pfx_bytes = decode_pfx(data)
+    except ValueError:
+        print("WINDOWS_CERT_PFX_BASE64 不是有效的 Base64")
+        return 1
+    raw = os.environ.get("WINDOWS_CERT_PASSWORD", "")
+    # 粘贴密码时容易多带空格或换行
+    candidates = list(dict.fromkeys([raw, raw.strip(), raw.strip("\r\n")]))
+    password, info = diagnose(pfx_bytes, candidates)
+    print(info)
+    if password is None:
+        return 1
+    if password != raw:
+        print("注意：密码首尾有多余的空格或换行，已自动去掉")
     signtool = find_signtool()
     fd, pfx = tempfile.mkstemp(suffix=".pfx")
     try:
         with os.fdopen(fd, "wb") as f:
-            f.write(base64.b64decode(data))
+            f.write(pfx_bytes)
         for ts in TIMESTAMP_SERVERS:
             cmd = [signtool, "sign", "/fd", "sha256", "/f", pfx, "/p", password, "/tr", ts, "/td", "sha256",
                    "/d", "Folio PDF", *files]
@@ -49,6 +87,8 @@ def main(files: list[str]) -> int:
                 print("签名完成，时间戳服务器：", ts)
                 return 0
             print(r.stderr.strip())
+            if "password" in r.stderr.lower():
+                return 1
             print("签名失败，换一个时间戳服务器重试…")
         return 1
     finally:

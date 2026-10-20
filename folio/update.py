@@ -240,6 +240,13 @@ def _no_window() -> dict:
     return {"creationflags": 0x08000000} if sys.platform == "win32" else {}
 
 
+def _ps_env(**extra) -> dict:
+    """从 PowerShell 7 里启动时会继承它的 PSModulePath，Windows PowerShell 5.1 就加载不了自带模块。"""
+    env = {k: v for k, v in os.environ.items() if k.upper() != "PSMODULEPATH"}
+    env.update(extra)
+    return env
+
+
 def signer(path: str) -> dict:
     """读取代码签名：{'signed': bool, 'valid': bool, 'intact': bool, 'id': 签名者标识, 'thumb': 证书指纹}。
 
@@ -251,7 +258,7 @@ def signer(path: str) -> dict:
                   "[pscustomobject]@{status=[string]$s.Status; thumb=$s.SignerCertificate.Thumbprint; "
                   "subject=$s.SignerCertificate.Subject} | ConvertTo-Json -Compress")
             r = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", ps], capture_output=True,
-                               text=True, timeout=30, env={**os.environ, "FOLIO_SIG_PATH": path}, **_no_window())
+                               text=True, timeout=30, env=_ps_env(FOLIO_SIG_PATH=os.path.abspath(path)), **_no_window())
             d = json.loads(r.stdout or "{}")
             status = d.get("status") or ""
             # UnknownError：签名完整，但证书链的根不受信任（自签名证书）

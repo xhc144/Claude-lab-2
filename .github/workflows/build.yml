@@ -112,7 +112,7 @@ jobs:
           Copy-Item dist/Folio/Folio.exe sigcheck/Folio.exe
           $b = [IO.File]::ReadAllBytes("sigcheck/Folio.exe"); $b[4096] = $b[4096] -bxor 0xFF
           [IO.File]::WriteAllBytes("sigcheck/Folio.exe", $b)
-          python -c "from folio import update as u; a=u.signer('dist/Folio/Folio.exe'); t=u.signer('sigcheck/Folio.exe'); print('same:', u.same_signer(a, a), 'tampered:', u.same_signer(a, t)); assert u.same_signer(a, a) and not u.same_signer(a, t)"
+          python -c "from folio import update as u; a=u.signer('dist/Folio/Folio.exe'); t=u.signer('sigcheck/Folio.exe'); print(a, t); print('same:', u.same_signer(a, a), 'tampered:', u.same_signer(a, t)); assert u.same_signer(a, a) and not u.same_signer(a, t)"
           if ($LASTEXITCODE -ne 0) { exit 1 }
           Remove-Item -Recurse -Force sigcheck
       - name: 签名（Windows，Azure Artifact Signing）

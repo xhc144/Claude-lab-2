@@ -1,0 +1,64 @@
+name: 测试与打包
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: 安装系统依赖（Qt 无界面运行需要）
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libgl1 libxkbcommon0 libfontconfig1 libdbus-1-3
+      - name: 安装 Python 依赖
+        run: pip install -r requirements.txt pytest
+      - name: 运行测试
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q
+
+  build:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Folio-windows
+          - os: macos-latest
+            name: Folio-macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: 安装依赖
+        run: pip install -r requirements.txt pyinstaller
+      - name: 打包
+        run: python packaging/build.py
+      - name: 压缩（Windows）
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path dist/Folio -DestinationPath ${{ matrix.name }}.zip
+      - name: 压缩（macOS）
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent dist/Folio.app ${{ matrix.name }}.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.name }}.zip
+          retention-days: 30
+      - name: 发布到 Release（推送 v* 标签时）
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.name }}.zip

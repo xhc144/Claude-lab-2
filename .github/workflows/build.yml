@@ -48,6 +48,7 @@ jobs:
       HAS_AZURE: ${{ secrets.AZURE_CLIENT_ID != '' }}
       HAS_MAC_CERT: ${{ secrets.MACOS_CERT_P12 != '' }}
       HAS_NOTARY: ${{ secrets.APPLE_ID != '' && secrets.APPLE_APP_PASSWORD != '' }}
+      PYTHONUTF8: "1"   # Windows 上 Python 默认用系统编码输出，中文会出错
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6

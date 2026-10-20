@@ -27,6 +27,8 @@ def find_signtool() -> str:
 
 
 def main(files: list[str]) -> int:
+    if hasattr(sys.stdout, "reconfigure"):  # Windows 控制台默认编码无法输出中文
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     data = os.environ.get("WINDOWS_CERT_PFX", "").strip()
     if not data:
         print("没有设置 WINDOWS_CERT_PFX，跳过签名")

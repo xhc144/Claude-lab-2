@@ -1,0 +1,222 @@
+name: 测试与打包
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: 安装系统依赖（Qt 无界面运行、Tesseract 文字识别）
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libxkbcommon0 libfontconfig1 libdbus-1-3 tesseract-ocr tesseract-ocr-chi-sim
+      - name: 安装 Python 依赖
+        run: pip install -r requirements.txt pytest
+      - name: 运行测试
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q
+
+  build:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Folio-windows
+          - os: macos-latest
+            name: Folio-macos
+    runs-on: ${{ matrix.os }}
+    env:
+      # 代码签名用的密钥放在仓库的 Settings → Secrets and variables → Actions 里，没有设置时跳过签名。
+      # 这里只记录"有没有设置"，密钥本身只交给用到它的那一步。
+      HAS_WIN_PFX: ${{ secrets.WINDOWS_CERT_PFX_BASE64 != '' || secrets.WINDOWS_CERT_PFX != '' }}
+      HAS_AZURE: ${{ secrets.AZURE_CLIENT_ID != '' }}
+      HAS_MAC_CERT: ${{ secrets.MACOS_CERT_P12 != '' }}
+      HAS_NOTARY: ${{ secrets.APPLE_ID != '' && secrets.APPLE_APP_PASSWORD != '' }}
+      HAS_UPDATE_KEY: ${{ secrets.UPDATE_SIGNING_KEY != '' }}
+      PYTHONUTF8: "1"   # Windows 上 Python 默认用系统编码输出，中文会出错
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: 确定版本号
+        shell: bash
+        run: |
+          base=$(python -c "import re;print(re.search(r'__version__ = \"([^\"]+)\"', open('folio/__init__.py', encoding='utf-8').read()).group(1))")
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="${base}.dev${GITHUB_RUN_NUMBER}"; fi
+          echo "FOLIO_VERSION=$v" >> "$GITHUB_ENV"
+          echo "版本号：$v"
+      - name: 安装依赖
+        run: pip install -r requirements.txt pyinstaller pytest
+      - name: 读取更新签名公钥（写进程序，用来验证更新清单）
+        if: env.HAS_UPDATE_KEY == 'true'
+        shell: bash
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          if pub=$(python packaging/update_key.py pubkey); then
+            echo "FOLIO_UPDATE_PUBKEY=$pub" >> "$GITHUB_ENV"
+            echo "更新签名公钥：$pub"
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            exit 1   # 发布版本必须带上公钥
+          else
+            echo "::warning::UPDATE_SIGNING_KEY 格式无法识别，本次打包不校验更新签名"
+          fi
+      - name: 在本系统上测试文字识别和自动更新
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q tests/test_ocr.py tests/test_update.py tests/test_ai.py
+
+      - name: 导入签名证书（macOS）
+        if: runner.os == 'macOS' && env.HAS_MAC_CERT == 'true'
+        env:
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: bash packaging/macos_keychain.sh
+      - name: 打包
+        run: python packaging/build.py
+
+      - name: 签名（Windows，.pfx 证书）
+        if: runner.os == 'Windows' && env.HAS_WIN_PFX == 'true'
+        env:
+          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX_BASE64 || secrets.WINDOWS_CERT_PFX }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+        run: python packaging/sign_windows.py dist/Folio/Folio.exe
+      - name: 检查签名结果（Windows）
+        if: runner.os == 'Windows' && (env.HAS_WIN_PFX == 'true' || env.HAS_AZURE == 'true')
+        shell: pwsh
+        run: |
+          $s = Get-AuthenticodeSignature dist/Folio/Folio.exe
+          Write-Host "签名者：$($s.SignerCertificate.Subject)"
+          Write-Host "状态：$($s.Status) $($s.StatusMessage)"
+          if (-not $s.SignerCertificate) { exit 1 }
+          # 自动更新的签名比较：同一份签名应通过，签名后被改过的副本应被拒绝
+          New-Item -ItemType Directory -Force sigcheck | Out-Null
+          Copy-Item dist/Folio/Folio.exe sigcheck/Folio.exe
+          $b = [IO.File]::ReadAllBytes("sigcheck/Folio.exe"); $b[4096] = $b[4096] -bxor 0xFF
+          [IO.File]::WriteAllBytes("sigcheck/Folio.exe", $b)
+          python -c "from folio import update as u; a=u.signer('dist/Folio/Folio.exe'); t=u.signer('sigcheck/Folio.exe'); print(a, t); print('same:', u.same_signer(a, a), 'tampered:', u.same_signer(a, t)); assert u.same_signer(a, a) and not u.same_signer(a, t)"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Remove-Item -Recurse -Force sigcheck
+      - name: 签名（Windows，Azure Artifact Signing）
+        if: runner.os == 'Windows' && env.HAS_AZURE == 'true'
+        uses: azure/artifact-signing-action@v2
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: ${{ secrets.AZURE_SIGNING_ENDPOINT }}
+          signing-account-name: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
+          certificate-profile-name: ${{ secrets.AZURE_CERT_PROFILE }}
+          files-folder: ${{ github.workspace }}\dist\Folio
+          files-folder-filter: exe
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
+      - name: 检查签名脚本（Windows，用临时自签名证书签一份副本，不影响发布文件）
+        if: runner.os == 'Windows' && env.HAS_WIN_PFX != 'true' && env.HAS_AZURE != 'true'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force sigtest | Out-Null
+          Copy-Item dist/Folio/Folio.exe sigtest/Folio.exe
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=Folio CI Test" -CertStoreLocation Cert:\CurrentUser\My
+          $pw = ConvertTo-SecureString -String "ci-test" -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath sigtest/test.pfx -Password $pw | Out-Null
+          $env:WINDOWS_CERT_PFX = [Convert]::ToBase64String([IO.File]::ReadAllBytes("sigtest/test.pfx"))
+          $env:WINDOWS_CERT_PASSWORD = "ci-test"
+          python packaging/sign_windows.py sigtest/Folio.exe
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $s = Get-AuthenticodeSignature sigtest/Folio.exe
+          Write-Host "签名者：$($s.SignerCertificate.Subject) 状态：$($s.Status)"
+          if (-not $s.SignerCertificate) { exit 1 }
+          Remove-Item -Recurse -Force sigtest
+          Remove-Item $cert.PSPath
+      - name: 公证（macOS）
+        if: runner.os == 'macOS' && env.HAS_MAC_CERT == 'true' && env.HAS_NOTARY == 'true'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: bash packaging/macos_notarize.sh dist/Folio.app
+
+      - name: 自检打包结果（Windows）
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath dist/Folio/Folio.exe -ArgumentList "--selftest", "$PWD\selftest.json" -Wait -PassThru
+          Get-Content selftest.json
+          if ($p.ExitCode -ne 0) { exit 1 }
+      - name: 自检打包结果（macOS）
+        if: runner.os == 'macOS'
+        run: |
+          dist/Folio.app/Contents/MacOS/Folio --selftest "$PWD/selftest.json"
+          cat selftest.json
+
+      - name: 压缩（Windows）
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path dist/Folio -DestinationPath ${{ matrix.name }}.zip
+      - name: 压缩（macOS）
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent dist/Folio.app ${{ matrix.name }}.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.name }}.zip
+          retention-days: 30
+
+  release:
+    # 推送 v* 标签时：发布安装包和自动更新清单 latest.json
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: 生成更新清单
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          python packaging/make_manifest.py --version "$v" \
+            --base-url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}" \
+            --page "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${GITHUB_REF_NAME}" \
+            --asset windows-x64=artifacts/Folio-windows.zip --asset macos-arm64=artifacts/Folio-macos.zip \
+            --notes docs/CHANGELOG.md --out latest.json
+          if [ -n "$UPDATE_SIGNING_KEY" ]; then
+            pip install cryptography
+            python packaging/update_key.py sign latest.json
+          fi
+          cat latest.json
+          python -c "import json;print(json.load(open('latest.json'))['notes'])" > release-notes.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md
+          files: |
+            artifacts/Folio-windows.zip
+            artifacts/Folio-macos.zip
+            latest.json

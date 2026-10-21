@@ -1,0 +1,19 @@
+PySide6-Essentials>=6.6
+PySide6-Addons>=6.6
+PyMuPDF>=1.26
+Pillow>=10.0
+numpy>=1.24
+# 验证自动更新清单的签名
+cryptography>=42
+# 可选：支持 iPhone 的 HEIC 照片转 PDF
+# pillow-heif>=0.16
+# Windows 自带文字识别（Windows.Media.Ocr）
+winrt-runtime>=3.2; sys_platform == "win32"
+winrt-Windows.Media.Ocr>=3.2; sys_platform == "win32"
+winrt-Windows.Graphics.Imaging>=3.2; sys_platform == "win32"
+winrt-Windows.Storage.Streams>=3.2; sys_platform == "win32"
+winrt-Windows.Globalization>=3.2; sys_platform == "win32"
+winrt-Windows.Foundation>=3.2; sys_platform == "win32"
+winrt-Windows.Foundation.Collections>=3.2; sys_platform == "win32"
+# macOS 自带文字识别（Vision）
+pyobjc-framework-Vision>=10; sys_platform == "darwin"

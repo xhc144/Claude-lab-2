@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+dist/
+*.spec
+.pytest_cache/
+*.folio-tmp
+.DS_Store
+Thumbs.db
+packaging/icons/
+folio/_version.py

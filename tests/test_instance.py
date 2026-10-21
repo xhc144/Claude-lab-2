@@ -245,11 +245,32 @@ def test_update_badge_and_home_footer(win, qapp):  # noqa: F811
     assert win.home.update_link.text() == "检查更新"
 
 
+def test_saving_settings_leaves_context_menu_alone(win, qapp, monkeypatch):  # noqa: F811
+    """保存设置时，右键菜单开关没变就不碰注册表。"""
+    from folio import platform_win
+    from folio.ui.dialogs.settings_dialog import SettingsDialog
+
+    calls = []
+    monkeypatch.setattr(platform_win, "sync_context_menu", lambda *a, **k: calls.append(a))
+    d = SettingsDialog(win, win.settings)
+    if not hasattr(d, "context_menu"):  # 只有 Windows 上有这个开关
+        d.context_menu = type("Box", (), {"isChecked": lambda self: True})()
+    d._save()
+    assert calls == []
+    d = SettingsDialog(win, win.settings)
+    d.context_menu = type("Box", (), {"isChecked": lambda self: False})()
+    d._save()
+    assert calls == [(False,)] and win.settings.get("shell/context_menu") is False
+    win.settings.set("shell/context_menu", True)
+
+
 @pytest.mark.skipif(sys.platform != "win32" or not os.environ.get("CI"), reason="只在 Windows CI 上改注册表")
 def test_context_menu_registry():
     from folio.platform_win import CONTEXT_MENU, _read_value, context_menu_installed, sync_context_menu
 
     try:
+        sync_context_menu(False, strict=True)  # 从干净的状态开始
+        assert not context_menu_installed()
         assert sync_context_menu(True, strict=True)
         assert context_menu_installed()
         sub, text, tool = CONTEXT_MENU[0]

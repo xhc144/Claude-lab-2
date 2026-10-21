@@ -223,11 +223,11 @@ class SettingsDialog(QDialog):
         self.ocr_page.save()
         st.set("update/auto", self.auto_update.isChecked())
         st.set("update/feed", self.feed.text().strip())
-        if hasattr(self, "context_menu"):
+        if hasattr(self, "context_menu") and self.context_menu.isChecked() != bool(st.get("shell/context_menu")):
             st.set("shell/context_menu", self.context_menu.isChecked())
             from ...platform_win import sync_context_menu
 
-            sync_context_menu(self.context_menu.isChecked())
+            sync_context_menu(self.context_menu.isChecked())  # 只在开关改变时写注册表
         st.sync()
         parent = self.parent()
         if parent is not None and hasattr(parent, "set_tone"):

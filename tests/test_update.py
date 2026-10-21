@@ -141,6 +141,79 @@ def test_windows_swap_script(tmp_path):
     assert not (tmp_path / ".folio-update").exists()
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows 替换脚本")
+def test_windows_swap_script_cwd_inside_dst(tmp_path):
+    """回归测试：脚本自己的当前目录落在要替换的目录里（旧版本不传 cwd 时就是这样），替换也要成功。
+
+    Windows 不允许改名被某个进程当作当前目录的文件夹；WIN_SCRIPT 开头不切换进程的当前目录时这个测试会失败
+    （只用 Set-Location 也会失败：它只改 PowerShell 的位置，不改进程的当前目录）。
+    """
+    src, dst = _make_dirs(tmp_path, "Folio App")
+    script = tmp_path / "update.ps1"
+    script.write_text(update.WIN_SCRIPT, encoding="utf-8-sig")
+    marker = tmp_path / "launched.txt"
+    launcher = tmp_path / "launch.cmd"
+    launcher.write_text(f'@echo started> "{marker}"\r\n')
+    proc = _sleeper()
+    r = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script),
+                        "-ProcId", str(proc.pid), "-Src", str(src), "-Dst", str(dst), "-Exe", str(launcher)],
+                       capture_output=True, text=True, timeout=120, cwd=str(dst))
+    assert r.returncode == 0, r.stderr
+    assert (dst / "version.txt").read_text() == "new"
+    assert _wait_for(marker.exists)
+    assert not [p for p in tmp_path.iterdir() if p.name.startswith("Folio App.old-")]
+
+
+@pytest.mark.parametrize("plat", ["win32", "darwin"])
+def test_launch_installer_cwd_outside_install_dir(tmp_path, monkeypatch, plat):
+    """启动替换脚本时，当前目录不能在程序目录里（否则 Windows 上程序目录被锁住，改名失败）。"""
+    root = tmp_path / ("Folio.app" if plat == "darwin" else "Folio")
+    root.mkdir()
+    monkeypatch.chdir(root)  # 从快捷方式启动时，Folio 的当前目录就是程序目录
+    monkeypatch.setattr(update, "install_root", lambda: str(root))
+    monkeypatch.setattr(update.tempfile, "gettempdir", lambda: str(tmp_path / "temp"))
+    (tmp_path / "temp").mkdir()
+    calls = []
+    monkeypatch.setattr(update.subprocess, "Popen", lambda args, **kw: calls.append((args, kw)))
+    monkeypatch.setattr(sys, "platform", plat)
+    update.launch_installer(str(tmp_path / ".folio-update" / root.name))
+    monkeypatch.undo()
+    assert len(calls) == 1
+    cwd = calls[0][1].get("cwd")
+    assert cwd, "launch_installer 必须传 cwd"
+    real_cwd, real_root = os.path.realpath(cwd), os.path.realpath(root)
+    assert os.path.commonpath([real_cwd, real_root]) != real_root
+
+
+def test_pending_failure(tmp_path, monkeypatch):
+    """上次下载好的新版本还在解压目录里 → 更新没装上，提示一次并清理。"""
+    monkeypatch.setattr(update.tempfile, "gettempdir", lambda: str(tmp_path))
+    root = tmp_path / "Programs" / "Folio"
+    root.mkdir(parents=True)
+    staging = tmp_path / "Programs" / ".folio-update"
+
+    def leave(version, app=True):
+        (staging / "Folio").mkdir(parents=True, exist_ok=True) if app else staging.mkdir(parents=True, exist_ok=True)
+        if version is not None:
+            (staging / update.STAGING_MARK).write_text(json.dumps({"version": version}), encoding="utf-8")
+
+    assert update.pending_failure(str(root), "0.2.3") is None          # 没有残留
+    leave("0.2.4")
+    (tmp_path / "folio-update-20261021120000.log").write_text("reason: x", encoding="utf-8")
+    failed = update.pending_failure(str(root), "0.2.3")
+    assert failed is not None and failed.version == "0.2.4" and failed.log.endswith(".log")
+    assert not staging.exists()                                        # 清理掉，下次不再提示
+    assert update.pending_failure(str(root), "0.2.3") is None
+    leave("0.2.4")
+    assert update.pending_failure(str(root), "0.2.4") is None          # 后来手动装上了
+    assert not staging.exists()
+    leave("0.2.4", app=False)
+    assert update.pending_failure(str(root), "0.2.3") is None          # 新版本已经移走（替换成功，脚本还没来得及删）
+    leave(None)
+    assert update.pending_failure(str(root), "0.2.3") is None          # 刚开始解压（另一个窗口在下载），不动它
+    assert staging.exists()
+
+
 @pytest.mark.skipif(sys.platform == "win32", reason="macOS 替换脚本（Linux 上用假的 open/xattr 测试）")
 def test_posix_swap_script(tmp_path):
     src, dst = _make_dirs(tmp_path, "Folio.app")

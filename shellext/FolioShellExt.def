@@ -1,0 +1,4 @@
+LIBRARY FolioShellExt
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

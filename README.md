@@ -40,7 +40,7 @@
 - 打开扫描件时顶部会提示「识别文字」；也可以在「工具 → 文字识别」里选择页面范围
 
 **PDF 工具**（在独立窗口里打开，不挡主窗口；Windows 上也可以直接在资源管理器里右键文件使用）
-- **右键菜单**：右键 PDF 选「用 Folio 压缩」「用 Folio 合并」，右键图片选「用 Folio 转为 PDF」，不用先打开软件；多选文件再右键会放进同一个窗口。Windows 11 上在「显示更多选项」里，可在「设置 → 常规」里关闭
+- **右键菜单**：右键 PDF 选「用 Folio 压缩」「用 Folio 合并」，右键图片选「用 Folio 转为 PDF」，不用先打开软件；多选文件再右键会一次全部放进同一个窗口。Windows 11 上直接出现在第一层菜单里（需要受信任的签名证书，见下文「Windows 11 右键菜单」；否则在「显示更多选项」里），可在「设置 → 常规」里关闭
 - **压缩**：直接填写「每个文件不超过 X MB」，程序先做无损优化，不够再逐级降低图片分辨率，用二分法找到满足上限的最高画质。实在压不到时会告诉你最小能压到多少。也可以按压缩程度压缩，或批量处理多个文件
 - **图片转 PDF**：照片、截图、长图都能转。长图按页面比例自动分页，并在空白行处切开，不会把一行字切成两半
 - **合并**：PDF、图片、Word/Excel/PPT（需要安装 LibreOffice）、EPUB 都能合成一个 PDF，每个文件可以只取部分页，并自动生成书签
@@ -115,6 +115,10 @@ API Key 只保存在本机的设置文件里。不想在界面里填写时，也
 2. 如果当前程序有数字签名，确认新版本是同一个签名者签的
 3. 关闭 Folio（有未保存的文件会先提示保存），替换程序文件后自动重新打开
 
+替换失败时（例如程序目录被别的程序占用）会重新打开旧版本，把原因写进 `%TEMP%\folio-update-时间.log`，下次启动时提示「更新没有装上」并给出下载地址，手动下载安装程序覆盖安装即可。
+
+> 0.2.2 及更早版本的自动更新在从开始菜单或桌面快捷方式启动时会装不上（替换脚本的当前目录在程序目录里，Windows 不允许给它改名），这个问题在 0.2.3 修好了。但替换是由**旧版本**执行的，所以从 0.2.2 及更早版本升级到 0.2.3 需要手动下载安装一次，之后的更新就正常了。
+
 更新信息来自 GitHub Releases 里的 `latest.json`。访问 GitHub 慢时，可以把 `latest.json` 和安装包放到自己的服务器上，在「设置 → 更新与关于」里填写更新地址。
 
 发布新版本：修改 `folio/__init__.py` 里的 `__version__`，在 `docs/CHANGELOG.md` 写好这一版的说明，然后推送标签：
@@ -123,6 +127,25 @@ API Key 只保存在本机的设置文件里。不想在界面里填写时，也
 git tag v0.2.0
 git push origin v0.2.0
 ```
+
+## Windows 11 右键菜单
+
+Windows 11 的第一层右键菜单只显示由**带包标识**的清单注册、实现了 `IExplorerCommand` 的扩展，旧的注册表菜单只能出现在「显示更多选项」里。所以 Folio 有两套右键菜单：
+
+- **新菜单**：`shellext/` 里的 C++ 扩展（三个顶层菜单项，按选中的文件类型显示；多选时把全部文件交给一个 Folio 进程），由稀疏包 `Folio-Shell.msix`（`packaging/sparse/AppxManifest.xml`）注册。安装程序把它们装到 `%LOCALAPPDATA%\Programs\Folio-shell`（不放在程序目录里：Explorer 加载着的 DLL 会锁住目录，自动更新就改不了名），然后运行 `register.ps1` 注册。
+- **旧菜单**：注册表里的 shell 动词。Windows 10、或者稀疏包注册失败时使用；新菜单注册成功后会删掉旧菜单，免得在「显示更多选项」里重复。
+
+「设置 → 常规」里的开关同时控制两套菜单（新菜单读取 `HKCU\Software\Folio\Shell` 的 `ContextMenu`）。卸载时两套都会清理。注册失败的原因记录在 `%TEMP%\folio-shell.log`。装好后如果没看到新菜单，重启一下资源管理器（任务管理器里重启「Windows 资源管理器」）或注销再登录。
+
+**签名证书必须被系统信任**，稀疏包才能注册。现在用的自签名证书（`CN=xhc144`）在普通用户的电脑上不受信任，注册会失败，安装程序会自动退回旧菜单（安装不会出错）。可选的办法：
+
+| 方案 | 效果 | 代价 |
+| --- | --- | --- |
+| 受信任的代码签名证书（推荐，例如 Azure Artifact Signing，打包流程里已经预留） | 所有用户直接看到新菜单 | 证书费用；用 Azure 时要在仓库变量 `MSIX_PUBLISHER` 里填它的证书 Subject |
+| 安装时请求管理员权限，把自签名证书导入「受信任的人」 | 用户点一次 UAC 后可用 | 要把自签名证书加进系统信任，有安全代价；和现在「不需要管理员」的安装方式冲突，没有采用 |
+| 证书不受信任时自动退回旧菜单（已实现，和第一种一起用） | 不需要任何操作 | 新菜单要等有受信任证书后才生效 |
+
+自己打包：先 `python packaging/build.py`，再 `python packaging/build_shell.py --publisher "CN=证书的Subject" --test`（需要 Visual Studio C++、CMake 和 Windows SDK），用 `python packaging/sign_windows.py` 给 `dist/Folio-shell` 里的 exe、dll、msix 签名，最后用 Inno Setup 编译 `packaging/installer.iss`。
 
 ## 代码签名
 
@@ -199,8 +222,11 @@ folio/
   update.py    自动更新
   assets/      图标（Lucide，ISC 许可）和 Logo
 tests/         pytest：核心逻辑 + 无界面模式下的界面测试
-packaging/     PyInstaller 打包、代码签名、更新清单脚本
+packaging/     PyInstaller 打包、代码签名、更新清单脚本；sparse/ 是 Windows 11 右键菜单的稀疏包清单和注册脚本
+shellext/      Windows 11 右键菜单扩展（C++，IExplorerCommand），由 packaging/build_shell.py 构建
 ```
+
+改代码的约定和容易踩的坑（尤其是自动更新）写在 [CLAUDE.md](CLAUDE.md)。
 
 运行测试（Linux 上测试文字识别需要安装 `tesseract-ocr tesseract-ocr-chi-sim`，没有时相关测试会跳过）：
 

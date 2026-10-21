@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import base64
+import glob
 import hashlib
 import json
 import os
@@ -300,9 +301,26 @@ def same_signer(cur: dict, new: dict) -> bool:
 
 
 # ---------------------------------------------------------------- 安装
+# 替换脚本由「旧版本」启动和执行：改这里的逻辑只对从改动后的版本再往后的更新生效（见 CLAUDE.md「自动更新的注意事项」）。
+# 脚本先切到临时目录：Windows 不允许改名一个正被某个进程当作当前目录的文件夹，
+# 如果脚本的当前目录在程序目录里（从快捷方式启动时 Folio 的当前目录就是程序目录），改名会一直失败。
+# 注意 Set-Location 只改 PowerShell 自己的位置，不改进程的当前目录（锁住目录的是后者），两个都要设。
+# 失败时写日志 %TEMP%\folio-update-<时间>.log 并重新打开旧版本；下次启动时 pending_failure() 会提示用户。
 WIN_SCRIPT = r"""
 param([int]$ProcId, [string]$Src, [string]$Dst, [string]$Exe)
+Set-Location -LiteralPath ([System.IO.Path]::GetTempPath())
+[System.IO.Directory]::SetCurrentDirectory([System.IO.Path]::GetTempPath())
 $ErrorActionPreference = 'Stop'
+function Fail([string]$Why) {
+  $log = Join-Path ([System.IO.Path]::GetTempPath()) ("folio-update-" + (Get-Date -Format 'yyyyMMddHHmmss') + ".log")
+  $err = if ($Error.Count) { ($Error[0] | Out-String).Trim() } else { '' }
+  try {
+    @("time: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')", "reason: $Why", "install dir: $Dst", "new version: $Src",
+      "cwd: $([System.IO.Directory]::GetCurrentDirectory())", "error: $err") | Set-Content -LiteralPath $log -Encoding UTF8
+  } catch {}
+  Start-Process -FilePath $Exe
+  exit 1
+}
 try { Wait-Process -Id $ProcId -Timeout 120 -ErrorAction SilentlyContinue } catch {}
 Start-Sleep -Milliseconds 400
 $bak = "$Dst.old-" + (Get-Date -Format 'yyyyMMddHHmmss')
@@ -310,13 +328,12 @@ $moved = $false
 for ($i = 0; $i -lt 40; $i++) {
   try { Rename-Item -LiteralPath $Dst -NewName (Split-Path $bak -Leaf); $moved = $true; break } catch { Start-Sleep -Milliseconds 500 }
 }
-if (-not $moved) { Start-Process -FilePath $Exe; exit 1 }
+if (-not $moved) { Fail "cannot rename the install dir (a file in it is in use, or some process has it as current directory)" }
 try {
   Move-Item -LiteralPath $Src -Destination $Dst
 } catch {
-  Rename-Item -LiteralPath $bak -NewName (Split-Path $Dst -Leaf)
-  Start-Process -FilePath $Exe
-  exit 1
+  try { Rename-Item -LiteralPath $bak -NewName (Split-Path $Dst -Leaf) } catch {}
+  Fail "cannot move the new version into place"
 }
 Start-Process -FilePath $Exe
 Start-Sleep -Seconds 2
@@ -326,6 +343,7 @@ Remove-Item -LiteralPath (Split-Path $Src -Parent) -Recurse -Force -ErrorAction 
 
 MAC_SCRIPT = r"""#!/bin/sh
 PID="$1"; SRC="$2"; DST="$3"
+cd "${TMPDIR:-/tmp}" || cd /
 i=0
 while kill -0 "$PID" 2>/dev/null && [ $i -lt 600 ]; do sleep 0.2; i=$((i+1)); done
 BAK="$DST.old-$(date +%s)"
@@ -348,6 +366,42 @@ def staging_dir(root: str) -> str:
     return os.path.join(os.path.dirname(root), f".{APP_NAME.lower()}-update")
 
 
+STAGING_MARK = "update.json"  # prepare() 在解压目录里记下要装的版本，下次启动时用来判断上次更新是否装上了
+
+
+@dataclass
+class FailedUpdate:
+    version: str   # 没装上的版本
+    log: str       # 替换脚本留下的日志（Windows），可能为空
+
+
+def pending_failure(root: str | None = None, current: str = __version__) -> FailedUpdate | None:
+    """程序启动时调用：上次下载好的新版本还留在解压目录里，说明替换失败了（替换成功时新版本会被移走）。
+
+    返回没装上的版本；没有失败的更新时返回 None。残留的目录无论如何都会删掉，免得每次启动都提示。
+    """
+    root = root or install_root()
+    if root is None:
+        return None
+    staging = staging_dir(root)
+    if not os.path.isdir(staging):
+        return None
+    try:
+        with open(os.path.join(staging, STAGING_MARK), encoding="utf-8") as f:
+            version = str(json.load(f).get("version") or "")
+    except (OSError, ValueError, AttributeError):
+        version = ""
+        if time.time() - os.path.getmtime(staging) < 600:
+            return None  # 可能另一个 Folio 窗口正在下载、解压
+    leftover = [n for n in os.listdir(staging) if os.path.isdir(os.path.join(staging, n))]
+    shutil.rmtree(staging, ignore_errors=True)
+    # 没有记录版本的是旧版本留下的；已经是这个版本或更新的，说明后来手动装上了
+    if not leftover or not version or not is_newer(version, current):
+        return None
+    logs = sorted(glob.glob(os.path.join(tempfile.gettempdir(), f"{APP_NAME.lower()}-update-*.log")), key=os.path.getmtime)
+    return FailedUpdate(version, logs[-1] if logs else "")
+
+
 def prepare(info: UpdateInfo, progress=None, cancelled=None) -> str:
     """下载、校验、解压，返回准备好的新版本路径。"""
     ok, why = can_self_update()
@@ -360,6 +414,8 @@ def prepare(info: UpdateInfo, progress=None, cancelled=None) -> str:
         if progress:
             progress(1.0, "正在解压…")
         new_root = extract(zip_path, staging_dir(root))
+        with open(os.path.join(staging_dir(root), STAGING_MARK), "w", encoding="utf-8") as f:
+            json.dump({"version": info.version, "from": __version__}, f)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     if progress:
@@ -374,6 +430,9 @@ def launch_installer(new_root: str):
     if root is None:
         raise UpdateError("当前不能自动安装更新")
     pid = os.getpid()
+    # 脚本的当前目录必须在程序目录外面：不传 cwd 会继承 Folio 的当前目录（从快捷方式启动时就是程序目录），
+    # Windows 上这会锁住程序目录，替换脚本改名失败，更新装不上（0.2.1 → 0.2.2 时真实发生过）
+    cwd = tempfile.gettempdir()
     if sys.platform == "win32":
         script = os.path.join(tempfile.gettempdir(), f"{APP_NAME.lower()}-update-{int(time.time())}.ps1")
         with open(script, "w", encoding="utf-8-sig") as f:
@@ -382,12 +441,12 @@ def launch_installer(new_root: str):
         flags = 0x00000008 | 0x00000200 | 0x08000000  # DETACHED_PROCESS | NEW_PROCESS_GROUP | NO_WINDOW
         subprocess.Popen(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-File",
                           script, "-ProcId", str(pid), "-Src", new_root, "-Dst", root, "-Exe", exe],
-                         creationflags=flags, close_fds=True)
+                         creationflags=flags, close_fds=True, cwd=cwd)
     elif sys.platform == "darwin":
         script = os.path.join(tempfile.gettempdir(), f"{APP_NAME.lower()}-update-{int(time.time())}.sh")
         with open(script, "w") as f:
             f.write(MAC_SCRIPT)
         os.chmod(script, 0o755)
-        subprocess.Popen(["/bin/sh", script, str(pid), new_root, root], start_new_session=True, close_fds=True)
+        subprocess.Popen(["/bin/sh", script, str(pid), new_root, root], start_new_session=True, close_fds=True, cwd=cwd)
     else:
         raise UpdateError("当前系统不支持自动安装更新")

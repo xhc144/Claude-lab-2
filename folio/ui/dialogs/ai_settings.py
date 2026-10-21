@@ -10,31 +10,47 @@ import tempfile
 
 from PySide6.QtCore import QUrl, Qt, Signal
 from PySide6.QtGui import QDesktopServices
-from PySide6.QtWidgets import (QCheckBox, QComboBox, QHBoxLayout, QLabel, QLineEdit, QListWidget,
-                               QListWidgetItem, QMenu, QMessageBox, QPushButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QComboBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QListWidget, QListWidgetItem,
+                               QMenu, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget)
 
 from ...ai import client
 from ...ai.hub import PRESETS, Connection, Hub, dashscope_host, new_id
 from ...config import Settings
 from ...tts import qwen
 from ...tts.engines import OPENAI_VOICES, SystemEngine
-from ..widgets import IconButton, label
+from ..widgets import Card, IconButton, StatusLabel, Switch, label
 from .base import Worker, section
 
 TEST_TEXT = "你好，这是 Folio 的朗读测试。Hello, this is a voice test."
 
 
 def page(title: str, subtitle: str = "") -> tuple[QWidget, QVBoxLayout]:
-    w = QWidget()
-    lay = QVBoxLayout(w)
-    lay.setContentsMargins(26, 22, 26, 22)
-    lay.setSpacing(12)
-    t = QLabel(title)
-    t.setObjectName("H2")
-    lay.addWidget(t)
+    """设置里的一页：标题、说明，下面是一组组卡片；内容多时可以滚动。返回 (整页部件, 放内容的布局)。"""
+    inner = QWidget()
+    lay = QVBoxLayout(inner)
+    lay.setContentsMargins(28, 24, 28, 24)
+    lay.setSpacing(8)
+    lay.addWidget(label(title, "PageTitle"))
     if subtitle:
         lay.addWidget(label(subtitle, "Muted", wrap=True))
-    return w, lay
+    lay.addSpacing(8)
+    scroll = QScrollArea()
+    scroll.setObjectName("PageScroll")
+    scroll.setWidgetResizable(True)
+    scroll.setFrameShape(QFrame.NoFrame)
+    scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+    scroll.setWidget(inner)
+    return scroll, lay
+
+
+def group(lay: QVBoxLayout, title: str) -> Card:
+    """在页面里加一组：小标题 + 卡片。"""
+    if lay.count() > 2:
+        lay.addSpacing(10)
+    lay.addWidget(section(title))
+    card = Card()
+    lay.addWidget(card)
+    return card
 
 
 def row(label_text: str, widget, hint: str = "", width: int = 96) -> QHBoxLayout:
@@ -88,23 +104,24 @@ class HubPage(QWidget):
         self._loading = False
 
         root = QVBoxLayout(self)
-        root.setContentsMargins(26, 22, 26, 22)
-        root.setSpacing(12)
-        t = QLabel("AI 中台")
-        t.setObjectName("H2")
-        root.addWidget(t)
+        root.setContentsMargins(28, 24, 28, 24)
+        root.setSpacing(8)
+        root.addWidget(label("AI 中台", "PageTitle"))
         root.addWidget(label("在这里统一填写各家 AI 服务的地址和 Key，朗读、文字识别、AI 校对都从这里选用，不用重复填写。"
                              "云端服务和本机运行的模型（Ollama、LM Studio）都可以。", "Muted", wrap=True))
+        root.addSpacing(8)
 
         body = QHBoxLayout()
-        body.setSpacing(16)
-        left = QVBoxLayout()
-        left.setSpacing(8)
+        body.setSpacing(12)
+        list_card = Card()
+        list_card.setFixedWidth(240)
+        left = list_card.add_block(8)
+        left.setContentsMargins(8, 8, 8, 10)
         self.list = QListWidget()
-        self.list.setFixedWidth(230)
         self.list.currentRowChanged.connect(self._select)
         left.addWidget(self.list, 1)
         btns = QHBoxLayout()
+        btns.setContentsMargins(4, 0, 4, 0)
         add = QPushButton("添加")
         menu = QMenu(add)
         for key, p in PRESETS.items():
@@ -116,12 +133,11 @@ class HubPage(QWidget):
         btns.addWidget(self.del_btn)
         btns.addStretch(1)
         left.addLayout(btns)
-        body.addLayout(left)
+        body.addWidget(list_card)
 
-        self.editor = QWidget()
-        el = QVBoxLayout(self.editor)
-        el.setContentsMargins(0, 0, 0, 0)
-        el.setSpacing(10)
+        self.editor = Card()
+        el = self.editor.add_block(10)
+        el.setContentsMargins(18, 16, 18, 16)
         self.kind = label("", "Muted")
         el.addLayout(row("类型", self.kind, width=72))
         self.name = QLineEdit()
@@ -298,9 +314,9 @@ class TtsPage(QWidget):
         root.setContentsMargins(0, 0, 0, 0)
         root.addWidget(w)
 
-        lay.addWidget(section("语音来源"))
+        src = group(lay, "语音来源").add_block()
         self.source = QComboBox()
-        lay.addLayout(row("使用", self.source))
+        src.addLayout(row("使用", self.source))
         self.source.currentIndexChanged.connect(self._source_changed)
         self.key_hint = QHBoxLayout()
         self.key_label = label("", "Faint", wrap=True)
@@ -309,7 +325,7 @@ class TtsPage(QWidget):
         go.setProperty("flat", True)
         go.clicked.connect(self.openHub.emit)
         self.key_hint.addWidget(go)
-        lay.addLayout(self.key_hint)
+        src.addLayout(self.key_hint)
 
         # 千问
         self.qwen_box = QWidget()
@@ -328,7 +344,7 @@ class TtsPage(QWidget):
             self.q_lang.addItem(text, k)
         self.q_lang.setCurrentIndex(next((k for k, (v, _) in enumerate(qwen.LANGUAGES) if v == st.get("tts/language")), 0))
         ql.addLayout(row("语言", self.q_lang, "单一语言的文档指定语言效果更好"))
-        lay.addWidget(self.qwen_box)
+        src.addWidget(self.qwen_box)
 
         # OpenAI 兼容
         self.oa_box = QWidget()
@@ -339,7 +355,7 @@ class TtsPage(QWidget):
         ol.addLayout(row("模型", self.oa_model))
         self.oa_voice = model_combo(st.get("tts/oa_voice") or "alloy", OPENAI_VOICES)
         ol.addLayout(row("音色", self.oa_voice, "本地语音服务请填它支持的音色名"))
-        lay.addWidget(self.oa_box)
+        src.addWidget(self.oa_box)
 
         # 系统
         self.sys_box = QWidget()
@@ -354,21 +370,17 @@ class TtsPage(QWidget):
             if self.sys_voice.itemData(k) == cur:
                 self.sys_voice.setCurrentIndex(k)
         sl.addLayout(row("系统音色", self.sys_voice))
-        lay.addWidget(self.sys_box)
+        src.addWidget(self.sys_box)
 
-        lay.addSpacing(4)
-        lay.addWidget(section("通用"))
-        self.skip = QCheckBox("跳过页眉、页脚和页码")
-        self.skip.setChecked(bool(st.get("tts/skip_margins")))
-        lay.addWidget(self.skip)
-        trow = QHBoxLayout()
+        card = group(lay, "通用")
+        self.skip = Switch(bool(st.get("tts/skip_margins")))
+        card.add_row("跳过页眉、页脚和页码", "朗读时不读每页顶部和底部重复出现的文字。", self.skip)
         self.test_btn = QPushButton("试听")
         self.test_btn.clicked.connect(self._test)
-        self.test_status = label("", "Muted", wrap=True)
-        trow.addWidget(self.test_btn)
-        trow.addWidget(self.test_status, 1)
-        lay.addLayout(trow)
-        lay.addWidget(label("合成的语音会缓存在本地，同一段重复朗读不会再次收费。", "Faint", wrap=True))
+        test_row = card.add_row("试听", "用上面选的语音读一句测试文字。合成的语音会缓存在本地，同一段重复朗读不会再次收费。",
+                                self.test_btn)
+        self.test_status = StatusLabel()
+        test_row.text_layout.addWidget(self.test_status)
         lay.addStretch(1)
         self.reload(st.get("tts/engine"))
         hub.connectionsChanged.connect(lambda: self.reload(self.source.currentData()))
@@ -489,9 +501,9 @@ class OcrPage(QWidget):
         self._models = dict(st.get("ocr/models") or {})       # 每个连接各自记住选过的模型
         self._fix_models = dict(st.get("ocr/fix_models") or {})
         self._cur = self._cur_fix = None
-        lay.addWidget(section("识别方式"))
+        src = group(lay, "识别方式").add_block()
         self.source = QComboBox()
-        lay.addLayout(row("使用", self.source))
+        src.addLayout(row("使用", self.source))
         self.source.currentIndexChanged.connect(self._source_changed)
 
         self.sys_box = QWidget()
@@ -513,7 +525,7 @@ class OcrPage(QWidget):
         if self.engine is None:
             hint = "⚠ 这台电脑上暂时没有可用的系统识别。" + hint
         sl.addWidget(label(hint, "Faint", wrap=True))
-        lay.addWidget(self.sys_box)
+        src.addWidget(self.sys_box)
 
         self.ai_box = QWidget()
         al = QVBoxLayout(self.ai_box)
@@ -523,12 +535,11 @@ class OcrPage(QWidget):
         al.addLayout(row("视觉模型", self.model))
         self.ai_hint = label("", "Faint", wrap=True)
         al.addWidget(self.ai_hint)
-        lay.addWidget(self.ai_box)
+        src.addWidget(self.ai_box)
 
-        lay.addSpacing(4)
-        lay.addWidget(section("AI 校对（可选）"))
-        self.fix_on = QCheckBox("识别后用 AI 改正错别字和标点（不会改写内容）")
-        lay.addWidget(self.fix_on)
+        card = group(lay, "AI 校对（可选）")
+        self.fix_on = Switch()
+        card.add_row("识别后用 AI 改正错别字和标点", "只改错字和标点，不会改写内容。", self.fix_on)
         self.fix_box = QWidget()
         fl = QVBoxLayout(self.fix_box)
         fl.setContentsMargins(0, 0, 0, 0)
@@ -537,7 +548,8 @@ class OcrPage(QWidget):
         fl.addLayout(row("使用", self.fix_conn))
         self.fix_model = model_combo("", ())
         fl.addLayout(row("文字模型", self.fix_model, "例如 deepseek-flash、qwen-flash"))
-        lay.addWidget(self.fix_box)
+        fix_lay = card.add_block()
+        fix_lay.addWidget(self.fix_box)
         self.fix_on.toggled.connect(self.fix_box.setEnabled)
         self.fix_conn.currentIndexChanged.connect(self._fix_changed)
 
@@ -545,6 +557,7 @@ class OcrPage(QWidget):
         go.setProperty("flat", True)
         go.clicked.connect(self.openHub.emit)
         h = QHBoxLayout()
+        h.setContentsMargins(0, 6, 0, 0)
         h.addWidget(go)
         h.addStretch(1)
         lay.addLayout(h)

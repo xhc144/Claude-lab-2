@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Folio 右键菜单的稀疏包（Package with External Location）清单。由 packaging/build_shell.py 填入
+  @VERSION@（四段数字）、@PUBLISHER@（必须和签名证书的 Subject 完全一致）、@DLLDIR@（DLL 所在的带版本号的子目录），
+  再用 makeappx 打成 Folio-Shell.msix。
+
+  外部位置（ExternalLocation）是 %LOCALAPPDATA%\Programs\Folio-shell，不是程序目录：
+  自动更新要给程序目录改名，而 Explorer（dllhost）加载着的 DLL 会锁住它所在的目录。
+  CLSID 要和 shellext/FolioShellExt.cpp 里的一致。
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+  xmlns:desktop5="http://schemas.microsoft.com/appx/manifest/desktop/windows10/5"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  IgnorableNamespaces="uap uap10 desktop4 desktop5 rescap com">
+  <Identity Name="Folio.Shell" Publisher="@PUBLISHER@" Version="@VERSION@" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Folio</DisplayName>
+    <PublisherDisplayName>Folio</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <uap10:AllowExternalContent>true</uap10:AllowExternalContent>
+  </Properties>
+  <Resources>
+    <Resource Language="zh-cn" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <rescap:Capability Name="unvirtualizedResources" />
+  </Capabilities>
+  <Applications>
+    <Application Id="FolioShell" Executable="FolioShell.exe" uap10:TrustLevel="mediumIL" uap10:RuntimeBehavior="win32App">
+      <uap:VisualElements AppListEntry="none" DisplayName="Folio" Description="Folio 资源管理器右键菜单"
+                          BackgroundColor="transparent" Square150x150Logo="Assets\Square150x150Logo.png"
+                          Square44x44Logo="Assets\Square44x44Logo.png" />
+      <Extensions>
+        <desktop4:Extension Category="windows.fileExplorerContextMenus">
+          <desktop4:FileExplorerContextMenus>
+            <desktop5:ItemType Type=".pdf">
+              <desktop5:Verb Id="FolioCompress" Clsid="774DDDCF-8048-41F5-A5E3-7AF831C7111F" />
+              <desktop5:Verb Id="FolioMerge" Clsid="2BD5E5C0-1A3C-4F08-9E8A-DFFB7A85841D" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".png">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".jpg">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".jpeg">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".bmp">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".gif">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".tif">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".tiff">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type=".webp">
+              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
+            </desktop5:ItemType>
+          </desktop4:FileExplorerContextMenus>
+        </desktop4:Extension>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:SurrogateServer DisplayName="Folio 右键菜单">
+              <com:Class Id="774DDDCF-8048-41F5-A5E3-7AF831C7111F" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
+              <com:Class Id="2BD5E5C0-1A3C-4F08-9E8A-DFFB7A85841D" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
+              <com:Class Id="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
+            </com:SurrogateServer>
+          </com:ComServer>
+        </com:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+</Package>

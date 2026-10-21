@@ -66,9 +66,10 @@ DARK = {
     "tooltip_text": "#1B1C1F",
 }
 
-# 界面字体：西文字体在前，中文字体作为回退
+# 界面字体。Windows 上把微软雅黑 UI 放在最前：它的西文就是 Segoe UI 的字形，而行高和基线按中文设计；
+# 以前 Segoe UI 在前、中文回退到雅黑时，行高按 Segoe UI 算，中文字偏下、看起来像被裁掉了一点
 if sys.platform == "win32":
-    FONT_FAMILIES = ["Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei"]
+    FONT_FAMILIES = ["Microsoft YaHei UI", "Segoe UI", "Microsoft YaHei"]
 elif sys.platform == "darwin":
     FONT_FAMILIES = [".AppleSystemUIFont", "PingFang SC", "Helvetica Neue"]
 else:
@@ -107,6 +108,9 @@ class ThemeManager(QObject):
             app.setStyle("Fusion")  # 各平台外观一致，且与样式表配合最好
             font = QFont(app.font())
             font.setFamilies(FONT_FAMILIES)
+            if sys.platform == "win32":
+                # 缩放 125%、150% 时默认不做字形微调，中文的横笔画会糊成两个像素；按像素对齐后清楚得多
+                font.setHintingPreference(QFont.PreferFullHinting)
             app.setFont(font)
             if sys.platform == "win32":
                 self._title_filter = TitleBarFilter(self)
@@ -117,7 +121,6 @@ class ThemeManager(QObject):
 
         css_vars = dict(self.colors)
         css_vars["_check"] = themed_file("check", "#FFFFFF")
-        css_vars["_close"] = themed_file("x", self.colors["text2"])
         css_vars["_chevron"] = themed_file("chevron-down", self.colors["text2"])
         app.setStyleSheet(stylesheet(css_vars))
         pal = app.palette()
@@ -150,11 +153,32 @@ class ThemeManager(QObject):
 
 
 class TitleBarFilter(QObject):
+    """Windows：窗口显示时给标题栏上色；菜单和提示框改成透明底，去掉系统加的直角阴影。"""
+
     def eventFilter(self, obj, event):
-        if (event.type() == QEvent.Show and obj.isWidgetType() and obj.isWindow()
+        if event.type() == QEvent.Polish and obj.isWidgetType() and _is_popup(obj):
+            make_popup_rounded(obj)
+        elif (event.type() == QEvent.Show and obj.isWidgetType() and obj.isWindow()
                 and obj.windowType() in (Qt.Window, Qt.Dialog)):  # 不管菜单、提示等弹出窗口
             theme.style_title_bar(obj)
         return False
+
+
+def _is_popup(w) -> bool:
+    return w.inherits("QMenu") or w.inherits("QTipLabel")
+
+
+def make_popup_rounded(w):
+    """菜单、提示框的圆角来自样式表，但 Windows 上弹出窗口是不透明的矩形，圆角外面露出底色，
+    系统还会在右边和下边画一道直角阴影（看起来像菜单底下多了一条黑线）。
+    改成透明底、不要系统阴影，就只剩样式表画的圆角和边框。必须在窗口真正创建之前设置：
+    QMenu 和 QTipLabel 都会在显示之前先 polish，这时候还没有创建窗口。
+    """
+    if w.property("_folioRounded") or w.testAttribute(Qt.WA_WState_Created):
+        return
+    w.setProperty("_folioRounded", True)
+    w.setWindowFlags(w.windowFlags() | Qt.FramelessWindowHint | Qt.NoDropShadowWindowHint)
+    w.setAttribute(Qt.WA_TranslucentBackground)
 
 
 def parse_color(s: str) -> QColor:
@@ -191,11 +215,13 @@ QFrame#Hairline {{ background: {c['border']}; max-height: 1px; min-height: 1px; 
 QFrame#VHairline {{ background: {c['border']}; max-width: 1px; min-width: 1px; border: none; }}
 QLabel {{ background: transparent; }}
 QLabel#Muted {{ color: {c['text2']}; }}
-QLabel#Faint {{ color: {c['text3']}; font-size: 12px; }}
+QLabel#Faint {{ color: {c['text2']}; font-size: 12px; }}
 QLabel#H1 {{ font-size: 26px; font-weight: 600; }}
 QLabel#H2 {{ font-size: 17px; font-weight: 600; }}
 QLabel#H3 {{ font-size: 14px; font-weight: 600; }}
 QLabel#SectionTitle {{ color: {c['text2']}; font-size: 12px; font-weight: 600; }}
+QLabel#PageTitle {{ font-size: 22px; font-weight: 600; }}
+QLabel#RowTitle {{ font-size: 13px; }}
 
 /* ---------- 顶部栏 ---------- */
 #TopBar {{ background: {c['surface']}; border-bottom: 1px solid {c['border']}; }}
@@ -248,6 +274,9 @@ QLineEdit, QPlainTextEdit, QTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {{
 QLineEdit:focus, QPlainTextEdit:focus, QTextEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {{
     border: 1px solid {c['accent']};
 }}
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled {{
+    color: {c['text3']}; background: {c['surface2']}; border-color: {c['border']};
+}}
 QLineEdit#Compact {{ padding: 3px 6px; border-radius: 6px; }}
 QLineEdit#Search {{ padding-left: 8px; border-radius: 8px; background: {c['surface2']}; border: 1px solid transparent; }}
 QLineEdit#Search:focus {{ background: {c['surface']}; border: 1px solid {c['accent']}; }}
@@ -297,7 +326,7 @@ QScrollBar::add-page, QScrollBar::sub-page {{ background: transparent; }}
 
 QMenu {{
     background: {c['surface']};
-    border: 1px solid {c['border']};
+    border: 1px solid {c['border_strong']};
     border-radius: 10px;
     padding: 6px;
 }}
@@ -331,7 +360,7 @@ QTabBar#DocTabs::tab {{
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     height: 34px;
-    padding: 0 4px 0 12px;
+    padding: 0 0 0 12px;
     margin: 0 2px 0 0;
     color: {c['text2']};
     min-width: 72px;
@@ -341,16 +370,10 @@ QTabBar#DocTabs::tab:hover {{ background: {c['hover']}; color: {c['text']}; }}
 QTabBar#DocTabs::tab:selected {{ background: {c['surface']}; color: {c['text']}; }}
 QTabBar#DocTabs[home="true"]::tab:selected {{ background: transparent; color: {c['text2']}; }}
 QTabBar#DocTabs[home="true"]::tab:selected:hover {{ background: {c['hover']}; color: {c['text']}; }}
-QTabBar#DocTabs::close-button {{
-    image: url({c['_close']});
-    subcontrol-position: right;
-    width: 18px; height: 18px;
-    padding: 3px;
-    border-radius: 5px;
-}}
-QTabBar#DocTabs::close-button:hover {{ background: {c['pressed']}; }}
 QTabBar#DocTabs QToolButton {{ background: {c['chrome']}; border: none; border-radius: 6px; padding: 0; }}
 QTabBar#DocTabs QToolButton:hover {{ background: {c['hover']}; }}
+QTabBar#DocTabs QToolButton#TabClose {{ background: transparent; border-radius: 5px; padding: 0; }}
+QTabBar#DocTabs QToolButton#TabClose:hover {{ background: {c['pressed']}; }}
 QTabBar::tear {{ width: 0; border: none; }}
 #TabStrip QToolButton {{ border-radius: 7px; }}
 QToolButton#HomeTab {{
@@ -403,7 +426,22 @@ QSplitter::handle:horizontal {{ width: 1px; }}
 #Swatch {{ border-radius: 11px; }}
 #DialogHeader {{ background: {c['surface']}; border-bottom: 1px solid {c['border']}; }}
 #DialogFooter {{ background: {c['surface']}; border-top: 1px solid {c['border']}; }}
-#Segmented {{ background: {c['surface2']}; border-radius: 9px; }}
-#Segmented QToolButton {{ border-radius: 7px; padding: 4px 10px; color: {c['text2']}; }}
-#Segmented QToolButton:checked {{ background: {c['surface']}; color: {c['text']}; }}
+#Segmented {{ background: {c['surface2']}; border: 1px solid {c['border']}; border-radius: 9px; }}
+#Segmented QToolButton {{
+    border: 1px solid transparent; border-radius: 7px; padding: 5px 14px; color: {c['text2']};
+}}
+#Segmented QToolButton:hover {{ color: {c['text']}; }}
+#Segmented QToolButton:checked {{ background: {c['surface']}; border-color: {c['border_strong']}; color: {c['text']}; }}
+
+/* ---------- 设置 ---------- */
+QFrame#SettingsCard {{
+    background: {c['surface']};
+    border: 1px solid {c['border']};
+    border-radius: 10px;
+}}
+QFrame#SettingsCard QFrame#Hairline {{ background: {c['border']}; }}
+QListWidget#SettingsNav::item {{ padding: 8px 10px; margin: 1px 0; border-radius: 8px; color: {c['text']}; }}
+QListWidget#SettingsNav::item:selected {{ background: {c['accent_soft']}; color: {c['accent']}; }}
+QScrollArea#PageScroll, QScrollArea#PageScroll > QWidget > QWidget {{ background: transparent; border: none; }}
+#SettingsFooter {{ background: {c['bg']}; border-top: 1px solid {c['border']}; }}
 """

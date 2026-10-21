@@ -25,12 +25,25 @@ function Remove-Package {
   Get-AppxPackage -Name $Name | ForEach-Object { Remove-AppxPackage -Package $_.PackageFullName }
 }
 
-if ($Action -eq 'uninstall') {
-  try { Remove-Package; Write-Log 'package removed' } catch { Write-Log "remove failed: $_" }
-  # Explorer 用过右键菜单后，dllhost 还会加载着 DLL 一段时间，结束它才能删掉文件
+function Stop-Dllhost {
+  # Explorer 用过右键菜单后，dllhost 还会加载着 DLL 一段时间：它在包里运行时移除不了包，也删不掉文件
   Get-Process dllhost -ErrorAction SilentlyContinue | Where-Object {
     try { @($_.Modules | Where-Object { $_.FileName -like "$Dir\*" }).Count -gt 0 } catch { $false }
   } | Stop-Process -Force -ErrorAction SilentlyContinue
+}
+
+if ($Action -eq 'uninstall') {
+  # 先结束 dllhost 再移除包；移除失败时重试几次（dllhost 刚退出时包可能还标记为使用中）
+  for ($i = 1; $i -le 5; $i++) {
+    Stop-Dllhost
+    try {
+      Remove-Package
+      if (-not (Get-AppxPackage -Name $Name)) { Write-Log 'package removed'; break }
+      Write-Log "attempt ${i}: package still registered"
+    } catch { Write-Log "attempt ${i}: remove failed: $_" }
+    Start-Sleep -Seconds 2
+  }
+  Stop-Dllhost
   Remove-Item -LiteralPath $Key -Recurse -Force -ErrorAction SilentlyContinue
   exit 0
 }
@@ -41,6 +54,7 @@ if ($build -lt 22000) {
   exit 0
 }
 try {
+  Stop-Dllhost
   Remove-Package
   Add-AppxPackage -Path (Join-Path $Dir 'Folio-Shell.msix') -ExternalLocation $Dir
   $pkg = Get-AppxPackage -Name $Name

@@ -96,7 +96,8 @@ Filename: "{app}\Folio.exe"; Description: "立即打开 Folio"; Flags: nowait po
 
 #if HaveShell
 [UninstallRun]
-Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{#ShellDir}\register.ps1"" -Action uninstall -Dir ""{#ShellDir}"""; WorkingDir: "{tmp}"; Flags: runhidden waituntilterminated; RunOnceId: "FolioShell"
+; 不写 WorkingDir：它在安装时就展开并记进卸载日志，{tmp} 到卸载时已经不存在，会 CreateProcess 失败（267）
+Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{#ShellDir}\register.ps1"" -Action uninstall -Dir ""{#ShellDir}"""; Flags: runhidden waituntilterminated; RunOnceId: "FolioShell"
 #endif
 
 [UninstallDelete]

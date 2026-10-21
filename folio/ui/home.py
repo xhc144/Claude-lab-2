@@ -11,6 +11,7 @@ from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (QFrame, QGridLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy,
                                QVBoxLayout, QWidget)
 
+from .. import __version__
 from ..config import Settings, cache_dir
 from ..icons import logo_pixmap, pixmap
 from ..theme import theme
@@ -189,6 +190,8 @@ class HomePage(QScrollArea):
     openRequested = Signal()
     openPath = Signal(str)
     toolRequested = Signal(str)
+    settingsRequested = Signal()
+    updateRequested = Signal()
 
     def __init__(self, settings: Settings, parent=None):
         super().__init__(parent)
@@ -265,13 +268,43 @@ class HomePage(QScrollArea):
         self.recent_lay.setSpacing(0)
         col.addWidget(self.recent_box)
         col.addStretch(1)
+
+        # 底部：版本和自动更新状态，检查更新、设置的入口
+        foot = QHBoxLayout()
+        foot.setSpacing(4)
+        self.version_label = QLabel()
+        self.version_label.setObjectName("Faint")
+        foot.addWidget(self.version_label)
+        foot.addStretch(1)
+        self.update_link = QPushButton("检查更新")
+        self.settings_link = QPushButton("设置")
+        for b, sig in ((self.update_link, self.updateRequested), (self.settings_link, self.settingsRequested)):
+            b.setProperty("flat", True)
+            b.setCursor(Qt.PointingHandCursor)
+            b.clicked.connect(sig.emit)
+            foot.addWidget(b)
+        col.addSpacing(8)
+        col.addLayout(foot)
         self._rows: list[RecentRow] = []
         self._thumb_queue: list[RecentRow] = []
         self._thumb_timer = QTimer(self)
         self._thumb_timer.timeout.connect(self._next_thumb)
         self.refresh()
+        self.refresh_footer()
+
+    def refresh_footer(self, update_info=None):
+        auto = "已开启自动检查更新" if self.settings.get("update/auto") else "自动检查更新已关闭"
+        last = float(self.settings.get("update/last_check") or 0)
+        when = f"，上次检查：{time_ago(last)}" if last else ""
+        self.version_label.setText(f"Folio {__version__} · {auto}{when}")
+        if update_info is not None:
+            self.update_link.setText(f"安装新版本 {update_info.version}")
+        else:
+            self.update_link.setText("检查更新")
 
     def refresh(self):
+        if hasattr(self, "version_label"):
+            self.refresh_footer(getattr(self.window(), "update_info", None))
         while self.recent_lay.count():
             w = self.recent_lay.takeAt(0).widget()
             if w:

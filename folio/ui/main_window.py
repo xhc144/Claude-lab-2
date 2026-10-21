@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import os
+import re
+import sys
 import time
 
 from PySide6.QtCore import QSize, Qt, QTimer
@@ -38,11 +40,21 @@ TOOL_BUTTONS = [
     ("read", "audio-lines", "点读：点哪读哪 (R)", "R"),
 ]
 
+
+def natural_key(path: str) -> list:
+    """按文件名自然排序（和资源管理器一样）：第2页.pdf 在 第10页.pdf 前面，x.pdf 在 x9.pdf 前面。"""
+    stem, ext = os.path.splitext(os.path.basename(path))
+    parts = [(0, int(t), "") if t.isdigit() else (1, 0, t.lower()) for t in re.split(r"(\d+)", stem) if t]
+    return parts + [(-1, 0, ext.lower())]
+
+
 OPEN_FILTER = ("所有支持的文件 (*.pdf *.epub *.xps *.oxps *.cbz *.fb2 *.mobi);;PDF 文件 (*.pdf);;"
                "电子书 (*.epub *.mobi *.fb2 *.cbz);;所有文件 (*)")
 
 
 class MainWindow(QMainWindow):
+    TOOL_REQUEST_DELAY_MS = 300
+
     def __init__(self, settings: Settings):
         super().__init__()
         self.settings = settings
@@ -51,7 +63,18 @@ class MainWindow(QMainWindow):
         self.reader.message.connect(lambda m: self.toast(m, 4000))
         self.reader.needsOcr.connect(self._offer_ocr)
         self.pending_update: str | None = None
+        self.update_info = None
+        self.tool_windows: list = []   # 打开着的工具窗口（压缩、合并等），各自是独立窗口，不会挡住主窗口
+        self._update_timer_armed = False
+        # 资源管理器里多选文件再点右键菜单时，每个文件各启动一次 Folio，文件是一个个送来的，顺序也是乱的：
+        # 攒一小会儿，按文件名排好再交给工具窗口
+        self._tool_requests: dict[str, list[str]] = {}
+        self._tool_request_timer = QTimer(self)
+        self._tool_request_timer.setSingleShot(True)
+        self._tool_request_timer.setInterval(self.TOOL_REQUEST_DELAY_MS)
+        self._tool_request_timer.timeout.connect(self._flush_tool_requests)
         self.setWindowIcon(app_icon())
+        self.setProperty("titleColor", "chrome")  # Windows 11：标题栏和标签栏同色
         self.setWindowTitle(APP_DISPLAY_NAME)
         self.resize(1360, 880)
         self.setMinimumSize(900, 600)
@@ -77,23 +100,28 @@ class MainWindow(QMainWindow):
         self.home.openRequested.connect(self.open_dialog)
         self.home.openPath.connect(self.open_path)
         self.home.toolRequested.connect(self.open_tool)
+        self.home.settingsRequested.connect(lambda: self.open_settings("about"))
+        self.home.updateRequested.connect(
+            lambda: self._show_update() if self.update_info else self.check_update(silent=False))
         self.stack.addWidget(self.home)
         self.tabs_widgets: list[DocTab] = []
         self._toast = Toast(root)
         self._build_shortcuts()
         self._sync_ui()
-        QTimer.singleShot(6000, self._auto_check_update)
 
     # ================================================================ 构建界面
     def _build_tabstrip(self) -> QWidget:
+        # 标签高 34，上面留 6：选中的标签贴着下面的工具栏；按钮都在标签那一行里垂直居中
         strip = QFrame()
         strip.setObjectName("TabStrip")
         hl = QHBoxLayout(strip)
-        hl.setContentsMargins(8, 0, 8, 0)
+        hl.setContentsMargins(8, 6, 8, 0)
         hl.setSpacing(2)
         self.home_btn = IconButton("house", "主页", checkable=True)
+        self.home_btn.setObjectName("HomeTab")
+        self.home_btn.setFixedSize(44, 34)
         self.home_btn.clicked.connect(self.show_home)
-        hl.addWidget(self.home_btn)
+        hl.addWidget(self.home_btn, 0, Qt.AlignBottom)
         self.tabbar = QTabBar()
         self.tabbar.setObjectName("DocTabs")
         self.tabbar.setTabsClosable(True)
@@ -107,11 +135,27 @@ class MainWindow(QMainWindow):
         self.tabbar.tabCloseRequested.connect(self.close_tab)
         self.tabbar.tabMoved.connect(self._on_tab_moved)
         self.tabbar.tabBarClicked.connect(lambda i: i >= 0 and self._show_tab(i))
-        hl.addWidget(self.tabbar, 0)
-        add = IconButton("plus", "打开文件 (Ctrl+O)", size=16)
+        self.tabbar.hide()  # 没有标签时不占位置，加号紧跟在主页按钮后面
+        hl.addWidget(self.tabbar, 0, Qt.AlignBottom)
+        hl.addSpacing(2)
+        add = IconButton("plus", "打开文件 (Ctrl+O)", size=18)
+        add.setFixedSize(30, 30)
         add.clicked.connect(self.open_dialog)
-        hl.addWidget(add)
+        hl.addWidget(add, 0, Qt.AlignVCenter)
         hl.addStretch(1)
+        # 右上角：有新版本时的提示 + 主菜单（主页和文档页都能看到，设置、检查更新都在这里）
+        self.update_btn = IconButton("arrow-down", "", size=14, text="新版本", color_key="accent")
+        self.update_btn.setObjectName("UpdatePill")
+        self.update_btn.setFixedHeight(26)
+        self.update_btn.clicked.connect(self._show_update)
+        self.update_btn.hide()
+        hl.addWidget(self.update_btn, 0, Qt.AlignVCenter)
+        hl.addSpacing(4)
+        self.btn_more = IconButton("ellipsis", "菜单：设置、检查更新、关于")
+        self.btn_more.setFixedSize(34, 30)
+        self.btn_more.setPopupMode(IconButton.InstantPopup)
+        self.btn_more.setMenu(self._build_more_menu())
+        hl.addWidget(self.btn_more, 0, Qt.AlignVCenter)
         return strip
 
     def _build_toolbar(self) -> QWidget:
@@ -147,9 +191,9 @@ class MainWindow(QMainWindow):
         hl.addWidget(self.page_edit)
         self.page_total = QLabel("/ 0")
         self.page_total.setObjectName("Muted")
-        self.page_total.setMinimumWidth(40)
-        hl.addSpacing(4)
+        hl.addSpacing(6)
         hl.addWidget(self.page_total)
+        hl.addSpacing(4)
         self.btn_next = IconButton("chevron-right", "下一页")
         self.btn_next.clicked.connect(lambda: self.cur and self.cur.view.next_page())
         hl.addWidget(self.btn_next)
@@ -223,11 +267,50 @@ class MainWindow(QMainWindow):
         self.btn_tone.setPopupMode(IconButton.InstantPopup)
         self.btn_tone.setMenu(self._build_tone_menu())
         hl.addWidget(self.btn_tone)
-        self.btn_more = IconButton("ellipsis", "更多")
-        self.btn_more.setPopupMode(IconButton.InstantPopup)
-        self.btn_more.setMenu(self._build_more_menu())
-        hl.addWidget(self.btn_more)
+        # 窗口窄时按顺序收起次要按钮（这些功能在菜单和快捷键里都有），避免按钮挤在一起
+        self._toolbar_steps = [[self.btn_tools], [self.btn_zoom_out, self.btn_zoom_in], [self.btn_present],
+                               [self.btn_print], [self.btn_layout], [self.btn_search]]
+        self._toolbar_need: tuple[int, list[int]] | None = None
+        self._toolbar_level = 0
         return bar
+
+    def _set_toolbar_level(self, level: int):
+        self._toolbar_level = level
+        for k, step in enumerate(self._toolbar_steps):
+            collapse = k < level
+            if step == [self.btn_tools]:  # 「工具」只去掉文字
+                self.btn_tools.setToolButtonStyle(Qt.ToolButtonIconOnly if collapse else Qt.ToolButtonTextBesideIcon)
+            else:
+                for w in step:
+                    w.setVisible(not collapse)
+
+    def _fit_toolbar(self):
+        if self._toolbar_need is None:  # 全部显示时要多宽，以及每收起一步能省多少
+            self._set_toolbar_level(0)
+            lay = self.topbar.layout()
+            lay.invalidate()
+            full = lay.sizeHint().width()
+            saves = []
+            for step in self._toolbar_steps:
+                if step == [self.btn_tools]:
+                    wide = self.btn_tools.sizeHint().width()
+                    self.btn_tools.setToolButtonStyle(Qt.ToolButtonIconOnly)
+                    saves.append(wide - self.btn_tools.sizeHint().width())
+                    self.btn_tools.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+                else:
+                    saves.append(sum(w.sizeHint().width() + lay.spacing() for w in step))
+            self._toolbar_need = (full, saves)
+        full, saves = self._toolbar_need
+        level, need = 0, full
+        while need > self.width() and level < len(saves):
+            need -= saves[level]
+            level += 1
+        if level != self._toolbar_level:
+            self._set_toolbar_level(level)
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        self._fit_toolbar()
 
     def _build_tools_menu(self) -> QMenu:
         m = QMenu(self)
@@ -283,6 +366,7 @@ class MainWindow(QMainWindow):
         m.addSeparator()
         m.addAction("设置…", lambda: self.open_settings())
         m.addAction("AI 中台…", lambda: self.open_settings("ai"))
+        m.addSeparator()
         m.addAction("检查更新…", lambda: self.check_update(silent=False))
         m.addAction("关于 Folio", self.about)
         m.addSeparator()
@@ -339,6 +423,12 @@ class MainWindow(QMainWindow):
         on_doc = tab is not None
         self.topbar.setVisible(on_doc)
         self.home_btn.setChecked(not on_doc)
+        self.tabbar.setVisible(self.tabbar.count() > 0)
+        if bool(self.tabbar.property("home")) != (not on_doc):  # 在主页时，标签都不显示为选中
+            self.tabbar.setProperty("home", not on_doc)
+            self.tabbar.style().unpolish(self.tabbar)
+            self.tabbar.style().polish(self.tabbar)
+            self.tabbar.update()
         if not on_doc:
             self.options.hide()
             self.setWindowTitle(APP_DISPLAY_NAME)
@@ -493,6 +583,8 @@ class MainWindow(QMainWindow):
         return self._add_doc(doc)
 
     def _add_doc(self, doc: PdfDocument) -> DocTab:
+        if not self.isVisible():  # 从右键菜单只打开了工具窗口时，主窗口还没显示
+            self.show()
         tab = DocTab(doc, self.settings, self)
         self.tabs_widgets.append(tab)
         self.stack.addWidget(tab)
@@ -755,6 +847,47 @@ class MainWindow(QMainWindow):
             tab.show_read_bar()
             self.reader.start(doc, page, 0)
 
+    # ================================================================ 其它进程发来的请求
+    def handle_request(self, tool: str | None, files: list[str]):
+        """再次启动 Folio（双击 PDF、右键菜单）时，新进程把文件交给这里。"""
+        if tool:
+            self._tool_requests.setdefault(tool, []).extend(files)
+            self._tool_request_timer.start()
+            return
+        self.reveal()
+        for p in files:
+            self.open_path(p)
+
+    def _flush_tool_requests(self):
+        requests, self._tool_requests = self._tool_requests, {}
+        for tool, files in requests.items():
+            files = sorted(dict.fromkeys(files), key=natural_key)
+            self.bring_to_front(self.open_tool(tool, files or None))
+
+    def reveal(self):
+        if not self.isVisible():
+            self.show()
+        self.bring_to_front(self)
+
+    @staticmethod
+    def bring_to_front(w):
+        if w is None:
+            return
+        if w.isMinimized():  # 恢复成最小化之前的样子（原来最大化的还是最大化）
+            w.setWindowState(w.windowState() & ~Qt.WindowMinimized)
+        w.raise_()
+        w.activateWindow()
+        if sys.platform == "win32":
+            from ..platform_win import bring_to_front
+
+            bring_to_front(int(w.winId()))
+
+    def showEvent(self, e):
+        super().showEvent(e)
+        if not self._update_timer_armed:  # 只从右键菜单打开工具时不检查，等主窗口真正显示出来
+            self._update_timer_armed = True
+            QTimer.singleShot(6000, self._auto_check_update)
+
     # ================================================================ 更新
     def _auto_check_update(self):
         from .. import update
@@ -776,6 +909,7 @@ class MainWindow(QMainWindow):
         def done(info):
             self.settings.set("update/last_check", time.time())
             if info is None:
+                self._set_update_info(None)
                 msg = f"已经是最新版本（{__version__}）"
                 if status:
                     status(msg)
@@ -784,11 +918,10 @@ class MainWindow(QMainWindow):
                 return
             if silent and info.version == self.settings.get("update/skip"):
                 return
+            self._set_update_info(info)
             if status:
                 status(f"发现新版本 {info.version}")
-            from .dialogs.update_dialog import UpdateDialog
-
-            UpdateDialog(self, info, dialog_parent).exec()
+            self._show_update(dialog_parent)
 
         def failed(msg):
             if status:
@@ -801,11 +934,30 @@ class MainWindow(QMainWindow):
         self._update_worker = worker
         worker.start()
 
+    def _set_update_info(self, info):
+        self.update_info = info
+        self.update_btn.setVisible(info is not None)
+        if info is not None:
+            self.update_btn.setText(f"新版本 {info.version}")
+            self.update_btn.setToolTip(f"Folio {info.version} 已发布，点击查看更新内容并安装")
+        self.home.refresh_footer(info)
+
+    def _show_update(self, dialog_parent=None):
+        info = self.update_info
+        if info is None:
+            return
+        from .dialogs.update_dialog import UpdateDialog
+
+        UpdateDialog(self, info, dialog_parent if isinstance(dialog_parent, QWidget) else None).exec()
+        if self.settings.get("update/skip") == info.version:  # 选了「跳过这个版本」
+            self._set_update_info(None)
+
     # ================================================================ 其它窗口
     def open_tool(self, key: str, paths: list[str] | None = None):
+        """打开工具窗口（独立窗口，不挡主窗口）；同一个工具已经开着时把文件加进去。返回那个窗口。"""
         from .dialogs.tool_dialogs import open_tool_dialog
 
-        open_tool_dialog(self, key, paths)
+        return open_tool_dialog(self, key, paths)
 
     def print_doc(self):
         tab = self.cur
@@ -834,6 +986,7 @@ class MainWindow(QMainWindow):
             theme.apply(QApplication.instance(), self.settings.get("ui/theme"))
             for t in self.tabs_widgets:
                 t.read_bar.update_state(self.reader.state)
+            self.home.refresh_footer(self.update_info)
 
     def about(self):
         QMessageBox.about(self, "关于 Folio",
@@ -871,6 +1024,14 @@ class MainWindow(QMainWindow):
             if not self._confirm_discard(tab):
                 e.ignore()
                 return
+        busy = [w for w in self.tool_windows if w.busy]
+        if busy:
+            names = "、".join(f"「{w.windowTitle()}」" for w in busy)
+            if QMessageBox.question(self, "退出 Folio", f"{names}还在进行，退出会停止它。确定退出吗？") != QMessageBox.Yes:
+                e.ignore()
+                return
+        for w in list(self.tool_windows):
+            w.close()
         self.reader.stop()
         if self.reader.engine:
             self.reader.engine.shutdown()

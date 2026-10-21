@@ -49,7 +49,7 @@ class CompressDialog(ToolDialog):
 
     def __init__(self, parent, paths=None):
         super().__init__(parent, "压缩 PDF", "设定文件最大体积，程序会自动寻找画质最好又不超过上限的压缩方式。",
-                         "shrink", 660, 600)
+                         "shrink", 660, 600, independent=True)
         b = self.body_layout
         b.addLayout(_list_header("文件", self._add, self._remove))
         self.files = FileList({".pdf"})
@@ -197,7 +197,7 @@ class CompressDialog(ToolDialog):
 class ImagesDialog(ToolDialog):
     def __init__(self, parent, paths=None):
         super().__init__(parent, "图片转 PDF", "支持照片、截图和长图。长图会按页面比例自动分页，并尽量在空白处切开。",
-                         "images", 720, 660)
+                         "images", 720, 660, independent=True)
         b = self.body_layout
         b.addLayout(_list_header("图片（可拖动排序）", self._add, self._remove, self._clear))
         self.files = FileList(images.IMAGE_EXTS)
@@ -332,7 +332,7 @@ class ImagesDialog(ToolDialog):
 class MergeDialog(ToolDialog):
     def __init__(self, parent, paths=None):
         super().__init__(parent, "合并文件", "把多个 PDF、图片、Word/Excel/PPT 合并成一个 PDF。双击文件可设置只合并其中某些页。",
-                         "combine", 700, 600)
+                         "combine", 700, 600, independent=True)
         b = self.body_layout
         b.addLayout(_list_header("文件（可拖动排序）", self._add, self._remove, self._clear))
         self.files = FileList(merge.ALL_EXTS)
@@ -457,7 +457,7 @@ class MergeDialog(ToolDialog):
 # =============================================================== 拆分
 class SplitDialog(ToolDialog):
     def __init__(self, parent, paths=None):
-        super().__init__(parent, "拆分 PDF", "把一个 PDF 拆成多个文件。", "scissors", 600, 520)
+        super().__init__(parent, "拆分 PDF", "把一个 PDF 拆成多个文件。", "scissors", 600, 520, independent=True)
         b = self.body_layout
         b.addWidget(section("文件"))
         src = QHBoxLayout()
@@ -522,7 +522,12 @@ class SplitDialog(ToolDialog):
         self.run_btn.setText("拆分")
         self._pages = 0
         if paths:
-            self.src.setText(paths[0])
+            self.add_paths(paths)
+
+    def add_paths(self, paths):
+        pdfs = [p for p in paths if p.lower().endswith(".pdf")]
+        if pdfs:
+            self.src.setText(pdfs[0])
 
     def _pick(self):
         p, _ = QFileDialog.getOpenFileName(self, "选择 PDF", "", "PDF 文件 (*.pdf)")
@@ -589,6 +594,23 @@ def open_tool_dialog(main, key: str, paths: list[str] | None = None):
             paths = [tab.doc.path]
             if tab.doc.modified:
                 main.toast("提示：工具处理的是磁盘上已保存的版本，未保存的修改不包含在内", 4000)
-    dlg = DIALOGS[key](main, paths)
-    dlg.exec()
+    # 同一个工具已经开着（而且没在处理）时，把文件加进去，不再开新窗口：
+    # 在资源管理器里选中好几个文件再点右键菜单，每个文件会各启动一次 Folio，最后都汇总到同一个窗口
+    dlg = next((w for w in getattr(main, "tool_windows", []) if isinstance(w, DIALOGS[key]) and not w.busy), None)
+    if dlg is None:
+        dlg = DIALOGS[key](main, paths)
+        windows = getattr(main, "tool_windows", None)
+        if windows is not None:
+            windows.append(dlg)
+            dlg.finished.connect(lambda _=0, d=dlg: d in windows and windows.remove(d))
+        if main.isVisible():  # 第一次显示在主窗口中间；之后它是独立窗口，可以随便移开
+            dlg.move(main.geometry().center() - dlg.rect().center())
+    elif paths:
+        dlg.add_paths(paths)
+    dlg.show()
+    if dlg.isMinimized():
+        dlg.setWindowState(dlg.windowState() & ~Qt.WindowMinimized)
+    dlg.raise_()
+    dlg.activateWindow()
+    return dlg
 

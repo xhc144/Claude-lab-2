@@ -1,4 +1,4 @@
-"""设置：常规、阅读、朗读、文字识别、AI 中台、关于与更新。"""
+"""设置：常规、阅读、朗读、文字识别、AI 中台、更新与关于。"""
 from __future__ import annotations
 
 import sys
@@ -34,7 +34,7 @@ def _row(label_text: str, widget, hint: str = "") -> QHBoxLayout:
 
 class SettingsDialog(QDialog):
     PAGES = [("general", "常规"), ("reading", "阅读"), ("tts", "朗读"), ("ocr", "文字识别"), ("ai", "AI 中台"),
-             ("about", "关于与更新")]
+             ("about", "更新与关于")]
 
     def __init__(self, parent, settings: Settings, page: str = ""):
         super().__init__(parent)
@@ -125,6 +125,16 @@ class SettingsDialog(QDialog):
         lay.addWidget(self.restore)
         if sys.platform == "win32":
             lay.addSpacing(6)
+            lay.addWidget(section("资源管理器右键菜单"))
+            self.context_menu = QCheckBox("右键 PDF 时显示「用 Folio 压缩」「用 Folio 合并」，右键图片时显示「用 Folio 转为 PDF」")
+            self.context_menu.setChecked(bool(self.settings.get("shell/context_menu")))
+            lay.addWidget(self.context_menu)
+            hint = QLabel("可以一次选中多个文件再右键，它们会放进同一个窗口。Windows 11 上在「显示更多选项」里"
+                          "（或按住 Shift 再右键）。")
+            hint.setObjectName("Faint")
+            hint.setWordWrap(True)
+            lay.addWidget(hint)
+            lay.addSpacing(6)
             lay.addWidget(section("默认程序"))
             b = QPushButton("设为默认 PDF 阅读器…")
             b.clicked.connect(self._set_default_app)
@@ -162,11 +172,13 @@ class SettingsDialog(QDialog):
         lay.addStretch(1)
         return w
 
-    # ---------------------------------------------------------------- 关于与更新
+    # ---------------------------------------------------------------- 更新与关于
     def _about(self) -> QWidget:
         from ... import update
 
-        w, lay = self._page("关于与更新")
+        w, lay = self._page("更新与关于")
+        import time
+
         lay.addWidget(label(f"{APP_DISPLAY_NAME} {__version__}", "H3"))
         lay.addWidget(label("PDF 阅读、批注、朗读与处理工具。基于 PySide6 (Qt) 与 PyMuPDF，图标来自 Lucide。", "Muted", wrap=True))
         lay.addSpacing(6)
@@ -181,9 +193,12 @@ class SettingsDialog(QDialog):
                             "下载的安装包会校验 SHA-256；程序有数字签名时，还会确认新版本是同一个签名者。", "Faint", wrap=True))
         crow = QHBoxLayout()
         b = QPushButton("检查更新")
+        b.setProperty("primary", True)
         b.clicked.connect(self._check_update)
         crow.addWidget(b)
-        self.update_status = label("", "Muted", wrap=True)
+        last = float(self.settings.get("update/last_check") or 0)
+        self.update_status = label(time.strftime("上次检查：%Y-%m-%d %H:%M", time.localtime(last)) if last else "还没有检查过",
+                                   "Muted", wrap=True)
         crow.addWidget(self.update_status, 1)
         lay.addLayout(crow)
         lay.addStretch(1)
@@ -208,6 +223,11 @@ class SettingsDialog(QDialog):
         self.ocr_page.save()
         st.set("update/auto", self.auto_update.isChecked())
         st.set("update/feed", self.feed.text().strip())
+        if hasattr(self, "context_menu"):
+            st.set("shell/context_menu", self.context_menu.isChecked())
+            from ...platform_win import sync_context_menu
+
+            sync_context_menu(self.context_menu.isChecked())
         st.sync()
         parent = self.parent()
         if parent is not None and hasattr(parent, "set_tone"):

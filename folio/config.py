@@ -45,6 +45,7 @@ DEFAULTS: dict = {
     "ocr/language": "",             # 系统识别的语言，空为自动
     "ocr/fix": "",                  # AI 校对用的连接 id，空为不校对
     "ocr/fix_model": "",
+    "shell/context_menu": True,     # Windows 资源管理器右键菜单
     "update/auto": True,
     "update/last_check": 0,
     "update/skip": "",

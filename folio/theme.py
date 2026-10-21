@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import sys
 
-from PySide6.QtCore import QObject, Qt, Signal
+from PySide6.QtCore import QEvent, QObject, Qt, Signal
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QPalette
 
 LIGHT = {
+    "chrome": "#E8EAEE",     # 标签栏（Windows 11 上标题栏也用这个颜色，连成一片）
     "bg": "#F4F5F7",
     "surface": "#FFFFFF",
     "surface2": "#F0F1F4",
@@ -20,6 +21,7 @@ LIGHT = {
     "accent": "#3D6DF2",
     "accent_hover": "#2F5CE0",
     "accent_soft": "rgba(61, 109, 242, 0.12)",
+    "accent_soft2": "rgba(61, 109, 242, 0.20)",
     "accent_text": "#FFFFFF",
     "canvas": "#E6E8EC",
     "page_shadow": "rgba(15, 23, 42, 0.10)",
@@ -35,6 +37,7 @@ LIGHT = {
 }
 
 DARK = {
+    "chrome": "#121315",
     "bg": "#1B1C1F",
     "surface": "#25262B",
     "surface2": "#2D2F35",
@@ -48,6 +51,7 @@ DARK = {
     "accent": "#5B8CFF",
     "accent_hover": "#7AA2FF",
     "accent_soft": "rgba(91, 140, 255, 0.18)",
+    "accent_soft2": "rgba(91, 140, 255, 0.28)",
     "accent_text": "#FFFFFF",
     "canvas": "#131416",
     "page_shadow": "rgba(0, 0, 0, 0.45)",
@@ -104,6 +108,9 @@ class ThemeManager(QObject):
             font = QFont(app.font())
             font.setFamilies(FONT_FAMILIES)
             app.setFont(font)
+            if sys.platform == "win32":
+                self._title_filter = TitleBarFilter(self)
+                app.installEventFilter(self._title_filter)
         self.dark = self.mode == "dark" or (self.mode == "system" and self.system_is_dark())
         self.colors = dict(DARK if self.dark else LIGHT)
         from .icons import themed_file
@@ -128,7 +135,26 @@ class ThemeManager(QObject):
         pal.setColor(QPalette.ToolTipBase, parse_color(c["tooltip_bg"]))
         pal.setColor(QPalette.ToolTipText, parse_color(c["tooltip_text"]))
         app.setPalette(pal)
+        if sys.platform == "win32":
+            for w in app.topLevelWidgets():
+                if w.isVisible() and w.windowType() in (Qt.Window, Qt.Dialog):
+                    self.style_title_bar(w)
         self.changed.emit()
+
+    def style_title_bar(self, w):
+        """Windows：标题栏颜色跟随主题。窗口可以用 titleColor 属性指定底色（颜色令牌名），默认用 bg。"""
+        from .platform_win import style_title_bar
+
+        key = w.property("titleColor") or "bg"
+        style_title_bar(int(w.winId()), self.qc(key if key in self.colors else "bg"), self.qc("text"), self.dark)
+
+
+class TitleBarFilter(QObject):
+    def eventFilter(self, obj, event):
+        if (event.type() == QEvent.Show and obj.isWidgetType() and obj.isWindow()
+                and obj.windowType() in (Qt.Window, Qt.Dialog)):  # 不管菜单、提示等弹出窗口
+            theme.style_title_bar(obj)
+        return False
 
 
 def parse_color(s: str) -> QColor:
@@ -174,7 +200,7 @@ QLabel#SectionTitle {{ color: {c['text2']}; font-size: 12px; font-weight: 600; }
 /* ---------- 顶部栏 ---------- */
 #TopBar {{ background: {c['surface']}; border-bottom: 1px solid {c['border']}; }}
 #OptionsBar {{ background: {c['surface']}; border-bottom: 1px solid {c['border']}; }}
-#TabStrip {{ background: {c['bg']}; }}
+#TabStrip {{ background: {c['chrome']}; }}
 
 QToolButton {{
     background: transparent;
@@ -186,7 +212,8 @@ QToolButton:hover {{ background: {c['hover']}; }}
 QToolButton:pressed {{ background: {c['pressed']}; }}
 QToolButton:checked {{ background: {c['accent_soft']}; }}
 QToolButton:disabled {{ background: transparent; }}
-QToolButton[textButton="true"] {{ padding: 5px 10px; color: {c['text']}; }}
+/* Qt 会在带文字的工具按钮右边多留 8px，这里扣掉，左右才对称 */
+QToolButton[textButton="true"] {{ padding: 5px 3px 5px 10px; color: {c['text']}; }}
 QToolButton::menu-indicator {{ image: none; width: 0; }}
 
 QPushButton {{
@@ -296,21 +323,51 @@ QListWidget::item:selected, QTreeWidget::item:selected {{ background: {c['accent
 QTreeView::branch {{ background: transparent; }}
 QHeaderView::section {{ background: transparent; border: none; color: {c['text2']}; padding: 4px; }}
 
+/* ---------- 标签栏：选中的标签和下面的工具栏连在一起，像浏览器一样 ---------- */
 QTabBar#DocTabs {{ background: transparent; }}
 QTabBar#DocTabs::tab {{
     background: transparent;
     border: none;
-    border-radius: 8px;
-    padding: 6px 10px 6px 12px;
-    margin: 6px 2px 6px 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    height: 34px;
+    padding: 0 4px 0 12px;
+    margin: 0 2px 0 0;
     color: {c['text2']};
-    min-width: 60px;
+    min-width: 72px;
     max-width: 220px;
 }}
-QTabBar#DocTabs::tab:hover {{ background: {c['hover']}; }}
-QTabBar#DocTabs::tab:selected {{ background: {c['surface']}; color: {c['text']}; border: 1px solid {c['border']}; }}
-QTabBar#DocTabs::close-button {{ image: url({c['_close']}); subcontrol-position: right; }}
-QTabBar#DocTabs::close-button:hover {{ background: {c['hover']}; border-radius: 4px; }}
+QTabBar#DocTabs::tab:hover {{ background: {c['hover']}; color: {c['text']}; }}
+QTabBar#DocTabs::tab:selected {{ background: {c['surface']}; color: {c['text']}; }}
+QTabBar#DocTabs[home="true"]::tab:selected {{ background: transparent; color: {c['text2']}; }}
+QTabBar#DocTabs[home="true"]::tab:selected:hover {{ background: {c['hover']}; color: {c['text']}; }}
+QTabBar#DocTabs::close-button {{
+    image: url({c['_close']});
+    subcontrol-position: right;
+    width: 18px; height: 18px;
+    padding: 3px;
+    border-radius: 5px;
+}}
+QTabBar#DocTabs::close-button:hover {{ background: {c['pressed']}; }}
+QTabBar#DocTabs QToolButton {{ background: {c['chrome']}; border: none; border-radius: 6px; padding: 0; }}
+QTabBar#DocTabs QToolButton:hover {{ background: {c['hover']}; }}
+QTabBar::tear {{ width: 0; border: none; }}
+#TabStrip QToolButton {{ border-radius: 7px; }}
+QToolButton#HomeTab {{
+    border-radius: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}}
+QToolButton#HomeTab:checked {{ background: {c['bg']}; }}
+QToolButton#UpdatePill {{
+    background: {c['accent_soft']};
+    color: {c['accent']};
+    border-radius: 13px;
+    padding: 3px 4px 3px 8px;
+    font-size: 12px;
+    font-weight: 600;
+}}
+QToolButton#UpdatePill:hover {{ background: {c['accent_soft2']}; }}
 
 QSplitter::handle {{ background: {c['border']}; }}
 QSplitter::handle:horizontal {{ width: 1px; }}

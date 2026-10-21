@@ -1,5 +1,5 @@
 ﻿; Windows 安装程序（Inno Setup 6）。先运行 packaging/build.py 生成 dist/Folio，再：
-;     iscc /DAppVersion=0.2.1 packaging/installer.iss
+;     iscc /DAppVersion=0.2.2 packaging/installer.iss
 ; 生成 dist/Folio-Setup-<版本>.exe。
 ;
 ; 装到当前用户自己的目录（%LOCALAPPDATA%\Programs\Folio），不需要管理员权限：
@@ -59,6 +59,17 @@ Root: HKCU; Subkey: "Software\Classes\Folio.PDF"; ValueType: string; ValueData: 
 Root: HKCU; Subkey: "Software\Classes\Folio.PDF\DefaultIcon"; ValueType: string; ValueData: """{app}\Folio.exe"",0"; Tasks: pdfassoc
 Root: HKCU; Subkey: "Software\Classes\Folio.PDF\shell\open\command"; ValueType: string; ValueData: """{app}\Folio.exe"" ""%1"""; Tasks: pdfassoc
 Root: HKCU; Subkey: "Software\Classes\.pdf\OpenWithProgids"; ValueType: string; ValueName: "Folio.PDF"; ValueData: ""; Flags: uninsdeletevalue; Tasks: pdfassoc
+; 资源管理器右键菜单：右键 PDF「用 Folio 压缩」「用 Folio 合并」，右键图片「用 Folio 转为 PDF」。
+; 和 folio/platform_win.py 的 CONTEXT_MENU 一致；程序启动时也会按「设置 → 常规」里的开关补上或删掉
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Compress"; ValueType: string; ValueName: "MUIVerb"; ValueData: "用 Folio 压缩"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Compress"; ValueType: string; ValueName: "Icon"; ValueData: "{app}\Folio.exe,0"
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Compress\command"; ValueType: string; ValueData: """{app}\Folio.exe"" --tool compress ""%1"""
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Merge"; ValueType: string; ValueName: "MUIVerb"; ValueData: "用 Folio 合并"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Merge"; ValueType: string; ValueName: "Icon"; ValueData: "{app}\Folio.exe,0"
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Merge\command"; ValueType: string; ValueData: """{app}\Folio.exe"" --tool merge ""%1"""
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\image\shell\Folio.ImagesToPdf"; ValueType: string; ValueName: "MUIVerb"; ValueData: "用 Folio 转为 PDF"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\image\shell\Folio.ImagesToPdf"; ValueType: string; ValueName: "Icon"; ValueData: "{app}\Folio.exe,0"
+Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\image\shell\Folio.ImagesToPdf\command"; ValueType: string; ValueData: """{app}\Folio.exe"" --tool images ""%1"""
 
 [Run]
 Filename: "{app}\Folio.exe"; Description: "立即打开 Folio"; Flags: nowait postinstall skipifsilent

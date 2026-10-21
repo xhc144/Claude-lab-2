@@ -38,10 +38,21 @@ class Worker(QThread):
 
 
 class ToolDialog(QDialog):
-    """统一风格的工具对话框：顶部标题、中间内容、底部进度条与按钮。"""
+    """统一风格的工具对话框：顶部标题、中间内容、底部进度条与按钮。
 
-    def __init__(self, parent, title: str, subtitle: str = "", icon: str = "file", width: int = 640, height: int = 560):
-        super().__init__(parent)
+    independent=True 时是独立窗口（压缩、合并等）：有自己的任务栏按钮，可以最小化，不会挡住主窗口，
+    主窗口照样可以移动、最小化、继续阅读；关闭时自动释放。文件可以拖到窗口的任何地方。
+    """
+
+    def __init__(self, parent, title: str, subtitle: str = "", icon: str = "file", width: int = 640, height: int = 560,
+                 independent: bool = False):
+        super().__init__(None if independent else parent)
+        self.main = parent
+        if independent:
+            self.setWindowFlags(Qt.Window)
+            self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setProperty("titleColor", "surface")
+        self.setAcceptDrops(True)
         self.setWindowTitle(title)
         self.resize(width, height)
         self.setMinimumSize(520, 420)
@@ -133,10 +144,18 @@ class ToolDialog(QDialog):
         self.cancel_btn.setText("取消")
         self.set_status("正在处理…")
         self.worker = Worker(job, self)
-        self.worker.progress.connect(lambda f, m: (self.progress.setValue(int(f * 1000)), self.set_status(m)))
+        self.worker.progress.connect(self._on_progress)
         self.worker.done.connect(self._finished)
         self.worker.failed.connect(self._failed)
         self.worker.start()
+
+    @property
+    def busy(self) -> bool:
+        return self.worker is not None
+
+    def _on_progress(self, f: float, msg: str):
+        self.progress.setValue(int(f * 1000))
+        self.set_status(msg)
 
     def _reset(self):
         self.run_btn.setEnabled(True)
@@ -163,11 +182,13 @@ class ToolDialog(QDialog):
     def show_output(self, path: str, openable: bool = False):
         self._last_output = path
         self.open_folder_btn.show()
-        self.open_doc_btn.setVisible(openable and hasattr(self.parent(), "open_path"))
+        self.open_doc_btn.setVisible(openable and hasattr(self.main, "open_path"))
 
     def _open_doc(self):
         if self._last_output and os.path.isfile(self._last_output):
-            self.parent().open_path(self._last_output)
+            self.main.open_path(self._last_output)
+            if hasattr(self.main, "reveal"):
+                self.main.reveal()
             self.accept()
 
     def _open_folder(self):
@@ -182,11 +203,40 @@ class ToolDialog(QDialog):
         else:
             self.reject()
 
+    def reject(self):
+        if self.worker is not None:  # 按 Esc 时先停止任务，不直接关掉
+            self._on_cancel()
+            return
+        super().reject()
+
+    def _stop_worker(self) -> bool:
+        """取消并等待后台任务结束；返回是否已经停下。"""
+        if self.worker is None:
+            return True
+        self.worker.cancel()
+        if not self.worker.wait(5000):
+            return False
+        self.worker = None  # 结束信号可能还在排队，窗口马上要关，不再处理
+        return True
+
     def closeEvent(self, e):
-        if self.worker is not None:
-            self.worker.cancel()
-            self.worker.wait(3000)
+        if not self._stop_worker():
+            self.set_status("正在取消…")
+            e.ignore()
+            return
         super().closeEvent(e)
+
+    # 文件拖到窗口任何地方都可以（不只是文件列表）
+    def dragEnterEvent(self, e):
+        if e.mimeData().hasUrls() and hasattr(self, "add_paths") and not self.busy:
+            e.acceptProposedAction()
+
+    def dropEvent(self, e):
+        paths = [u.toLocalFile() for u in e.mimeData().urls() if u.isLocalFile()]
+        paths = [p for p in paths if os.path.isfile(p)]
+        if paths and hasattr(self, "add_paths") and not self.busy:
+            self.add_paths(paths)
+            e.acceptProposedAction()
 
 
 def choose_save_path(parent, title: str, default_path: str, filt: str = "PDF 文件 (*.pdf)") -> str | None:

@@ -181,6 +181,51 @@ jobs:
           path: ${{ matrix.name }}.zip
           retention-days: 30
 
+      - name: 制作安装程序（Windows）
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # GitHub 的 Windows 机器自带 Inno Setup 6，没有时再安装
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue) -and -not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+          $iscc = Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup*\ISCC.exe", "$env:ProgramFiles\Inno Setup*\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -Last 1
+          if (-not $iscc) { Write-Error "找不到 ISCC.exe"; exit 1 }
+          & $iscc.FullName "/DAppVersion=$env:FOLIO_VERSION" packaging/installer.iss
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          "SETUP_EXE=dist/Folio-Setup-$env:FOLIO_VERSION.exe" >> $env:GITHUB_ENV
+      - name: 签名安装程序（Windows，.pfx 证书）
+        if: runner.os == 'Windows' && env.HAS_WIN_PFX == 'true'
+        env:
+          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX_BASE64 || secrets.WINDOWS_CERT_PFX }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+        run: python packaging/sign_windows.py ${{ env.SETUP_EXE }}
+      - name: 试装、自检、卸载（Windows）
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath $env:SETUP_EXE -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/TASKS=desktopicon,pdfassoc" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { Write-Error "安装失败：$($p.ExitCode)"; exit 1 }
+          $app = "$env:LOCALAPPDATA\Programs\Folio"
+          $p = Start-Process -FilePath "$app\Folio.exe" -ArgumentList "--selftest", "$PWD\selftest-installed.json" -Wait -PassThru
+          Get-Content selftest-installed.json
+          if ($p.ExitCode -ne 0) { exit 1 }
+          if (-not (Test-Path "$([Environment]::GetFolderPath('Programs'))\Folio.lnk")) { Write-Error "没有开始菜单快捷方式"; exit 1 }
+          # 自动更新会整体替换程序目录：确认目录和上一级都能写，卸载程序不在程序目录里
+          python -c "import os,sys; a=sys.argv[1]; assert os.access(a, os.W_OK) and os.access(os.path.dirname(a), os.W_OK); assert not any(n.startswith('unins') for n in os.listdir(a))" $app
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $p = Start-Process -FilePath "$env:LOCALAPPDATA\Programs\Folio-uninstall\unins000.exe" -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          for ($i = 0; $i -lt 60 -and (Test-Path $app); $i++) { Start-Sleep -Seconds 1 }   # 卸载程序会在后台再跑一会儿
+          if (Test-Path $app) { Write-Error "卸载后程序目录还在"; exit 1 }
+          Write-Host "安装、自检、卸载都正常"
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
+        with:
+          name: Folio-windows-setup
+          path: ${{ env.SETUP_EXE }}
+          retention-days: 30
+
   release:
     # 推送 v* 标签时：发布安装包和自动更新清单 latest.json
     needs: build
@@ -212,11 +257,13 @@ jobs:
             python packaging/update_key.py sign latest.json
           fi
           cat latest.json
-          python -c "import json;print(json.load(open('latest.json'))['notes'])" > release-notes.md
+          { cat packaging/release-header.md; echo; echo "## 这个版本更新了什么"; echo
+            python -c "import json;print(json.load(open('latest.json'))['notes'])"; } > release-notes.md
       - uses: softprops/action-gh-release@v2
         with:
           body_path: release-notes.md
           files: |
+            artifacts/Folio-Setup-*.exe
             artifacts/Folio-windows.zip
             artifacts/Folio-macos.zip
             latest.json

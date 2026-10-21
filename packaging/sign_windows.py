@@ -1,6 +1,8 @@
 """用 .pfx 证书给 Windows 程序签名（Authenticode + RFC 3161 时间戳）。
 
     python packaging/sign_windows.py dist/Folio/Folio.exe [更多文件…]
+    python packaging/sign_windows.py --subject      只输出证书的 Subject（Windows 的写法，例如 CN=xhc144），
+                                                    右键菜单稀疏包清单里的 Publisher 必须和它完全一致
 
 证书来自环境变量（在 GitHub 仓库 Settings → Secrets and variables → Actions 里添加）：
     WINDOWS_CERT_PFX        .pfx 文件的 Base64 内容（仓库密钥 WINDOWS_CERT_PFX_BASE64）
@@ -51,10 +53,48 @@ def diagnose(pfx: bytes, passwords: list[str]) -> tuple[str | None, str]:
                   "密码不对，或者 WINDOWS_CERT_PFX_BASE64 不是这个 .pfx 文件的完整 Base64")
 
 
+# Windows（X509Certificate2.Subject、MSIX 清单的 Publisher）用的属性名
+_SUBJECT_NAMES = {"2.5.4.3": "CN", "2.5.4.10": "O", "2.5.4.11": "OU", "2.5.4.7": "L", "2.5.4.8": "S", "2.5.4.6": "C",
+                  "2.5.4.9": "STREET", "2.5.4.5": "SERIALNUMBER", "1.2.840.113549.1.9.1": "E"}
+
+
+def windows_subject(cert) -> str:
+    """证书 Subject 的 Windows 写法：从最具体的一项开始，用「, 」分隔，含特殊字符的值加双引号。"""
+    parts = []
+    for rdn in reversed(cert.subject.rdns):
+        for attr in rdn:
+            value = str(attr.value)
+            if any(ch in value for ch in ',+="\n<>#;') or value != value.strip():
+                value = '"' + value.replace('"', '""') + '"'
+            parts.append(f"{_SUBJECT_NAMES.get(attr.oid.dotted_string, 'OID.' + attr.oid.dotted_string)}={value}")
+    return ", ".join(parts)
+
+
+def print_subject(pfx_bytes: bytes, candidates: list[str]) -> int:
+    from cryptography.hazmat.primitives.serialization import pkcs12
+
+    for pw in candidates:
+        try:
+            _, cert, _ = pkcs12.load_key_and_certificates(pfx_bytes, pw.encode() if pw else None)
+        except ValueError:
+            continue
+        if cert is not None:
+            print(windows_subject(cert))
+            return 0
+    print("用 WINDOWS_CERT_PASSWORD 打不开 .pfx", file=sys.stderr)
+    return 1
+
+
 def main(files: list[str]) -> int:
     if hasattr(sys.stdout, "reconfigure"):  # Windows 控制台默认编码无法输出中文
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     data = os.environ.get("WINDOWS_CERT_PFX", "").strip()
+    if files == ["--subject"]:
+        if not data:
+            print("没有设置 WINDOWS_CERT_PFX", file=sys.stderr)
+            return 1
+        raw = os.environ.get("WINDOWS_CERT_PASSWORD", "")
+        return print_subject(decode_pfx(data), list(dict.fromkeys([raw, raw.strip(), raw.strip("\r\n")])))
     if not data:
         print("没有设置 WINDOWS_CERT_PFX，跳过签名")
         return 0

@@ -5,11 +5,17 @@
 ; 装到当前用户自己的目录（%LOCALAPPDATA%\Programs\Folio），不需要管理员权限：
 ; 自动更新会整体替换程序目录，必须对这个目录和它的上一级有写权限。
 ; 也因为这样，卸载程序不能放在程序目录里（更新时会被一起替换掉），单独放在旁边的 Folio-uninstall。
+;
+; Windows 11 第一层右键菜单（先运行 packaging/build_shell.py 生成 dist/Folio-shell）装到旁边的 Folio-shell：
+; Explorer（dllhost）加载着的 DLL 会锁住它所在的目录，放进程序目录的话自动更新就改不了名。
+; 安装后用 register.ps1 注册稀疏包；注册不上（Windows 10、证书不受信任等）时保留下面 [Registry] 里的旧菜单。
 
 #ifndef AppVersion
   #define AppVersion "0.0.0"
 #endif
 #define Root SourcePath + "\.."
+#define ShellDir "{localappdata}\Programs\Folio-shell"
+#define HaveShell FileExists(Root + "\dist\Folio-shell\register.ps1")
 
 [Setup]
 AppId={{6E2B3F4A-8C1D-4E7F-9A5B-F0110C0A2D01}
@@ -48,10 +54,21 @@ Name: "pdfassoc"; Description: "用 Folio 打开 PDF 文件（可在“打开方
 
 [Files]
 Source: "{#Root}\dist\Folio\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+#if HaveShell
+Source: "{#Root}\dist\Folio-shell\*"; DestDir: "{#ShellDir}"; Flags: ignoreversion
+; DLL 在带版本号的子目录里；同一个版本重装时 DLL 可能正被 Explorer 加载着，已经有了就不覆盖
+Source: "{#Root}\dist\Folio-shell\{#AppVersion}\*"; DestDir: "{#ShellDir}\{#AppVersion}"; Flags: onlyifdoesntexist
+#endif
 
 [Icons]
-Name: "{userprograms}\Folio"; Filename: "{app}\Folio.exe"
-Name: "{userdesktop}\Folio"; Filename: "{app}\Folio.exe"; Tasks: desktopicon
+; 起始位置不能是程序目录（Inno Setup 默认就是 {app}）：Folio 的当前目录在程序目录里时，
+; 自动更新的替换脚本没法给程序目录改名，更新会装不上
+Name: "{userprograms}\Folio"; Filename: "{app}\Folio.exe"; WorkingDir: "{userdocs}"
+Name: "{userdesktop}\Folio"; Filename: "{app}\Folio.exe"; WorkingDir: "{userdocs}"; Tasks: desktopicon
+
+[InstallDelete]
+; 手动安装时清掉上次没装上的自动更新残留
+Type: filesandordirs; Name: "{localappdata}\Programs\.folio-update"
 
 [Registry]
 ; 只把 Folio 加进 PDF 的“打开方式”列表，不抢默认程序
@@ -72,9 +89,18 @@ Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\image\shell\Folio.I
 Root: HKCU; Subkey: "Software\Classes\SystemFileAssociations\image\shell\Folio.ImagesToPdf\command"; ValueType: string; ValueData: """{app}\Folio.exe"" --tool images ""%1"""
 
 [Run]
+#if HaveShell
+Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{#ShellDir}\register.ps1"" -Action install -Dir ""{#ShellDir}"" -Version {#AppVersion}"; WorkingDir: "{tmp}"; StatusMsg: "正在注册右键菜单…"; Flags: runhidden waituntilterminated
+#endif
 Filename: "{app}\Folio.exe"; Description: "立即打开 Folio"; Flags: nowait postinstall skipifsilent
+
+#if HaveShell
+[UninstallRun]
+Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{#ShellDir}\register.ps1"" -Action uninstall -Dir ""{#ShellDir}"""; WorkingDir: "{tmp}"; Flags: runhidden waituntilterminated; RunOnceId: "FolioShell"
+#endif
 
 [UninstallDelete]
 ; 自动更新后程序目录里的文件不在安装记录里，整个目录一起删掉
 Type: filesandordirs; Name: "{app}"
 Type: filesandordirs; Name: "{localappdata}\Programs\.folio-update"
+Type: filesandordirs; Name: "{#ShellDir}"

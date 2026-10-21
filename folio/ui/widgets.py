@@ -1,13 +1,13 @@
-"""通用小部件：图标按钮、分段选择、颜色选择、提示气泡、文件列表等。"""
+"""通用小部件：图标按钮、分段选择、开关、设置卡片、颜色选择、提示气泡、文件列表等。"""
 from __future__ import annotations
 
 import os
 
-from PySide6.QtCore import QEasingCurve, QPropertyAnimation, QSize, Qt, QTimer, Signal
+from PySide6.QtCore import Property, QEasingCurve, QPropertyAnimation, QRectF, QSize, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QFontMetrics, QPainter, QPen
-from PySide6.QtWidgets import (QAbstractItemView, QButtonGroup, QColorDialog, QFrame, QGraphicsOpacityEffect,
-                               QHBoxLayout, QLabel, QListWidget, QListWidgetItem, QSizePolicy, QToolButton,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QButtonGroup, QCheckBox, QColorDialog, QFrame,
+                               QGraphicsOpacityEffect, QHBoxLayout, QLabel, QLayout, QListWidget, QListWidgetItem,
+                               QSizePolicy, QToolButton, QVBoxLayout, QWidget)
 
 from ..icons import themed
 from ..theme import theme
@@ -103,6 +103,147 @@ class Segmented(QFrame):
     def set_value(self, key: str):
         if key in self._buttons:
             self._buttons[key].setChecked(True)
+
+
+class TabCloseButton(QWidget):
+    """文档标签上的关闭按钮。
+
+    不用 QSS 的 ::close-button：Qt 会把它贴着标签右边缘摆放，悬停底色顶到标签圆角上，叉号看起来不在中间。
+    这里是一个正方形按钮（图标正好在中间），右边留出和左边文字差不多的空白。
+    """
+    clicked = Signal()
+
+    def __init__(self, parent=None, tip: str = "关闭标签 (Ctrl+W)"):
+        super().__init__(parent)
+        lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 8, 0)
+        lay.setSpacing(0)
+        self.button = IconButton("x", tip, size=14)
+        self.button.setObjectName("TabClose")
+        self.button.setFixedSize(20, 20)
+        self.button.clicked.connect(self.clicked)
+        lay.addWidget(self.button)
+        self.setFixedSize(28, 20)
+
+
+class Switch(QCheckBox):
+    """开关（Windows 11 风格），用法和 QCheckBox 一样：isChecked()、setChecked()、toggled。"""
+
+    W, H = 40, 22
+
+    def __init__(self, checked: bool = False, parent=None):
+        super().__init__(parent)
+        self.setCursor(Qt.PointingHandCursor)
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self._knob = 0.0
+        self._anim = QPropertyAnimation(self, b"knob", self)
+        self._anim.setDuration(140)
+        self._anim.setEasingCurve(QEasingCurve.OutCubic)
+        self.toggled.connect(self._slide)
+        self.setChecked(checked)
+        self._knob = 1.0 if checked else 0.0
+        theme.changed.connect(self.update)
+
+    def _get_knob(self) -> float:
+        return self._knob
+
+    def _set_knob(self, v: float):
+        self._knob = v
+        self.update()
+
+    knob = Property(float, _get_knob, _set_knob)
+
+    def _slide(self, on: bool):
+        self._anim.stop()
+        if not self.isVisible():
+            self._set_knob(1.0 if on else 0.0)
+            return
+        self._anim.setStartValue(self._knob)
+        self._anim.setEndValue(1.0 if on else 0.0)
+        self._anim.start()
+
+    def sizeHint(self) -> QSize:
+        return QSize(self.W, self.H)
+
+    def minimumSizeHint(self) -> QSize:
+        return self.sizeHint()
+
+    def hitButton(self, pos) -> bool:
+        return self.rect().contains(pos)
+
+    def paintEvent(self, e):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.Antialiasing)
+        if not self.isEnabled():
+            p.setOpacity(0.45)
+        track = QRectF(0.5, (self.height() - self.H) / 2 + 0.5, self.W - 1, self.H - 1)
+        r = track.height() / 2
+        on = self.isChecked()
+        if on:
+            p.setPen(Qt.NoPen)
+            p.setBrush(theme.qc("accent_hover" if self.underMouse() else "accent"))
+        else:
+            p.setPen(QPen(theme.qc("text3"), 1))
+            p.setBrush(theme.qc("hover") if self.underMouse() else Qt.NoBrush)
+        p.drawRoundedRect(track, r, r)
+        # 关着时圆点小一点、颜色深，打开时是白色的大圆点（和 Windows 11 一样）
+        knob_r = 7.0 if on else 5.5
+        left, right = track.left() + r, track.right() - r
+        cx = left + (right - left) * self._knob
+        p.setPen(Qt.NoPen)
+        p.setBrush(theme.qc("accent_text") if on else theme.qc("text2"))
+        p.drawEllipse(QRectF(cx - knob_r, track.center().y() - knob_r, knob_r * 2, knob_r * 2))
+
+
+class Card(QFrame):
+    """设置页里的一组选项：圆角卡片，每一项之间有一条分隔线。"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setObjectName("SettingsCard")
+        self._lay = QVBoxLayout(self)
+        self._lay.setContentsMargins(0, 0, 0, 0)
+        self._lay.setSpacing(0)
+
+    def add(self, item) -> QWidget:
+        """加一项（部件或布局，布局会包上统一的内边距）。"""
+        if isinstance(item, QLayout):
+            w = QWidget()
+            item.setContentsMargins(16, 12, 16, 12)
+            w.setLayout(item)
+            item = w
+        if self._lay.count():
+            self._lay.addWidget(hline())
+        self._lay.addWidget(item)
+        return item
+
+    def add_block(self, spacing: int = 10) -> QVBoxLayout:
+        """加一块可以自由排版的区域，返回它的布局。"""
+        lay = QVBoxLayout()
+        lay.setSpacing(spacing)
+        self.add(lay)
+        return lay
+
+    def add_row(self, title: str, desc: str = "", control=None) -> QWidget:
+        """左边标题和说明，右边开关、按钮等控件。"""
+        row = QHBoxLayout()
+        row.setSpacing(16)
+        text = QVBoxLayout()
+        text.setSpacing(3)
+        text.addWidget(label(title, "RowTitle", wrap=True))
+        if desc:
+            text.addWidget(label(desc, "Faint", wrap=True))
+        row.addLayout(text, 1)
+        if isinstance(control, QWidget):
+            row.addWidget(control, 0, Qt.AlignVCenter)
+        elif control is not None:
+            row.addLayout(control)
+        w = self.add(row)
+        w.text_layout = text  # 以后可以在说明下面再加状态文字
+        if isinstance(control, QCheckBox):  # 点整行的文字也能切换开关
+            w.mouseReleaseEvent = lambda e, c=control: c.isEnabled() and e.button() == Qt.LeftButton and c.toggle()
+            w.setCursor(Qt.PointingHandCursor)
+        return w
 
 
 class Swatch(QToolButton):
@@ -229,6 +370,20 @@ class Toast(QFrame):
             pass
         if self._fx.opacity() < 0.05:
             self.hide()
+
+
+class StatusLabel(QLabel):
+    """状态文字：没有内容时不占位置。"""
+
+    def __init__(self, text: str = "", kind: str = "Muted", parent=None):
+        super().__init__(parent)
+        self.setObjectName(kind)
+        self.setWordWrap(True)
+        self.setText(text)
+
+    def setText(self, text: str):
+        super().setText(text)
+        self.setVisible(bool(text))
 
 
 class ElidedLabel(QLabel):

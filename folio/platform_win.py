@@ -5,8 +5,16 @@ import sys
 
 PROG_ID = "Folio.PDF"
 
-# 资源管理器右键菜单（HKCU\Software\Classes 下）：(注册表位置, 菜单文字, 工具名)。
-# packaging/installer.iss 里写的是同样的内容，改这里时两边一起改。
+# 资源管理器右键菜单有两套：
+# 1. Windows 11 第一层新菜单：shellext/ 里的 C++ 扩展，由稀疏包 Folio.Shell 注册（安装程序调用
+#    packaging/sparse/register.ps1）。注册成功时会在 SHELL_KEY 里记下包的 PackageFamily；
+#    扩展显示前读 SHELL_KEY 的 ContextMenu（0 = 关闭），所以设置里的开关不用重新注册包。
+# 2. 旧的注册表菜单（下面的 CONTEXT_MENU）：Windows 10 和稀疏包注册失败（例如证书不受信任）时的兜底。
+#    新菜单生效时删掉它：新菜单的项目也会出现在「显示更多选项」里，两套都在就重复了。
+SHELL_KEY = r"Software\Folio\Shell"
+
+# 旧的注册表菜单（HKCU\Software\Classes 下）：(注册表位置, 菜单文字, 工具名)。
+# packaging/installer.iss 和 packaging/sparse/register.ps1 里写的是同样的位置，改这里时一起改。
 CONTEXT_MENU = [
     (r"SystemFileAssociations\.pdf\shell\Folio.Compress", "用 Folio 压缩", "compress"),
     (r"SystemFileAssociations\.pdf\shell\Folio.Merge", "用 Folio 合并", "merge"),
@@ -79,19 +87,56 @@ def context_menu_installed() -> bool:
     return all(_read_value(rf"Software\Classes\{sub}\command") for sub, _, _ in CONTEXT_MENU)
 
 
+def new_menu_active() -> bool:
+    """Windows 11 的新右键菜单（稀疏包 Folio.Shell）是否已经注册。"""
+    if sys.platform != "win32":
+        return False
+    family = _read_value(SHELL_KEY, "PackageFamily")
+    if not family:
+        return False
+    try:
+        import ctypes
+        from ctypes import wintypes
+
+        count, size = wintypes.UINT(0), wintypes.UINT(0)
+        err = ctypes.windll.kernel32.GetPackagesByPackageFamily(str(family), ctypes.byref(count), None,
+                                                                 ctypes.byref(size), None)
+        return err == 122 or (err == 0 and count.value > 0)  # 122：ERROR_INSUFFICIENT_BUFFER，说明有已安装的包
+    except (AttributeError, OSError):
+        return False
+
+
+def _sync_shell_flag(enabled: bool) -> bool:
+    """新菜单的开关（扩展每次显示前读取）；返回是否改动了注册表。"""
+    import winreg
+
+    want = 1 if enabled else 0
+    if _read_value(SHELL_KEY, "ContextMenu") == want:
+        return False
+    with winreg.CreateKey(winreg.HKEY_CURRENT_USER, SHELL_KEY) as k:
+        winreg.SetValueEx(k, "ContextMenu", 0, winreg.REG_DWORD, want)
+    return True
+
+
 def sync_context_menu(enabled: bool, strict: bool = False) -> bool:
-    """让右键菜单和设置一致（程序位置变了也会更新命令）；返回是否改动了注册表。strict 时出错直接抛出。"""
+    """让两套右键菜单都和设置一致（程序位置变了也会更新命令）；返回是否改动了注册表。strict 时出错直接抛出。"""
     if sys.platform != "win32":
         return False
     import winreg
 
     changed = False
+    try:
+        changed = _sync_shell_flag(enabled)
+    except OSError:
+        if strict:
+            raise
+    legacy = enabled and not new_menu_active()
     launcher = _launcher()
     icon = f"{sys.executable},0" if getattr(sys, "frozen", False) else ""
     for sub, text, tool in CONTEXT_MENU:
         key = rf"Software\Classes\{sub}"
         try:
-            if enabled:
+            if legacy:
                 cmd = f'{launcher} --tool {tool} "%1"'
                 if _read_value(key + r"\command") == cmd and _read_value(key, "MUIVerb") == text:
                     continue

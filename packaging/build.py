@@ -20,26 +20,32 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ICON_DIR = os.path.join(ROOT, "packaging", "icons")
 
 
-def make_icons() -> str | None:
-    """从 folio.svg 生成 .ico / .icns。"""
+def render_logo(path: str, size: int):
+    """把 folio.svg 渲染成 size×size 的 PNG。"""
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-    from PIL import Image
     from PySide6.QtCore import QRectF, Qt
     from PySide6.QtGui import QGuiApplication, QImage, QPainter
     from PySide6.QtSvg import QSvgRenderer
 
     if QGuiApplication.instance() is None:  # SVG 渲染需要 Qt 应用实例
-        make_icons.app = QGuiApplication([])
-    os.makedirs(ICON_DIR, exist_ok=True)
+        render_logo.app = QGuiApplication([])
     renderer = QSvgRenderer(os.path.join(ROOT, "folio", "assets", "folio.svg"))
-    png = os.path.join(ICON_DIR, "folio-1024.png")
-    img = QImage(1024, 1024, QImage.Format_ARGB32)
+    img = QImage(size, size, QImage.Format_ARGB32)
     img.fill(Qt.transparent)
     p = QPainter(img)
     p.setRenderHint(QPainter.Antialiasing)
-    renderer.render(p, QRectF(0, 0, 1024, 1024))
+    renderer.render(p, QRectF(0, 0, size, size))
     p.end()
-    img.save(png)
+    img.save(path)
+
+
+def make_icons() -> str | None:
+    """从 folio.svg 生成 .ico / .icns。"""
+    from PIL import Image
+
+    os.makedirs(ICON_DIR, exist_ok=True)
+    png = os.path.join(ICON_DIR, "folio-1024.png")
+    render_logo(png, 1024)
     pil = Image.open(png)
     if sys.platform == "win32":
         out = os.path.join(ICON_DIR, "folio.ico")

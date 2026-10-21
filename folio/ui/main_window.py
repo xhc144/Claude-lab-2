@@ -24,7 +24,7 @@ from .bars import OptionsBar
 from .doc_tab import DocTab
 from .home import HomePage
 from .tools import EDIT_TOOLS
-from .widgets import IconButton, Toast, vline
+from .widgets import IconButton, TabCloseButton, Toast, vline
 
 TOOL_BUTTONS = [
     ("select", "mouse-pointer-2", "选择文字 (V)", "V"),
@@ -124,15 +124,13 @@ class MainWindow(QMainWindow):
         hl.addWidget(self.home_btn, 0, Qt.AlignBottom)
         self.tabbar = QTabBar()
         self.tabbar.setObjectName("DocTabs")
-        self.tabbar.setTabsClosable(True)
-        self.tabbar.setMovable(True)
+        self.tabbar.setMovable(True)  # 关闭按钮用自己的 TabCloseButton（见 _add_doc），不用 setTabsClosable
         self.tabbar.setExpanding(False)
         self.tabbar.setDocumentMode(True)
         self.tabbar.setElideMode(Qt.ElideMiddle)
         self.tabbar.setDrawBase(False)
         self.tabbar.setUsesScrollButtons(True)
         self.tabbar.currentChanged.connect(self._on_tab_changed)
-        self.tabbar.tabCloseRequested.connect(self.close_tab)
         self.tabbar.tabMoved.connect(self._on_tab_moved)
         self.tabbar.tabBarClicked.connect(lambda i: i >= 0 and self._show_tab(i))
         self.tabbar.hide()  # 没有标签时不占位置，加号紧跟在主页按钮后面
@@ -503,6 +501,12 @@ class MainWindow(QMainWindow):
         self.stack.setCurrentWidget(self.home)
         self._sync_ui()
 
+    def _close_tab_of(self, button: QWidget):
+        for i in range(self.tabbar.count()):  # 标签可以拖动换位置，按按钮找到它现在的序号
+            if self.tabbar.tabButton(i, QTabBar.RightSide) is button:
+                self.close_tab(i)
+                return
+
     def close_tab(self, i: int) -> bool:
         tab = self.tabs_widgets[i]
         if not self._confirm_discard(tab):
@@ -590,6 +594,9 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(tab)
         idx = self.tabbar.addTab(doc.name)
         self.tabbar.setTabToolTip(idx, doc.path)
+        close = TabCloseButton()
+        close.clicked.connect(lambda: self._close_tab_of(close))
+        self.tabbar.setTabButton(idx, QTabBar.RightSide, close)
         doc.undoChanged.connect(self._sync_if_current)
         doc.modifiedChanged.connect(lambda _: self._sync_if_current())
         doc.structureChanged.connect(self._sync_if_current)
@@ -887,6 +894,7 @@ class MainWindow(QMainWindow):
         if not self._update_timer_armed:  # 只从右键菜单打开工具时不检查，等主窗口真正显示出来
             self._update_timer_armed = True
             QTimer.singleShot(6000, self._auto_check_update)
+            QTimer.singleShot(1500, self._check_failed_update)
 
     # ================================================================ 更新
     def _auto_check_update(self):
@@ -898,6 +906,33 @@ class MainWindow(QMainWindow):
         if time.time() - float(st.get("update/last_check") or 0) < update.CHECK_INTERVAL:
             return
         self.check_update(silent=True)
+
+    def _check_failed_update(self):
+        """上次自动更新没装上（新版本还留在解压目录里）时告诉用户，给出手动下载的地址。"""
+        from PySide6.QtCore import QUrl
+        from PySide6.QtGui import QDesktopServices
+
+        from .. import update
+
+        try:
+            failed = update.pending_failure()
+        except OSError:
+            return
+        if failed is None:
+            return
+        box = QMessageBox(self)
+        box.setIcon(QMessageBox.Warning)
+        box.setWindowTitle("更新没有装上")
+        text = (f"上次下载的 Folio {failed.version} 没有装上，现在仍是 {__version__}。\n\n"
+                "请到下载页面下载安装程序，直接运行覆盖安装即可，设置和最近打开的文件都会保留。")
+        if failed.log:
+            text += f"\n\n失败原因记录在：{failed.log}"
+        box.setText(text)
+        go = box.addButton("打开下载页面", QMessageBox.AcceptRole)
+        box.addButton("关闭", QMessageBox.RejectRole)
+        box.exec()
+        if box.clickedButton() is go:
+            QDesktopServices.openUrl(QUrl(update.RELEASES_PAGE))
 
     def check_update(self, silent: bool = False, dialog_parent=None, status=None):
         from .. import update

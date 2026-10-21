@@ -182,6 +182,53 @@ jobs:
           $p = Start-Process -FilePath dist/Folio/Folio.exe -ArgumentList "--selftest", "$PWD\selftest.json" -Wait -PassThru
           Get-Content selftest.json
           if ($p.ExitCode -ne 0) { exit 1 }
+      - name: 构建 Windows 11 右键菜单（C++ 扩展 + 稀疏包）
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX_BASE64 || secrets.WINDOWS_CERT_PFX }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+          MSIX_PUBLISHER: ${{ vars.MSIX_PUBLISHER }}
+        run: |
+          # 稀疏包清单的 Publisher 必须和签名证书的 Subject 完全一致
+          if ($env:MSIX_PUBLISHER) {
+            $pub = $env:MSIX_PUBLISHER          # 用 Azure Artifact Signing 时，在仓库变量里填它的证书 Subject
+          } elseif ($env:WINDOWS_CERT_PFX) {
+            $pub = python packaging/sign_windows.py --subject
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          } else {
+            # 没有证书（例如 fork 的仓库）：用临时自签名证书，只用来在这台 CI 机器上试装
+            $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=Folio CI Test" -KeyUsage DigitalSignature `
+              -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}") -CertStoreLocation Cert:\CurrentUser\My
+            $pw = ConvertTo-SecureString -String "ci-test" -Force -AsPlainText
+            Export-PfxCertificate -Cert $cert -FilePath "$env:RUNNER_TEMP\ci-test.pfx" -Password $pw | Out-Null
+            $env:WINDOWS_CERT_PFX = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:RUNNER_TEMP\ci-test.pfx"))
+            $env:WINDOWS_CERT_PASSWORD = "ci-test"
+            $pub = "CN=Folio CI Test"
+          }
+          # --test：直接加载 DLL 自检（标题、按文件类型显示、设置里关掉、多选文件一条命令启动）
+          python packaging/build_shell.py --publisher "$pub" --test
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if ($env:HAS_AZURE -ne 'true') {
+            python packaging/sign_windows.py dist/Folio-shell/FolioShell.exe "dist/Folio-shell/$env:FOLIO_VERSION/FolioShellExt.dll" dist/Folio-shell/Folio-Shell.msix
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+      - name: 签名右键菜单（Windows，Azure Artifact Signing）
+        if: runner.os == 'Windows' && env.HAS_AZURE == 'true'
+        uses: azure/artifact-signing-action@v2
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: ${{ secrets.AZURE_SIGNING_ENDPOINT }}
+          signing-account-name: ${{ secrets.AZURE_SIGNING_ACCOUNT }}
+          certificate-profile-name: ${{ secrets.AZURE_CERT_PROFILE }}
+          files-folder: ${{ github.workspace }}\dist\Folio-shell
+          files-folder-filter: exe,dll,msix
+          files-folder-recurse: true
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
       - name: 自检打包结果（macOS）
         if: runner.os == 'macOS'
         run: |
@@ -224,6 +271,15 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          # 让这台 CI 机器信任稀疏包的签名证书（相当于用了受信任的证书），才能试装新右键菜单。
+          # 用户电脑上证书不受信任时，register.ps1 会保留旧的注册表菜单
+          # PowerShell 7 里 Appx 模块要通过 Windows PowerShell 加载
+          Import-Module Appx -UseWindowsPowerShell -WarningAction SilentlyContinue
+          $signer = (Get-AuthenticodeSignature dist/Folio-shell/Folio-Shell.msix).SignerCertificate
+          if (-not $signer) { Write-Error "Folio-Shell.msix 没有签名"; exit 1 }
+          $store = [Security.Cryptography.X509Certificates.X509Store]::new("TrustedPeople", "LocalMachine")
+          $store.Open("ReadWrite"); $store.Add($signer); $store.Close()
+          Write-Host "稀疏包签名者：$($signer.Subject)"
           $p = Start-Process -FilePath $env:SETUP_EXE -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/TASKS=desktopicon,pdfassoc" -Wait -PassThru
           if ($p.ExitCode -ne 0) { Write-Error "安装失败：$($p.ExitCode)"; exit 1 }
           $app = "$env:LOCALAPPDATA\Programs\Folio"
@@ -231,10 +287,25 @@ jobs:
           Get-Content selftest-installed.json
           if ($p.ExitCode -ne 0) { exit 1 }
           if (-not (Test-Path "$([Environment]::GetFolderPath('Programs'))\Folio.lnk")) { Write-Error "没有开始菜单快捷方式"; exit 1 }
+          $lnk = (New-Object -ComObject WScript.Shell).CreateShortcut("$([Environment]::GetFolderPath('Programs'))\Folio.lnk")
+          Write-Host "快捷方式起始位置：$($lnk.WorkingDirectory)"
+          if ($lnk.WorkingDirectory -like "$app*") { Write-Error "快捷方式的起始位置不能是程序目录（自动更新会改不了名）"; exit 1 }
           $menu = "HKCU:\Software\Classes\SystemFileAssociations\.pdf\shell\Folio.Compress"
-          $cmd = (Get-ItemProperty -LiteralPath "$menu\command").'(default)'
-          Write-Host "右键菜单命令：$cmd"
-          if ($cmd -notlike "*Folio.exe*--tool compress*") { Write-Error "没有右键菜单「用 Folio 压缩」"; exit 1 }
+          if (Test-Path "$env:TEMP\folio-shell.log") { Get-Content "$env:TEMP\folio-shell.log" }
+          if ([Environment]::OSVersion.Version.Build -ge 22000) {
+            # Windows 11：新右键菜单（稀疏包）注册成功，旧的注册表菜单删掉（不在「显示更多选项」里重复）
+            $pkg = Get-AppxPackage -Name Folio.Shell
+            if (-not $pkg) { Write-Error "没有注册右键菜单稀疏包 Folio.Shell"; exit 1 }
+            Write-Host "稀疏包：$($pkg.PackageFullName)，外部位置：$($pkg.InstallLocation)"
+            if (Test-Path -LiteralPath $menu) { Write-Error "新菜单生效后，旧的注册表菜单应该删掉"; exit 1 }
+            # 通过已注册的包（dllhost 代理）创建扩展，确认 Explorer 能用
+            & shellext/build/Release/FolioShellTest.exe --packaged "$env:RUNNER_TEMP\shelltest"
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          } else {
+            $cmd = (Get-ItemProperty -LiteralPath "$menu\command").'(default)'
+            Write-Host "右键菜单命令：$cmd"
+            if ($cmd -notlike "*Folio.exe*--tool compress*") { Write-Error "没有右键菜单「用 Folio 压缩」"; exit 1 }
+          }
           # 自动更新会整体替换程序目录：确认目录和上一级都能写，卸载程序不在程序目录里
           python -c "import os,sys; a=sys.argv[1]; assert os.access(a, os.W_OK) and os.access(os.path.dirname(a), os.W_OK); assert not any(n.startswith('unins') for n in os.listdir(a))" $app
           if ($LASTEXITCODE -ne 0) { exit 1 }
@@ -242,6 +313,12 @@ jobs:
           for ($i = 0; $i -lt 60 -and (Test-Path $app); $i++) { Start-Sleep -Seconds 1 }   # 卸载程序会在后台再跑一会儿
           if (Test-Path $app) { Write-Error "卸载后程序目录还在"; exit 1 }
           if (Test-Path -LiteralPath $menu) { Write-Error "卸载后右键菜单还在"; exit 1 }
+          if (Get-AppxPackage -Name Folio.Shell) { Write-Error "卸载后稀疏包还在"; exit 1 }
+          for ($i = 0; $i -lt 30 -and (Test-Path "$env:LOCALAPPDATA\Programs\Folio-shell"); $i++) { Start-Sleep -Seconds 1 }
+          if (Test-Path "$env:LOCALAPPDATA\Programs\Folio-shell") { Write-Error "卸载后 Folio-shell 目录还在"; exit 1 }
+          if (Test-Path "HKCU:\Software\Folio\Shell") { Write-Error "卸载后 HKCU\Software\Folio\Shell 还在"; exit 1 }
+          $store = [Security.Cryptography.X509Certificates.X509Store]::new("TrustedPeople", "LocalMachine")
+          $store.Open("ReadWrite"); $store.Remove($signer); $store.Close()
           Write-Host "安装、自检、卸载都正常"
       - uses: actions/upload-artifact@v4
         if: runner.os == 'Windows'

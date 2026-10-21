@@ -266,13 +266,17 @@ def test_saving_settings_leaves_context_menu_alone(win, qapp, monkeypatch):  # n
 
 @pytest.mark.skipif(sys.platform != "win32" or not os.environ.get("CI"), reason="只在 Windows CI 上改注册表")
 def test_context_menu_registry():
-    from folio.platform_win import CONTEXT_MENU, _read_value, context_menu_installed, sync_context_menu
+    from folio.platform_win import (CONTEXT_MENU, SHELL_KEY, _read_value, context_menu_installed, new_menu_active,
+                                    sync_context_menu)
 
+    assert not new_menu_active()  # 这一步在试装之前跑，稀疏包还没注册，用的是旧的注册表菜单
     try:
         sync_context_menu(False, strict=True)  # 从干净的状态开始
         assert not context_menu_installed()
+        assert _read_value(SHELL_KEY, "ContextMenu") == 0  # 新菜单（Windows 11）也一起关掉
         assert sync_context_menu(True, strict=True)
         assert context_menu_installed()
+        assert _read_value(SHELL_KEY, "ContextMenu") == 1
         sub, text, tool = CONTEXT_MENU[0]
         cmd = _read_value(rf"Software\Classes\{sub}\command")
         assert f"--tool {tool}" in cmd and '"%1"' in cmd
@@ -281,3 +285,9 @@ def test_context_menu_registry():
         assert not context_menu_installed()
     finally:
         sync_context_menu(False)
+        import winreg
+
+        try:
+            winreg.DeleteKey(winreg.HKEY_CURRENT_USER, SHELL_KEY)
+        except OSError:
+            pass

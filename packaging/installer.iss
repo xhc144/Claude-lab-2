@@ -39,11 +39,8 @@ CloseApplications=yes
 ChangesAssociations=yes
 
 [Languages]
-#if FileExists(CompilerPath + "Languages\ChineseSimplified.isl")
-Name: "zh"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
-#else
-  #error 这个版本的 Inno Setup 没有简体中文语言文件，请升级到 6.4 以上
-#endif
+; Inno Setup 6 不自带简体中文，用的是官方仓库里的社区翻译（issrc 的 is-6_7_1 标签，Files/Languages/Unofficial）
+Name: "zh"; MessagesFile: "{#SourcePath}ChineseSimplified.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "创建桌面快捷方式"; GroupDescription: "其他："

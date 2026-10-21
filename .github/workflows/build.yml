@@ -185,9 +185,11 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          # 用最新的 Inno Setup（6.4 起自带简体中文界面）
-          choco install innosetup -y --no-progress
-          if ($LASTEXITCODE -ne 0) { exit 1 }
+          # GitHub 的 Windows 机器自带 Inno Setup 6，没有时再安装
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue) -and -not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
           $iscc = Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup*\ISCC.exe", "$env:ProgramFiles\Inno Setup*\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -Last 1
           if (-not $iscc) { Write-Error "找不到 ISCC.exe"; exit 1 }
           & $iscc.FullName "/DAppVersion=$env:FOLIO_VERSION" packaging/installer.iss

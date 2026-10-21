@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
         self.setProperty("titleColor", "chrome")  # Windows 11：标题栏和标签栏同色
         self.setWindowTitle(APP_DISPLAY_NAME)
         self.resize(1360, 880)
-        self.setMinimumSize(900, 600)
+        self.setMinimumSize(960, 600)  # 工具栏收起次要按钮后，Windows 上大约要 930 宽
         self.setAcceptDrops(True)
 
         root = QWidget()

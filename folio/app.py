@@ -24,6 +24,7 @@ SERVER_NAME = f"{APP_NAME}-single-instance-{os.environ.get('USERNAME') or os.env
 TOOL_KEYS = ("compress", "images", "merge", "split")
 # 资源管理器里多选文件再点右键菜单时，会同时启动好几个 Folio：先抢到锁的当主程序，其余的等它准备好后把文件交给它
 CONNECT_WAIT_MS = 15000
+ACK_WAIT_MS = 30000  # 主程序冷启动（杀毒软件扫描等）可能要好几秒，这期间连得上但还不能回复
 
 
 def parse_args(argv: list[str]) -> tuple[str | None, list[str]]:
@@ -63,31 +64,42 @@ def _lock_path() -> str:
     return os.path.join(tempfile.gettempdir(), f"{SERVER_NAME}.lock")
 
 
-def _send_to_running(payload: bytes, primary_pid: int = 0, wait_ms: int = 300) -> bool:
+def _send_to_running(payload: bytes, primary_pid: int = 0, wait_ms: int = 300, ack_ms: int = ACK_WAIT_MS) -> bool:
+    """把请求交给已经在运行的主程序，等它回复「收到」才算成功。
+
+    主程序可能还在启动（窗口没建好，暂时读不了数据）；Windows 的命名管道不缓存数据，
+    这时提前断开请求就丢了，所以要等到回复，最多等 ack_ms。
+    """
     sock = QLocalSocket()
-    waited = 0
+    deadline = time.monotonic() + wait_ms / 1000
     while True:
         sock.connectToServer(SERVER_NAME)
         if sock.waitForConnected(300):
             break
         sock.abort()
-        waited += 300
-        if waited >= wait_ms:
+        if time.monotonic() >= deadline:
             return False
         time.sleep(0.1)
-        waited += 100
     if primary_pid and sys.platform == "win32":
         # 用户刚刚双击文件，这个进程有把窗口切到前台的权利；把它让给主程序，主程序的窗口才能弹到最前面
         from .platform_win import allow_foreground
 
         allow_foreground(primary_pid)
-    sock.write(QByteArray(payload))
-    sock.flush()
-    sock.waitForBytesWritten(2000)
+    sock.write(QByteArray(payload.rstrip(b"\n") + b"\n"))
+    reply = b""
+    deadline = time.monotonic() + ack_ms / 1000
+    while True:
+        if sock.bytesToWrite():
+            sock.waitForBytesWritten(100)
+        if sock.bytesAvailable() or sock.waitForReadyRead(100):
+            reply += bytes(sock.readAll())
+        if reply.endswith(b"\n"):
+            break
+        if time.monotonic() >= deadline or sock.state() == QLocalSocket.UnconnectedState:
+            sock.abort()
+            return False
     sock.disconnectFromServer()
-    if sock.state() != QLocalSocket.UnconnectedState:
-        sock.waitForDisconnected(1000)
-    return True
+    return reply.strip() == b"ok"
 
 
 def _primary_pid(lock: QLockFile) -> int:
@@ -121,20 +133,18 @@ class InstanceServer:
             buf = bytearray()
             done = []
 
-            def read(sock=sock, buf=buf):
+            def read(sock=sock, buf=buf, done=done):
                 buf.extend(bytes(sock.readAll()))
+                if not done and buf.endswith(b"\n"):  # 一个请求一行；收齐后回复，对方收到回复才断开
+                    done.append(True)
+                    self._dispatch(decode_request(bytes(buf)))
+                    sock.write(b"ok\n")
+                    sock.flush()
 
-            def finish(sock=sock, buf=buf, done=done):
-                if done:
-                    return
-                done.append(True)
-                read()
-                sock.deleteLater()
-                self._dispatch(decode_request(bytes(buf)))
             sock.readyRead.connect(read)
-            sock.disconnected.connect(finish)
-            if sock.state() == QLocalSocket.UnconnectedState:  # 对方已经发完并断开
-                finish()
+            sock.disconnected.connect(sock.deleteLater)
+            if sock.bytesAvailable():
+                read()
 
     def _dispatch(self, req):
         if self.handler is None:

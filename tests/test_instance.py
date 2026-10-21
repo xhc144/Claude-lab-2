@@ -1,5 +1,6 @@
 """单实例、右键菜单打开工具、工具窗口、标签栏和更新提示。"""
 import os
+import subprocess
 import sys
 import time
 
@@ -8,6 +9,8 @@ from PySide6.QtCore import QLockFile
 
 from .test_core import make_text_pdf
 from .test_gui import open_doc, pump, win  # noqa: F401  （win 是 fixture）
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # ---------------------------------------------------------------- 命令行和请求格式
@@ -35,28 +38,46 @@ def test_request_roundtrip():
     assert decode_request(b"__activate__") == (None, [])
 
 
+def _send_in_subprocess(name: str, tool, files):
+    """像资源管理器那样，另起一个进程把请求发给主程序。"""
+    code = (f"import sys; sys.path.insert(0, {ROOT!r})\n"
+            "from PySide6.QtCore import QCoreApplication\n"
+            "app = QCoreApplication([])\n"
+            "import folio.app as a\n"
+            f"a.SERVER_NAME = {name!r}\n"
+            f"ok = a._send_to_running(a.encode_request({tool!r}, {files!r}), wait_ms=10000, ack_ms=20000)\n"
+            "sys.exit(0 if ok else 3)\n")
+    return subprocess.Popen([sys.executable, "-c", code])
+
+
+def _wait_process(qapp, proc, timeout=40):
+    end = time.time() + timeout
+    while proc.poll() is None and time.time() < end:
+        pump(qapp, 20)
+    if proc.poll() is None:
+        proc.kill()
+    return proc.wait()
+
+
 def test_instance_server_forwards(qapp, monkeypatch):
     from folio import app as appmod
 
-    monkeypatch.setattr(appmod, "SERVER_NAME", f"folio-test-{os.getpid()}-{time.time_ns()}")
+    name = f"folio-test-{os.getpid()}-{time.time_ns()}"
+    monkeypatch.setattr(appmod, "SERVER_NAME", name)
     server = appmod.InstanceServer()
     got = []
+    # 主程序还在启动、暂时处理不了消息时（这里 2 秒不跑事件循环），发送方要一直等到主程序确认收到
+    proc = _send_in_subprocess(name, "compress", ["/x/1.pdf"])
+    time.sleep(2)
+    assert _wait_process(qapp, proc) == 0
     # 窗口还没建好时收到的请求先排队
-    assert appmod._send_to_running(appmod.encode_request("compress", ["/x/1.pdf"]), wait_ms=2000)
-    for _ in range(100):
-        pump(qapp, 10)
-        if server._queue:
-            break
     assert server._queue == [("compress", ["/x/1.pdf"])]
     server.set_handler(lambda tool, files: got.append((tool, files)))
     assert got == [("compress", ["/x/1.pdf"])]
-    # 之后的请求直接交给窗口
-    for k in range(3):
-        assert appmod._send_to_running(appmod.encode_request("merge", [f"/x/{k}.pdf"]), wait_ms=2000)
-    for _ in range(200):
-        pump(qapp, 10)
-        if len(got) == 4:
-            break
+    # 同时来好几个
+    procs = [_send_in_subprocess(name, "merge", [f"/x/{k}.pdf"]) for k in range(3)]
+    assert [_wait_process(qapp, p) for p in procs] == [0, 0, 0]
+    pump(qapp, 50)
     assert sorted(got[1:]) == [("merge", ["/x/0.pdf"]), ("merge", ["/x/1.pdf"]), ("merge", ["/x/2.pdf"])]
     server.server.close()
 
@@ -199,10 +220,10 @@ def test_toolbar_collapses_when_narrow(win, qapp, tmp_path):  # noqa: F811
     win.resize(1600, 800)
     pump(qapp, 30)
     assert win.btn_print.isVisible() and win.btn_zoom_in.isVisible()
-    win.resize(900, 700)
+    win.resize(win.minimumWidth(), 700)
     pump(qapp, 30)
     lay = win.topbar.layout()
-    assert lay.sizeHint().width() <= win.topbar.width() + 4  # 按钮不会挤在一起
+    assert lay.sizeHint().width() <= win.topbar.width()  # 窗口最窄时按钮也不会挤在一起
     assert not win.btn_print.isVisible()
     win.resize(1600, 800)
     pump(qapp, 30)
@@ -229,13 +250,13 @@ def test_context_menu_registry():
     from folio.platform_win import CONTEXT_MENU, _read_value, context_menu_installed, sync_context_menu
 
     try:
-        assert sync_context_menu(True)
+        assert sync_context_menu(True, strict=True)
         assert context_menu_installed()
         sub, text, tool = CONTEXT_MENU[0]
         cmd = _read_value(rf"Software\Classes\{sub}\command")
         assert f"--tool {tool}" in cmd and '"%1"' in cmd
-        assert not sync_context_menu(True)  # 已经一致时不再改动
-        assert sync_context_menu(False)
+        assert not sync_context_menu(True, strict=True)  # 已经一致时不再改动
+        assert sync_context_menu(False, strict=True)
         assert not context_menu_installed()
     finally:
         sync_context_menu(False)

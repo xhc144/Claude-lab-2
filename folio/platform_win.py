@@ -79,8 +79,8 @@ def context_menu_installed() -> bool:
     return all(_read_value(rf"Software\Classes\{sub}\command") for sub, _, _ in CONTEXT_MENU)
 
 
-def sync_context_menu(enabled: bool) -> bool:
-    """让右键菜单和设置一致（程序位置变了也会更新命令）；返回是否改动了注册表。"""
+def sync_context_menu(enabled: bool, strict: bool = False) -> bool:
+    """让右键菜单和设置一致（程序位置变了也会更新命令）；返回是否改动了注册表。strict 时出错直接抛出。"""
     if sys.platform != "win32":
         return False
     import winreg
@@ -110,7 +110,8 @@ def sync_context_menu(enabled: bool) -> bool:
                         pass
                 changed = True
         except OSError:
-            pass
+            if strict:
+                raise
     if changed:
         _notify_shell()
     return changed

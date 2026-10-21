@@ -28,7 +28,8 @@ Windows 不允许给一个**正被某个进程当作当前目录**的文件夹�
 
 所以：
 
-- **替换脚本和它的父进程都不能把当前目录放在程序目录里。** `launch_installer()` 的两个 `Popen` 都传 `cwd=tempfile.gettempdir()`；`WIN_SCRIPT` 一开头就 `Set-Location` 到临时目录，`MAC_SCRIPT` 一开头就 `cd` 到临时目录（双保险）。
+- **替换脚本和它的父进程都不能把当前目录放在程序目录里。** `launch_installer()` 的两个 `Popen` 都传 `cwd=tempfile.gettempdir()`；`WIN_SCRIPT` 一开头就切到临时目录，`MAC_SCRIPT` 一开头就 `cd` 到临时目录（双保险）。
+- **PowerShell 的 `Set-Location` 不够**：它只改 PowerShell 自己的位置（`$PWD`），进程的当前目录（`[IO.Directory]::GetCurrentDirectory()`，锁住目录的是它）不变。必须再调用 `[System.IO.Directory]::SetCurrentDirectory(...)`。`test_windows_swap_script_cwd_inside_dst` 就是在 CI 上这样发现的。
 - 快捷方式的起始位置是 `{userdocs}`（`packaging/installer.iss` 的 `[Icons]`），CI 试装时会检查。
 - 同理，任何会长时间打开程序目录里文件的东西都不能放进程序目录。Windows 11 右键菜单的 DLL 会被 Explorer（dllhost.exe）加载，所以它装在旁边的 `Folio-shell`，不在 `Folio` 里。
 - 新增要启动的子进程时，想一想它会不会在 Folio 退出后还活着、当前目录在哪里。

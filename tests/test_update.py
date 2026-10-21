@@ -145,7 +145,8 @@ def test_windows_swap_script(tmp_path):
 def test_windows_swap_script_cwd_inside_dst(tmp_path):
     """回归测试：脚本自己的当前目录落在要替换的目录里（旧版本不传 cwd 时就是这样），替换也要成功。
 
-    Windows 不允许改名被某个进程当作当前目录的文件夹；WIN_SCRIPT 开头的 Set-Location 去掉后这个测试会失败。
+    Windows 不允许改名被某个进程当作当前目录的文件夹；WIN_SCRIPT 开头不切换进程的当前目录时这个测试会失败
+    （只用 Set-Location 也会失败：它只改 PowerShell 的位置，不改进程的当前目录）。
     """
     src, dst = _make_dirs(tmp_path, "Folio App")
     script = tmp_path / "update.ps1"

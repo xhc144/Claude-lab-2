@@ -304,17 +304,19 @@ def same_signer(cur: dict, new: dict) -> bool:
 # 替换脚本由「旧版本」启动和执行：改这里的逻辑只对从改动后的版本再往后的更新生效（见 CLAUDE.md「自动更新的注意事项」）。
 # 脚本先切到临时目录：Windows 不允许改名一个正被某个进程当作当前目录的文件夹，
 # 如果脚本的当前目录在程序目录里（从快捷方式启动时 Folio 的当前目录就是程序目录），改名会一直失败。
+# 注意 Set-Location 只改 PowerShell 自己的位置，不改进程的当前目录（锁住目录的是后者），两个都要设。
 # 失败时写日志 %TEMP%\folio-update-<时间>.log 并重新打开旧版本；下次启动时 pending_failure() 会提示用户。
 WIN_SCRIPT = r"""
 param([int]$ProcId, [string]$Src, [string]$Dst, [string]$Exe)
 Set-Location -LiteralPath ([System.IO.Path]::GetTempPath())
+[System.IO.Directory]::SetCurrentDirectory([System.IO.Path]::GetTempPath())
 $ErrorActionPreference = 'Stop'
 function Fail([string]$Why) {
   $log = Join-Path ([System.IO.Path]::GetTempPath()) ("folio-update-" + (Get-Date -Format 'yyyyMMddHHmmss') + ".log")
   $err = if ($Error.Count) { ($Error[0] | Out-String).Trim() } else { '' }
   try {
     @("time: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')", "reason: $Why", "install dir: $Dst", "new version: $Src",
-      "cwd: $((Get-Location).Path)", "error: $err") | Set-Content -LiteralPath $log -Encoding UTF8
+      "cwd: $([System.IO.Directory]::GetCurrentDirectory())", "error: $err") | Set-Content -LiteralPath $log -Encoding UTF8
   } catch {}
   Start-Process -FilePath $Exe
   exit 1

@@ -4,7 +4,9 @@
 # 任何失败都不能中断安装：注册不上时保留旧的注册表右键菜单（Windows 10、证书不受信任等情况），原因写进
 # %TEMP%\folio-shell.log。注册成功后删掉旧的注册表菜单，免得在「显示更多选项」里重复出现。
 param([ValidateSet('install', 'uninstall')][string]$Action, [string]$Dir, [string]$Version = '')
-Set-Location -LiteralPath ([System.IO.Path]::GetTempPath())   # 不占用任何安装目录
+# 不占用任何安装目录（Set-Location 只改 PowerShell 的位置，进程的当前目录要另外设）
+Set-Location -LiteralPath ([System.IO.Path]::GetTempPath())
+[System.IO.Directory]::SetCurrentDirectory([System.IO.Path]::GetTempPath())
 # 从 PowerShell 7 里启动安装程序时会继承它的 PSModulePath，Windows PowerShell 5.1 就加载不了 Appx 模块
 $env:PSModulePath = "$env:ProgramFiles\WindowsPowerShell\Modules;$env:SystemRoot\System32\WindowsPowerShell\v1.0\Modules"
 $ErrorActionPreference = 'Stop'

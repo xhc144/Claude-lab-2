@@ -76,7 +76,7 @@
 
 正式版在 [Releases](https://github.com/xhc144/Claude-lab-2/releases/latest) 下载：Windows 推荐用 `Folio-Setup-版本号.exe` 安装（装在当前用户目录，不需要管理员权限，也可以在系统设置里卸载）；`Folio-windows.zip` 是免安装版。
 
-推送 `v*` 标签（例如 `v0.2.1`）时，安装程序、压缩包和自动更新用的 `latest.json` 会自动发布到 Releases，发布说明开头的下载指引来自 `packaging/release-header.md`。
+推送 `v*` 标签（例如 `v0.2.1`）时，安装程序、压缩包和自动更新用的 `latest.json` 会自动发布到 Releases，发布说明开头的下载指引来自 `packaging/release-header.md`。不想用 git 打标签时，也可以在 **Actions → 测试与打包 → Run workflow** 里填写版本号手动发布（会在所选分支的最新提交上创建标签）。
 
 ### 从源码运行
 

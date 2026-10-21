@@ -73,7 +73,9 @@
 
 每次推送代码，GitHub Actions 都会自动打包。打开仓库的 **Actions → 测试与打包**，选择最新一次运行，在 Artifacts 里下载 `Folio-windows` 或 `Folio-macos`。解压后运行 `Folio.exe` 或 `Folio.app` 即可，不用安装 Python。
 
-推送 `v*` 标签（例如 `v0.2.0`）时，安装包和自动更新用的 `latest.json` 会自动发布到 Releases。
+正式版在 [Releases](https://github.com/xhc144/Claude-lab-2/releases/latest) 下载：Windows 推荐用 `Folio-Setup-版本号.exe` 安装（装在当前用户目录，不需要管理员权限，也可以在系统设置里卸载）；`Folio-windows.zip` 是免安装版。
+
+推送 `v*` 标签（例如 `v0.2.1`）时，安装程序、压缩包和自动更新用的 `latest.json` 会自动发布到 Releases，发布说明开头的下载指引来自 `packaging/release-header.md`。
 
 ### 从源码运行
 

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Folio 右键菜单的稀疏包（Package with External Location）清单。由 packaging/build_shell.py 填入
-  @VERSION@（四段数字）、@PUBLISHER@（必须和签名证书的 Subject 完全一致）、@DLLDIR@（DLL 所在的带版本号的子目录），
-  再用 makeappx 打成 Folio-Shell.msix。
+  Folio 右键菜单的稀疏包（Package with External Location）清单模板。每个菜单命令单独一个包：
+  Windows 11 会把同一个包里、对选中文件都适用的多个命令收进一个以包名命名的子菜单（「Folio >」，
+  而且没有图标），所以「用 Folio 压缩」「用 Folio 合并」「用 Folio 转为 PDF」各是一个包，才能都在第一层。
+  packaging/build_shell.py 按它的 PACKAGES 表填入：
+    @NAME@（包名，例如 Folio.Shell.Compress）、@TITLE@（菜单文字）、@CLSID@、@ITEMTYPES@（适用的文件类型），
+    @VERSION@（四段数字）、@PUBLISHER@（必须和签名证书的 Subject 完全一致）、@DLLDIR@（DLL 所在的带版本号的子目录），
+  再用 makeappx 打成 Folio-Shell-<命令>.msix。
 
   外部位置（ExternalLocation）是 %LOCALAPPDATA%\Programs\Folio-shell，不是程序目录：
   自动更新要给程序目录改名，而 Explorer（dllhost）加载着的 DLL 会锁住它所在的目录。
+  几个包共用这个目录里的 FolioShell.exe 和 FolioShellExt.dll，每个包只注册 DLL 里的一个 CLSID。
   CLSID 要和 shellext/FolioShellExt.cpp 里的一致。
 -->
 <Package
@@ -17,9 +22,9 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
   IgnorableNamespaces="uap uap10 desktop4 desktop5 rescap com">
-  <Identity Name="Folio.Shell" Publisher="@PUBLISHER@" Version="@VERSION@" ProcessorArchitecture="x64" />
+  <Identity Name="@NAME@" Publisher="@PUBLISHER@" Version="@VERSION@" ProcessorArchitecture="x64" />
   <Properties>
-    <DisplayName>Folio</DisplayName>
+    <DisplayName>@TITLE@</DisplayName>
     <PublisherDisplayName>Folio</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
     <uap10:AllowExternalContent>true</uap10:AllowExternalContent>
@@ -36,48 +41,19 @@
   </Capabilities>
   <Applications>
     <Application Id="FolioShell" Executable="FolioShell.exe" uap10:TrustLevel="mediumIL" uap10:RuntimeBehavior="win32App">
-      <uap:VisualElements AppListEntry="none" DisplayName="Folio" Description="Folio 资源管理器右键菜单"
+      <uap:VisualElements AppListEntry="none" DisplayName="@TITLE@" Description="Folio 资源管理器右键菜单"
                           BackgroundColor="transparent" Square150x150Logo="Assets\Square150x150Logo.png"
                           Square44x44Logo="Assets\Square44x44Logo.png" />
       <Extensions>
         <desktop4:Extension Category="windows.fileExplorerContextMenus">
           <desktop4:FileExplorerContextMenus>
-            <desktop5:ItemType Type=".pdf">
-              <desktop5:Verb Id="FolioCompress" Clsid="774DDDCF-8048-41F5-A5E3-7AF831C7111F" />
-              <desktop5:Verb Id="FolioMerge" Clsid="2BD5E5C0-1A3C-4F08-9E8A-DFFB7A85841D" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".png">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".jpg">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".jpeg">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".bmp">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".gif">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".tif">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".tiff">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
-            <desktop5:ItemType Type=".webp">
-              <desktop5:Verb Id="FolioImages" Clsid="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" />
-            </desktop5:ItemType>
+@ITEMTYPES@
           </desktop4:FileExplorerContextMenus>
         </desktop4:Extension>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
             <com:SurrogateServer DisplayName="Folio 右键菜单">
-              <com:Class Id="774DDDCF-8048-41F5-A5E3-7AF831C7111F" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
-              <com:Class Id="2BD5E5C0-1A3C-4F08-9E8A-DFFB7A85841D" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
-              <com:Class Id="E4165EA7-0EA4-4BF6-AF0A-B6F03A8F1DB3" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
+              <com:Class Id="@CLSID@" Path="@DLLDIR@\FolioShellExt.dll" ThreadingModel="STA" />
             </com:SurrogateServer>
           </com:ComServer>
         </com:Extension>

@@ -210,7 +210,8 @@ jobs:
           python packaging/build_shell.py --publisher "$pub" --test
           if ($LASTEXITCODE -ne 0) { exit 1 }
           if ($env:HAS_AZURE -ne 'true') {
-            python packaging/sign_windows.py dist/Folio-shell/FolioShell.exe "dist/Folio-shell/$env:FOLIO_VERSION/FolioShellExt.dll" dist/Folio-shell/Folio-Shell.msix
+            $msix = @(Get-ChildItem dist/Folio-shell/Folio-Shell-*.msix | ForEach-Object { $_.FullName })
+            python packaging/sign_windows.py dist/Folio-shell/FolioShell.exe "dist/Folio-shell/$env:FOLIO_VERSION/FolioShellExt.dll" @msix
             if ($LASTEXITCODE -ne 0) { exit 1 }
           }
       - name: 签名右键菜单（Windows，Azure Artifact Signing）
@@ -275,8 +276,12 @@ jobs:
           # 用户电脑上证书不受信任时，register.ps1 会保留旧的注册表菜单
           # PowerShell 7 里 Appx 模块要通过 Windows PowerShell 加载
           Import-Module Appx -UseWindowsPowerShell -WarningAction SilentlyContinue
-          $signer = (Get-AuthenticodeSignature dist/Folio-shell/Folio-Shell.msix).SignerCertificate
-          if (-not $signer) { Write-Error "Folio-Shell.msix 没有签名"; exit 1 }
+          $msix = @(Get-ChildItem dist/Folio-shell/Folio-Shell-*.msix)
+          if ($msix.Count -ne 3) { Write-Error "应该有 3 个右键菜单稀疏包，实际 $($msix.Count) 个"; exit 1 }
+          foreach ($m in $msix) {
+            if (-not (Get-AuthenticodeSignature $m.FullName).SignerCertificate) { Write-Error "$($m.Name) 没有签名"; exit 1 }
+          }
+          $signer = (Get-AuthenticodeSignature $msix[0].FullName).SignerCertificate
           $store = [Security.Cryptography.X509Certificates.X509Store]::new("TrustedPeople", "LocalMachine")
           $store.Open("ReadWrite"); $store.Add($signer); $store.Close()
           Write-Host "稀疏包签名者：$($signer.Subject)"
@@ -294,9 +299,13 @@ jobs:
           if (Test-Path "$env:TEMP\folio-shell.log") { Get-Content "$env:TEMP\folio-shell.log" }
           if ([Environment]::OSVersion.Version.Build -ge 22000) {
             # Windows 11：新右键菜单（稀疏包）注册成功，旧的注册表菜单删掉（不在「显示更多选项」里重复）
-            $pkg = Get-AppxPackage -Name Folio.Shell
-            if (-not $pkg) { Write-Error "没有注册右键菜单稀疏包 Folio.Shell"; exit 1 }
-            Write-Host "稀疏包：$($pkg.PackageFullName)，外部位置：$($pkg.InstallLocation)"
+            # 每个命令一个包（同一个包里的多个命令会被收进「Folio >」子菜单）
+            foreach ($n in "Folio.Shell.Compress", "Folio.Shell.Merge", "Folio.Shell.Images") {
+              $pkg = Get-AppxPackage -Name $n
+              if (-not $pkg) { Write-Error "没有注册右键菜单稀疏包 $n"; exit 1 }
+              Write-Host "稀疏包：$($pkg.PackageFullName)，外部位置：$($pkg.InstallLocation)"
+            }
+            if (Get-AppxPackage -Name Folio.Shell) { Write-Error "0.2.3 的稀疏包 Folio.Shell 应该已经移除"; exit 1 }
             if (Test-Path -LiteralPath $menu) { Write-Error "新菜单生效后，旧的注册表菜单应该删掉"; exit 1 }
             # 通过已注册的包（dllhost 代理）创建扩展，确认 Explorer 能用
             & shellext/build/Release/FolioShellTest.exe --packaged "$env:RUNNER_TEMP\shelltest"
@@ -317,7 +326,7 @@ jobs:
           if (Test-Path $app) { Write-Error "卸载后程序目录还在"; exit 1 }
           if (Test-Path -LiteralPath $menu) { Write-Error "卸载后右键菜单还在"; exit 1 }
           if (Test-Path "$env:TEMP\folio-shell.log") { Get-Content "$env:TEMP\folio-shell.log" }
-          if (Get-AppxPackage -Name Folio.Shell) { Write-Error "卸载后稀疏包还在"; exit 1 }
+          if (Get-AppxPackage -Name "Folio.Shell*") { Write-Error "卸载后稀疏包还在"; exit 1 }
           for ($i = 0; $i -lt 30 -and (Test-Path "$env:LOCALAPPDATA\Programs\Folio-shell"); $i++) { Start-Sleep -Seconds 1 }
           if (Test-Path "$env:LOCALAPPDATA\Programs\Folio-shell") { Write-Error "卸载后 Folio-shell 目录还在"; exit 1 }
           if (Test-Path "HKCU:\Software\Folio\Shell") { Write-Error "卸载后 HKCU\Software\Folio\Shell 还在"; exit 1 }

@@ -54,6 +54,7 @@ Windows 不允许给一个**正被某个进程当作当前目录**的文件夹�
 
 两套，详见 README「Windows 11 右键菜单」和 `folio/platform_win.py` 开头的注释：
 
-- 新菜单：`shellext/`（C++ IExplorerCommand，三个 CLSID）+ `packaging/sparse/`（稀疏包清单、`register.ps1`），由 `packaging/build_shell.py` 构建。CLSID 在 `FolioShellExt.cpp`、`AppxManifest.xml`、`FolioShellTest.cpp` 三处要一致。
+- 新菜单：`shellext/`（C++ IExplorerCommand，三个 CLSID）+ `packaging/sparse/`（稀疏包清单模板、`register.ps1`），由 `packaging/build_shell.py` 构建。**每个命令一个稀疏包**（`Folio.Shell.Compress` / `.Merge` / `.Images`）：同一个包里对同一个文件都适用的多个命令会被 Windows 11 收进「Folio >」子菜单，新增命令时也要单独成包。CLSID 在 `FolioShellExt.cpp`、`build_shell.py` 的 `PACKAGES`、`FolioShellTest.cpp` 三处要一致。
+- 自动更新只替换 `Folio` 程序目录，不会更新 `Folio-shell` 和稀疏包；右键菜单的改动要用户运行安装程序才生效。
 - 旧菜单：`folio/platform_win.py` 的 `CONTEXT_MENU`、`packaging/installer.iss` 的 `[Registry]`、`register.ps1` 的 `$Legacy` 三处要一致。
 - 稀疏包的 Publisher 必须和签名证书的 Subject 完全一致；证书不受信任时注册会失败，自动退回旧菜单。

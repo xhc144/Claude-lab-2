@@ -132,7 +132,7 @@ git push origin v0.2.0
 
 Windows 11 的第一层右键菜单只显示由**带包标识**的清单注册、实现了 `IExplorerCommand` 的扩展，旧的注册表菜单只能出现在「显示更多选项」里。所以 Folio 有两套右键菜单：
 
-- **新菜单**：`shellext/` 里的 C++ 扩展（三个顶层菜单项，按选中的文件类型显示；多选时把全部文件交给一个 Folio 进程），由稀疏包 `Folio-Shell.msix`（`packaging/sparse/AppxManifest.xml`）注册。安装程序把它们装到 `%LOCALAPPDATA%\Programs\Folio-shell`（不放在程序目录里：Explorer 加载着的 DLL 会锁住目录，自动更新就改不了名），然后运行 `register.ps1` 注册。
+- **新菜单**：`shellext/` 里的 C++ 扩展（三个顶层菜单项，按选中的文件类型显示；多选时把全部文件交给一个 Folio 进程），由稀疏包 `Folio-Shell-<命令>.msix`（模板 `packaging/sparse/AppxManifest.xml`）注册。每个命令单独一个包：Windows 11 会把同一个包里、对选中文件都适用的多个命令收进一个以包名命名的子菜单（「Folio >」，没有图标），分开后三项都直接在第一层。安装程序把它们装到 `%LOCALAPPDATA%\Programs\Folio-shell`（不放在程序目录里：Explorer 加载着的 DLL 会锁住目录，自动更新就改不了名），然后运行 `register.ps1` 注册。
 - **旧菜单**：注册表里的 shell 动词。Windows 10、或者稀疏包注册失败时使用；新菜单注册成功后会删掉旧菜单，免得在「显示更多选项」里重复。
 
 「设置 → 常规」里的开关同时控制两套菜单（新菜单读取 `HKCU\Software\Folio\Shell` 的 `ContextMenu`）。卸载时两套都会清理。注册失败的原因记录在 `%TEMP%\folio-shell.log`。装好后如果没看到新菜单，重启一下资源管理器（任务管理器里重启「Windows 资源管理器」）或注销再登录。

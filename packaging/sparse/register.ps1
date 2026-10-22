@@ -1,4 +1,5 @@
-# 注册 / 移除 Folio 的 Windows 11 右键菜单（稀疏包 Folio.Shell）。由安装程序调用（packaging/installer.iss）：
+# 注册 / 移除 Folio 的 Windows 11 右键菜单（稀疏包 Folio.Shell.<命令>，每个命令一个包，
+# 见 packaging/build_shell.py 的 PACKAGES；0.2.3 只有一个包 Folio.Shell，安装时一起移除）。由安装程序调用（packaging/installer.iss）：
 #     register.ps1 -Action install   -Dir %LOCALAPPDATA%\Programs\Folio-shell -Version 0.2.3
 #     register.ps1 -Action uninstall -Dir %LOCALAPPDATA%\Programs\Folio-shell
 # 任何失败都不能中断安装：注册不上时保留旧的注册表右键菜单（Windows 10、证书不受信任等情况），原因写进
@@ -10,7 +11,6 @@ Set-Location -LiteralPath ([System.IO.Path]::GetTempPath())
 # 从 PowerShell 7 里启动安装程序时会继承它的 PSModulePath，Windows PowerShell 5.1 就加载不了 Appx 模块
 $env:PSModulePath = "$env:ProgramFiles\WindowsPowerShell\Modules;$env:SystemRoot\System32\WindowsPowerShell\v1.0\Modules"
 $ErrorActionPreference = 'Stop'
-$Name = 'Folio.Shell'
 $Key = 'HKCU:\Software\Folio\Shell'
 # 和 folio/platform_win.py 的 CONTEXT_MENU 一致
 $Legacy = @('SystemFileAssociations\.pdf\shell\Folio.Compress', 'SystemFileAssociations\.pdf\shell\Folio.Merge',
@@ -21,8 +21,16 @@ function Write-Log([string]$Text) {
   try { Add-Content -LiteralPath $Log -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [$Action] $Text" -Encoding UTF8 } catch {}
 }
 
+# 这次要注册的包（目录里的 Folio-Shell-<命令>.msix；0.2.3 留下的 Folio-Shell.msix 不匹配）
+$Msix = @(Get-ChildItem -LiteralPath $Dir -Filter 'Folio-Shell-*.msix' -ErrorAction SilentlyContinue | Sort-Object Name)
+
+# Folio 的所有右键菜单包：现在的 Folio.Shell.<命令>，和 0.2.3 的 Folio.Shell
+function Get-FolioPackages {
+  @(Get-AppxPackage -Name 'Folio.Shell*' | Where-Object { $_.Name -eq 'Folio.Shell' -or $_.Name -like 'Folio.Shell.*' })
+}
+
 function Remove-Package {
-  Get-AppxPackage -Name $Name | ForEach-Object { Remove-AppxPackage -Package $_.PackageFullName }
+  Get-FolioPackages | ForEach-Object { Remove-AppxPackage -Package $_.PackageFullName }
 }
 
 function Stop-Dllhost {
@@ -38,7 +46,7 @@ if ($Action -eq 'uninstall') {
     Stop-Dllhost
     try {
       Remove-Package
-      if (-not (Get-AppxPackage -Name $Name)) { Write-Log 'package removed'; break }
+      if (-not (Get-FolioPackages)) { Write-Log 'packages removed'; break }
       Write-Log "attempt ${i}: package still registered"
     } catch { Write-Log "attempt ${i}: remove failed: $_" }
     Start-Sleep -Seconds 2
@@ -54,20 +62,23 @@ if ($build -lt 22000) {
   exit 0
 }
 try {
+  if (-not $Msix) { throw "no Folio-Shell-*.msix in $Dir" }
   Stop-Dllhost
   Remove-Package
-  Add-AppxPackage -Path (Join-Path $Dir 'Folio-Shell.msix') -ExternalLocation $Dir
-  $pkg = Get-AppxPackage -Name $Name
-  if (-not $pkg) { throw 'package not found after Add-AppxPackage' }
+  foreach ($m in $Msix) { Add-AppxPackage -Path $m.FullName -ExternalLocation $Dir }
+  $pkgs = @(Get-FolioPackages)
+  if ($pkgs.Count -ne $Msix.Count) { throw "registered $($pkgs.Count) of $($Msix.Count) packages" }
   New-Item -Path $Key -Force | Out-Null
-  Set-ItemProperty -Path $Key -Name PackageFamily -Value $pkg.PackageFamilyName
+  # folio/platform_win.py 的 new_menu_active() 只看这一个包是否还在（几个包总是一起注册、一起移除）
+  Set-ItemProperty -Path $Key -Name PackageFamily -Value $pkgs[0].PackageFamilyName
   foreach ($k in $Legacy) {
     Remove-Item -LiteralPath "HKCU:\Software\Classes\$k" -Recurse -Force -ErrorAction SilentlyContinue
   }
-  Write-Log "registered $($pkg.PackageFullName)"
+  Write-Log "registered $(($pkgs | ForEach-Object { $_.PackageFullName }) -join ', ')"
 } catch {
-  # 最常见：签名证书不受这台电脑信任（自签名证书）。保留旧菜单
+  # 最常见：签名证书不受这台电脑信任（自签名证书）。保留旧菜单；已经注册上的包也移除，不留半套新菜单
   Write-Log "register failed, keeping the classic context menu: $_"
+  try { Remove-Package } catch { Write-Log "cleanup failed: $_" }
   if (Test-Path $Key) { Remove-ItemProperty -Path $Key -Name PackageFamily -ErrorAction SilentlyContinue }
 }
 # 清掉旧版本的 DLL 目录（还被 dllhost 加载着的删不掉，下次安装再删）

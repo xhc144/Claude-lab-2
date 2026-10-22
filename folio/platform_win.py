@@ -6,8 +6,8 @@ import sys
 PROG_ID = "Folio.PDF"
 
 # 资源管理器右键菜单有两套：
-# 1. Windows 11 第一层新菜单：shellext/ 里的 C++ 扩展，由稀疏包 Folio.Shell 注册（安装程序调用
-#    packaging/sparse/register.ps1）。注册成功时会在 SHELL_KEY 里记下包的 PackageFamily；
+# 1. Windows 11 第一层新菜单：shellext/ 里的 C++ 扩展，由稀疏包 Folio.Shell.<命令> 注册（每个命令一个包；安装程序调用
+#    packaging/sparse/register.ps1）。注册成功时会在 SHELL_KEY 里记下其中一个包的 PackageFamily；
 #    扩展显示前读 SHELL_KEY 的 ContextMenu（0 = 关闭），所以设置里的开关不用重新注册包。
 # 2. 旧的注册表菜单（下面的 CONTEXT_MENU）：Windows 10 和稀疏包注册失败（例如证书不受信任）时的兜底。
 #    新菜单生效时删掉它：新菜单的项目也会出现在「显示更多选项」里，两套都在就重复了。
@@ -88,7 +88,7 @@ def context_menu_installed() -> bool:
 
 
 def new_menu_active() -> bool:
-    """Windows 11 的新右键菜单（稀疏包 Folio.Shell）是否已经注册。"""
+    """Windows 11 的新右键菜单（稀疏包 Folio.Shell.<命令>，总是一起注册、一起移除）是否已经注册。"""
     if sys.platform != "win32":
         return False
     family = _read_value(SHELL_KEY, "PackageFamily")

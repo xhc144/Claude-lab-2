@@ -69,6 +69,10 @@ Name: "{userdesktop}\Folio"; Filename: "{app}\Folio.exe"; WorkingDir: "{userdocs
 [InstallDelete]
 ; 手动安装时清掉上次没装上的自动更新残留
 Type: filesandordirs; Name: "{localappdata}\Programs\.folio-update"
+#if HaveShell
+; 右键菜单的稀疏包以这次装进来的为准（0.2.3 的 Folio-Shell.msix 已经拆成每个命令一个包）
+Type: files; Name: "{#ShellDir}\*.msix"
+#endif
 
 [Registry]
 ; 只把 Folio 加进 PDF 的“打开方式”列表，不抢默认程序

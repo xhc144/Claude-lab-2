@@ -1,0 +1,326 @@
+% 附录 A 习题解答
+\chapter{习题解答}
+\label{app:solutions}
+
+{\small\color{midgray} A、B 级习题给出完整解答；C 级习题给出完整解答或详细的证明要点。建议先独立思考，至少写下一种思路后再对照。}
+
+\section*{第 0 章}
+
+\soltitle{0.1}
+$\E X=\frac{1+\dots+6}{6}=3.5$，$\E X^2=\frac{91}{6}$，$\Var X=\frac{91}{6}-\frac{49}{4}=\frac{35}{12}$。两颗独立骰子之和的方差为 $\frac{35}{6}$。
+由双线性与独立性，$\Cov(X_1+X_2,X_1)=\Var X_1+\Cov(X_2,X_1)=\frac{35}{12}$。
+
+\soltitle{0.2}
+$\Cov(X+Y,X-Y)=\Var X-\Cov(X,Y)+\Cov(Y,X)-\Var Y=\Var X-\Var Y=0$。不一定独立：两颗骰子之和为 $12$ 时差必为 $0$，
+所以 $\P(\text{和}=12,\ \text{差}=1)=0\ne\P(\text{和}=12)\P(\text{差}=1)=\frac1{36}\cdot\frac{10}{36}$。
+
+\soltitle{0.3}
+$\Var\Xbar=\frac{1/4}{400}=\frac{1}{1600}$，切比雪夫给出 $\P(|\Xbar-\frac12|\ge0.05)\le\frac{1/1600}{0.0025}=0.25$。
+中心极限定理：$K$ 的均值 $200$、标准差 $10$，事件为 $|K-200|\ge20$，连续性修正后
+$\approx2\big(1-\Phi(19.5/10)\big)=2(1-\Phi(1.95))\approx0.0512$，与精确值 $0.0510$ 几乎相同；切比雪夫界大了约 5 倍。
+
+\soltitle{0.4}
+对任意 $0<\varepsilon<n$，$\P(|X_n|>\varepsilon)=\P(X_n=n)=1/n\to0$，故 $X_n\toP0$。$\E X_n=n\cdot\frac1n=1$；
+$\E X_n^2=n$，$\Var X_n=n-1\to\infty$。少量概率放在很远的地方，不影响“依概率”，却能左右期望。
+
+\soltitle{0.5}
+(1) 由定理 \ref{thm:sumvar}，$\Var\big(\sum X_i\big)=n\sigma^2+n(n-1)\rho\sigma^2$，除以 $n^2$ 即得。
+(2) 方差非负，$1+(n-1)\rho\ge0$，即 $\rho\ge-1/(n-1)$。$\rho>0$ 时 $\Var\Xbar\to\rho\sigma^2>0$：
+若各次测量共享一个共同的误差（例如仪器的系统偏差），再多次平均也消除不了它。“多测几次取平均”只对\emph{独立}的误差有效。
+（第 1 章不放回抽样中 $\rho=-1/(N-1)$，$n=N$ 时方差恰好为 $0$。）
+
+\soltitle{0.6}
+(1) $g(x)=x(1-x)$，$g'(p)=1-2p\ne0$。中心极限定理给出 $\sqrt n(\Xbar-p)\tod\N(0,p(1-p))$，由 Delta 方法
+$\sqrt n\big(T_n-p(1-p)\big)\tod\N\big(0,(1-2p)^2p(1-p)\big)$。
+(2) $T_n-\frac14=-(\Xbar-\frac12)^2$，所以 $n(T_n-\frac14)=-\big(\sqrt n(\Xbar-\frac12)\big)^2$。$\sqrt n(\Xbar-\frac12)\tod Z/2$，$Z\sim\N(0,1)$；
+连续映射定理对依分布收敛同样成立，故 $n(T_n-\frac14)\tod-Z^2/4=-\frac14\chi^2_1$。
+
+\section*{第 1 章}
+
+\soltitle{1.1}
+均值 $25/8=3.125$，中位数 $2$。两半为 $(1,1,2,2)$ 与 $(2,3,4,10)$，$Q_1=1.5$，$Q_3=3.5$，$I=2$，五数概括 $(1,1.5,2,3.5,10)$。
+区间 $[-1.5,6.5]$，须到 $1$ 与 $4$，$10$ 单独标出。改成 $100$ 后，箱体、须、中位数都不变，最大值变为 $100$，均值增加 $90/8$ 变为 $14.375$，方差剧增。
+
+\soltitle{1.2}
+标准误 $2/\sqrt4=1$。要 $2/\sqrt n\le0.25$，需 $n\ge64$。
+
+\soltitle{1.3}
+$10$ 个二元子集的均值：$1.5,2,2.5,3,2.5,3,3.5,3.5,4,4.5$。分布为
+$1.5,2,4,4.5$ 各 $\frac1{10}$，$2.5,3,3.5$ 各 $\frac2{10}$。期望 $3$；方差 $\frac{1}{10}(2.25+1+2\times0.25+0+2\times0.25+1+2.25)=0.75$。
+总体 $\mu=3$，$\sigma^2=2$，公式给出 $\frac{5-2}{5-1}\cdot\frac22=0.75$，一致。
+
+\soltitle{1.4}
+按比例：$n_1=60$，$n_2=40$，$\Var T=0.6^2\cdot\frac{100}{60}+0.4^2\cdot\frac{900}{40}=0.6+3.6=4.2$。
+Neyman：$n_h\propto p_h\sigma_h=6,12$，$n_1\approx33$，$n_2\approx67$，$\Var T=\frac{(6+12)^2}{100}=3.24$。走读生内部差异大，应当多抽。
+
+\soltitle{1.5}
+$\sum_i\sum_j(x_i-x_j)^2=2n\sum x_i^2-2\big(\sum x_i\big)^2=2n^2\big(\overline{x^2}-\xbar^2\big)=2n^2v$。因 $S^2=\frac{n}{n-1}v$，
+$S^2=\frac{1}{2n(n-1)}\sum_{i,j}(X_i-X_j)^2=\frac{1}{n(n-1)}\sum_{i<j}(X_i-X_j)^2$。
+独立同分布时 $\E(X_i-X_j)^2=\Var(X_i-X_j)=2\sigma^2$，共 $\binom n2$ 项，故 $\E S^2=\frac{1}{n(n-1)}\cdot\frac{n(n-1)}2\cdot2\sigma^2=\sigma^2$。
+
+\soltitle{1.6}
+记 $w=\frac{n_1}{n_1+n_2}$。合并均值 $w\xbar_1+(1-w)\xbar_2$，合并方差 $wv_1+(1-w)v_2+w(1-w)(\xbar_1-\xbar_2)^2$（组内方差的加权平均加上组间方差）。
+
+\soltitle{1.7}
+$\sigma^2=0.25$。$N=10^4$：$\SE=\sqrt{\frac{9000}{9999}\cdot\frac{0.25}{1000}}\approx0.0150$；$N=10^7$：$\approx0.0158$。总体扩大一千倍，标准误只差 5\%。
+
+\soltitle{1.8}
+估计值为 $0$ 当且仅当全为 $0$ 或全为 $1$，概率 $(1-p)^n+p^n$。$p=0.05$、$n=20$ 时约为 $0.95^{20}\approx0.36$。
+三分之一以上的情况下，这个“标准误估计”说误差为零，而真实标准误是 $\sqrt{0.05\times0.95/20}\approx0.049$。这正是第 4 章 Wald 区间失效的根源。
+
+\soltitle{1.9}
+一对 $\{u,v\}$ 中等概率取一个，方差为 $(u-v)^2/4$，各对独立，故配对 $\mathcal P$ 下估计量方差为 $V(\mathcal P)=\frac{1}{4m^2}\sum_{\{i,j\}\in\mathcal P}(a_i-a_j)^2$，期望总是总体均值。
+
+\emph{最优配对}：若 $a_1$ 与 $a_j$、$a_2$ 与 $a_k$ 配对（$j,k>2$），改为 $\{a_1,a_2\},\{a_j,a_k\}$，平方差之和减少
+$(a_j-a_1)^2+(a_k-a_2)^2-(a_2-a_1)^2-(a_j-a_k)^2=2(a_j-a_2)(a_k-a_1)>0$。所以最优配对必含 $\{a_1,a_2\}$，对剩下的数归纳，唯一最优配对为
+$\{a_1,a_2\},\{a_3,a_4\},\dots$，最小方差 $\frac{1}{4m^2}\sum_{j=1}^m(a_{2j}-a_{2j-1})^2$。
+
+\emph{与简单随机抽样比较}：对所有配对方式等概率平均，任一指定的 $\{i,j\}$ 成对的概率为 $\frac1{2m-1}$，于是平均方差为
+$\frac{1}{4m^2(2m-1)}\sum_{i<j}(a_i-a_j)^2=\frac{\sigma^2}{2m-1}$（用习题 1.5 的恒等式，$\sigma^2$ 以 $2m$ 为分母）。这恰好等于简单随机抽取 $m$ 个的方差
+$\frac{2m-m}{2m-1}\cdot\frac{\sigma^2}{m}$。$m\ge2$ 时配对方式不止一种，而最优者唯一，所以最小值严格小于平均值。
+
+\soltitle{1.10}
+六个两数之和互不相同且等可能，恰为 $1,2,\dots,6$。设 $a\le b\le c\le d$，每个数在和中出现 3 次，$a+b+c+d=21/3=7$。
+最小两个和 $a+b=1$、$a+c=2$，最大两个和 $c+d=6$、$b+d=5$。令 $a=t$，得 $(t,1-t,2-t,4+t)$，剩下的 $a+d=4+2t$ 与 $b+c=3-2t$ 须为 $\{3,4\}$，
+得 $t=0$ 或 $t=-\frac12$。答案：$\{0,1,2,4\}$ 或 $\{-\frac12,\frac32,\frac52,\frac72\}$。即使知道统计量的完整抽样分布，也未必能确定总体。
+
+\soltitle{1.11}
+平移使 $\mu=0$，则 $\sum x_i^2=nv$。设最小、最大值为 $a<0<b$（$v>0$ 保证两者异号），$(b-a)^2\le2(a^2+b^2)\le2\sum x_i^2=2nv$。
+第一个等号要求 $a=-b$，第二个要求其余 $n-2$ 个数都是 $0$。所以取等的数据恰为 $\mu-\sqrt{nv/2}$、$n-2$ 个 $\mu$、$\mu+\sqrt{nv/2}$，验证可知它们确实满足条件。
+
+\section*{第 2 章}
+
+\soltitle{2.1}
+两者都无偏。$\Var T=\sigma^2/2$，$\Var\Xbar=\sigma^2/n$；均方误差等于方差。$n>2$ 时 $\Xbar$ 更好。$T$ 的分布不随 $n$ 改变，$\sigma>0$ 时不相合。
+
+\soltitle{2.2}
+权重正比于 $1/0.02^2=2500$、$1/0.05^2=400$、$1/0.04^2=625$，合计 $3525$。合并估计 $\frac{2500\times5.03+400\times5.11+625\times4.98}{3525}\approx5.030$，
+标准误 $1/\sqrt{3525}\approx0.0168$。
+
+\soltitle{2.3}
+$\E(c\Xbar)=c\mu$，$\MSE=c^2\frac{\sigma^2}n+(1-c)^2\mu^2$。比 $\Xbar$ 好当且仅当 $(1-c)^2\mu^2<(1-c^2)\frac{\sigma^2}n$，即
+$\mu^2<\frac{1+c}{1-c}\cdot\frac{\sigma^2}n$。条件涉及未知的 $\mu$，无法事先保证；$\mu$ 接近 $0$（或 $n$ 很小）时收缩估计更好，反之更差。
+
+\soltitle{2.4}
+$\Xbar=8.2/5=1.64$，$T_1=3.28$——小于已观测到的 $3.6$，与数据矛盾。$T_2=3.6$，$T_3=\frac65\times3.6=4.32$，$T_4=\frac76\times3.6=4.2$。
+
+\soltitle{2.5}
+$\MSE(S^2)=\Var S^2=\frac{2\sigma^4}{n-1}$。$V_n=\frac{n-1}nS^2$：方差 $\frac{(n-1)^2}{n^2}\cdot\frac{2\sigma^4}{n-1}$，偏差 $-\frac{\sigma^2}{n}$，
+$\MSE=\frac{2(n-1)+1}{n^2}\sigma^4=\frac{(2n-1)\sigma^4}{n^2}$。$\frac{2n-1}{n^2}<\frac2{n-1}\iff(2n-1)(n-1)<2n^2\iff1<3n$，恒成立。
+
+\soltitle{2.6}
+(1) $K(K-1)$ 是样本中有序的不同成功对数，每个有序位置对都是成功对的概率为 $\frac{M(M-1)}{N(N-1)}$，所以 $\E K(K-1)=n(n-1)\frac{M(M-1)}{N(N-1)}$；又 $\E K=\frac{nM}{N}$。
+由 $M^2=M(M-1)+M$，
+\[
+T=\frac{(N-1)K(K-1)}{Nn(n-1)}+\frac{K}{nN}
+\]
+满足 $\E T=\frac{M(M-1)+M}{N^2}=p^2$。
+(2) $\Var K=np(1-p)\frac{N-n}{N-1}$（定理 \ref{thm:fpc}），故 $\E(K/n)^2-p^2=\frac{p(1-p)}{n}\cdot\frac{N-n}{N-1}$。偏差为 $0$ 当且仅当 $p\in\{0,1\}$ 或 $n=N$。
+
+\soltitle{2.7}
+正文已证无偏估计满足 $\sum T(k)\lambda^k/k!=\sum(-1)^k\lambda^k/k!$ 对所有 $\lambda\ge0$；两个幂级数在一个区间上相等，系数必相等，故 $T(k)=(-1)^k$ 唯一。
+$\E e^{-2X}=\exp\big(\lambda(e^{-2}-1)\big)$，偏差为 $\exp\big(\lambda(e^{-2}-1)\big)-e^{-2\lambda}$。
+$(-1)^X$ 的均方误差为 $\Var(-1)^X=1-e^{-4\lambda}$（因 $\E(-1)^{2X}=1$），$\lambda$ 小时约为 $4\lambda$；$e^{-2X}$ 的均方误差约为 $\P(X=1)(1-e^{-2})^2\approx0.75\lambda$。
+例如 $\lambda=0.1$ 时两者分别为 $0.33$ 与 $0.075$，有偏的估计好得多。
+
+\soltitle{2.8}
+$M\le\theta$ 总成立，且 $\P(M\le\theta-\varepsilon)=\big(\frac{\theta-\varepsilon}{\theta}\big)^n\to0$（$0<\varepsilon<\theta$），所以 $\P(|M-\theta|>\varepsilon)\to0$。
+
+\soltitle{2.9}
+$\E X^k=k!\,\theta^k$，两者都无偏。$\Var(X^2/2)=\frac{24\theta^4}{4}-\theta^4=5\theta^4$，故 $\Var A_n=5\theta^4/n$。
+$B_n$ 是 $m=\binom n2$ 个乘积 $H_{ij}=X_iX_j$ 的平均：$\Var H=(2\theta^2)^2-\theta^4=3\theta^4$；共享一个下标的两项协方差为 $\E X_1^2\E X_2\E X_3-\theta^4=\theta^4$，
+这样的无序项对有 $3\binom n3$ 个；不共享下标的独立。于是
+\[
+\Var B_n=\frac{3m\theta^4+2\cdot3\binom n3\theta^4}{m^2}=\frac{2(2n-1)}{n(n-1)}\theta^4 .
+\]
+$\Var B_n<\Var A_n\iff2(2n-1)<5(n-1)\iff n>3$。$n=2$ 时 $A_n$ 好，$n=3$ 相同，$n\ge4$ 时 $B_n$ 好。$B_n$ 平均了很多项，但它们共享样本而彼此相关；
+小样本时相关性抵消了平均的好处。
+
+\soltitle{2.10}
+(1) 记 $a_k=\P(N=k)$，$\E_pT=\sum_ka_k(1-p)^k$。令 $t=1-p\in[0,1]$，要求 $\sum a_kt^k=\frac1{1+p}=\frac1{2-t}=\sum_k\frac{t^k}{2^{k+1}}$。
+两个幂级数在 $[0,1]$ 上相等，系数相等（取 $t=0$ 得常数项相等，除以 $t$ 后令 $t\downarrow0$ 依次得到各项），所以唯一的分布是 $\P(N=k)=2^{-k-1}$，
+$\E N=\sum_{m\ge1}\P(N\ge m)=\sum_{m\ge1}2^{-m}=1$。
+(2) $T$ 取 $0,1$ 且无偏，$\MSE=g(1-g)=\frac{p}{(1+p)^2}\le\frac14$，在 $p=1$ 时取到。恒取 $3/4$ 时 $\MSE=\big(\frac34-\frac1{1+p}\big)^2$，而 $\frac1{1+p}\in[\frac12,1]$，
+最大为 $\frac1{16}$。不看数据的常数在最坏情况下比这个无偏估计好 4 倍——无偏性与精度是两回事。
+
+\section*{第 3 章}
+
+\soltitle{3.1}
+$\Xbar=32/8=4$，矩估计与 MLE 都是 $\hatt\lambda=4$。$I(\lambda)=1/\lambda$，标准误约 $\sqrt{\hatt\lambda/n}=\sqrt{0.5}\approx0.71$。由不变性，“一分钟没有车”的概率的 MLE 为 $e^{-4}\approx0.018$。
+
+\soltitle{3.2}
+$\ell(p)=n\log p+\big(\sum x_i-n\big)\log(1-p)$，$\ell'(p)=\frac np-\frac{\sum x_i-n}{1-p}=0$ 得 $\hatt p=n/\sum x_i=1/\Xbar$（$\ell$ 为凹函数；若全部 $x_i=1$，$\hatt p=1$）。
+
+\soltitle{3.3}
+$\Xbar=9.2/6\approx1.533$，$\hatt\lambda=1/\Xbar\approx0.652$；中位数的 MLE 为 $\log2\cdot\Xbar\approx1.063$ 千小时；标准误约 $\hatt\lambda/\sqrt6\approx0.266$。
+
+\soltitle{3.4}
+$\hatt\mu=4.7$，离差平方和 $2.06$，$\hatt{\sigma^2}=2.06/5=0.412$，$s^2=2.06/4=0.515$。
+
+\soltitle{3.5}
+$L(a,b)=(b-a)^{-n}$ 当 $a\le\min x_i$ 且 $b\ge\max x_i$，否则为 $0$。要使 $b-a$ 最小，取 $\hatt a=\min X_i$，$\hatt b=\max X_i$。
+矩估计 $\Xbar\pm\sqrt{3V}$ 可能给出 $\hatt a>\min x_i$ 或 $\hatt b<\max x_i$，与数据矛盾；MLE 不会。
+
+\soltitle{3.6}
+$\log f=x\log\lambda-\lambda-\log x!$，$-\partial_\lambda^2\log f=x/\lambda^2$，$I(\lambda)=1/\lambda$。下界 $\frac{1}{nI}=\frac\lambda n=\Var\Xbar$，$\Xbar$ 达到下界。
+
+\soltitle{3.7}
+$\ell(\theta)=-\sum|x_i-\theta|+\text{常数}$ 是凹的分段线性函数。在不等于任何 $x_i$ 的 $\theta$ 处，斜率为 $\#\{x_i>\theta\}-\#\{x_i<\theta\}$。
+$n=2k+1$ 时，斜率在 $x_{(k+1)}$ 左侧为正、右侧为负，唯一最大点是中位数；$n=2k$ 时，斜率在 $(x_{(k)},x_{(k+1)})$ 上为 $0$，整段都是最大点。
+
+\soltitle{3.8}
+截尾记录：$\ell=\delta\log\lambda-\lambda\min(X,c)$，$-\ell''=\delta/\lambda^2$，$I_1=\frac{1-e^{-\lambda c}}{\lambda^2}$。
+超过与否：$B_1\sim\Bern(q)$，$q=e^{-\lambda c}$，伯努利信息为 $\frac1{q(1-q)}$，乘以 $(\dd q/\dd\lambda)^2=c^2q^2$，得 $I_2=\frac{c^2e^{-\lambda c}}{1-e^{-\lambda c}}$。
+令 $u=\lambda c>0$，$I_1\ge I_2\iff(1-e^{-u})^2\ge u^2e^{-u}\iff e^{u/2}-e^{-u/2}\ge u$，即 $2\sinh(u/2)\ge u$，恒成立。
+
+\soltitle{3.9}
+$\P(\min(X,Y)>s,\ X<Y)=\int_s^\infty\lambda e^{-\lambda x}e^{-\nu x}\dd x=\frac{\lambda}{\lambda+\nu}e^{-(\lambda+\nu)s}$，乘积形式说明 $\min\sim\Exp(\lambda+\nu)$、
+$\1\{X<Y\}\sim\Bern\big(\frac{\lambda}{\lambda+\nu}\big)$ 且两者独立。$K\sim\Bin\big(n,\frac{\lambda}{\lambda+\nu}\big)$ 与 $T\sim\mathrm{Gamma}(n,\lambda+\nu)$ 独立，似然正比于
+\[
+\Big(\frac{\lambda}{\lambda+\nu}\Big)^k\Big(\frac{\nu}{\lambda+\nu}\Big)^{n-k}(\lambda+\nu)^ne^{-(\lambda+\nu)t}=\lambda^k\nu^{n-k}e^{-(\lambda+\nu)t}.
+\]
+它对 $\lambda,\nu$ 分离。$0<k<n$ 时 $\hatt\lambda=k/t$，$\hatt\nu=(n-k)/t$。$k=0$ 时似然随 $\lambda$ 严格递减，在 $\lambda>0$ 内取不到最大值，MLE 不存在；$k=n$ 同理。
+
+\soltitle{3.10}
+(1) 第二大值 $s$ 与最大值 $s+d$ 的联合密度为 $n(n-1)s^{n-2}/\theta^n$（选出这两个观测的编号，其余 $n-2$ 个都小于 $s$）。对 $0<s<\theta-d$ 积分得 $f(d)=n(\theta-d)^{n-1}/\theta^n$。
+(2) 令 $u=d/\theta\in(0,1)$，$f=\frac nd\,u(1-u)^{n-1}$，在 $u=1/n$ 处唯一最大，故 $\hatt\theta=nD_n$。$\P(D_n>d)=(1-d/\theta)^n$，$\E D_n=\int_0^\theta(1-d/\theta)^n\dd d=\frac{\theta}{n+1}$，
+唯一的无偏比例估计为 $(n+1)D_n$。
+(3) $\P(nD_n/\theta>a)=(1-a/n)^n\to e^{-a}$，即 $nD_n/\theta\tod\Exp(1)$，不收敛到 $1$；两个估计都不相合。一个“间距”只携带一个观测量级的信息，样本再多也不变。
+
+\section*{第 4 章}
+
+\soltitle{4.1}
+$52.3\pm2.131\times4.8/4=52.3\pm2.56$，即 $[49.74,\ 54.86]$。区间包含 $50$，在 5\% 水平上不能拒绝 $\mu=50$。
+
+\soltitle{4.2}
+$\P(T\ge15)=\frac{\binom{20}{15}+\binom{20}{16}+\dots+\binom{20}{20}}{2^{20}}=\frac{15504+4845+1140+190+20+1}{1048576}=\frac{21700}{1048576}\approx0.0207$。
+
+\soltitle{4.3}
+(1) 错：$\mu$ 是固定的，95\% 指方法的覆盖率。(2) 错：p 值是在 $H_0$ 为真的前提下计算的。(3) 错：可能只是功效不足。
+(4) 基本正确：区间长度与 $1/\sqrt n$ 成正比（$t$ 区间的长度是随机的，但其期望随 $n$ 增大而减小）。
+
+\soltitle{4.4}
+$n\ge(1.96\times10/2)^2=96.04$，至少 $97$；半宽 $1$ 时 $n\ge384.2$，至少 $385$——精度提高一倍，样本量约 4 倍。
+
+\soltitle{4.5}
+拒绝域 $\{\sqrt n\Xbar/\sigma>z_{1-\alpha}\}$，功效 $1-\Phi\big(z_{1-\alpha}-\sqrt n\delta/\sigma\big)\ge1-\beta\iff z_{1-\alpha}-\sqrt n\delta/\sigma\le-z_{1-\beta}$，
+即 $n\ge\big((z_{1-\alpha}+z_{1-\beta})\sigma/\delta\big)^2$。$\delta=0.5\sigma$：$(2.487/0.5)^2=24.7$，取 $25$。
+
+\soltitle{4.6}
+$\P(P\le u)=\P\big(F(T)\ge1-u\big)=\P\big(T\ge F^{-1}(1-u)\big)=1-F\big(F^{-1}(1-u)\big)=u$（用到 $F$ 连续严格递增）。
+
+\soltitle{4.7}
+$(n-1)s^2=9\times1.513=13.62$。$\sigma^2$ 的区间 $[13.62/19.023,\ 13.62/2.700]=[0.716,\ 5.04]$，$\sigma$ 的区间 $[0.846,\ 2.25]$。注意区间不对称，且很宽：10 个观测估计方差很不精确。
+
+\soltitle{4.8}
+他在 $Z>z_{0.95}$ 或 $Z<-z_{0.95}$ 时拒绝，即 $|Z|>1.645$，第一类错误为 $0.10$。这正是水平 $10\%$ 的双侧检验，而不是 5\%。
+
+\soltitle{4.9}
+(1) 对 $0<t<1$，$\P(P_1P_2\le t)=\int_0^1\P(P_2\le t/x)\dd x=\int_0^t1\dd x+\int_t^1\frac tx\dd x=t(1-\log t)$。此函数连续严格递增，故 $Q(1-\log Q)\sim\Unif(0,1)$ 是合法 p 值
+（这就是 Fisher 合并法的两检验情形；用到了独立与均匀）。
+
+(2) 若 $P_1>u/2$ 且 $P_2>u/2$，则 $2\sqrt{P_1P_2}>u$。所以 $\{2\sqrt{P_1P_2}\le u\}\subseteq\{P_1\le u/2\}\cup\{P_2\le u/2\}$，概率 $\le u/2+u/2=u$，无需独立。
+常数不能减小：任取 $0<s<1$，令 $U\sim\Unif(0,1)$，$P_1=U$；$U<s$ 时 $P_2=s-U$，否则 $P_2=U$。两者都均匀。$U<s$ 时 $\sqrt{P_1P_2}=\sqrt{U(s-U)}\le s/2$，所以
+$\P(\sqrt{P_1P_2}\le s/2)\ge s$。若常数 $c<2$，取 $u=cs/2<s$，则 $\P(c\sqrt{P_1P_2}\le u)\ge s>u$，违反合法性。
+
+\soltitle{4.10}
+(1) 设 $A=(0,1)^2$。$\theta>1$ 时 $(X_1,X_2)$ 在 $(0,\theta)^2$ 上均匀，对任一拒绝域 $C$，$\P_\theta(C\cap A)=\theta^{-2}\P_1(C)\le\theta^{-2}\alpha$，而 $\P_\theta(A^c)=1-\theta^{-2}$，
+所以 $\P_\theta(C)\le1-\frac{1-\alpha}{\theta^2}$。(2) 取 $b=\sqrt{1-\alpha}$，$C=\{\max(X_1,X_2)>b\}$。$\theta\le b$ 时拒绝概率为 $0$；$b<\theta\le1$ 时为 $1-b^2/\theta^2\le\alpha$，水平为 $\alpha$；
+$\theta>1$ 时为 $1-b^2/\theta^2=1-(1-\alpha)/\theta^2$，达到上界。
+
+\section*{第 5 章}
+
+\soltitle{5.1}
+(1) 配对（同一学生前后）。(2) 独立两样本。(3) 配对（双胞胎配对）。(4) 独立两样本。
+
+\soltitle{5.2}
+差 $2.6$。Welch：标准误 $\sqrt{3.2^2/12+5.9^2/15}=1.782$，区间 $2.6\pm2.072\times1.782=[-1.09,\ 6.29]$。
+合并：$s_p=\sqrt{(11\times10.24+14\times34.81)/25}=4.899$，标准误 $4.899\sqrt{1/12+1/15}=1.897$，区间 $[-1.31,\ 6.51]$。两者差别不大，因为两组样本量相近；
+这里方差大的恰是较大的一组，合并方差高估了标准误，区间偏宽（若反过来，就会偏窄）。
+
+\soltitle{5.3}
+$\hatt p_1=0.30$，$\hatt p_2=0.20$，合并 $\hatt p=0.25$，$Z=\frac{0.10}{\sqrt{0.25\times0.75\times2/150}}=2.00$，双侧 p 值 $0.046$。
+区间：$0.10\pm1.96\sqrt{0.3\times0.7/150+0.2\times0.8/150}=0.10\pm0.097$，即 $[0.003,\ 0.197]$。
+
+\soltitle{5.4}
+全部 8 个数之和为 $92$，$\Xbar-\Ybar=(2S-92)/4$，$S$ 为“处理组”4 个数之和，观测 $S=51$。和 $\ge51$ 的 4 元子集有
+\[
+\begin{gathered}\{15,14,13,12\},\ \{15,14,13,11\},\ \{15,14,13,10\},\ \{15,14,13,9\},\\ \{15,14,12,11\},\ \{15,14,12,10\},\ \{15,13,12,11\},\end{gathered}
+\]
+共 $7$ 个，单侧 p 值 $7/70=0.10$。
+
+\soltitle{5.5}
+$\Var(B-A)=\sigma_A^2+\sigma_B^2-2\rho\sigma_A\sigma_B$，$\rho<0$ 时大于独立分析时的 $\sigma_A^2+\sigma_B^2$，配对反而更差。例如同一盆中的两株植物争夺有限的养分，一株长得好另一株就差；
+或同一个人在固定时间内分配给两项任务的产出。
+
+\soltitle{5.6}
+记 $u=S_X^2/m$，$v=S_Y^2/n$。上界：由柯西–施瓦茨，$(u+v)^2=\big(\frac{u}{\sqrt{m-1}}\sqrt{m-1}+\frac{v}{\sqrt{n-1}}\sqrt{n-1}\big)^2\le\big(\frac{u^2}{m-1}+\frac{v^2}{n-1}\big)(m+n-2)$。
+下界：设 $m\le n$，$\frac{u^2}{m-1}+\frac{v^2}{n-1}\le\frac{u^2+v^2}{m-1}\le\frac{(u+v)^2}{m-1}$，故 $\hatt\nu\ge m-1$。
+
+\soltitle{5.7}
+$m=n$ 时 $S_p^2=\frac{S_X^2+S_Y^2}{2}$，$S_p^2\cdot\frac2n=\frac{S_X^2+S_Y^2}{n}$，两个统计量的分母相同。区别只在自由度：合并检验用 $2n-2$，Welch 用 $\hatt\nu\le2n-2$，后者临界值略大、略保守。
+
+\soltitle{5.8}
+舍去 0 后 $9$ 个差值全为正。符号检验：$\P(\text{全正})=2^{-9}$，双侧 p 值 $2^{-8}\approx0.0039$。Wilcoxon：秩和取最大值 $45$，只有全正这一种组合，双侧 p 值同样为 $2/512\approx0.0039$。
+
+\soltitle{5.9}
+记 $\nu=n-1$，$Z_j=\sqrt n(\Xbar_j-\mu_0)/\sigma$，$U_j=\nu S_j^2/\sigma^2$。由定理 \ref{thm:normalsample}，$(Z_1,Z_2)$ 与 $(U_1,U_2)$ 独立，$Z_j\sim\N(0,1)$，$U_j\sim\chi^2_\nu$。
+选择 $J$ 只依赖 $(U_1,U_2)$，所以给定 $(U_1,U_2)$ 后 $Z_J$ 仍为标准正态。记 $c=t_{\nu,1-\alpha/2}$，条件拒绝概率为 $h(U_J)=2\Phi\big(-c\sqrt{U_J/\nu}\big)$，$h$ 严格递减。
+对固定的第一批，$\E h(U_1)=\alpha$；而 $\min(U_1,U_2)\le U_1\le\max(U_1,U_2)$ 且两边严格不等号都以正概率成立，故
+$\E h(\min)>\alpha>\E h(\max)$。选标准差小的一批，等于挑了一个“看起来更精确”的样本，假阳性增多。
+
+\soltitle{5.10}
+(1) 每人的平均 $\bar Y_j$ 的方差为 $\tau^2+\sigma^2/k$，人与人独立，$\Var\hatt\mu=\frac{\tau^2+\sigma^2/k}{\lfloor B/(c+k)\rfloor}$，故极限 $F(k)=(c+k)(\tau^2+\sigma^2/k)=c\tau^2+\sigma^2+\tau^2k+\frac{c\sigma^2}{k}$。
+(2) $F(k+1)-F(k)=\tau^2-\frac{c\sigma^2}{k(k+1)}$ 随 $k$ 递增。记 $R=c\sigma^2/\tau^2$，$k$ 最优当且仅当 $k(k-1)\le R\le k(k+1)$；$R=j(j+1)$ 时 $j$ 与 $j+1$ 并列。
+直观上：招募越贵（$c$ 大）、测量误差越大（$\sigma^2$ 大）、个体差异越小（$\tau^2$ 小），越应该对每个人多测几次；连续实变量近似下最优 $k\approx\sqrt R$。
+
+\section*{第 6 章}
+
+\soltitle{6.1}
+$\xbar=3$，$\ybar=4.2$，$S_{xx}=10$，$S_{xy}=8$，$S_{yy}=8.8$。$\hatt b=0.8$，$\hatt a=1.8$。残差 $-0.6,\ 0.6,\ 0.8,\ -1.0,\ 0.2$，$\mathrm{SSE}=2.4$，$s^2=0.8$，$R^2=1-2.4/8.8=0.727$。
+斜率标准误 $\sqrt{0.8/10}=0.283$，区间 $0.8\pm3.182\times0.283=[-0.10,\ 1.70]$，含 $0$，不能断言斜率非零。只有 5 个点、3 个自由度，$t$ 临界值很大。
+
+\soltitle{6.2}
+$R^2=0.995$：对数气压的变异有 99.5\% 可由沸点的直线关系解释。$s=0.379$：在给定沸点下，观测值围绕直线的典型偏差约为 $0.38$ 个单位。
+$R^2$ 只衡量线性拟合的相对程度，不能发现弯曲（原始气压的拟合 $R^2$ 也有 0.994）、离群点或方差不等，这些要靠残差图。
+
+\soltitle{6.3}
+(i) $S_{xx}=\sum(x-4.5)^2=82.5$；(ii) $S_{xx}=10\times25=250$。设计 (ii) 的方差约为 (i) 的 $1/3$。隐患：只在两个 $x$ 值测量，完全无法检查关系是不是直线。
+
+\soltitle{6.4}
+$\xbar=4$，$t=(-3,-2,-1,0,6)$，$S_{xx}=50$。$h_{ii}=0.2+t_i^2/50$：$0.38,\ 0.28,\ 0.22,\ 0.20,\ 0.92$，和为 $2$。$x=10$ 的点几乎独自决定斜率。
+
+\soltitle{6.5}
+$\sum h_{ii}=1+\sum t_i^2/S_{xx}=2$；显然 $h_{ii}\ge1/n$。$h_{ii}\le1\iff t_i^2\le\frac{n-1}{n}S_{xx}$。由 $\sum_jt_j=0$，$t_i=-\sum_{j\ne i}t_j$，柯西–施瓦茨给出
+$t_i^2\le(n-1)\sum_{j\ne i}t_j^2=(n-1)(S_{xx}-t_i^2)$，即 $nt_i^2\le(n-1)S_{xx}$。等号当且仅当所有 $t_j$（$j\ne i$）相等，即其余各点的 $x$ 全部相同。
+此时直线必须经过第 $i$ 个点（$h_{ii}=1$ 意味着 $\Var e_i=0$，$e_i\equiv0$），该点完全决定斜率。
+
+\soltitle{6.6}
+$R^2=\frac{\hatt b^2S_{xx}}{S_{yy}}=\frac{S_{xy}^2}{S_{xx}S_{yy}}=r^2$。两条回归线的斜率分别为 $S_{xy}/S_{xx}$ 与 $S_{xy}/S_{yy}$，乘积为 $r^2\le1$；
+所以除非所有点共线，两条直线不重合。
+
+\soltitle{6.7}
+$\xbar=\frac{n}{m+n}$，$t_i$ 在第一组为 $-\frac{n}{m+n}$，在第二组为 $\frac{m}{m+n}$，$S_{xx}=\frac{mn}{m+n}$。
+$S_{xy}=\sum t_iy_i=\frac{mn}{m+n}(\Ybar-\Xbar)$，故 $\hatt b=\Ybar-\Xbar$，$\hatt a=\Xbar$。拟合值就是各组均值，$\mathrm{SSE}=(m-1)S_X^2+(n-1)S_Y^2$，$s^2=S_p^2$。
+$\hatt b/(s/\sqrt{S_{xx}})=\frac{\Ybar-\Xbar}{S_p\sqrt{1/m+1/n}}$，正是合并方差 $t$ 统计量。
+
+\soltitle{6.8}
+两个新观测的平均为 $a+bx_0+\bar\varepsilon_0$，$\Var\bar\varepsilon_0=\sigma^2/2$，区间为
+\[
+\hatt y_0\pm t_{n-2,1-\alpha/2}\,s\sqrt{\tfrac12+\tfrac1n+\tfrac{(x_0-\xbar)^2}{S_{xx}}}\,,
+\]
+比单个观测的预测区间窄，但永远宽于平均响应的置信区间。
+
+\soltitle{6.9}
+原斜率为 $(-4y_1-y_2+5y_3)/14$。取 $y_1=u$、$y_2=v$、$y_3=\frac{4u+v}5$，原斜率为零，题设要求 $5g\big(\frac{4u+v}{5}\big)=4g(u)+g(v)$。
+令 $h=g-g(0)$，则 $h(0)=0$ 且满足同一方程。取 $u=0$ 得 $h(v/5)=h(v)/5$，代回得 $h(4u+v)=4h(u)+h(v)$；取 $v=0$ 得 $h(4u)=4h(u)$，于是
+$h(A+v)=h(A)+h(v)$ 对一切实数成立。由加法性与连续性，$h(x)=cx$。$c=0$ 时变换后斜率恒为零，违反“仅当”；$c\ne0$ 时变换后斜率是原斜率的 $c$ 倍，满足要求。
+答案：$g(x)=d+cx$，$c\ne0$。保持“斜率是否为零”的连续变换只有非退化的仿射变换。
+
+\soltitle{6.10}
+(1) $z_{\Pi(i)}$ 的均值为 $0$，方差为 $S_{yy}/n$；$i\ne j$ 时 $\E z_{\Pi(i)}z_{\Pi(j)}=\frac{\sum_{r\ne s}z_rz_s}{n(n-1)}=-\frac{S_{yy}}{n(n-1)}$。又 $\sum_{i\ne j}t_it_j=-S_{xx}$，
+\[
+\E B_\Pi=0,\qquad \Var B_\Pi=\frac{1}{S_{xx}^2}\Big(\frac{S_{yy}}{n}S_{xx}+\frac{S_{yy}}{n(n-1)}S_{xx}\Big)=\frac{S_{yy}}{(n-1)S_{xx}}.
+\]
+(2) 若 $x$ 是随机分配给各单位的（或原假设下 $y$ 可交换），“$x$ 与 $y$ 无关”意味着所有排列等可能，于是可以把观测斜率与 $n!$ 个排列斜率比较，得到精确 p 值，
+不需要正态假设。注意 $\hatt b/\sqrt{\Var B_\Pi}=r\sqrt{n-1}$，而 $t$ 统计量为 $r\sqrt{n-2}/\sqrt{1-r^2}$，$r$ 小时两者相近；样本较大时两种检验结论通常一致。

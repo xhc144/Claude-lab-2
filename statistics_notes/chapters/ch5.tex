@@ -1,0 +1,386 @@
+% 第5章 两个样本的比较
+\chapter{两个样本的比较}
+\label{ch:twosample}
+
+\begin{chapguide}
+\textbf{\heiti 本章要解决的问题}\quad 新药与旧药、处理组与对照组、男生与女生——统计学最常见的任务是\emph{比较}。
+本章的核心信息是：\emph{比较的方法由试验设计决定}。配对数据先作差；两组独立数据要看方差是否相同，方差不同（或不知道是否相同）时用 \keyword{Welch 检验}；
+比例有专门的方法；不愿意假设正态时，可以用\keyword{置换检验}得到精确的 p 值。最后，我们学习怎样检查这些方法所依赖的假设。\par\smallskip
+\textbf{\heiti 预备}\quad 第 4 章的 $t$ 分布、置信区间与 p 值。
+\end{chapguide}
+
+\section{先问设计，再选方法}
+
+拿到两列数，第一个问题不是“用哪个公式”，而是“数据是怎样产生的”。图 \ref{fig:flow} 是本章的路线图。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  q/.style={rectangle, rounded corners=2mm, draw=main, fill=mainlight, font=\small\heiti, align=center, inner sep=2mm, minimum height=9mm},
+  a/.style={rectangle, rounded corners=2mm, fill=main, text=white, font=\small, align=center, inner sep=2mm, minimum height=9mm},
+  b/.style={rectangle, rounded corners=2mm, fill=sage, text=white, font=\small, align=center, inner sep=2mm, minimum height=9mm},
+  arr/.style={-{Stealth[length=2mm]}, midgray, thick}, lab/.style={font=\scriptsize, midgray}]
+  \node[q] (type) at (0,0) {数据是连续测量值\\还是成功/失败？};
+  \node[a] (prop) at (5.6,0) {两个比例：$z$ 检验与区间\\（\ref{sec:prop} 节）};
+  \node[q] (pair) at (0,-2.1) {同一个对象测了两次，\\或对象两两配对？};
+  \node[q] (diff) at (5.6,-2.1) {对差值 $d_i$ 做单样本推断\\（\ref{sec:paired} 节）};
+  \node[q] (var) at (0,-4.3) {两组独立，\\方差是否明显相同？};
+  \node[a] (welch) at (5.6,-4.3) {Welch $t$（默认选择）\\（\ref{sec:welch} 节）};
+  \node[a] (pooled) at (0,-6.3) {合并方差 $t$\\（\ref{sec:pooled} 节）};
+  \node[b] (perm) at (5.6,-6.3) {不愿假设正态 / 样本很小：\\置换检验、符号检验（\ref{sec:perm} 节）};
+  \draw[arr] (type) -- node[lab, above] {比例} (prop);
+  \draw[arr] (type) -- node[lab, right] {连续} (pair);
+  \draw[arr] (pair) -- node[lab, above] {是} (diff);
+  \draw[arr] (pair) -- node[lab, right] {否} (var);
+  \draw[arr] (var) -- node[lab, above] {不确定 / 否} (welch);
+  \draw[arr] (var) -- node[lab, right] {有充分理由相同} (pooled);
+  \draw[arr, dashed] (diff) -- (perm);
+  \draw[arr, dashed] (welch) -- (perm);
+\end{tikzpicture}
+\caption{两样本比较的方法选择。虚线表示：任何一种情形都可以用不依赖正态的方法补充或替代。}
+\label{fig:flow}
+\end{figure}
+
+\section{配对数据：先求差，再推断}
+\label{sec:paired}
+
+同一个人服用两种药、同一块地的两半用两种肥料、同一个学生测验前后的成绩——这样的数据成对出现 $(A_i,B_i)$，同一对的两个数往往高度相关，
+因为它们共享这个对象自身的特点（体质、土壤、基础）。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.62\linewidth, height=6.2cm, xmin=0.6, xmax=2.4, ymin=-2.2, ymax=6.2,
+  xtick={1,2}, xticklabels={药物 A, 药物 B}, ylabel={多睡的小时数}]
+  \addplot[main!55, thick, forget plot] coordinates {(1,0.7) (2,1.9)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,-1.6) (2,0.8)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,-0.2) (2,1.1)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,-1.2) (2,0.1)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,-0.1) (2,-0.1)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,3.4) (2,4.4)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,3.7) (2,5.5)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,0.8) (2,1.6)};
+  \addplot[accent, very thick, forget plot] coordinates {(1,0.0) (2,4.6)};
+  \addplot[main!55, thick, forget plot] coordinates {(1,2.0) (2,3.4)};
+  \addplot[only marks, mark=*, mark size=1.8pt, main] table[x expr=1, y=a] {figdata/sleep.dat};
+  \addplot[only marks, mark=*, mark size=1.8pt, main] table[x expr=2, y=b] {figdata/sleep.dat};
+  \node[font=\scriptsize, accent, anchor=west] at (axis cs:2.03,4.6) {9 号};
+\end{axis}
+\end{tikzpicture}
+\caption{睡眠数据的配对图：每条线连接同一位病人的两个结果。病人之间的差别很大（从 $-1.6$ 到 $3.7$），
+但几乎每条线都向上倾斜——差别主要来自病人，而药物效应体现在“每条线的斜率”上。}
+\label{fig:pairs}
+\end{figure}
+
+配对分析的方法很简单：令 $D_i=B_i-A_i$，把 $D_1,\dots,D_n$ 当作一个样本，用第 4 章的单样本 $t$ 方法推断平均差 $\mu_D$。
+它为什么比把两列当作独立样本好？关键在于差的方差：
+\[
+\Var(B_i-A_i)=\sigma_A^2+\sigma_B^2-2\rho\,\sigma_A\sigma_B .
+\]
+同一对象的两个结果正相关（$\rho>0$）时，差的方差比 $\sigma_A^2+\sigma_B^2$ 小得多。睡眠数据中 $s_A^2=3.20$，$s_B^2=4.01$，相关系数 $r=0.795$，
+差值的方差只有 $3.20+4.01-2\times0.795\times1.789\times2.002\approx1.51$。\emph{配对把病人之间的差异消掉了。}
+
+第 4 章已经完成了睡眠数据的配对分析：平均差 $1.58$ 小时，95\% 区间 $[0.70,\,2.46]$，$t=4.06$，p 值 $0.0028$。
+
+\section{两个独立正态样本：合并方差 \texorpdfstring{$t$}{t} 检验}
+\label{sec:pooled}
+
+现在设 $X_1,\dots,X_m\iid\N(\mu_1,\sigma_1^2)$、$Y_1,\dots,Y_n\iid\N(\mu_2,\sigma_2^2)$，两组相互独立。要推断 $\mu_1-\mu_2$，自然的估计是 $\Xbar-\Ybar$，
+\[
+\Var(\Xbar-\Ybar)=\frac{\sigma_1^2}{m}+\frac{\sigma_2^2}{n}.
+\]
+若\emph{假定} $\sigma_1=\sigma_2=\sigma$，可以把两组的信息合起来估计这个共同的 $\sigma^2$。
+
+\begin{theorem}{合并方差 $t$ 统计量}{pooled}
+设 $\sigma_1=\sigma_2=\sigma$。令合并样本方差 $S_p^2=\dfrac{(m-1)S_X^2+(n-1)S_Y^2}{m+n-2}$，则
+\[
+T_p=\frac{(\Xbar-\Ybar)-(\mu_1-\mu_2)}{S_p\sqrt{1/m+1/n}}\sim t_{m+n-2}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:normalsample}，$(m-1)S_X^2/\sigma^2\sim\chi^2_{m-1}$、$(n-1)S_Y^2/\sigma^2\sim\chi^2_{n-1}$，两者独立，和为 $(m+n-2)S_p^2/\sigma^2\sim\chi^2_{m+n-2}$
+（独立卡方之和的自由度相加，由定义即得）。分子除以 $\sigma\sqrt{1/m+1/n}$ 后服从 $\N(0,1)$，且与 $S_X^2,S_Y^2$ 都独立。按 $t$ 分布的定义相除即可。
+\end{proof}
+
+\section{方差不等时：Welch 检验}
+\label{sec:welch}
+
+原讲义正确地指出：两组方差不同时，$T_p$ 不再服从 $t$ 分布。\emph{那该怎么办？}答案是不再合并方差，直接分别估计：
+\[
+T_W=\frac{(\Xbar-\Ybar)-(\mu_1-\mu_2)}{\sqrt{S_X^2/m+S_Y^2/n}} .
+\]
+它的精确分布依赖未知的 $\sigma_1/\sigma_2$（这是著名的 \keyword{Behrens–Fisher 问题}，没有完美的精确解），
+但可以用一个 $t$ 分布很好地近似，只需选对自由度。
+
+\paragraph{Welch–Satterthwaite 自由度}
+记 $W=S_X^2/m+S_Y^2/n$，$w=\E W=\sigma_1^2/m+\sigma_2^2/n$。若 $W$ 恰好形如 $w\chi^2_\nu/\nu$，$T_W$ 就精确服从 $t_\nu$。
+让两者的方差相等来选 $\nu$：$\Var(w\chi^2_\nu/\nu)=2w^2/\nu$，而由 $\Var S^2=2\sigma^4/(n-1)$，
+\[
+\Var W=\frac{2\sigma_1^4}{m^2(m-1)}+\frac{2\sigma_2^4}{n^2(n-1)}
+\quad\Longrightarrow\quad
+\nu=\frac{\big(\sigma_1^2/m+\sigma_2^2/n\big)^2}{\dfrac{(\sigma_1^2/m)^2}{m-1}+\dfrac{(\sigma_2^2/n)^2}{n-1}} .
+\]
+把 $\sigma_i^2$ 换成 $S_X^2,S_Y^2$，就得到 Welch 检验使用的自由度 $\hatt\nu$。可以证明 $\min(m,n)-1\le\hatt\nu\le m+n-2$（习题 \ref{ex5:df}）。
+
+\paragraph{合并方差检验到底错得多严重}
+下表用模拟比较了两种检验的真实第一类错误（名义水平 5\%，每种情形重复 20 万次）。
+
+\begin{table}[H]
+\centering\small
+\caption{两组均值相等时，名义 5\% 双侧检验的真实拒绝率（模拟）}\label{tab:welchsim}
+\begin{tabular}{cc c cc}
+\toprule
+$m$ & $n$ & $\sigma_1/\sigma_2$ & 合并方差 $t$ & Welch $t$\\
+\midrule
+10 & 10 & 1 & 5.0\% & 4.9\% \\
+10 & 10 & 2 & 5.5\% & 5.0\% \\
+10 & 10 & 4 & 6.2\% & 5.1\% \\
+\midrule
+10 & 40 & 1 & 5.0\% & 5.2\% \\
+10 & 40 & 2 & \textcolor{accent}{\textbf{18.4\%}} & 5.1\% \\
+10 & 40 & 4 & \textcolor{accent}{\textbf{29.4\%}} & 5.0\% \\
+\midrule
+40 & 10 & 2 & \textcolor{main}{\textbf{0.5\%}} & 5.0\% \\
+40 & 10 & 4 & \textcolor{main}{\textbf{0.1\%}} & 5.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{intuition}[读懂这张表]
+\begin{itemize}
+\item 两组样本量相等时，$S_p^2(2/n)=(S_X^2+S_Y^2)/n$，合并检验与 Welch 检验的统计量\emph{完全相同}，只是自由度不同，所以合并检验相当稳健。
+\item 样本量不等时，合并方差是按自由度加权的平均，它会被\emph{大样本组}的方差主导。若方差大的恰是小样本组，标准误被低估，假阳性率可高达 $30\%$；
+反之标准误被高估，检验过分保守、功效损失严重。
+\item Welch 检验在所有情形下都接近 5\%；而方差真正相等时，它与合并检验几乎没有差别。
+\end{itemize}
+所以\textbf{默认使用 Welch 检验}。只有当有充分的先验理由相信方差相等时（例如同一台仪器、同一个过程），合并方差检验才有微小的好处。
+“先做方差齐性检验、再决定用哪个”的两步法并不推荐：方差检验在小样本时功效很低，而且这种“看了数据再选方法”本身会扭曲第一类错误（见习题 \ref{ex5:select}）。
+\end{intuition}
+
+Welch 方法的 $1-\alpha$ 置信区间为 $(\Xbar-\Ybar)\pm t_{\hatt\nu,1-\alpha/2}\sqrt{S_X^2/m+S_Y^2/n}$。
+
+\begin{casestudy}{如果把睡眠数据当成两个独立样本}
+假如有人忽略了配对，把两列数当作独立的两组。Welch 检验给出：差 $1.58$，标准误 $\sqrt{3.20/10+4.01/10}=0.849$，$\hatt\nu=17.8$，
+$t=1.86$，p 值 $0.079$，95\% 区间 $[-0.21,\ 3.37]$——\emph{不显著}。
+
+同一份数据，配对分析的 p 值是 $0.0028$，独立分析是 $0.079$。差别全在标准误：$0.389$ 对 $0.849$。忽略配对等于把病人之间的巨大差异（图 \ref{fig:pairs}）
+当成了随机误差。正确的分析由\emph{试验设计}决定（这里每位病人都试了两种药），而不是由哪个结果更“好看”决定。
+\end{casestudy}
+
+\section{两个比例}
+\label{sec:prop}
+
+两组独立的伯努利试验：第一组 $n_1$ 次中成功 $X_1$ 次，第二组 $n_2$ 次中成功 $X_2$ 次。$\hatt p_i=X_i/n_i$，
+\[
+\Var(\hatt p_1-\hatt p_2)=\frac{p_1(1-p_1)}{n_1}+\frac{p_2(1-p_2)}{n_2}.
+\]
+\begin{itemize}
+\item \textbf{检验} $H_0:p_1=p_2$：在 $H_0$ 下两组成功率相同，用合并比例 $\hatt p=(X_1+X_2)/(n_1+n_2)$ 估计标准误，
+$Z=\dfrac{\hatt p_1-\hatt p_2}{\sqrt{\hatt p(1-\hatt p)(1/n_1+1/n_2)}}$ 近似服从 $\N(0,1)$。
+\item \textbf{区间}：不能假定 $p_1=p_2$，分别估计：$(\hatt p_1-\hatt p_2)\pm z_{1-\alpha/2}\sqrt{\hatt p_1(1-\hatt p_1)/n_1+\hatt p_2(1-\hatt p_2)/n_2}$。
+\end{itemize}
+这两个都是大样本近似，要求每组的成功数与失败数都不太少（常用标准：都不少于 $5$ 到 $10$）。否则应使用基于超几何分布的 Fisher 精确检验。
+
+\begin{casestudy}{1954 年脊髓灰质炎疫苗试验}
+美国 1954 年的 Salk 疫苗试验中，随机、双盲部分的结果（据 Freedman、Pisani、Purves《Statistics》整理的约数）为：
+接种组约 $200\,000$ 名儿童中 $56$ 例麻痹型脊髓灰质炎，安慰剂组约 $200\,000$ 名中 $142$ 例，即每十万人 $28$ 例对 $71$ 例。
+$Z\approx6.1$，p 值约 $10^{-9}$；发病率之差的 95\% 区间约为每十万人 $29$ 到 $57$ 例。接种组的发病率约为对照组的 $0.39$ 倍。
+
+注意两点。第一，发病率极低（万分之几），所以需要数十万人才能得出结论——比例的标准误由 $p(1-p)/n$ 决定，$p$ 很小时要看的是\emph{病例数}而非总人数。
+第二，结论之所以能解释为\emph{因果}，靠的是随机分组：随机化保证了两组除接种外在各方面可比。
+\end{casestudy}
+
+\section{不依赖正态的精确检验}
+\label{sec:perm}
+
+$t$ 检验依赖正态性（或大样本）。另一类方法从\emph{试验设计本身}的随机性出发，不需要任何分布假设。
+
+\subsection{随机分组与置换检验}
+
+设 $N=m+n$ 个对象中，随机选 $m$ 个接受处理，其余作对照。原假设是“处理对每个对象都没有作用”：
+无论分到哪组，每个对象的结果都一样。那么观测到的 $N$ 个结果是固定的，\emph{唯一的随机性来自分组}，而分组的 $\binom Nm$ 种方式等可能。
+于是可以精确算出任何统计量的零分布。
+
+\begin{example}{一个可以手算的置换检验}{perm}
+6 只小鼠随机分成两组，处理组的结果为 $12,10,8$，对照组为 $9,6,5$。用 $T=\Xbar-\Ybar$ 作统计量，观测值为 $10-6.67=3.33$。
+把 $6$ 个数重新分成“3 个对 3 个”共 $\binom63=20$ 种方式，算出每种的 $T$：其中 $T\ge3.33$ 的只有 $2$ 种（实际的分组和 $\{12,10,9\}$ 对 $\{8,6,5\}$）。
+所以单侧精确 p 值为 $2/20=0.10$。
+
+注意：3 对 3 时最小可能的单侧 p 值是 $1/20=0.05$。\emph{样本太小时，无论效应多大都无法得到很小的 p 值}——这是置换检验诚实的一面。
+\end{example}
+
+\begin{intuition}[置换检验的合法性从哪里来]
+置换检验的有效性来自“在原假设下各种标签排列等可能”。随机分组的试验自动保证这一点。但如果两组\emph{本来}就不同（例如方差不同），
+即使均值相同，标签也不可交换，此时把置换检验当作“均值相等”的检验就可能失效。\emph{能不能置换，要由设计或假设来论证，而不是默认。}
+\end{intuition}
+
+\subsection{配对数据：符号翻转}
+
+对配对数据，原假设“两种处理无差别”意味着：每一对内部谁先谁后是对称的，所以每个差值 $D_i$ 取 $+|D_i|$ 或 $-|D_i|$ 等可能且相互独立。
+于是 $2^n$ 种符号组合等可能，可以算出 $\sum D_i$ 的精确零分布。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.88\linewidth, height=5cm, xmin=-17, xmax=17, ymin=0,
+  xlabel={翻转符号后差值之和 $\sum\pm|d_i|$}, ylabel={符号组合数（共 1024 种）}]
+  \addplot[ycomb, main!70, line width=1pt] table[x=s,y=count] {figdata/sleep_flip.dat};
+  \draw[accent, very thick, -{Stealth}] (axis cs:15.8,9) -- (axis cs:15.8,2.6);
+  \node[font=\scriptsize, accent, anchor=south] at (axis cs:15.8,9) {观测值 15.8};
+\end{axis}
+\end{tikzpicture}
+\caption{睡眠数据差值之和的符号翻转零分布（精确枚举）。观测值位于最右端：只有“全部取正号”（第 5 号病人的差值为 0，取正取负都一样，故计 2 种）达到它。}
+\label{fig:flip}
+\end{figure}
+
+睡眠数据中，观测和 $15.8$ 是所有组合中最大的，单侧精确 p 值为 $2/1024\approx0.002$，双侧为 $0.004$。
+它只假设每个差值的分布关于 $0$ 对称，不需要正态，结论与 $t$ 检验一致。
+
+更粗糙但更简单的是\keyword{符号检验}：只看差值的正负。睡眠数据中 $9$ 个非零差值全为正，在原假设下概率为 $2^{-9}\approx0.002$。
+介于两者之间的是 \keyword{Wilcoxon 符号秩检验}：把 $|d_i|$ 排秩后再按符号求和，它既不依赖正态，又比符号检验利用了更多信息，是实践中最常用的非参数配对检验。
+
+\section{检查假设}
+
+每种方法都有前提。$t$ 方法的前提是：观测独立；（配对的差值或各组）近似正态；Welch 不要求方差相等，合并方法要求。
+\emph{独立性}由设计保证，无法从数据中可靠地检查；\emph{正态性}可以用图形检查。
+
+\subsection{QQ 图}
+
+把排序后的数据 $x_{(1)}\le\dots\le x_{(n)}$ 对标准正态分位数 $\Phi^{-1}\big((i-0.5)/n\big)$ 作图。数据若来自正态分布，点应大致落在一条直线上
+（截距约为均值，斜率约为标准差）。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.6\linewidth, height=5.6cm, xmin=-2, xmax=2, ymin=-0.5, ymax=5,
+  xlabel={标准正态分位数}, ylabel={排序后的差值}]
+  \addplot[midgray, dashed, domain=-2:2] {1.58+1.23*x};
+  \addplot[only marks, mark=*, mark size=2pt, main] table[x=q,y=d] {figdata/sleep_qq.dat};
+  \node[font=\scriptsize, accent, anchor=east] at (axis cs:1.5,4.6) {9 号病人};
+\end{axis}
+\end{tikzpicture}
+\caption{睡眠差值的正态 QQ 图。虚线为 $\bar d+s\cdot z$。中间 8 个点很贴近直线，最大的一个点（4.6）明显偏上，最小的一个（0）略偏上。
+10 个点的 QQ 图本身波动就很大，这种程度的偏离不算严重，但值得做敏感性分析。}
+\label{fig:qq}
+\end{figure}
+
+\subsection{敏感性分析}
+
+当某个点可疑时，不要悄悄删掉它，而是\emph{两种都做、都报告}。去掉第 9 号病人后，其余 9 个差值的均值为 $1.24$，标准差 $0.66$，
+$t=5.66$（自由度 8），p 值 $0.0005$。结论不变——这个异常点不是结论的来源。如果结论随一个点的去留而改变，就必须如实说明，并设法弄清这个点是否可信。
+
+\begin{intuition}[$t$ 方法有多稳健]
+由中心极限定理，样本量较大时 $\Xbar$ 近似正态，$t$ 方法对正态性的偏离并不敏感。小样本时，它对\emph{明显的偏斜}和\emph{离群值}比较敏感，
+这时可以用 Wilcoxon 或置换检验作为补充。两类方法结论一致，结论就更可信。
+\end{intuition}
+
+\begin{table}[H]
+\centering\small
+\caption{两样本比较方法一览}\label{tab:twomethods}
+\begin{tabularx}{\linewidth}{l l X}
+\toprule
+情形 & 方法 & 主要前提 \\
+\midrule
+配对数据 & 配对 $t$（对差值的单样本 $t$） & 差值独立、近似正态 \\
+ & 符号翻转 / Wilcoxon 符号秩 / 符号检验 & 差值独立，分布关于 0 对称（符号检验只需中位数为 0） \\
+独立两组 & Welch $t$ & 各组独立、近似正态；方差可不等 \\
+ & 合并方差 $t$ & 另需方差相等，样本量不等时对此很敏感 \\
+ & 置换检验 / Wilcoxon 秩和检验 & 原假设下标签可交换（随机分组保证） \\
+两个比例 & 两比例 $z$ 检验与区间 & 独立，各格计数不太少；否则用 Fisher 精确检验 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{\starmark\ 深入讨论}
+
+\begin{deeper}[固定预算下怎样分配样本量]
+两组独立，方差为 $\sigma_1^2,\sigma_2^2$，每个观测的成本为 $c_1,c_2$，总预算 $B=c_1m+c_2n$。要使 $\Var(\Xbar-\Ybar)=\sigma_1^2/m+\sigma_2^2/n$ 最小，
+由柯西–施瓦茨不等式，
+\[
+\Big(\frac{\sigma_1^2}{m}+\frac{\sigma_2^2}{n}\Big)(c_1m+c_2n)\ge\big(\sigma_1\sqrt{c_1}+\sigma_2\sqrt{c_2}\big)^2,
+\]
+等号当且仅当 $m/n=\dfrac{\sigma_1/\sqrt{c_1}}{\sigma_2/\sqrt{c_2}}$。即：\emph{方差大的组多抽，成本高的组少抽，按标准差除以成本的平方根分配}。
+等方差、等成本时就是两组一样多。这与第 1 章的 Neyman 分配是同一个道理。
+\end{deeper}
+
+\begin{deeper}[两样本 $t$ 检验就是一个回归]
+令 $x_i=0$ 表示第一组、$x_i=1$ 表示第二组，用直线 $y=a+bx$ 拟合全部 $N$ 个点。最小二乘斜率恰为 $\hatt b=\Ybar-\Xbar$，
+而第 \ref{ch:regression} 章的斜率 $t$ 统计量恰好就是合并方差 $t$ 统计量（可能差一个符号）。这说明两样本比较是回归的特例，
+也解释了为什么合并方差检验与回归一样，都要求“误差方差处处相同”。
+\end{deeper}
+
+\begin{summary}
+\begin{itemize}
+\item 方法由设计决定：配对数据先求差；独立两组再看方差；比例另有方法。
+\item 配对之所以有效，是因为 $\Var(B-A)=\sigma_A^2+\sigma_B^2-2\rho\sigma_A\sigma_B$，正相关时大大减小。忽略配对会严重损失功效。
+\item 合并方差 $t$ 要求方差相等；样本量不等且方差不等时，第一类错误可严重失控。默认使用 Welch $t$，自由度用 Welch–Satterthwaite 公式。
+\item 两比例：检验时用合并比例算标准误，区间用各自的比例；要求计数不太少。
+\item 置换检验与符号翻转检验的有效性来自设计的随机性或对称性，给出精确 p 值；小样本时最小可达 p 值有下限。
+\item 用 QQ 图检查正态性，对可疑点做敏感性分析，并如实报告。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+下列研究应该用配对方法还是独立两样本方法？
+\begin{enumerate}
+\item 20 名学生在培训前后各测一次成绩。
+\item 随机选 20 名学生参加培训，另 20 名不参加，比较期末成绩。
+\item 15 对双胞胎，每对中随机一人用新教材、一人用旧教材。
+\item 比较 30 个城市家庭与 30 个农村家庭的月支出。
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+两组独立样本：$m=12$，$\xbar=24.1$，$s_X=3.2$；$n=15$，$\ybar=21.5$，$s_Y=5.9$。
+\begin{enumerate}
+\item 用 Welch 方法求 $\mu_1-\mu_2$ 的 95\% 置信区间（$\hatt\nu\approx22.3$，$t_{22.3,0.975}\approx2.072$）。
+\item 用合并方差方法重新计算（$t_{25,0.975}=2.060$）。两者相差大吗？为什么？
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+新旧两种工艺各生产 $150$ 件，次品分别为 $45$ 件和 $30$ 件。检验两种工艺的次品率是否相同，并求次品率之差的 95\% 置信区间。
+\end{exercise}
+
+\begin{exercise}
+8 个对象随机分成两组各 4 个，处理组结果为 $15,13,12,11$，对照组为 $10,9,14,8$。以 $\Xbar-\Ybar$ 为统计量，求置换检验的单侧精确 p 值（$\binom84=70$）。
+\end{exercise}
+
+\levelB
+\begin{exercise}
+在配对设计中，若同一对内两个结果\emph{负相关}，配对分析与独立分析哪个标准误更小？举一个可能出现负相关的实际例子。
+\end{exercise}
+
+\begin{exercise}\label{ex5:df}
+证明 Welch–Satterthwaite 自由度满足 $\min(m,n)-1\le\hatt\nu\le m+n-2$。
+\hint{记 $u=S_X^2/m$、$v=S_Y^2/n$，$\hatt\nu=(u+v)^2/\big(u^2/(m-1)+v^2/(n-1)\big)$。上界用柯西–施瓦茨，下界用 $u^2+v^2\le(u+v)^2$。}
+\end{exercise}
+
+\begin{exercise}
+证明 $m=n$ 时合并方差 $t$ 统计量与 Welch 统计量相等。这时两种检验还有什么区别？
+\end{exercise}
+
+\begin{exercise}
+对睡眠数据做符号检验和 Wilcoxon 符号秩检验（第 5 号病人差值为 $0$，舍去），分别求双侧 p 值。
+\hint{Wilcoxon：9 个非零差值全为正，秩和取到最大值，在原假设下只有一种符号组合（共 $2^9$ 种）能达到。}
+\end{exercise}
+
+\levelC
+\begin{exercise}[原讲义习题 6.1]\label{ex5:select}
+两批独立样本各有 $n\ge2$ 个观测，都来自 $\N(\mu,\sigma^2)$。分析者比较两批的样本标准差后，只用标准差\emph{较小}的那一批算 $T=\sqrt n(\Xbar_J-\mu_0)/S_J$，
+按 $t_{n-1}$ 的双侧临界值检验 $H_0:\mu=\mu_0$。证明真实第一类错误严格大于 $\alpha$；若改选标准差较大的一批，则严格小于 $\alpha$。
+\hint{条件于两批的 $S_1^2,S_2^2$，被选中的 $\sqrt n(\Xbar_J-\mu_0)/\sigma$ 仍是标准正态（为什么？）。拒绝的条件概率是 $S_J$ 的严格递减函数。}
+\end{exercise}
+
+\begin{exercise}[原讲义习题 6.7]
+每招募一名受试者花费 $c>0$，每次测量花费 $1$。每人测 $k$ 次，总经费 $B$，人数为 $\lfloor B/(c+k)\rfloor$。第 $j$ 人第 $\ell$ 次观测为
+$Y_{j\ell}=\mu+U_j+\varepsilon_{j\ell}$，$U_j$ 的方差为 $\tau^2$（个体差异），$\varepsilon_{j\ell}$ 的方差为 $\sigma^2$（测量误差），全部独立。以所有读数的平均估计 $\mu$。
+\begin{enumerate}
+\item 固定 $k$，求 $\lim_{B\to\infty}B\Var(\hatt\mu)$。
+\item 求使这个极限最小的正整数 $k$。结果怎样依赖 $c\sigma^2/\tau^2$？给出直观解释。
+\end{enumerate}
+\end{exercise}

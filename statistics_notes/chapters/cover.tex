@@ -1,0 +1,28 @@
+% 封面
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[main] (current page.north west) rectangle (current page.south east);
+  % 背景：一族逐渐变窄的正态曲线，象征“样本越大，估计越集中”
+  \begin{scope}[shift={($(current page.south west)+(2.2,5.2)$)}, x=1cm, y=1cm]
+    \foreach \s/\o in {2.2/0.10,1.6/0.14,1.15/0.18,0.8/0.24,0.56/0.32,0.4/0.42}{
+      \draw[white, opacity=\o, line width=0.9pt, domain=-5.2:5.2, samples=120, smooth]
+        plot ({\x+8.3}, {2.4*exp(-(\x*\x)/(2*\s*\s))/(\s*1.7)});
+    }
+    \draw[white, opacity=0.35] (2.6,0) -- (14.0,0);
+    \foreach \x in {3.1,4.1,...,13.1} \draw[white, opacity=0.35] (\x,0) -- (\x,-0.12);
+  \end{scope}
+  \fill[accent] ($(current page.north west)+(0,-9.4)$) rectangle ($(current page.north west)+(1.6,-12.9)$);
+  \node[anchor=north west, text=white, align=left] at ($(current page.north west)+(2.4,-4.2)$)
+    {\fontsize{14}{18}\selectfont\lightsans 新领军计划\quad·\quad 重构版};
+  \node[anchor=north west, text=white, align=left] at ($(current page.north west)+(2.3,-9.2)$)
+    {\fontsize{44}{54}\selectfont\blackfont 数理统计\\[2pt]\fontsize{44}{54}\selectfont\blackfont 自学讲义};
+  \node[anchor=north west, text=white, align=left] at ($(current page.north west)+(2.4,-14.4)$)
+    {\fontsize{16}{22}\selectfont\lightsans 从数据到推断};
+  \node[anchor=north west, text=white, opacity=0.9, align=left] at ($(current page.north west)+(2.4,-15.8)$)
+    {\fontsize{12}{18}\selectfont\lightsans 抽样\quad 估计\quad 区间\quad 检验\quad 两样本\quad 回归};
+  \node[anchor=south east, text=white, opacity=0.85, align=right] at ($(current page.south east)+(-2.2,1.8)$)
+    {\fontsize{10.5}{15}\selectfont\lightsans 2026 年 10 月};
+\end{tikzpicture}
+\end{titlepage}
+\cleardoublepage

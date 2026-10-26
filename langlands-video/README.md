@@ -3,7 +3,8 @@
 一段约 3 分半钟的中文科普短片，介绍朗兰兹纲领（Langlands Program）。旁白用**通义千问 Qwen3-TTS**（阿里云百炼 DashScope）合成，
 画面和配乐全部由 Python 程序生成，没有用到任何素材文件。
 
-成品：`langlands.mp4`（1920×1080，30fps，H.264 + AAC，响度 −14 LUFS）。
+成品：`langlands.mp4`（1920×1080，30fps，H.264 + AAC，响度 −14 LUFS，时长 3:33）。
+仓库里放的是压缩过的版本（约 27 MB）；`python make.py` 生成的原画质版本在 `build/langlands.mp4`（约 80 MB）。
 
 ## 内容
 

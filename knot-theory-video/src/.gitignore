@@ -1,0 +1,6 @@
+audio/
+media/
+logs/
+build_*/
+bg_*.png
+*.mp4

@@ -1,20 +1,30 @@
-# Folio 开发说明（给改代码的人和 AI）
+# Claude-lab-2 说明（给改代码的人和 AI）
 
-Folio 是 PySide6（Qt）+ PyMuPDF 的 PDF 阅读器。Windows 用 PyInstaller 打包、Inno Setup 做安装程序，
-装在 `%LOCALAPPDATA%\Programs\Folio`（不需要管理员权限）；macOS 是 `Folio.app`。默认分支 `main`。
+这个仓库**什么都可以放**：Folio PDF 阅读器的代码、讲义、讲解视频、动画短片，以及生成它们的源码，每样东西一个目录，清单见 README「里面有什么」。
+下面先是所有目录通用的约定，再是 Folio 的开发说明；只动其它目录时，Folio 那部分（测试、发版、自动更新）不用管。
 
-## 基本约定
+## 通用约定
 
 - 代码注释、界面文字、提交说明、文档都用中文，风格和周围的代码保持一致。
+- 新东西放进自己的顶层目录，写一个 `README.md` 说明是什么、怎么重新生成；能重新生成的把源码一起提交，渲染缓存、音频缓存、`build/` 之类的中间产物不提交。
+- GitHub 单个文件上限 100 MB，视频等大文件尽量压到 50 MB 以内。
+- 只保留 `main` 一个长期分支：不要直接推 `main`，在分支上改、开 PR，合并后删除分支。删分支前把 tip 记到 `docs/BRANCH-RECOVERY-日期.md`。
+- 不要自己打 `v*` 标签或手动运行发布：推送 `v*` 标签或在 Actions 里填版本号运行，就会正式发布 Folio 并推送给所有用户的自动更新（不管改的是哪个目录）。
+- 推到 `main` 或 `claude/**` 分支都会触发 Folio 的 CI（测试和打包）；只改其它目录时，CI 结果与改动无关。
+
+## Folio 开发说明
+
+Folio 是 PySide6（Qt）+ PyMuPDF 的 PDF 阅读器。Windows 用 PyInstaller 打包、Inno Setup 做安装程序，
+装在 `%LOCALAPPDATA%\Programs\Folio`（不需要管理员权限）；macOS 是 `Folio.app`。代码在 `folio/`、`packaging/`、`shellext/`、`tests/`。
+
 - 改完先跑测试：`QT_QPA_PLATFORM=offscreen python -m pytest -q`。Windows 专用的测试（替换脚本、注册表、命名管道）只在 Windows 上跑，CI 的 `windows-latest` 会跑。
-- 不要直接推 `main`，在分支上改、开 PR。不要自己打 `v*` 标签或手动发布：推送 `v*` 标签或在 Actions 里填版本号运行，就会正式发布并推送给所有用户的自动更新。
 - 版本号在 `folio/__init__.py`，发版说明写在 `docs/CHANGELOG.md` 对应的 `## 版本号` 一节（会原样进入更新提示和 Release 说明）。
 
-## 自动更新的注意事项
+### 自动更新的注意事项
 
 代码在 `folio/update.py`，测试在 `tests/test_update.py`。**改动更新相关的任何代码（`update.py`、`WIN_SCRIPT`、`MAC_SCRIPT`、`ui/dialogs/update_dialog.py`、`packaging/installer.iss` 的快捷方式和目录、`packaging/make_manifest.py`、`packaging/update_key.py`）后必须跑 `tests/test_update.py`**，涉及 Windows 替换脚本的改动要在 Windows 上跑（CI 的 Windows 任务会跑）。
 
-### 流程
+#### 流程
 
 1. **check**：读取 `latest.json`（GitHub Releases），程序内置了更新公钥时先验证清单的 Ed25519 签名，再比较版本号。
 2. **prepare**：下载对应平台的 zip → 校验大小和 SHA-256 → 解压到程序目录旁边的 `.folio-update`（同一个磁盘，替换时只要改名）→ 当前程序有代码签名时，确认新版本是同一个签名者（同一张证书的指纹，或受信任证书的同一个 Subject）。解压目录里会写 `update.json` 记下要装的版本。
@@ -22,7 +32,7 @@ Folio 是 PySide6（Qt）+ PyMuPDF 的 PDF 阅读器。Windows 用 PyInstaller �
 4. **替换脚本**：等旧进程退出 → 把程序目录改名成 `Folio.old-时间` → 把新版本移进来 → 重新启动 → 删掉旧目录和解压目录。改名失败会重试 20 秒；最终失败时写日志 `%TEMP%\folio-update-时间.log`，重新打开旧版本。
 5. **下次启动**：`pending_failure()` 发现解压目录里还留着新版本（替换成功时它会被移走），就提示「更新没有装上」并给出手动下载地址，然后清理残留。
 
-### 踩过的坑：当前目录会锁住程序目录（0.2.1 → 0.2.2 时真实发生过）
+#### 踩过的坑：当前目录会锁住程序目录（0.2.1 → 0.2.2 时真实发生过）
 
 Windows 不允许给一个**正被某个进程当作当前目录**的文件夹（或者里面有文件被打开、DLL 被加载的文件夹）改名。从开始菜单或桌面快捷方式启动 Folio 时，它的当前目录就是程序目录（Inno Setup 的快捷方式默认「起始位置」是 `{app}`）；以前 `subprocess.Popen` 启动替换脚本时没传 `cwd`，PowerShell 继承了这个当前目录，自己把程序目录锁住了，`Rename-Item` 重试 40 次都失败，然后悄悄重新打开旧版本——用户看到的是「下载成功但重启后还是旧版本，`.folio-update` 一直留着」。
 
@@ -34,7 +44,7 @@ Windows 不允许给一个**正被某个进程当作当前目录**的文件夹�
 - 同理，任何会长时间打开程序目录里文件的东西都不能放进程序目录。Windows 11 右键菜单的 DLL 会被 Explorer（dllhost.exe）加载，所以它装在旁边的 `Folio-shell`，不在 `Folio` 里。
 - 新增要启动的子进程时，想一想它会不会在 Folio 退出后还活着、当前目录在哪里。
 
-### 重要：执行替换的是「旧版本」的代码
+#### 重要：执行替换的是「旧版本」的代码
 
 `launch_installer()` 和替换脚本都来自**正在运行的旧版本**，新版本只是被下载的 zip。所以对更新逻辑的修复只对「从修复后的版本再往后更新」生效：
 
@@ -42,7 +52,7 @@ Windows 不允许给一个**正被某个进程当作当前目录**的文件夹�
 - 改 `update.py` / `WIN_SCRIPT` / `MAC_SCRIPT` 时，一定要想清楚**旧客户端会怎么跑新逻辑**：旧客户端会用它自己的代码下载、校验、解压、替换新版本。清单格式（`latest.json` 的字段）、zip 的目录结构（解压后顶层是 `Folio/Folio.exe` 或 `Folio.app`）、签名方式（换证书会让「同一签名者」检查失败）、更新公钥（换密钥后旧版本验证不了新清单）都要保持旧客户端能处理，否则所有用户都得手动更新一次。
 - 需要改这些约定时，先发一个「能理解新旧两种格式」的过渡版本，等大部分用户更新到它之后再切换。
 
-### 排查「更新下不来 / 装不上」
+#### 排查「更新下不来 / 装不上」
 
 1. 看 `%LOCALAPPDATA%\Programs\.folio-update` 有没有残留：有 `Folio` 子目录说明下载、解压成功，但替换失败了；`update.json` 里是要装的版本。
 2. 看 `%TEMP%\folio-update-*.log`（替换失败的原因、当时的当前目录、`$Error[0]`）和 `%TEMP%\folio-update-*.ps1`（实际运行的替换脚本，能看出用户的旧版本是哪一版逻辑）。
@@ -50,7 +60,7 @@ Windows 不允许给一个**正被某个进程当作当前目录**的文件夹�
 4. 0.2.2 及更早版本没有日志，基本都是上面「当前目录」的问题：让用户手动下载安装。
 5. 下载、校验阶段的错误会直接显示在更新窗口里（SHA-256 不一致、签名者不一致、清单签名无效等）。
 
-## Windows 右键菜单
+### Windows 右键菜单
 
 两套，详见 README「Windows 11 右键菜单」和 `folio/platform_win.py` 开头的注释：
 

@@ -1,6 +1,6 @@
 # 概率分布图鉴（讲解视频）
 
-根据讲义《概率分布图鉴》（[`概率分布图鉴.pdf`](概率分布图鉴.pdf)）做的讲解视频：1080p60，约 13 分钟，Manim 动画，配色沿用讲义（青绿 = 离散、赭红 = 连续、靛蓝 = 抽样分布与多元正态）。
+根据讲义《概率分布图鉴》（[`概率分布图鉴.pdf`](概率分布图鉴.pdf)）做的讲解视频：1080p60，约 12 分半钟，Manim 动画，配色沿用讲义（青绿 = 离散、赭红 = 连续、靛蓝 = 抽样分布与多元正态）。
 口播稿由千问（`qwen3.8-max`）按分镜要点撰写、人工审校，配音用千问语音合成（`qwen3-tts-flash`，音色 Maia），带中文字幕。
 
 - 视频：[`probability-distributions-1080p.mp4`](probability-distributions-1080p.mp4)（字幕已烧录；另附 [`probability-distributions-1080p.srt`](probability-distributions-1080p.srt)）

@@ -137,7 +137,7 @@ class E3B(VScene):
         k0 = 3
         cut = DashedLine(pieces[k0].get_corner(UL) + UP * 0.35, pieces[k0].get_corner(DL) + DOWN * 0.35, color=BRICK,
                          stroke_width=3)
-        lab = T("已经失败 3 次", 22, BRICK, bold=True).next_to(VGroup(*pieces[:k0]), DOWN, buff=0.4)
+        lab = T("已经失败 3 次", 22, BRICK, bold=True).next_to(VGroup(*pieces[:k0]), UP, buff=0.2)
         self.play(Create(cut), *[pieces[i].animate.set_opacity(0.25) for i in range(k0)], FadeIn(lab), run_time=0.9)
         rest = VGroup(*pieces[k0:], tail).copy()
         self.play(rest.animate.shift(DOWN * 1.6), run_time=1.0)
@@ -205,12 +205,12 @@ class E3C(VScene):
 
         self.seg(1)
         tree = VGroup(root, win, lose, a1, a2, p1, p2, loop, again)
-        self.play(tree.animate.scale(0.6).to_edge(LEFT, buff=0.4).shift(UP * 0.6), run_time=0.8)
+        self.play(tree.animate.scale(0.5).to_corner(DL, buff=0.5), run_time=0.8)
         eq = MathTex(r"E", r"=p\cdot 1+(1-p)(1+E)", font_size=52)
         e2 = MathTex(r"E", r"=1+(1-p)E", font_size=52)
         e3 = MathTex(r"pE", r"=1", font_size=52)
         e4 = MathTex(r"E", r"=\frac{1}{p}", font_size=60)
-        col = VGroup(eq, e2, e3, e4).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 2.4 + UP * 0.2)
+        col = VGroup(eq, e2, e3, e4).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 2.0 + UP * 0.9)
         self.play(Write(eq), run_time=1.4)
         for e in (e2, e3):
             self.play(TransformFromCopy(col[col.submobjects.index(e) - 1], e), run_time=0.9)
@@ -325,7 +325,7 @@ class E3D(VScene):
             pts = [ax.c2p(k, math.comb(k - 1, r - 1) * 0.35 ** r * 0.65 ** (k - r)) for k in ks]
             ln = VMobject(stroke_color=c, stroke_width=3.5).set_points_as_corners(pts)
             ds = VGroup(*[Dot(q, radius=0.04, color=c) for q in pts])
-            lab = M(f"r={r}", 32, c).next_to(pts[max(0, int(r * 1.8 - r))], UP + RIGHT, buff=0.15)
+            lab = M(f"r={r}", 32, c).move_to(ax.c2p(*{1: (3.2, 0.34), 3: (9.5, 0.14), 6: (21, 0.1)}[r]))
             self.play(Create(ln), FadeIn(ds, lag_ratio=0.03), FadeIn(lab), run_time=1.1)
         clt = T("越多独立小段相加 → 越像钟形", 26, GOLD, bold=True).move_to(ax.c2p(28, 0.3))
         self.play(FadeIn(clt), run_time=0.6)

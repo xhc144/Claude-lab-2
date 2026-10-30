@@ -1,0 +1,328 @@
+% 第3章 构造估计量：矩估计与极大似然
+\chapter{构造估计量：矩估计与极大似然}
+\label{ch:mle}
+
+\begin{chapguide}
+\textbf{\heiti 本章要解决的问题}\quad 第 2 章教我们\emph{评价}估计量，本章教我们\emph{构造}估计量。两种通用方法：
+\keyword{矩估计}（让样本的矩等于总体的矩）和\keyword{极大似然估计}（选择最能解释已观测数据的参数）。
+后者是现代统计的主力，我们会看到它在大样本下近似正态、近似无偏，而且精度达到理论极限（Fisher 信息给出的下界）。\par\smallskip
+\textbf{\heiti 预备}\quad 第 2 章的偏差、均方误差、相合性；第 0 章的大数定律、中心极限定理、Delta 方法。
+\end{chapguide}
+
+\section{矩估计}
+
+若总体均值可以写成参数的函数，就可以反过来，让样本均值“扮演”总体均值，解出参数。
+这一想法推广到二阶、三阶矩，就是矩估计。
+
+\begin{definition}{样本矩与矩估计}{mom}
+记 $m_r(\theta)=\E_\theta X_1^r$ 为 $r$ 阶总体矩，$M_r=\frac1n\sum_iX_i^r$ 为 $r$ 阶样本矩。
+选择适当的若干阶（通常是前 $k$ 阶，$k$ 为参数个数），解方程组 $m_r(\theta)=M_r$，所得的解称为\keyword{矩估计}。
+\end{definition}
+
+\begin{example}{几个矩估计}{momex}
+\begin{itemize}
+\item $\Pois(\lambda)$：$\E X=\lambda$，矩估计 $\hatt\lambda=\Xbar$。
+\item $\Exp(\lambda)$：$\E X=1/\lambda$，矩估计 $\hatt\lambda=1/\Xbar$。
+\item $\Unif(0,\theta)$：$\E X=\theta/2$，矩估计 $\hatt\theta=2\Xbar$（第 2 章已看到它不如基于最大值的估计）。
+\item $\Unif(a,b)$：$\E X=\frac{a+b}2$，$\Var X=\frac{(b-a)^2}{12}$。用前两阶矩，记 $V=M_2-M_1^2=\frac1n\sum(X_i-\Xbar)^2$，解得
+$\hatt a=\Xbar-\sqrt{3V}$，$\hatt b=\Xbar+\sqrt{3V}$。
+\end{itemize}
+\end{example}
+
+为什么矩估计合理？由大数定律，$M_r\toP m_r(\theta)$（只要 $\E|X_1|^r<\infty$）。若矩方程的解是样本矩的连续函数，
+连续映射（命题 \ref{prop:cmt}）立刻给出：\emph{矩估计是相合的}。它的渐近正态性则可以由中心极限定理加 Delta 方法得到（例 \ref{ex:deltaexp} 就是一例）。
+
+\begin{warning}
+矩估计不检查数据与参数是否相容。$\Unif(0,\theta)$ 的数据 $(1,1,1,5)$ 给出 $\hatt\theta=2\Xbar=4$，可是已观测到 $5$。
+矩方程甚至可能在参数空间内无解：若 $X$ 以概率 $1-\theta,\theta/2,\theta/2$ 取 $0,1,2$（$0\le\theta\le1$），$\E X=3\theta/2$；
+观测到两个 $2$ 时 $\Xbar=2$，解得 $\theta=4/3\notin[0,1]$。这两个缺点都促使我们寻找更好的原则。
+\end{warning}
+
+\section{可识别性：数据能否区分参数}
+
+在讨论任何估计方法之前，先要问：两个不同的参数，会不会产生\emph{完全相同}的数据分布？如果会，再多的数据也无法区分它们。
+
+\begin{definition}{可识别性}{ident}
+若 $\theta\ne\eta$ 时观测数据在两个参数下的分布总不相同，即 $P_\theta=P_\eta\Rightarrow\theta=\eta$，称参数在该模型中\keyword{可识别}。
+\end{definition}
+
+\begin{example}{只记录绝对值}{absval}
+$X\sim\N(\mu,1)$，仪器只记录 $|X|$。$\mu$ 与 $-\mu$ 下 $|X|$ 的分布完全相同，所以 $\mu$ 不可识别，能识别的只有 $|\mu|$。
+\end{example}
+
+\begin{example}{只记录和}{sumonly}
+$X_1\sim\N(\mu_1,1)$、$X_2\sim\N(\mu_2,1)$ 独立，只记录 $Y=X_1+X_2\sim\N(\mu_1+\mu_2,2)$。
+$(\mu_1,\mu_2)$ 不可识别，但 $\mu_1+\mu_2$ 可识别。
+\end{example}
+
+这两个例子说明一个一般道理：对数据做任何与参数无关的处理（只保留 $|X|$、只保留和），\emph{都不能增加}可识别性，
+只可能丢失信息。这与第 1 章深入讨论中“只保存部分数据”的思想一脉相承。
+
+\section{似然函数}
+
+假设抛硬币 $10$ 次得到 $7$ 次正面。$p=0.3$ 时得到这样一份记录（某个特定的正反序列）的概率是 $0.3^7\,0.7^3\approx7.5\times10^{-5}$，
+$p=0.7$ 时是 $0.7^7\,0.3^3\approx2.2\times10^{-3}$，大了约 $30$ 倍。\emph{把这个概率看成参数的函数}，就得到似然。
+
+\begin{definition}{似然函数}{lik}
+设观测到 $x=(x_1,\dots,x_n)$。离散时称 $L(\theta)=\P_\theta(X=x)$，有密度时称 $L(\theta)=f_\theta(x)$ 为\keyword{似然函数}；
+$\ell(\theta)=\log L(\theta)$ 为\keyword{对数似然}。对独立同分布样本，
+\[
+L(\theta)=\prod_{i=1}^nf_\theta(x_i),\qquad \ell(\theta)=\sum_{i=1}^n\log f_\theta(x_i).
+\]
+\end{definition}
+
+\begin{warning}
+似然是\emph{参数}的函数，数据固定不动；它\emph{不是}参数的概率分布（对 $\theta$ 积分一般不等于 $1$）。
+$L(0.7)/L(0.3)\approx30$ 的意思是“若 $p=0.7$，看到这份数据的可能性是 $p=0.3$ 时的 30 倍”，而不是“$p=0.7$ 的可能性是 $p=0.3$ 的 30 倍”。
+\end{warning}
+
+与参数无关的正因子不影响似然的比较。记录全部序列时 $L(p)=p^7(1-p)^3$，只记录正面次数时 $L(p)=\binom{10}{7}p^7(1-p)^3$，两者成比例，
+给出完全相同的推断。因此常常只写出似然中与参数有关的部分。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.82\linewidth, height=5.4cm, xmin=0, xmax=1, ymin=0, ymax=1.1,
+  xlabel={$p$}, ylabel={相对似然 $L(p)/L(\hatt p)$}, legend pos=north west, xtick={0,0.2,0.4,0.6,0.7,0.8,1}]
+  \addplot[main, very thick, domain=0:1, samples=200] {(x/0.7)^7*((1-x)/0.3)^3};
+  \addplot[accent, very thick, domain=0:1, samples=300] {(x/0.7)^28*((1-x)/0.3)^12};
+  \draw[midgray, dashed] (axis cs:0.7,0) -- (axis cs:0.7,1.05);
+  \addplot[gold, thick, densely dashed, domain=0:1] {0.1465};
+  \node[font=\scriptsize, gold!70!black, anchor=south west] at (axis cs:0.02,0.15) {$e^{-1.92}\approx0.147$};
+  \legend{{$n=10$，7 次正面}, {$n=40$，28 次正面}}
+\end{axis}
+\end{tikzpicture}
+\caption{伯努利模型的相对似然。两份数据的正面比例都是 $0.7$，峰值位置相同；数据多四倍时，曲线窄约一半。
+落在虚线以上的参数值是“与数据相当相容的”，这一范围正是第 \ref{ch:inference} 章似然区间的雏形。}
+\label{fig:lik}
+\end{figure}
+
+\section{极大似然估计}
+
+\begin{definition}{极大似然估计}{mle}
+在参数空间 $\Theta$ 内使 $L(\theta)$ 达到最大值的参数 $\hatt\theta$ 称为\keyword{极大似然估计}（MLE）。
+\end{definition}
+
+由于 $\log$ 严格递增，最大化 $L$ 与最大化 $\ell$ 等价，而 $\ell$ 是求和，更好处理。当 $\ell$ 光滑且最大值在参数空间内部时，
+它满足\keyword{似然方程} $\ell'(\theta)=0$（多参数时是偏导数全为零）。但\emph{驻点不一定是最大点}，最大点也不一定是驻点，求出后要检验。
+
+\begin{example}{伯努利与泊松}{mlebern}
+伯努利：$\ell(p)=k\log p+(n-k)\log(1-p)$，$k=\sum x_i$。若 $0<k<n$，$\ell'(p)=\frac kp-\frac{n-k}{1-p}=0$ 给出 $\hatt p=k/n$，
+且 $\ell$ 是凹函数，驻点就是最大点。$k=0$ 或 $n$ 时 $\ell$ 单调，最大点在端点 $0$ 或 $1$，仍是 $\hatt p=k/n$。
+
+泊松：$\ell(\lambda)=\big(\sum x_i\big)\log\lambda-n\lambda+\text{常数}$，得 $\hatt\lambda=\Xbar$。两例中 MLE 与矩估计相同。
+\end{example}
+
+\begin{example}{正态分布}{mlenorm}
+$\ell(\mu,\sigma^2)=-\frac n2\log\sigma^2-\frac{1}{2\sigma^2}\sum(x_i-\mu)^2+\text{常数}$。对任意 $\sigma^2$，$\mu=\xbar$ 使平方和最小；
+代入后对 $\sigma^2$ 求导，得
+\[
+\hatt\mu=\Xbar,\qquad \hatt{\sigma^2}=\frac1n\sum(X_i-\Xbar)^2=V_n .
+\]
+注意 $\hatt{\sigma^2}$ 以 $n$ 为分母，是有偏的（第 1 章）。MLE 不保证无偏，但偏差随 $n\to\infty$ 消失。
+\end{example}
+
+\begin{example}{均匀分布：最大值不在驻点}{mleunif}
+$\Unif(0,\theta)$ 的似然为
+\[
+L(\theta)=\prod_i\frac{\1\{0<x_i\le\theta\}}{\theta}=\begin{cases}\theta^{-n},&\theta\ge\max_ix_i,\\0,&\theta<\max_ix_i.\end{cases}
+\]
+$\theta$ 小于最大观测值时，数据不可能出现，似然为零；此后似然随 $\theta$ 递减。所以 $\hatt\theta=M=\max_iX_i$（图 \ref{fig:unifLik}）。
+导数在这里毫无用处——最大点恰在似然的跳跃处。MLE 自动拒绝了与数据矛盾的参数，这正是矩估计 $2\Xbar$ 做不到的。
+\end{example}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.7\linewidth, height=4.6cm, xmin=0, xmax=10, ymin=0, ymax=1.15,
+  xlabel={$\theta$}, ylabel={$L(\theta)/L(\hatt\theta)$}, xtick={0,2,4,5,6,8,10}, ytick={0,0.5,1}]
+  \addplot[main, very thick, domain=5:10, samples=80] {(5/x)^4};
+  \addplot[main, very thick, domain=0:5] {0};
+  \addplot[only marks, mark=*, mark options={fill=main}, main] coordinates {(5,1)};
+  \addplot[only marks, mark=*, mark options={fill=white}, main] coordinates {(5,0)};
+  \addplot[only marks, mark=triangle*, mark size=3pt, accent] coordinates {(1,0.06) (1,0.12) (1,0.18) (5,0.06)};
+  \node[font=\scriptsize, accent, anchor=west] at (axis cs:1.2,0.17) {数据 $1,1,1,5$};
+  \draw[-{Stealth}, accent] (axis cs:4,0.5) node[left, font=\scriptsize] {矩估计 $2\Xbar=4$：似然为 0} -- (axis cs:4,0.04);
+\end{axis}
+\end{tikzpicture}
+\caption{$\Unif(0,\theta)$ 在数据 $(1,1,1,5)$ 下的似然。$\theta<5$ 的参数与数据矛盾，似然为零；最大值在 $\hatt\theta=5$ 处取到。}
+\label{fig:unifLik}
+\end{figure}
+
+\begin{proposition}{MLE 的不变性}{invariance}
+若 $\hatt\theta$ 是 $\theta$ 的 MLE，$g$ 是一一映射，则 $g(\hatt\theta)$ 是 $g(\theta)$ 的 MLE。
+\end{proposition}
+\begin{proof}
+把模型改用 $\eta=g(\theta)$ 作参数，似然为 $L^*(\eta)=L(g^{-1}(\eta))$，它在 $\eta=g(\hatt\theta)$ 处最大。
+\end{proof}
+
+例如指数分布寿命超过 $1$ 年的概率 $e^{-\lambda}$ 的 MLE 是 $e^{-\hatt\lambda}=e^{-1/\Xbar}$；正态分布 $\sigma$ 的 MLE 是 $\sqrt{V_n}$。
+不变性很方便，但要注意它与无偏性冲突：无偏性在非线性变换下不保持，MLE 却保持。
+
+\begin{warning}
+MLE 可能不存在，也可能不唯一。
+\begin{itemize}
+\item 设 $X_i$ 独立服从 $\Exp(\lambda)$，但仪器只记录超过阈值 $c$ 的个数 $B\sim\Bin(n,e^{-\lambda c})$。若 $B=0$，似然 $(1-e^{-\lambda c})^n$ 随 $\lambda$ 严格递增，
+在 $(0,\infty)$ 内没有最大点；若 $0<B<n$，$\hatt\lambda=-\frac1c\log\frac Bn$。
+\item 若 $X_i$ 独立服从 $\Unif(\theta,\theta+1)$，似然在 $\max x_i-1\le\theta\le\min x_i$ 上处处等于 $1$，整个区间都是 MLE。
+\end{itemize}
+\end{warning}
+
+\section{极大似然估计有多准：Fisher 信息}
+
+图 \ref{fig:lik} 暗示：似然在峰值附近越“尖”，数据对参数的约束越强，估计越准。把“尖”的程度量化，就是 Fisher 信息。
+
+\begin{definition}{得分函数与 Fisher 信息}{fisher}
+对单个观测的密度（或概率函数）$f_\theta(x)$，称 $s_\theta(x)=\frac{\partial}{\partial\theta}\log f_\theta(x)$ 为\keyword{得分函数}，称
+\[
+I(\theta)=\E_\theta\big[s_\theta(X)^2\big]
+\]
+为单个观测的 \keyword{Fisher 信息}。$n$ 个独立同分布观测的信息为 $nI(\theta)$。
+\end{definition}
+
+在常见的“正则”模型中（支撑集不依赖 $\theta$，求导与积分可以交换），得分函数有两个基本性质：
+\begin{equation}\label{eq:score}
+\E_\theta s_\theta(X)=0,\qquad I(\theta)=\Var_\theta s_\theta(X)=-\E_\theta\Big[\frac{\partial^2}{\partial\theta^2}\log f_\theta(X)\Big].
+\end{equation}
+第一式来自对 $\int f_\theta(x)\dd x=1$ 求导：$0=\int\partial_\theta f_\theta=\int s_\theta f_\theta=\E_\theta s_\theta$；第二式再求一次导即得。
+第二个表达式说明：信息就是对数似然的\emph{平均弯曲程度}。
+
+\begin{example}{两个信息的计算}{fisherex}
+伯努利：$\log f_p(x)=x\log p+(1-x)\log(1-p)$，$-\partial_p^2\log f_p=\frac x{p^2}+\frac{1-x}{(1-p)^2}$，取期望得 $I(p)=\frac1{p(1-p)}$。
+
+指数分布：$\log f_\lambda(x)=\log\lambda-\lambda x$，$-\partial_\lambda^2\log f_\lambda=\frac1{\lambda^2}$，所以 $I(\lambda)=\frac1{\lambda^2}$。
+\end{example}
+
+\begin{theorem}{MLE 的渐近正态性}{mleasym}
+在正则条件下，若 $\hatt\theta_n$ 是相合的 MLE，$0<I(\theta)<\infty$，则
+\[
+\sqrt n\,(\hatt\theta_n-\theta)\tod\N\Big(0,\ \frac{1}{I(\theta)}\Big).
+\]
+\end{theorem}
+\begin{proof}[推导梗概]
+在 $\theta$ 附近展开似然方程：$0=\ell_n'(\hatt\theta_n)\approx\ell_n'(\theta)+\ell_n''(\theta)(\hatt\theta_n-\theta)$，于是
+\[
+\sqrt n(\hatt\theta_n-\theta)\approx\frac{\ell_n'(\theta)/\sqrt n}{-\ell_n''(\theta)/n}.
+\]
+分子是 $n$ 个独立、均值为 $0$、方差为 $I(\theta)$ 的得分之和除以 $\sqrt n$，由中心极限定理 $\tod\N(0,I(\theta))$；
+分母是 $n$ 项的平均，由大数定律 $\toP I(\theta)$。由 Slutsky 定理，比值 $\tod\N(0,I(\theta)/I(\theta)^2)$。严格证明需要控制展开的余项。
+\end{proof}
+
+于是 MLE 的标准误近似为 $1/\sqrt{nI(\theta)}$；用 $\hatt\theta$ 代替未知的 $\theta$，得到可以计算的
+\[
+\widehat{\SE}(\hatt\theta)=\frac{1}{\sqrt{nI(\hatt\theta)}} .
+\]
+伯努利：$\widehat{\SE}=\sqrt{\hatt p(1-\hatt p)/n}$，与第 1 章一致；指数分布：$\widehat{\SE}(\hatt\lambda)=\hatt\lambda/\sqrt n$，与 Delta 方法（例 \ref{ex:deltaexp}）一致。
+
+\paragraph{这已经是最好的了吗}
+下面的定理说明，在正则模型中，没有哪个无偏估计的方差能小于 $1/(nI(\theta))$。
+
+\begin{theorem}{Cramér–Rao 下界}{cr}
+在正则条件下，若 $T$ 是 $\theta$ 的无偏估计且方差有限，则
+\[
+\Var_\theta T\ge\frac{1}{nI(\theta)} .
+\]
+\end{theorem}
+\begin{proof}
+记 $U=\sum_{i=1}^ns_\theta(X_i)=\partial_\theta\log f_\theta(X_1,\dots,X_n)$，由 \eqref{eq:score}，$\E U=0$，$\Var U=nI(\theta)$。对 $\E_\theta T=\theta$ 两边求导：
+\[
+1=\frac{\dd}{\dd\theta}\int t(x)f_\theta(x)\dd x=\int t(x)\,\partial_\theta\log f_\theta(x)\,f_\theta(x)\dd x=\E_\theta(TU)=\Cov_\theta(T,U).
+\]
+由柯西–施瓦茨不等式，$1=\Cov(T,U)^2\le\Var T\cdot\Var U=\Var T\cdot nI(\theta)$。
+\end{proof}
+
+伯努利模型中 $\Var\Xbar=p(1-p)/n$ 恰好等于下界，所以 $\Xbar$ 是 $p$ 的\emph{最小方差无偏估计}。
+MLE 在大样本下渐近达到这个下界，这是它被广泛使用的根本原因。
+
+\begin{intuition}[均匀分布为什么能“打破”下界]
+第 2 章中 $\Unif(0,\theta)$ 的无偏估计 $\frac{n+1}nM$ 的方差是 $\frac{\theta^2}{n(n+2)}$，按 $1/n^2$ 下降，远快于 $1/n$。
+这并不违反 Cramér–Rao 定理，因为这个模型\emph{不正则}：数据的取值范围 $(0,\theta)$ 依赖参数，求导和积分不能交换。
+直观上，“边界”的位置比“中心”的位置容易确定得多。
+\end{intuition}
+
+\section{\starmark\ 深入讨论}
+
+\begin{deeper}[观测不完整时的似然：截尾数据]
+测试 $n$ 个元件的寿命 $X_i\sim\Exp(\lambda)$，但试验只进行到时刻 $c$。到时还没坏的元件只知道 $X_i>c$。
+\emph{写似然的原则是：每条记录贡献“它实际被观测到的那个事件”的概率或密度。}已损坏的元件贡献密度 $\lambda e^{-\lambda x_i}$，
+未损坏的贡献概率 $\P(X_i>c)=e^{-\lambda c}$。若 $d$ 个元件损坏，记总的“暴露时间” $T=\sum_i\min(x_i,c)$，则
+\[
+L(\lambda)=\lambda^de^{-\lambda T},\qquad \hatt\lambda=\frac dT\quad(d\ge1).
+\]
+即“损坏数除以总暴露时间”。如果错误地丢掉未损坏的元件、只用损坏元件的寿命，得到的 $d/\sum_{\text{损坏}}x_i$ 会系统性地\emph{高估}失效率——
+因为寿命长的元件恰恰被丢掉了。这是生存分析的起点。
+\end{deeper}
+
+\begin{deeper}[两种记录方式，两种似然]
+同一批原始数据，记录方式不同，似然就不同。上面的指数寿命试验，若只记录“超过 $c$ 的个数”$B$，似然变为 $\binom nB e^{-\lambda cB}(1-e^{-\lambda c})^{n-B}$，
+MLE 为 $-\frac1c\log\frac Bn$。它使用的信息比截尾数据少，Fisher 信息也更小：单个观测的信息从截尾记录的 $\frac{1-e^{-\lambda c}}{\lambda^2}$
+降为 $\frac{c^2e^{-\lambda c}}{1-e^{-\lambda c}}$（习题 \ref{ex3:info}）。
+\end{deeper}
+
+\begin{summary}
+\begin{itemize}
+\item 矩估计：令样本矩等于总体矩；简单、相合，但可能与数据矛盾或无解。
+\item 可识别性是一切估计的前提；对数据的任何处理都不能增加信息。
+\item 似然是参数的函数，不是参数的概率。MLE 使似然最大；与参数无关的因子可以丢掉。
+\item 求 MLE：先写对数似然，解似然方程，再检验是否为最大值；注意边界、跳跃、不存在与不唯一。MLE 具有不变性。
+\item Fisher 信息 $I(\theta)=\E s^2=-\E\,\partial^2\log f$；MLE 渐近服从 $\N(\theta,1/(nI(\theta)))$，标准误约为 $1/\sqrt{nI(\hatt\theta)}$。
+\item Cramér–Rao：正则模型中无偏估计的方差 $\ge1/(nI(\theta))$。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+某路口每分钟到达的车辆数服从 $\Pois(\lambda)$。连续 $8$ 分钟的记录为 $3,5,2,4,6,3,4,5$。求 $\lambda$ 的矩估计与 MLE，
+以及 MLE 的近似标准误。“一分钟内没有车”的概率的 MLE 是多少？
+\end{exercise}
+
+\begin{exercise}
+重复独立试验直到第一次成功，所需次数 $X$ 服从几何分布 $\P(X=k)=(1-p)^{k-1}p$，$k\ge1$。根据 $n$ 次独立重复的记录 $x_1,\dots,x_n$ 求 $p$ 的 MLE。
+\end{exercise}
+
+\begin{exercise}
+某种灯泡的寿命（千小时）服从 $\Exp(\lambda)$。$6$ 个灯泡的寿命为 $0.8$，$2.1$，$1.3$，$0.4$，$3.0$，$1.6$。求 $\lambda$ 的 MLE、寿命中位数 $\log2/\lambda$ 的 MLE，
+以及 $\hatt\lambda$ 的近似标准误。
+\end{exercise}
+
+\begin{exercise}
+对 $\N(\mu,\sigma^2)$ 的数据 $4.1,\ 5.3,\ 3.8,\ 4.9,\ 5.4$，求 $\mu$ 和 $\sigma^2$ 的 MLE，并与样本方差 $s^2$ 比较。
+\end{exercise}
+
+\levelB
+\begin{exercise}
+对 $\Unif(a,b)$（$a<b$ 均未知），求 $(a,b)$ 的 MLE，并与例 \ref{ex:momex} 的矩估计比较：哪个可能与数据矛盾？
+\end{exercise}
+
+\begin{exercise}
+对 $\Pois(\lambda)$，求 Fisher 信息 $I(\lambda)$，并验证 $\Xbar$ 的方差恰好达到 Cramér–Rao 下界。
+\end{exercise}
+
+\begin{exercise}
+拉普拉斯分布的密度为 $f_\theta(x)=\frac12e^{-|x-\theta|}$。证明 $\theta$ 的 MLE 是样本中位数（$n$ 为奇数时唯一；$n$ 为偶数时中间两个次序统计量之间的任何值都是 MLE）。
+\hint{$\ell(\theta)=-\sum|x_i-\theta|+$ 常数，考察它在相邻两个次序统计量之间的斜率。}
+\end{exercise}
+
+\begin{exercise}\label{ex3:info}
+接深入讨论中的指数寿命试验。分别对两种记录方式（截尾记录 $\min(X,c)$ 与是否超过 $c$），求单个观测的 Fisher 信息，并证明前者总是更大。
+\hint{截尾记录的对数似然为 $\delta\log\lambda-\lambda\min(X,c)$，其中 $\delta=\1\{X\le c\}$；对后者，$B_1=\1\{X>c\}$ 是伯努利变量，可用伯努利信息与链式法则。}
+\end{exercise}
+
+\levelC
+\begin{exercise}[原讲义例 2.3]
+每轮独立地取 $X\sim\Exp(\lambda)$、$Y\sim\Exp(\nu)$，$\lambda,\nu>0$ 未知。做 $n$ 轮，只记录 $X<Y$ 的轮数 $K=k$ 和各轮 $\min(X,Y)$ 之和 $T=t$。求 $(\lambda,\nu)$ 的 MLE，并讨论何时不存在。
+\hint{先证明 $\min(X,Y)\sim\Exp(\lambda+\nu)$，且 $\1\{X<Y\}$ 与 $\min(X,Y)$ 独立，$\P(X<Y)=\lambda/(\lambda+\nu)$。}
+\end{exercise}
+
+\begin{exercise}[原讲义习题 2.4]
+$X_1,\dots,X_n$（$n\ge2$）独立服从 $\Unif(0,\theta)$，只记录最大的两个观测值之差 $D_n=X_{(n)}-X_{(n-1)}$。
+\begin{enumerate}
+\item 证明 $D_n$ 的密度为 $n(\theta-d)^{n-1}/\theta^n$（$0<d<\theta$）。
+\item 求 $\theta$ 的 MLE 和形如 $c_nD_n$ 的无偏估计。
+\item 这两个估计量相合吗？
+\end{enumerate}
+\hint{(2) 令 $u=d/\theta$，似然正比于 $u(1-u)^{n-1}$。(3) 求 $\P(nD_n/\theta>a)$ 的极限。}
+\end{exercise}

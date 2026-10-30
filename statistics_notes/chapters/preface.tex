@@ -1,0 +1,110 @@
+% 前言
+\ctexset{chapter/titleformat=\plaintitlebox}
+\chapter{写在前面}
+\ctexset{chapter/titleformat=\chaptertitlebox}
+
+\section*{这份讲义想做什么}
+
+统计学回答的是一类特别的问题：\emph{只看到了一部分，怎样对整体说话，又怎样说清楚自己可能错多少}。
+抛十次硬币得到七次正面，硬币偏不偏？测了十个病人，新药有没有效？量了十七次沸点和气压，
+能不能用沸点推算海拔？这些问题都有同一个结构：数据是随机的，我们关心的却是背后固定而未知的量。
+
+这份讲义要带你走完一条完整的路：
+\begin{center}
+\begin{tikzpicture}[
+  stage/.style={rectangle, rounded corners=2mm, fill=main, text=white, font=\small\heiti, minimum height=8mm, inner xsep=3mm},
+  arr/.style={-{Stealth[length=2.2mm]}, main, line width=0.8pt}]
+  \node[stage, fill=midgray] (c0) at (0,0) {概率工具};
+  \node[stage] (c1) at (2.55,0) {数据与抽样};
+  \node[stage] (c2) at (5.35,0) {估计的误差};
+  \node[stage] (c3) at (8.15,0) {参数估计};
+  \node[stage] (c4) at (8.15,-1.35) {区间与检验};
+  \node[stage] (c5) at (5.35,-1.35) {两样本比较};
+  \node[stage] (c6) at (2.55,-1.35) {线性回归};
+  \draw[arr] (c0) -- (c1); \draw[arr] (c1) -- (c2); \draw[arr] (c2) -- (c3);
+  \draw[arr] (c3) -- (c4); \draw[arr] (c4) -- (c5); \draw[arr] (c5) -- (c6);
+  \node[font=\scriptsize, color=midgray] at (0,-0.65) {第 0 章};
+  \foreach \n/\p in {1/c1,2/c2,3/c3}{\node[font=\scriptsize, color=midgray, above=0.5mm of \p] {第 \n 章};}
+  \foreach \n/\p in {4/c4,5/c5,6/c6}{\node[font=\scriptsize, color=midgray, below=0.5mm of \p] {第 \n 章};}
+\end{tikzpicture}
+\end{center}
+每一站都先问\emph{为什么需要它}，再给出定义和结论，然后用一个能算到底的例子把它落地，最后说清楚它\emph{什么时候不能用、不能用时该用什么}。
+
+\section*{和原讲义的关系}
+
+本讲义是在原《新领军计划数理统计自学讲义》（141 页）的基础上\emph{重新组织、重新写作}的。原讲义的数学功底很扎实：
+对假设的精确性、取等条件和唯一性一丝不苟，不少题目（最优耦合、对称化、置换检验、回归的几何）很有深度。
+但它更像一本以统计为背景的高难度题集，作为自学教材有几处明显的问题。重写时针对它们做了如下改动：
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{>{\heiti\color{accent}}p{3.1cm} X}
+\toprule
+\textcolor{ink}{\heiti 原讲义的问题} & \heiti 本讲义的处理 \\
+\midrule
+数学技巧压过统计理解 & 主线按“数据与抽样 → 估计误差 → 参数估计 → 区间与检验 → 两样本 → 回归”的学习顺序展开；组合极值、最优耦合、构造与唯一性证明一律移到标有 \starmark{} 的“深入讨论”和 C 级习题，第一遍可以跳过。 \\
+前置知识没交代 & 新增\textbf{第 0 章 概率工具箱}：协方差与和的方差、切比雪夫不等式、两种收敛的区别、中心极限定理、Delta 方法，全部在第一次使用前讲清楚。 \\
+几乎没有图 & 全书配有二十余幅统计图与示意图：抽样分布随 $n$ 集中、偏差与方差的靶图、似然曲线、置信区间的覆盖、p 值的尾部面积、功效函数、配对图与 QQ 图、最小二乘与残差、置信带与预测带、杠杆点、辛普森悖论……图是正文的一部分。 \\
+只说“不能用”，不说“该用什么” & 合并方差 $t$ 检验之后紧接着讲 \textbf{Welch 检验}，并用模拟展示合并方差检验在什么情形下失效；比例的 Wald 区间之后给出 Wilson 区间；每章都有“方法的适用条件”与选择建议。 \\
+缺少真实数据与模型检查 & 使用两份经典真实数据贯穿后半部分：Student（1908）的\textbf{睡眠药物数据}、Forbes（1857）的\textbf{沸点与气压数据}；讲解箱线图、QQ 图、残差图如何检查假设，以及发现异常点后怎么办。 \\
+习题跨度过大、缺少提示 & 每章习题分为 \textbf{A 基础}、\textbf{B 进阶}、\textbf{C 挑战} 三级，C 级保留原讲义的精华题并附提示；附录 A 给出全部习题的解答。 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+原讲义中关于“只保存部分数据能确定什么”、随机化检验、标签置换等较专门的内容，这里做了取舍：
+保留其核心思想并放到合适的位置，删去了与主线关系较远、主要考验技巧的部分。
+
+\section*{怎样使用这份讲义}
+
+\paragraph{需要的准备}
+一元微积分（求导、积分、泰勒展开），以及初等概率（事件、条件概率、随机变量、期望）。
+遇到不熟悉的概率工具，先翻第 0 章；第 0 章本身也可以作为复习单独读。
+
+\paragraph{阅读节奏}
+建议的第一遍路线是：第 0 章快速浏览 → 第 1 至 6 章的正文与 A、B 级习题，跳过所有 \starmark{} 内容。
+第二遍再读“深入讨论”并挑战 C 级习题。每章开头的“本章导引”说明了这一章要解决的问题和需要的预备知识；
+章末的“本章小结”列出必须掌握的要点，可以用来自测。
+
+\paragraph{书中的标记}
+\begin{definition*}{示例}{}
+定义放在这样的浅色框里。
+\end{definition*}
+\begin{theorem*}{示例}{}
+重要的定理和命题放在带标题栏的框里，后面一般紧跟证明。
+\end{theorem*}
+\begin{intuition}
+“直观理解”用来解释一个结论为什么应该成立，或者应该怎样想到它。
+\end{intuition}
+\begin{warning}
+“常见误区”提醒初学者最容易犯的错误。
+\end{warning}
+\begin{deeper}
+标有 \starmark{} 的“深入讨论”内容更难，或离主线较远，第一遍可以跳过，不影响后续阅读。
+\end{deeper}
+
+\section*{记号约定}
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{>{$}l<{$} X}
+\toprule
+\text{记号} & 含义 \\
+\midrule
+X,\ Y,\ X_i & 随机变量（大写）；对应的观测值用小写 $x,\ y,\ x_i$ \\
+\Xbar,\ S^2 & 样本均值 $\frac1n\sum X_i$，样本方差 $\frac1{n-1}\sum (X_i-\Xbar)^2$ \\
+\theta,\ \Theta & 参数，参数空间 \\
+\P_\theta,\ \E_\theta,\ \Var_\theta & 参数为 $\theta$ 时的概率、期望、方差（可省略下标） \\
+X_i \iid F & 各 $X_i$ 独立同分布，共同分布为 $F$ \\
+\N(\mu,\sigma^2) & 均值 $\mu$、方差 $\sigma^2$ 的正态分布；$\Phi$ 为标准正态分布函数 \\
+z_q,\ t_{\nu,q} & 标准正态分布、自由度 $\nu$ 的 $t$ 分布的 $q$ 分位数，如 $z_{0.975}\approx 1.96$ \\
+\toP,\ \tod & 依概率收敛，依分布收敛（第 0 章） \\
+\1_A & 事件 $A$ 的示性变量：$A$ 发生取 1，否则取 0 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{flushright}
+\small\color{midgray}本讲义的图中，标明“模拟”的结果均由固定随机种子的程序生成，其余均为精确计算。
+\end{flushright}

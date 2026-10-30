@@ -1,10 +1,39 @@
-# Folio PDF
+# Claude-lab-2
+
+这是一个**什么都可以放**的仓库：软件、讲义、讲解视频、动画短片，以及生成它们的源码，都可以放进来，各占一个目录，互不相干。
+
+仓库最早只用来做 Folio PDF 阅读器，所以 Folio 的代码仍在根目录（`folio/`、`packaging/`、`shellext/`、`tests/` 等），自动更新和安装包也从这个仓库的 Releases 发布；但仓库本身不只属于 Folio。
+
+## 里面有什么
+
+| 目录 / 文件 | 内容 |
+|---|---|
+| `folio/`、`packaging/`、`shellext/`、`tests/`、`run.py` | **Folio PDF 阅读器**，见下文 [Folio PDF 阅读器](#folio-pdf-阅读器) |
+| [`probability-distributions-video/`](probability-distributions-video/) | 《概率分布图鉴》讲解视频：Manim 动画，千问写口播稿、千问语音配音；附讲义原文和生成源码 |
+| [`geo-topo-video/`](geo-topo-video/) | 讲解视频：几何与拓扑中的五道经典难题 |
+| [`knot-theory-video/`](knot-theory-video/) | 讲解视频：扭结理论速通 |
+| [`langlands-video/`](langlands-video/) | 科普短片：朗兰兹纲领 |
+| [`cheems_video/`](cheems_video/) | 原创动画短片《Cheems 规则怪谈：月光宠物旅馆》的生成代码 |
+| [`statistics_notes/`](statistics_notes/) | 《数理统计自学讲义（重构版）》LaTeX 源码和 PDF |
+| [`statistics_teacher_JX28.pdf`](statistics_teacher_JX28.pdf) | 数理统计讲义（PDF） |
+
+## 往这里放东西的约定
+
+- 每样东西一个顶层目录（单个文件也可以直接放根目录），目录里写一个 `README.md`：是什么、怎么重新生成。
+- 能重新生成的东西把源码一起放进来；中间产物（渲染缓存、音频缓存、`build/` 等）不要提交。
+- GitHub 限制单个文件不超过 100 MB，视频等大文件尽量压到 50 MB 以内。
+- 只有动到 Folio 的代码时才需要遵守 [CLAUDE.md](CLAUDE.md) 里的 Folio 开发说明（测试、发版、自动更新等）；其它目录与 Folio 的打包和发布无关。
+- 只保留 `main` 一个长期分支：在临时分支上改，合并进 `main` 后删除分支。
+
+---
+
+## Folio PDF 阅读器
 
 一个桌面 PDF 阅读器，可以阅读、批注、朗读、识别扫描件和处理 PDF。基于 PySide6 (Qt) 和 PyMuPDF，支持 Windows / macOS / Linux。
 
 ![阅读界面](docs/screenshots/reader-light.png)
 
-## 功能
+### 功能
 
 **阅读**
 - 连续滚动或双页显示，缩放、适合宽度、适合页面，放大时分块渲染，大文档也流畅
@@ -68,9 +97,9 @@
 |---|---|
 | ![](docs/screenshots/ai-hub.png) | ![](docs/screenshots/ocr.png) |
 
-## 安装与运行
+### 安装与运行
 
-### 直接下载（Windows / macOS）
+#### 直接下载（Windows / macOS）
 
 每次推送代码，GitHub Actions 都会自动打包。打开仓库的 **Actions → 测试与打包**，选择最新一次运行，在 Artifacts 里下载 `Folio-windows` 或 `Folio-macos`。解压后运行 `Folio.exe` 或 `Folio.app` 即可，不用安装 Python。
 
@@ -78,7 +107,7 @@
 
 推送 `v*` 标签（例如 `v0.2.1`）时，安装程序、压缩包和自动更新用的 `latest.json` 会自动发布到 Releases，发布说明开头的下载指引来自 `packaging/release-header.md`。不想用 git 打标签时，也可以在 **Actions → 测试与打包 → Run workflow** 里填写版本号手动发布（会在所选分支的最新提交上创建标签）。
 
-### 从源码运行
+#### 从源码运行
 
 需要 Python 3.10 或更高版本：
 
@@ -87,14 +116,14 @@ pip install -r requirements.txt
 python run.py              # 或者 python run.py 文件.pdf
 ```
 
-### 自己打包
+#### 自己打包
 
 ```bash
 pip install -r requirements.txt pyinstaller
 python packaging/build.py  # 输出到 dist/Folio
 ```
 
-## AI 设置
+### AI 设置
 
 所有 AI 服务都在 **右上角菜单（⋯）→ AI 中台** 里设置，填一次 Key，朗读和文字识别都能用。
 
@@ -107,7 +136,7 @@ python packaging/build.py  # 输出到 dist/Folio
 
 API Key 只保存在本机的设置文件里。不想在界面里填写时，也可以设置环境变量 `DASHSCOPE_API_KEY`、`DEEPSEEK_API_KEY`、`OPENAI_API_KEY` 等。没有 Key 或不想联网时，朗读用「系统语音」、识别用「系统自带」即可完全离线使用。
 
-## 自动更新
+### 自动更新
 
 打包版启动后会在后台检查新版本（每天最多一次，可在「设置 → 更新与关于」关闭）。主页底部显示当前版本、自动更新状态和「检查更新」按钮；右上角菜单（⋯）里也有「检查更新」。发现新版本时显示更新说明，右上角也会一直显示「新版本」按钮，点「立即更新」后：
 
@@ -128,7 +157,7 @@ git tag v0.2.0
 git push origin v0.2.0
 ```
 
-## Windows 11 右键菜单
+### Windows 11 右键菜单
 
 Windows 11 的第一层右键菜单只显示由**带包标识**的清单注册、实现了 `IExplorerCommand` 的扩展，旧的注册表菜单只能出现在「显示更多选项」里。所以 Folio 有两套右键菜单：
 
@@ -147,7 +176,7 @@ Windows 11 的第一层右键菜单只显示由**带包标识**的清单注册�
 
 自己打包：先 `python packaging/build.py`，再 `python packaging/build_shell.py --publisher "CN=证书的Subject" --test`（需要 Visual Studio C++、CMake 和 Windows SDK），用 `python packaging/sign_windows.py` 给 `dist/Folio-shell` 里的 exe、dll、msix 签名，最后用 Inno Setup 编译 `packaging/installer.iss`。
 
-## 代码签名
+### 代码签名
 
 签名能让 Windows 不再弹出「未知发布者」警告、macOS 不再提示「无法验证开发者」，自动更新也会用签名确认新版本来源可靠。
 
@@ -191,7 +220,7 @@ Windows 11 的第一层右键菜单只显示由**带包标识**的清单注册�
 | `APPLE_TEAM_ID` | 开发者团队 ID |
 | `APPLE_APP_PASSWORD` | 在 appleid.apple.com 生成的 App 专用密码 |
 
-## 快捷键
+### 快捷键
 
 | 操作 | 快捷键 | 操作 | 快捷键 |
 |---|---|---|---|
@@ -209,7 +238,7 @@ Windows 11 的第一层右键菜单只显示由**带包标识**的清单注册�
 | 切换标签页 | Ctrl+Tab | 暂停 / 继续朗读 | Ctrl+Shift+Space |
 | 关闭标签页 | Ctrl+W | | |
 
-## 开发
+### 开发
 
 ```
 folio/
@@ -237,9 +266,9 @@ QT_QPA_PLATFORM=offscreen python -m pytest -q
 
 打包后的程序可以用 `Folio --selftest result.json` 自检（CI 每次打包后都会运行）。
 
-## 说明
+### 说明
 
 - 按 Ctrl+S 保存会直接写回原文件（先写临时文件再替换，中途出错不会损坏原文件）；想保留原文件就用「另存为」。压缩、合并、拆分等工具总是生成新文件，不会覆盖原文件。
 - 本项目依赖 PyMuPDF，它采用 AGPL-3.0 许可（另有商业许可）。自己使用或开源发布没有问题；如果要闭源分发，需要购买 MuPDF 商业许可，或者换用其它 PDF 引擎。
 
-[分支历史与恢复入口](docs/BRANCH-RECOVERY-20261021.md)保存本次整理前的完整 tip 和本地恢复方法；所有原提交持续保留在 main 历史。
+分支整理记录（删除前的完整 tip 和本地恢复方法）：[2026-10-21](docs/BRANCH-RECOVERY-20261021.md)、[2026-10-30](docs/BRANCH-RECOVERY-20261030.md)；所有原提交都保留在 main 历史里。

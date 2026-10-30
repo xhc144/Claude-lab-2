@@ -1,0 +1,446 @@
+% 第0章 概率工具箱
+\setcounter{chapter}{-1}
+\chapter{概率工具箱}
+\label{ch:prob}
+
+\begin{chapguide}
+\textbf{\heiti 为什么先读这一章}\quad 统计推断的每一步都要用到几件概率工具：期望和方差的计算规则、
+\emph{协方差}（求和的方差时必不可少）、切比雪夫不等式、大数定律、中心极限定理，以及 Delta 方法。
+原讲义在用到它们时才突然引入，这里把它们集中讲清楚。\par\smallskip
+\textbf{\heiti 怎么读}\quad 学过概率论的读者可以只看 \ref{sec:cov}、\ref{sec:clt}、\ref{sec:delta} 三节和章末习题；
+没学过的读者请完整读一遍。本章的结论后面会反复引用。\par\smallskip
+\textbf{\heiti 预备}\quad 事件与概率、离散与连续随机变量、密度函数、独立性。
+\end{chapguide}
+
+\section{期望与方差：计算规则}
+
+设 $X$ 是随机变量。离散时 $\E X=\sum_x x\,\P(X=x)$，有密度 $f$ 时 $\E X=\int x f(x)\dd x$
+（要求级数或积分绝对收敛）。更一般地，对函数 $g$，$\E g(X)$ 用 $g(x)$ 代替 $x$ 计算。
+
+\begin{theorem}{期望的线性性}{linearity}
+对任意可积随机变量 $X_1,\dots,X_n$ 和常数 $a_1,\dots,a_n,b$，
+\[
+\E\Big(\sum_{i=1}^n a_iX_i+b\Big)=\sum_{i=1}^n a_i\E X_i+b .
+\]
+\emphx{这里不需要任何独立性。}
+\end{theorem}
+
+线性性看似平凡，却是全书最常用的工具。它最漂亮的用法是配合\keyword{示性变量}：
+若 $A$ 是事件，$\1_A$ 在 $A$ 发生时取 $1$、否则取 $0$，则 $\E\1_A=\P(A)$。
+
+\begin{example}{用示性变量求二项分布的均值}{binmean}
+独立抛一枚正面概率为 $p$ 的硬币 $n$ 次，正面次数为 $K$。求 $\E K$。
+\end{example}
+\begin{solution}
+令 $I_i$ 为“第 $i$ 次是正面”的示性变量，则 $K=I_1+\dots+I_n$。由线性性，
+$\E K=\sum_i \E I_i=np$。不需要对 $\binom nk p^k(1-p)^{n-k}$ 求和。
+\end{solution}
+
+\begin{definition}{方差与标准差}{var}
+若 $\E X^2<\infty$，记 $\mu=\E X$，称 $\Var X=\E(X-\mu)^2$ 为 $X$ 的方差，$\sqrt{\Var X}$ 为标准差。
+\end{definition}
+
+展开平方并用线性性，得到最常用的计算公式和平移、伸缩规则：
+\begin{equation}\label{eq:varformula}
+\Var X=\E X^2-(\E X)^2,\qquad \Var(aX+b)=a^2\Var X .
+\end{equation}
+平移不改变分散程度，伸缩 $a$ 倍使方差变为 $a^2$ 倍、标准差变为 $|a|$ 倍。
+对示性变量，$\1_A^2=\1_A$，所以 $\Var\1_A=\P(A)-\P(A)^2=\P(A)\big(1-\P(A)\big)$。
+
+\section{协方差与和的方差}
+\label{sec:cov}
+
+统计里最常见的操作是\emph{求平均}。平均 $n$ 次测量为什么更准？要回答它，就要知道和的方差。
+先看两个变量：
+\[
+\Var(X+Y)=\E\big[(X-\E X)+(Y-\E Y)\big]^2=\Var X+\Var Y+2\,\E\big[(X-\E X)(Y-\E Y)\big].
+\]
+最后一项描述 $X,Y$ 是否“同涨同落”，它有专门的名字。
+
+\begin{definition}{协方差与相关系数}{cov}
+设 $X,Y$ 的二阶矩有限。称
+\[
+\Cov(X,Y)=\E\big[(X-\E X)(Y-\E Y)\big]=\E(XY)-\E X\,\E Y
+\]
+为 $X$ 与 $Y$ 的协方差。当两者方差都为正时，称
+$\Corr(X,Y)=\Cov(X,Y)\big/\sqrt{\Var X\,\Var Y}$ 为相关系数。$\Cov(X,Y)=0$ 时称两者\keyword{不相关}。
+\end{definition}
+
+协方差的性质与乘法完全类似：
+\begin{itemize}
+\item 对称：$\Cov(X,Y)=\Cov(Y,X)$；且 $\Cov(X,X)=\Var X$；
+\item 双线性：$\Cov(aX+bY+c,\,Z)=a\Cov(X,Z)+b\Cov(Y,Z)$，常数 $c$ 不起作用。
+\end{itemize}
+
+\begin{theorem}{和的方差}{sumvar}
+若 $X_1,\dots,X_n$ 的二阶矩有限，则
+\[
+\Var\Big(\sum_{i=1}^n a_iX_i\Big)=\sum_{i=1}^n a_i^2\Var X_i+2\sum_{1\le i<j\le n}a_ia_j\Cov(X_i,X_j).
+\]
+特别地，若它们两两不相关（例如相互独立），则交叉项全部消失：$\Var(\sum a_iX_i)=\sum a_i^2\Var X_i$。
+\end{theorem}
+\begin{proof}
+由双线性，$\Var(\sum_i a_iX_i)=\Cov(\sum_i a_iX_i,\sum_j a_jX_j)=\sum_i\sum_j a_ia_j\Cov(X_i,X_j)$。
+$i=j$ 的项给出 $a_i^2\Var X_i$，$i\ne j$ 的项两两成对，合起来是 $2\sum_{i<j}$。
+若 $X_i,X_j$ 独立，则 $\E(X_iX_j)=\E X_i\,\E X_j$，协方差为零。
+\end{proof}
+
+\begin{example}{二项分布的方差}{binvar}
+接例 \ref{ex:binmean}。各 $I_i$ 独立，$\Var I_i=p(1-p)$，所以 $\Var K=np(1-p)$。
+正面\emph{比例} $\Xbar=K/n$ 的方差是 $p(1-p)/n$。
+\end{example}
+
+\begin{warning}
+\textbf{不相关不等于独立。}设 $X$ 在 $\{-1,0,1\}$ 上等可能，$Y=X^2$。$Y$ 完全由 $X$ 决定，
+但 $\E(XY)=\E X^3=0=\E X\,\E Y$，所以 $\Cov(X,Y)=0$。协方差只度量\emph{线性}的共同变化。
+不过，计算和的方差时只需要不相关，这比独立弱得多。
+\end{warning}
+
+协方差为负的情形在抽样中很常见，下面这个例子在第 \ref{ch:sampling} 章会再次出现。
+
+\begin{example}{不放回抽取的负相关}{urn}
+袋中有 $N\ge2$ 个球，其中 $M$ 个红球。不放回地依次摸两个，$I_1,I_2$ 分别表示第一、二个是红球。求 $\Cov(I_1,I_2)$。
+\end{example}
+\begin{solution}
+由对称性，每次摸到红球的概率都是 $M/N$。两次都是红球的概率为 $\frac{M}{N}\cdot\frac{M-1}{N-1}$。于是
+\[
+\Cov(I_1,I_2)=\frac{M(M-1)}{N(N-1)}-\frac{M^2}{N^2}=-\frac{M(N-M)}{N^2(N-1)}\le 0 .
+\]
+直观上，第一个是红球，袋里的红球就少了，第二个是红球的机会随之变小。
+\end{solution}
+
+最后记下一个处处要用的不等式。
+
+\begin{proposition}{柯西–施瓦茨不等式}{cs}
+$|\Cov(X,Y)|\le\sqrt{\Var X\,\Var Y}$，从而 $-1\le\Corr(X,Y)\le1$。当 $\Var Y>0$ 时，取等号当且仅当
+$X-\E X$ 以概率 $1$ 等于 $Y-\E Y$ 的某个常数倍。
+\end{proposition}
+\begin{proof}
+设 $\Var Y>0$（否则两边都是 0）。对任意实数 $t$，
+$0\le\Var(X-tY)=\Var X-2t\Cov(X,Y)+t^2\Var Y$。
+取 $t=\Cov(X,Y)/\Var Y$ 即得 $\Var X-\Cov(X,Y)^2/\Var Y\ge0$。
+等号成立当且仅当 $\Var(X-tY)=0$，即 $X-tY$ 为常数。
+\end{proof}
+
+\section{常用分布一览}
+
+下表列出本讲义用到的分布。$\Gamma$ 函数、$\chi^2$ 分布与 $t$ 分布在第 \ref{ch:inference} 章再介绍。
+
+\begin{table}[H]
+\centering\small
+\caption{常用分布}\label{tab:dists}
+\begin{tabular}{l l l c c}
+\toprule
+分布 & 取值 & 概率或密度 & 均值 & 方差\\
+\midrule
+$\Bern(p)$ & $\{0,1\}$ & $\P(X=1)=p$ & $p$ & $p(1-p)$ \\
+$\Bin(n,p)$ & $\{0,\dots,n\}$ & $\binom nk p^k(1-p)^{n-k}$ & $np$ & $np(1-p)$ \\
+$\Pois(\lambda)$ & $\{0,1,\dots\}$ & $e^{-\lambda}\lambda^k/k!$ & $\lambda$ & $\lambda$ \\
+$\Unif(a,b)$ & $(a,b)$ & $1/(b-a)$ & $(a+b)/2$ & $(b-a)^2/12$ \\
+$\Exp(\lambda)$ & $(0,\infty)$ & $\lambda e^{-\lambda x}$ & $1/\lambda$ & $1/\lambda^2$ \\
+$\N(\mu,\sigma^2)$ & $\R$ & $\frac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu)^2/(2\sigma^2)}$ & $\mu$ & $\sigma^2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent 关于正态分布，下面两条性质会反复使用：
+\begin{enumerate}
+\item \textbf{标准化}：$X\sim\N(\mu,\sigma^2)$ 当且仅当 $Z=(X-\mu)/\sigma\sim\N(0,1)$。因此
+$\P(X\le x)=\Phi\big((x-\mu)/\sigma\big)$，其中 $\Phi$ 是标准正态分布函数。
+\item \textbf{独立正态的线性组合仍是正态}：若 $X_i\sim\N(\mu_i,\sigma_i^2)$ 相互独立，则
+\[
+\textstyle\sum a_iX_i\sim\N\big(\sum a_i\mu_i,\ \sum a_i^2\sigma_i^2\big).
+\]
+均值和方差由线性性和定理 \ref{thm:sumvar} 给出，
+“仍是正态”这一点可用矩母函数证明。
+\end{enumerate}
+几个需要记住的数：$\P(|Z|\le1)\approx0.683$，$\P(|Z|\le1.96)\approx0.95$，$\P(|Z|\le2.576)\approx0.99$。
+
+\section{两个不等式：只用均值和方差控制概率}
+
+很多时候我们只知道均值和方差，不知道完整分布。下面两个不等式说明，这已经足以控制“偏离很远”的概率。
+
+\begin{theorem}{马尔可夫与切比雪夫不等式}{cheb}
+\begin{enumerate}
+\item（马尔可夫）若 $Y\ge0$，则对任意 $a>0$，$\P(Y\ge a)\le \E Y/a$。
+\item（切比雪夫）若 $\Var X<\infty$，则对任意 $\varepsilon>0$，
+\[
+\P\big(|X-\E X|\ge\varepsilon\big)\le\frac{\Var X}{\varepsilon^2}.
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) 因为 $Y\ge a\1_{\{Y\ge a\}}$，取期望得 $\E Y\ge a\P(Y\ge a)$。
+(2) 对 $Y=(X-\E X)^2$ 和 $a=\varepsilon^2$ 应用 (1)。
+\end{proof}
+
+\begin{example}{切比雪夫界有多粗}{chebcoin}
+公平硬币抛 $100$ 次，正面比例 $\Xbar$ 偏离 $1/2$ 至少 $0.1$ 的概率是多少？
+\end{example}
+\begin{solution}
+$\Var\Xbar=\frac{1/4}{100}=\frac1{400}$，切比雪夫给出 $\P(|\Xbar-\tfrac12|\ge0.1)\le\frac{1/400}{0.01}=0.25$。
+精确值是 $\P(|K-50|\ge10)\approx0.057$。切比雪夫界对\emph{任何}分布都成立，代价是它往往很保守。
+更精确的近似要靠 \ref{sec:clt} 节的中心极限定理。
+\end{solution}
+
+\section{大数定律与依概率收敛}
+
+\begin{definition}{依概率收敛}{convP}
+称随机变量序列 $T_n$ \keyword{依概率收敛}到常数 $c$，记作 $T_n\toP c$，如果对每个 $\varepsilon>0$，
+\[
+\P\big(|T_n-c|>\varepsilon\big)\longrightarrow 0\qquad(n\to\infty).
+\]
+\end{definition}
+
+意思是：$n$ 足够大时，$T_n$ 落在 $c$ 的任意小邻域之外的\emph{概率}可以任意小。
+它不要求每一条样本路径都收敛，也不要求 $\E T_n\to c$（见习题 \ref{ex0:moments}）。
+
+\begin{theorem}{弱大数定律}{wlln}
+设 $X_1,X_2,\dots$ 独立同分布，$\E X_1=\mu$，$\Var X_1=\sigma^2<\infty$。则 $\Xbar_n=\frac1n\sum_{i=1}^nX_i\toP\mu$。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:sumvar}，$\Var\Xbar_n=\sigma^2/n$。切比雪夫不等式给出
+$\P(|\Xbar_n-\mu|>\varepsilon)\le\sigma^2/(n\varepsilon^2)\to0$。
+\end{proof}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.88\linewidth, height=5.6cm, xmode=log, xmin=1, xmax=1000,
+  ymin=0, ymax=1, xlabel={抛掷次数 $n$（对数刻度）}, ylabel={正面比例 $\Xbar_n$},
+  restrict y to domain=-0.1:1.1, legend pos=north east]
+  \addplot[name path=hi, draw=none, forget plot] table[x=n,y=hi] {figdata/lln.dat};
+  \addplot[name path=lo, draw=none, forget plot] table[x=n,y=lo] {figdata/lln.dat};
+  \addplot[fill=main, fill opacity=0.10, forget plot] fill between[of=hi and lo];
+  \addplot[main, thick] table[x=n,y=p1] {figdata/lln.dat};
+  \addplot[accent, thick] table[x=n,y=p2] {figdata/lln.dat};
+  \addplot[gold, thick] table[x=n,y=p3] {figdata/lln.dat};
+  \addplot[midgray, dashed, domain=1:1000] {0.5};
+  \legend{序列 1, 序列 2, 序列 3}
+\end{axis}
+\end{tikzpicture}
+\caption{三条公平硬币序列的累计正面比例（模拟）。阴影是 $\frac12\pm2\sqrt{1/(4n)}$，宽度按 $1/\sqrt n$ 收窄。
+早期的波动很大，但三条曲线最终都被“挤”向 $1/2$——这就是大数定律。}
+\label{fig:lln}
+\end{figure}
+
+依概率收敛与连续函数可以交换次序，这让我们能从简单的结论推出复杂的结论。
+
+\begin{proposition}{连续映射}{cmt}
+若 $T_n\toP c$，函数 $g$ 在 $c$ 处连续，则 $g(T_n)\toP g(c)$。对多个分量同样成立：
+若 $T_n\toP c$、$U_n\toP d$，$g$ 在 $(c,d)$ 处连续，则 $g(T_n,U_n)\toP g(c,d)$。
+\end{proposition}
+\begin{proof}
+给定 $\varepsilon>0$，由连续性存在 $\delta>0$，使 $|t-c|\le\delta$ 时 $|g(t)-g(c)|\le\varepsilon$。
+于是 $\{|g(T_n)-g(c)|>\varepsilon\}\subseteq\{|T_n-c|>\delta\}$，后者的概率趋于 $0$。多分量情形同理。
+\end{proof}
+
+\begin{example}{样本方差的收敛}{s2conv}
+设 $X_i$ 独立同分布且 $\E X_1^4<\infty$，$\Var X_1=\sigma^2$。记 $S_n^2=\frac1{n-1}\sum(X_i-\Xbar_n)^2$（第 \ref{ch:sampling} 章）。
+由于 $S_n^2=\frac{n}{n-1}\big(\frac1n\sum X_i^2-\Xbar_n^2\big)$，大数定律给出 $\frac1n\sum X_i^2\toP\E X_1^2$ 和 $\Xbar_n\toP\mu$，
+连续映射给出 $S_n^2\toP\E X_1^2-\mu^2=\sigma^2$，再由 $\sqrt{\cdot}$ 连续得 $S_n\toP\sigma$。
+（实际上只要 $\sigma^2<\infty$ 就够了，但证明要用强一些的大数定律。）
+\end{example}
+
+\section{中心极限定理与依分布收敛}
+\label{sec:clt}
+
+大数定律说 $\Xbar_n$ 会靠近 $\mu$；但统计推断还要回答：\emph{偏离多少是正常的？}
+偏离的量级是 $\sigma/\sqrt n$。把偏离放大 $\sqrt n$ 倍再看，它的分布会稳定下来，而且几乎总是正态的。
+
+\begin{definition}{依分布收敛}{convd}
+设 $T_n$ 的分布函数为 $F_n$，$T$ 的分布函数为 $F$。如果在 $F$ 的每个连续点 $t$ 都有
+$F_n(t)\to F(t)$，就称 $T_n$ \keyword{依分布收敛}到 $T$（或到 $T$ 的分布），记作 $T_n\tod T$。
+\end{definition}
+
+\begin{theorem}{中心极限定理}{clt}
+设 $X_1,X_2,\dots$ 独立同分布，$\E X_1=\mu$，$0<\Var X_1=\sigma^2<\infty$。则
+\[
+\frac{\sqrt n\,(\Xbar_n-\mu)}{\sigma}\tod \N(0,1),\qquad\text{即}\qquad
+\P\Big(\frac{\sqrt n(\Xbar_n-\mu)}{\sigma}\le z\Big)\to\Phi(z)\ \text{对每个}\ z .
+\]
+\end{theorem}
+
+证明需要特征函数，可在任何一本概率论教材中找到，这里从略。图 \ref{fig:clt} 展示了它在说什么：
+即使单次观测的分布很偏（$p=0.2$ 的伯努利分布只取 $0,1$ 且很不对称），标准化后的和也迅速接近钟形曲线。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=3 by 1, horizontal sep=0.9cm}, notesaxis,
+  width=0.37\linewidth, height=4.4cm, xmin=-3.6, xmax=4.4, ymin=0, ymax=0.62,
+  xtick={-3,0,3}, ytick={0,0.2,0.4,0.6}, yticklabel style={/pgf/number format/fixed}]
+\nextgroupplot[title={$n=5$}, ylabel={概率 $\times$ 标准差}]
+  \addplot[ybar interval, fill=main!25, draw=main!70] table[x expr=\thisrow{z}-0.5*\thisrow{w}, y=h] {figdata/clt_n5.dat};
+  \addplot[accent, thick, domain=-3.6:4.4, samples=120] {exp(-x^2/2)/sqrt(2*pi)};
+\nextgroupplot[title={$n=20$}]
+  \addplot[ybar interval, fill=main!25, draw=main!70] table[x expr=\thisrow{z}-0.5*\thisrow{w}, y=h] {figdata/clt_n20.dat};
+  \addplot[accent, thick, domain=-3.6:4.4, samples=120] {exp(-x^2/2)/sqrt(2*pi)};
+\nextgroupplot[title={$n=100$}]
+  \addplot[ybar interval, fill=main!25, draw=main!70] table[x expr=\thisrow{z}-0.5*\thisrow{w}, y=h] {figdata/clt_n100.dat};
+  \addplot[accent, thick, domain=-3.6:4.4, samples=120] {exp(-x^2/2)/sqrt(2*pi)};
+\end{groupplot}
+\end{tikzpicture}
+\caption{$K\sim\Bin(n,0.2)$ 标准化为 $(K-np)/\sqrt{np(1-p)}$ 后的分布（精确计算；柱高为概率除以柱宽，以便与密度比较）。
+红线是 $\N(0,1)$ 的密度。$n=5$ 时明显右偏，$n=100$ 时已与正态曲线几乎重合。}
+\label{fig:clt}
+\end{figure}
+
+\begin{example}{正态近似}{normapprox}
+公平硬币抛 $100$ 次，求至少 $60$ 次正面的概率。
+\end{example}
+\begin{solution}
+$K$ 的均值 $50$、标准差 $5$。$K$ 只取整数，“$K\ge60$”与“$K\ge59.5$”是同一事件，用 $59.5$ 做正态近似更准（\keyword{连续性修正}）：
+\[
+\P(K\ge60)\approx1-\Phi\Big(\frac{59.5-50}{5}\Big)=1-\Phi(1.9)\approx0.0287 .
+\]
+精确值为 $0.0284$。不做修正得 $1-\Phi(2)\approx0.0228$，误差大得多。
+\end{solution}
+
+\subsection{两种收敛，别混为一谈}
+
+初学者最容易混淆的是：$\Xbar_n$ 收敛到 $\mu$，而 $\sqrt n(\Xbar_n-\mu)$ 收敛到一个正态分布，两个结论有什么区别？
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\linewidth}{l X X}
+\toprule
+ & 依概率收敛 $T_n\toP c$ & 依分布收敛 $T_n\tod T$ \\
+\midrule
+说的是 & $T_n$ \emph{本身}越来越接近一个常数 & $T_n$ 的\emph{分布形状}越来越像某个分布 \\
+典型例子 & 大数定律：$\Xbar_n\toP\mu$ & 中心极限定理：$\sqrt n(\Xbar_n-\mu)\tod\N(0,\sigma^2)$ \\
+统计用途 & 估计量是否\emph{相合}（会不会估准） & 误差有多大、怎样构造\emph{区间和检验} \\
+强弱关系 & \multicolumn{2}{l}{依概率收敛 $\Rightarrow$ 依分布收敛；极限是常数时两者等价} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+两者在\emph{不同的尺度}上看同一个误差 $\Xbar_n-\mu$：不放大时它缩成一个点 $0$；放大 $\sqrt n$ 倍时它保持一个稳定的正态“形状”。
+放大得太少（例如乘 $n^{1/4}$），仍缩到 $0$；放大得太多（乘 $n$），则会发散。$\sqrt n$ 恰好是“刚刚好”的尺度。
+
+\begin{warning}
+依分布收敛只涉及分布，不涉及随机变量本身。例如 $X\sim\N(0,1)$，令 $X_n=-X$。每个 $X_n$ 都与 $X$ 同分布，
+所以 $X_n\tod X$；但 $|X_n-X|=2|X|$ 根本不变小，$X_n$ 并不依概率收敛到 $X$。
+\end{warning}
+
+\subsection{把未知的 \texorpdfstring{$\sigma$}{σ} 换成估计值：Slutsky 定理}
+
+实际使用中心极限定理时，$\sigma$ 通常未知，要用样本标准差 $S_n$ 代替。下面的定理保证这样替换不改变极限。
+
+\begin{theorem}{Slutsky}{slutsky}
+若 $T_n\tod T$，$U_n\toP c$（常数），则
+$T_n+U_n\tod T+c$，$U_nT_n\tod cT$；当 $c\ne0$ 时还有 $T_n/U_n\tod T/c$。
+\end{theorem}
+
+\noindent 结合例 \ref{ex:s2conv}（$S_n\toP\sigma$）与中心极限定理，得到第 \ref{ch:inference} 章近似置信区间的基础：
+\begin{equation}\label{eq:studentized}
+\frac{\sqrt n(\Xbar_n-\mu)}{S_n}=\frac{\sqrt n(\Xbar_n-\mu)}{\sigma}\cdot\frac{\sigma}{S_n}\tod\N(0,1).
+\end{equation}
+
+\section{Delta 方法：函数的误差怎样传递}
+\label{sec:delta}
+
+估计了 $\mu$，常常还要估计 $g(\mu)$，例如用 $1/\Xbar$ 估计指数分布的参数 $\lambda=1/\mu$。$\Xbar$ 的误差约为 $\sigma/\sqrt n$，
+$g(\Xbar)$ 的误差是多少？答案是：在 $\mu$ 附近，$g$ 近似是一条直线，斜率为 $g'(\mu)$，误差就被放大 $|g'(\mu)|$ 倍。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1.6cm,y=1.6cm]
+  \draw[-{Stealth}, midgray] (0.2,0) -- (4.3,0) node[below, ink] {$t$};
+  \draw[-{Stealth}, midgray] (0.3,-0.1) -- (0.3,2.6) node[left, ink] {$g(t)$};
+  \draw[main, very thick, domain=0.55:4.1, samples=80, smooth] plot (\x, {1.25*ln(\x)+0.9});
+  \def\c{2}
+  \pgfmathsetmacro{\gc}{1.25*ln(2)+0.9}
+  \draw[accent, thick, dashed, domain=1.0:3.2] plot (\x, {\gc+0.625*(\x-2)});
+  \fill[main!18] (1.55,0) rectangle (2.45,0.07);
+  \draw[main, thick] (1.55,0) -- (2.45,0);
+  \fill[accent!20] (0.3,{\gc-0.625*0.45}) rectangle (0.37,{\gc+0.625*0.45});
+  \draw[accent, thick] (0.3,{\gc-0.625*0.45}) -- (0.3,{\gc+0.625*0.45});
+  \draw[densely dotted, midgray] (1.55,0) -- (1.55,{\gc-0.625*0.45}) -- (0.3,{\gc-0.625*0.45});
+  \draw[densely dotted, midgray] (2.45,0) -- (2.45,{\gc+0.625*0.45}) -- (0.3,{\gc+0.625*0.45});
+  \fill[ink] (2,0) circle (1.5pt) node[below=2pt] {$\mu$};
+  \fill[ink] (2,\gc) circle (1.5pt);
+  \node[font=\small, main, align=center] at (2,-0.55) {$\Xbar$ 的波动范围 $\approx\sigma/\sqrt n$};
+  \node[font=\small, accent, align=left, anchor=west] at (0.45,2.35) {$g(\Xbar)$ 的波动范围 $\approx|g'(\mu)|\,\sigma/\sqrt n$};
+  \node[font=\small, accent, anchor=west] at (3.2,1.95) {切线：斜率 $g'(\mu)$};
+\end{tikzpicture}
+\caption{Delta 方法的几何意义：在 $\Xbar$ 可能落入的小范围内，曲线 $g$ 几乎与切线重合。}
+\label{fig:delta}
+\end{figure}
+
+\begin{theorem}{Delta 方法}{delta}
+设 $\sqrt n(T_n-c)\tod\N(0,\tau^2)$，函数 $g$ 在 $c$ 处可导。则
+\[
+\sqrt n\big(g(T_n)-g(c)\big)\tod\N\big(0,\ g'(c)^2\tau^2\big).
+\]
+\end{theorem}
+\begin{proof}[证明梗概]
+由导数的定义，$g(T_n)-g(c)=\big(g'(c)+R_n\big)(T_n-c)$，其中 $T_n\to c$ 时余项 $R_n\to0$。
+由 $\sqrt n(T_n-c)\tod\N(0,\tau^2)$ 可推出 $T_n\toP c$（误差是 $O(1/\sqrt n)$ 量级），于是 $R_n\toP0$。
+将等式乘以 $\sqrt n$ 并应用 Slutsky 定理即得。
+\end{proof}
+
+\begin{example}{指数分布的率参数}{deltaexp}
+设 $X_i$ 独立服从 $\Exp(\lambda)$，用 $\hatt\lambda=1/\Xbar$ 估计 $\lambda$。由表 \ref{tab:dists}，$\mu=1/\lambda$，$\sigma^2=1/\lambda^2$，
+中心极限定理给出 $\sqrt n(\Xbar-1/\lambda)\tod\N(0,1/\lambda^2)$。取 $g(t)=1/t$，$g'(1/\lambda)=-\lambda^2$，所以
+\[
+\sqrt n\,(\hatt\lambda-\lambda)\tod\N\big(0,\ \lambda^4\cdot\lambda^{-2}\big)=\N(0,\lambda^2).
+\]
+也就是说，$\hatt\lambda$ 的标准误约为 $\lambda/\sqrt n$——相对误差约为 $1/\sqrt n$，与 $\lambda$ 的大小无关。
+\end{example}
+
+\begin{warning}
+若 $g'(c)=0$，定理给出的极限是退化的 $\N(0,0)$，只说明误差比 $1/\sqrt n$ 小，不能用来构造区间。
+此时需要二阶展开，误差的量级变为 $1/n$（见习题 \ref{ex0:deltazero}）。
+\end{warning}
+
+\begin{summary}
+\begin{itemize}
+\item 期望总是线性的；方差只有在不相关时才“可加”，一般还要加上协方差项 $2\sum_{i<j}a_ia_j\Cov(X_i,X_j)$。
+\item 独立 $\Rightarrow$ 不相关，反之不然；不放回抽样会产生负相关。
+\item 切比雪夫：$\P(|X-\E X|\ge\varepsilon)\le\Var X/\varepsilon^2$，普适但保守。
+\item 大数定律：$\Xbar_n\toP\mu$；中心极限定理：$\sqrt n(\Xbar_n-\mu)/\sigma\tod\N(0,1)$。前者回答“会不会估准”，后者回答“误差多大”。
+\item Slutsky：可以把 $\sigma$ 换成相合估计 $S_n$。Delta 方法：$g(T_n)$ 的渐近标准差是 $|g'(c)|$ 乘以 $T_n$ 的渐近标准差。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+掷一颗均匀骰子，点数为 $X$。求 $\E X$ 与 $\Var X$；再求两颗独立骰子点数之和的方差，以及“两颗骰子点数之和”与“第一颗点数”的协方差。
+\end{exercise}
+
+\begin{exercise}
+设 $\Var X=\Var Y$。证明 $X+Y$ 与 $X-Y$ 不相关。它们一定独立吗？
+\hint{考虑两颗骰子的点数之和与点数之差能否同时取到 $12$ 与 $1$。}
+\end{exercise}
+
+\begin{exercise}
+公平硬币抛 $400$ 次，正面比例为 $\Xbar$。分别用切比雪夫不等式和中心极限定理（带连续性修正）估计 $\P(|\Xbar-\tfrac12|\ge0.05)$，
+并与精确值 $0.0510$ 比较。
+\end{exercise}
+
+\levelB
+\begin{exercise}\label{ex0:moments}
+设 $X_n$ 以概率 $1/n$ 取 $n$，以概率 $1-1/n$ 取 $0$。证明 $X_n\toP0$，但 $\E X_n=1$ 对每个 $n$ 成立，而 $\Var X_n\to\infty$。
+这说明依概率收敛并不保证期望收敛。
+\end{exercise}
+
+\begin{exercise}\label{ex0:equicorr}
+设 $X_1,\dots,X_n$ 的方差都是 $\sigma^2>0$，任意两个的相关系数都是 $\rho$。
+\begin{enumerate}
+\item 证明 $\Var\Xbar=\dfrac{\sigma^2}{n}\big(1+(n-1)\rho\big)$。
+\item 由此证明 $\rho\ge-1/(n-1)$。当 $\rho>0$ 时，$n\to\infty$ 时 $\Var\Xbar$ 趋于多少？这对“多测几次取平均”有什么启示？
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}\label{ex0:deltazero}
+设 $X_i$ 独立服从 $\Bern(p)$，用 $T_n=\Xbar(1-\Xbar)$ 估计 $p(1-p)$。
+\begin{enumerate}
+\item 当 $p\ne1/2$ 时，求 $\sqrt n\big(T_n-p(1-p)\big)$ 的极限分布。
+\item 当 $p=1/2$ 时，证明 $n\big(T_n-\tfrac14\big)\tod-\tfrac14\chi^2_1$，其中 $\chi^2_1$ 是一个标准正态变量的平方的分布。
+\end{enumerate}
+\hint{$x(1-x)-\frac14=-(x-\frac12)^2$。}
+\end{exercise}

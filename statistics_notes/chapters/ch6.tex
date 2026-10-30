@@ -1,0 +1,447 @@
+% 第6章 一元线性回归
+\chapter{一元线性回归}
+\label{ch:regression}
+
+\begin{chapguide}
+\textbf{\heiti 本章要解决的问题}\quad 两个变量之间有什么样的关系？能不能用一个去预测另一个？预测有多准？
+本章从散点图和最小二乘直线出发，给出它的几何解释（正交投影），然后建立统计模型，推导斜率的精度与推断方法，
+区分“平均响应的置信区间”和“新观测的预测区间”，最后学习用残差图检查模型、识别异常点与强影响点。
+全章以 Forbes 的沸点–气压数据为主线，最后给出一份完整的分析。\par\smallskip
+\textbf{\heiti 预备}\quad 第 4 章的 $t$ 分布与置信区间；第 0 章的协方差与柯西–施瓦茨不等式。
+\end{chapguide}
+
+\begin{casestudy}{Forbes 的沸点与气压数据（1857）}
+19 世纪的登山者想知道自己所在的海拔。气压计能测海拔，但又贵又易碎；温度计便宜得多。苏格兰物理学家 J.\,D.\,Forbes 在阿尔卑斯山和苏格兰的
+17 个地点同时测量了水的沸点（°F）和气压（英寸汞柱），希望用沸点推算气压，进而推算海拔。
+\begin{center}\small
+\begin{tabular}{l*{9}{c}}
+\toprule
+编号 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\
+\midrule
+沸点（°F） & 194.5 & 194.3 & 197.9 & 198.4 & 199.4 & 199.9 & 200.9 & 201.1 & 201.4\\
+气压（英寸汞柱） & 20.79 & 20.79 & 22.40 & 22.67 & 23.15 & 23.35 & 23.89 & 23.99 & 24.02\\
+\midrule[\heavyrulewidth]
+编号 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17\\
+\midrule
+沸点（°F） & 201.3 & 203.6 & 204.6 & 209.5 & 208.6 & 210.7 & 211.9 & 212.2\\
+气压（英寸汞柱） & 24.01 & 25.14 & 26.57 & 28.49 & 27.76 & 29.04 & 29.88 & 30.06\\
+\bottomrule
+\end{tabular}
+\end{center}
+物理学（Clausius–Clapeyron 关系）提示：在这个温度范围内，\emph{气压的对数}与沸点近似成直线关系。按 Weisberg 的经典处理，
+下文的响应取 $y=100\log_{10}(\text{气压})$，自变量 $x$ 为沸点。
+\end{casestudy}
+
+\section{最小二乘直线}
+
+给定 $n$ 个点 $(x_i,y_i)$，其中 $x_i$ 不全相等，我们想找一条直线 $y=a+bx$ 尽量贴近它们。“贴近”的标准是竖直方向偏差的平方和最小。
+
+\begin{definition}{最小二乘直线、拟合值与残差}{ls}
+使 $Q(a,b)=\sum_{i=1}^n(y_i-a-bx_i)^2$ 最小的 $(\hatt a,\hatt b)$ 确定的直线称为\keyword{最小二乘直线}。
+$\hatt y_i=\hatt a+\hatt bx_i$ 称为\keyword{拟合值}，$e_i=y_i-\hatt y_i$ 称为\keyword{残差}。
+\end{definition}
+
+记 $t_i=x_i-\xbar$，以及
+\[
+S_{xx}=\sum_i(x_i-\xbar)^2,\qquad S_{xy}=\sum_i(x_i-\xbar)(y_i-\ybar),\qquad S_{yy}=\sum_i(y_i-\ybar)^2 .
+\]
+
+\begin{theorem}{最小二乘解}{lssol}
+最小二乘直线唯一存在，
+\[
+\hatt b=\frac{S_{xy}}{S_{xx}},\qquad \hatt a=\ybar-\hatt b\,\xbar .
+\]
+残差满足 $\sum_ie_i=0$ 与 $\sum_ix_ie_i=0$；直线经过点 $(\xbar,\ybar)$；最小平方和为 $\mathrm{SSE}=\sum e_i^2=S_{yy}-\hatt b^2S_{xx}$。
+\end{theorem}
+\begin{proof}
+把直线写成 $y=c+b(x-\xbar)$ 的形式（$c=a+b\xbar$）。由于 $\sum_it_i=0$，
+\[
+Q=\sum_i\big[(y_i-\ybar)-bt_i+(\ybar-c)\big]^2=\sum_i\big[(y_i-\ybar)-bt_i\big]^2+n(\ybar-c)^2 .
+\]
+第二项在 $c=\ybar$ 时最小。第一项展开为 $S_{yy}-2bS_{xy}+b^2S_{xx}=S_{xx}\big(b-S_{xy}/S_{xx}\big)^2+S_{yy}-S_{xy}^2/S_{xx}$，
+在 $b=S_{xy}/S_{xx}$ 时最小，最小值即 $\mathrm{SSE}$。两个残差恒等式就是 $\partial Q/\partial a=\partial Q/\partial b=0$。
+\end{proof}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.7\linewidth, height=5.4cm, xmin=0, xmax=9, ymin=1, ymax=7.2, xlabel={$x$}, ylabel={$y$}]
+  \addplot[main, very thick, domain=0:9] {1.557143+0.626190*x};
+  \draw[accent, line width=1.3pt] (axis cs:1,2.1) -- (axis cs:1,2.1833);
+  \draw[accent, line width=1.3pt] (axis cs:2,2.9) -- (axis cs:2,2.8095);
+  \draw[accent, line width=1.3pt] (axis cs:3,3.2) -- (axis cs:3,3.4357);
+  \draw[accent, line width=1.3pt] (axis cs:4,4.4) -- (axis cs:4,4.0619);
+  \draw[accent, line width=1.3pt] (axis cs:5,4.6) -- (axis cs:5,4.6881);
+  \draw[accent, line width=1.3pt] (axis cs:6,5.3) -- (axis cs:6,5.3143);
+  \draw[accent, line width=1.3pt] (axis cs:7,6.1) -- (axis cs:7,5.9405);
+  \draw[accent, line width=1.3pt] (axis cs:8,6.4) -- (axis cs:8,6.5667);
+  \addplot[only marks, mark=*, mark size=2.2pt, ink] table[x=x,y=y] {figdata/lev_pts.dat};
+  \fill[main] (axis cs:4.5,4.375) circle (2.2pt);
+  \node[font=\scriptsize, main, anchor=south east] at (axis cs:4.4,4.5) {$(\xbar,\ybar)$};
+  \node[font=\scriptsize, accent, anchor=north west] at (axis cs:3.1,3.25) {残差 $e_i$};
+\end{axis}
+\end{tikzpicture}
+\caption{最小二乘直线使红色竖线（残差）的平方和最小。直线必经过均值点 $(\xbar,\ybar)$；残差有正有负，总和为零。}
+\label{fig:ls}
+\end{figure}
+
+\begin{warning}
+最小二乘只最小化\emph{竖直}方向的误差，所以“用 $x$ 预测 $y$”的直线与“用 $y$ 预测 $x$”的直线一般\emph{不是}同一条。
+回归是有方向的：先想清楚哪个是用来预测的变量、哪个是被预测的变量。
+\end{warning}
+
+\section{几何视角：投影与平方和分解}
+
+把 $n$ 个响应看成 $\R^n$ 中的一个向量 $y$。所有形如 $a\mathbf1+bx$ 的向量组成一个二维平面（由全 1 向量与 $x$ 张成）。
+最小二乘就是在这个平面上找离 $y$ \emph{最近}的点——即 $y$ 在平面上的\keyword{正交投影} $\hatt y$。残差向量 $e=y-\hatt y$ 垂直于这个平面，
+这正是两个恒等式 $\sum e_i=0$（$e\perp\mathbf1$）与 $\sum x_ie_i=0$（$e\perp x$）的含义。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.25, line join=round]
+  \fill[main!10] (-0.6,-1.4) -- (3.4,-0.9) -- (3.9,1.8) -- (-0.1,1.3) -- cycle;
+  \draw[main!50] (-0.6,-1.4) -- (3.4,-0.9) -- (3.9,1.8) -- (-0.1,1.3) -- cycle;
+  \node[main, font=\small, anchor=west] at (3.45,-0.8) {由 $\mathbf 1$ 与 $x$ 张成的平面};
+  \coordinate (O) at (0,0);
+  \coordinate (Yh) at (2.6,0.55);
+  \coordinate (Y) at (2.6,2.65);
+  \coordinate (Yb) at (1.2,-0.35);
+  \draw[-{Stealth}, very thick, ink] (O) -- (Y) node[above] {$y$};
+  \draw[-{Stealth}, very thick, main] (O) -- (Yh) node[below right] {$\hatt y$};
+  \draw[-{Stealth}, very thick, accent] (Yh) -- (Y) node[midway, right] {$e=y-\hatt y$};
+  \draw[accent] ($(Yh)+(0,0.22)$) -- ++(-0.2,-0.03) -- ++(0,-0.22);
+  \draw[-{Stealth}, thick, gold] (O) -- (Yb) node[below] {$\ybar\mathbf1$};
+  \draw[densely dashed, midgray] (Yb) -- (Yh);
+  \fill (O) circle (1.2pt) node[left] {$0$};
+\end{tikzpicture}
+\caption{最小二乘是正交投影。三角形 $(\ybar\mathbf 1,\ \hatt y,\ y)$ 在 $\hatt y$ 处是直角，勾股定理给出 $\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}$。}
+\label{fig:proj}
+\end{figure}
+
+由勾股定理（$\hatt y-\ybar\mathbf1$ 在平面内，$e$ 垂直于平面），
+\[
+\underbrace{\sum(y_i-\ybar)^2}_{\mathrm{SST}=S_{yy}}=\underbrace{\sum(\hatt y_i-\ybar)^2}_{\mathrm{SSR}=\hatt b^2S_{xx}}+\underbrace{\sum e_i^2}_{\mathrm{SSE}} .
+\]
+\keyword{决定系数} $R^2=\mathrm{SSR}/\mathrm{SST}$ 是 $y$ 的总变异中被直线“解释”的比例；容易验证 $R^2=r^2$，其中 $r=S_{xy}/\sqrt{S_{xx}S_{yy}}$ 是样本相关系数。
+
+\begin{casestudy}{Forbes 数据的最小二乘直线}
+$\xbar=202.95$，$\ybar=139.60$，$S_{xx}=530.78$，$S_{xy}=475.38$，$S_{yy}=427.91$。于是
+\[
+\hatt b=\frac{475.38}{530.78}=0.8956,\qquad \hatt a=139.60-0.8956\times202.95=-42.16,
+\]
+$\mathrm{SSE}=2.156$，$R^2=0.995$。沸点每升高 $1$°F，$100\log_{10}(\text{气压})$ 平均增加约 $0.90$。
+\end{casestudy}
+
+\begin{warning}
+$R^2$ 高不代表直线模型正确，也不代表因果关系。下面会看到，用原始气压（不取对数）拟合也有 $R^2=0.994$，但残差图清楚地显示直线并不合适。
+\end{warning}
+
+\section{统计模型与估计精度}
+
+到此为止我们只做了几何计算。要谈“斜率估计有多准”，需要说明数据的随机性从何而来。
+
+\begin{definition}{一元线性回归模型}{slr}
+$x_1,\dots,x_n$ 是事先确定的、不全相等的常数，
+\[
+Y_i=a+bx_i+\varepsilon_i,\qquad i=1,\dots,n,
+\]
+其中误差 $\varepsilon_i$ 均值为 $0$、方差都等于 $\sigma^2$，且两两不相关。$a,b,\sigma^2$ 未知。
+\end{definition}
+
+模型说的是：在每个 $x$ 处，响应的\emph{平均值}恰好落在直线 $a+bx$ 上，围绕平均值的波动大小处处相同。
+
+\begin{theorem}{最小二乘估计的均值与方差}{lsvar}
+在上述模型下，$\hatt b$ 与 $\hatt a$ 无偏，且
+\[
+\Var\hatt b=\frac{\sigma^2}{S_{xx}},\qquad
+\Var\big(\hatt a+\hatt bx_0\big)=\sigma^2\Big(\frac1n+\frac{(x_0-\xbar)^2}{S_{xx}}\Big).
+\]
+\end{theorem}
+\begin{proof}
+$\hatt b=\sum_it_iY_i/S_{xx}$（因为 $\sum t_i\ybar=0$），是 $Y_i$ 的线性组合。$\E\hatt b=\sum t_i(a+bx_i)/S_{xx}=b\sum t_ix_i/S_{xx}=b$；
+由定理 \ref{thm:sumvar}，$\Var\hatt b=\sigma^2\sum t_i^2/S_{xx}^2=\sigma^2/S_{xx}$。
+拟合均值 $\hatt a+\hatt bx_0=\Ybar+\hatt b(x_0-\xbar)$，而 $\Cov(\Ybar,\hatt b)=\frac{\sigma^2}{nS_{xx}}\sum t_i=0$，于是方差为 $\frac{\sigma^2}n+(x_0-\xbar)^2\frac{\sigma^2}{S_{xx}}$。
+\end{proof}
+
+\begin{intuition}[这两个公式告诉了我们什么]
+\begin{itemize}
+\item \textbf{斜率的精度取决于 $x$ 的散布} $S_{xx}$。在很窄的范围内测量，很难看清斜率；把 $x$ 拉开，斜率就准得多。
+\item \textbf{离 $\xbar$ 越远，平均响应估计得越差}，而且按平方增长。直线像一根绕 $(\xbar,\ybar)$ 摆动的跷跷板，两端摆幅最大。
+外推到数据范围之外尤其危险——不仅误差大，而且直线关系本身可能不再成立。
+\end{itemize}
+\end{intuition}
+
+在所有可能的估计方法中，最小二乘斜率是最好的吗？在“线性、无偏”的范围内，答案是肯定的。
+
+\begin{theorem}{高斯–马尔可夫（斜率情形）}{gm}
+若 $T=\sum_iw_iY_i$（权重只依赖已知的 $x_i$）对一切 $a,b$ 无偏估计 $b$，则 $\Var T\ge\sigma^2/S_{xx}=\Var\hatt b$，等号仅当 $T=\hatt b$。
+\end{theorem}
+\begin{proof}
+无偏要求 $\sum w_i=0$ 且 $\sum w_ix_i=1$，从而 $\sum w_it_i=1$。由柯西–施瓦茨，$1=\big(\sum w_it_i\big)^2\le\sum w_i^2\cdot S_{xx}$，
+故 $\Var T=\sigma^2\sum w_i^2\ge\sigma^2/S_{xx}$；等号当且仅当 $w_i\propto t_i$，再由 $\sum w_it_i=1$ 得 $w_i=t_i/S_{xx}$。
+\end{proof}
+
+\paragraph{估计 $\sigma^2$}
+误差 $\varepsilon_i$ 观测不到，只能用残差代替。由于估计了两个参数，残差满足两个约束，只剩 $n-2$ 个“自由度”：
+
+\begin{proposition}{残差方差}{s2reg}
+$s^2=\mathrm{SSE}/(n-2)$ 是 $\sigma^2$ 的无偏估计。
+\end{proposition}
+\begin{proof}
+$\mathrm{SSE}=S_{yy}-\hatt b^2S_{xx}$。一方面 $Y_i-\Ybar=bt_i+(\varepsilon_i-\bar\varepsilon)$，由第 1 章 $\E\sum(\varepsilon_i-\bar\varepsilon)^2=(n-1)\sigma^2$，
+交叉项期望为零，所以 $\E S_{yy}=b^2S_{xx}+(n-1)\sigma^2$。另一方面 $\E\hatt b^2=\Var\hatt b+b^2=\sigma^2/S_{xx}+b^2$。
+相减得 $\E\,\mathrm{SSE}=(n-2)\sigma^2$。
+\end{proof}
+
+\section{正态误差下的推断}
+
+若进一步假设 $\varepsilon_i$ 独立服从 $\N(0,\sigma^2)$，用与定理 \ref{thm:normalsample} 完全相同的正交变换论证（这次取前两个正交方向为 $\mathbf1/\sqrt n$ 与 $t/\sqrt{S_{xx}}$），可以证明：
+$\hatt a,\hatt b$ 与 $s^2$ 独立，$(n-2)s^2/\sigma^2\sim\chi^2_{n-2}$，因此
+\[
+\frac{\hatt b-b}{s/\sqrt{S_{xx}}}\sim t_{n-2},\qquad
+\frac{(\hatt a+\hatt bx_0)-(a+bx_0)}{s\sqrt{1/n+(x_0-\xbar)^2/S_{xx}}}\sim t_{n-2}.
+\]
+斜率的 $1-\alpha$ 置信区间为 $\hatt b\pm t_{n-2,1-\alpha/2}\,s/\sqrt{S_{xx}}$；检验 $H_0:b=0$（$x$ 与 $y$ 没有线性关系）用 $t=\hatt b/(s/\sqrt{S_{xx}})$。
+
+\subsection{平均响应的区间与新观测的预测区间}
+
+在 $x_0$ 处，有两个不同的问题：
+\begin{itemize}
+\item \textbf{平均响应} $a+bx_0$ 在哪里？——这是一个固定的数，置信区间为
+\[
+\hatt y_0\pm t_{n-2,1-\alpha/2}\,s\sqrt{\frac1n+\frac{(x_0-\xbar)^2}{S_{xx}}}\,.
+\]
+\item \textbf{一个新观测} $Y_0=a+bx_0+\varepsilon_0$ 会落在哪里？——它还带着自己的误差 $\varepsilon_0$，与已有数据独立，
+$\Var(Y_0-\hatt y_0)=\sigma^2\big(1+\frac1n+\frac{(x_0-\xbar)^2}{S_{xx}}\big)$，所以\keyword{预测区间}为
+\[
+\hatt y_0\pm t_{n-2,1-\alpha/2}\,s\sqrt{1+\frac1n+\frac{(x_0-\xbar)^2}{S_{xx}}}\,.
+\]
+\end{itemize}
+样本量增大时，置信区间缩成一条线，预测区间却始终至少有 $\pm1.96\sigma$ 宽：\emph{再多的数据也消除不了单个新观测的随机性}。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.9\linewidth, height=6.2cm, xmin=193, xmax=213.5, ymin=130, ymax=149,
+  xlabel={沸点（°F）}, ylabel={$100\log_{10}(\text{气压})$}, legend pos=north west, legend cell align=left]
+  \addplot[name path=phi, draw=none, forget plot] table[x=x,y=phi] {figdata/forbes_band.dat};
+  \addplot[name path=plo, draw=none, forget plot] table[x=x,y=plo] {figdata/forbes_band.dat};
+  \addplot[gold!25] fill between[of=phi and plo];
+  \addplot[name path=chi, draw=none, forget plot] table[x=x,y=chi] {figdata/forbes_band.dat};
+  \addplot[name path=clo, draw=none, forget plot] table[x=x,y=clo] {figdata/forbes_band.dat};
+  \addplot[main!35] fill between[of=chi and clo];
+  \addplot[main, thick] table[x=x,y=m] {figdata/forbes_band.dat};
+  \addplot[only marks, mark=*, mark size=1.8pt, ink] table[x=bp,y=lp] {figdata/forbes.dat};
+  \node[font=\scriptsize, accent, anchor=south east] at (axis cs:204.4,142.5) {12 号};
+  \legend{95\% 预测区间, 95\% 平均响应置信区间, 最小二乘直线}
+\end{axis}
+\end{tikzpicture}
+\caption{Forbes 数据（全部 17 点）的拟合直线、平均响应的置信带（深色，中间最窄）与新观测的预测带（浅色）。
+由于 $R^2$ 极高，两条带都很窄，但预测带始终明显宽于置信带。}
+\label{fig:band}
+\end{figure}
+
+\begin{casestudy}{Forbes：斜率与预测}
+$s=\sqrt{2.156/15}=0.379$，斜率的标准误 $0.379/\sqrt{530.78}=0.0165$，$t_{15,0.975}=2.131$，95\% 区间为 $[0.861,\ 0.931]$。
+$t=54.4$，“没有线性关系”被彻底否定。在沸点 $200$°F 处，平均响应的估计为 $136.96$，95\% 置信区间 $\pm0.22$，预测区间 $\pm0.84$；
+换算回气压，约为 $23.42$ 英寸汞柱。
+\end{casestudy}
+
+\section{检查模型：残差图}
+
+模型的每个假设（直线形状、等方差、无异常点）都可能不成立，而 $R^2$ 和 $t$ 统计量对此几乎毫无反应。最有效的检查工具是\keyword{残差图}：
+把残差对拟合值（或对 $x$）作图。模型正确时，残差应当像一团没有结构的随机点，围绕 $0$ 上下均匀分布。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=3 by 1, horizontal sep=1.15cm}, notesaxis, width=0.36\linewidth, height=4.6cm,
+  title style={font=\footnotesize\heiti}]
+\nextgroupplot[title={原始气压对沸点}, xlabel={沸点}, ylabel={残差}, ymin=-0.4, ymax=0.7, xmin=193, xmax=213.5]
+  \draw[midgray, dashed] (axis cs:193,0) -- (axis cs:213.5,0);
+  \addplot[only marks, mark=*, mark size=1.6pt, main] table[x=bp,y=res] {figdata/forbes_raw_res.dat};
+\nextgroupplot[title={对数气压对沸点}, xlabel={沸点}, ymin=-0.6, ymax=1.6, xmin=193, xmax=213.5]
+  \draw[midgray, dashed] (axis cs:193,0) -- (axis cs:213.5,0);
+  \addplot[only marks, mark=*, mark size=1.6pt, main] table[x=bp,y=res] {figdata/forbes.dat};
+  \node[font=\scriptsize, accent, anchor=west] at (axis cs:205,1.36) {12 号};
+\nextgroupplot[title={真实关系弯曲（示意）}, xlabel={$x$}, ymin=-1.8, ymax=3.2, xmin=-0.5, xmax=10.5]
+  \draw[midgray, dashed] (axis cs:-0.5,0) -- (axis cs:10.5,0);
+  \addplot[only marks, mark=*, mark size=1.6pt, gold!80!black] table[x=x,y=res] {figdata/curve_res.dat};
+\end{groupplot}
+\end{tikzpicture}
+\caption{三幅残差图。左：用原始气压拟合，残差呈系统的弧形（两端偏高、中间偏低），说明直线不合适——尽管 $R^2=0.994$。
+中：取对数后弧形消失，但 12 号点远离其余各点。右：示意数据中真实关系是抛物线，残差呈明显的 U 形。}
+\label{fig:resid}
+\end{figure}
+
+\subsection{残差也有不同的方差}
+
+即使模型正确，残差的方差也不全相同：可以证明 $\Var e_i=\sigma^2(1-h_{ii})$，其中
+\[
+h_{ii}=\frac1n+\frac{(x_i-\xbar)^2}{S_{xx}}
+\]
+称为第 $i$ 个点的\keyword{杠杆值}。离 $\xbar$ 远的点杠杆值大，直线被它“拉”得更近，残差反而偏小。为了公平比较，常用\keyword{标准化残差}
+$r_i=e_i/(s\sqrt{1-h_{ii}})$，模型正确时它大致像标准正态变量，绝对值超过 $3$ 就值得注意。Forbes 数据中 12 号点的标准化残差为 $3.71$，其余都在 $\pm1$ 以内。
+
+\subsection{真实关系不是直线时，斜率在估计什么}
+
+若真实均值是某个函数 $\E Y_i=f(x_i)$，最小二乘斜率仍可计算，它的期望是
+\[
+\E\hatt b=\frac{\sum_it_if(x_i)}{S_{xx}} .
+\]
+这是 $f$ 在各段上的斜率的某种加权平均。例如 $f(x)=a+bx+cx^2$ 时，$\E\hatt b=b+c\sum_it_ix_i^2/S_{xx}=f'(\xi)$，其中 $\xi=\frac{\sum t_ix_i^2}{2S_{xx}}$ 只依赖设计。
+所以弯曲的关系下，“斜率”描述的是某个特定位置的变化率，换一组 $x$ 就会变；用它外推尤其不可靠。
+
+\section{异常点与强影响点}
+
+数据中“不寻常”的点有两种，需要区分：
+\begin{itemize}
+\item \keyword{离群点}：$y$ 方向上远离直线，标准化残差大。它可能是记录错误，也可能是模型没有考虑到的现象。
+\item \keyword{高杠杆点}：$x$ 远离其他点，$h_{ii}$ 大。它不一定离群，但它\emph{有能力}单独改变直线。
+\end{itemize}
+一个点对拟合的实际影响，由两者共同决定。删去第 $i$ 个点后重新拟合，斜率的变化有一个精确的公式：
+\[
+\hatt b-\hatt b_{(i)}=\frac{(x_i-\xbar)\,e_i}{S_{xx}\,(1-h_{ii})} .
+\]
+残差 $e_i$ 大、且 $x_i$ 远离中心（$h_{ii}$ 接近 $1$）时，影响最大。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.8\linewidth, height=5.4cm, xmin=0, xmax=17, ymin=1, ymax=8, xlabel={$x$}, ylabel={$y$}, legend pos=north west]
+  \addplot[main, very thick, domain=0:17] {1.557143+0.626190*x};
+  \addplot[accent, very thick, dashed, domain=0:17] {3.519777+0.140808*x};
+  \addplot[only marks, mark=*, mark size=2pt, ink] table[x=x,y=y] {figdata/lev_pts.dat};
+  \addplot[only marks, mark=*, mark size=3pt, accent] coordinates {(16,4)};
+  \node[font=\scriptsize, accent, anchor=south] at (axis cs:16,4.15) {高杠杆点 $h=0.77$};
+  \legend{不含该点：斜率 0.63, 含该点：斜率 0.14}
+\end{axis}
+\end{tikzpicture}
+\caption{一个高杠杆点的影响。前 8 个点清楚地显示斜率约为 $0.63$；加入 $x=16$ 处的一个点后，斜率骤降到 $0.14$。
+而且加入后它的残差并不算特别大——高杠杆点把直线拉向自己，从而“掩盖”了自己的异常。}
+\label{fig:lev}
+\end{figure}
+
+\begin{casestudy}{Forbes 的 12 号点}
+12 号点的标准化残差为 $3.71$，是明显的离群点，但它的杠杆值只有 $0.064$（$x=204.6$ 接近中心）。删去它后，斜率从 $0.8956$ 变为 $0.8911$，几乎不变；
+但 $s$ 从 $0.379$ 降到 $0.114$，缩小到三分之一，斜率的 95\% 区间变为 $[0.881,\ 0.902]$，预测区间也窄得多。
+也就是说，这个点不影响“直线是什么”，却严重影响“直线有多准”。Forbes 本人也怀疑过这个点；Weisberg 推测可能是记录有误。
+\end{casestudy}
+
+\begin{warning}
+发现异常点后，\emph{不能}因为它“不好看”就删掉。正确的做法是：检查原始记录；分别报告含与不含该点的结果；如果删去，要说明理由。
+\end{warning}
+
+\section{完整案例：Forbes 数据分析}
+
+\begin{casestudy}{一份完整的回归分析}
+\begin{enumerate}
+\item \textbf{明确问题}：用沸点 $x$ 预测气压，进而推算海拔。$x$ 是预测变量，$y=100\log_{10}(\text{气压})$ 是响应。
+\item \textbf{作图}：散点图显示很强的直线趋势（图 \ref{fig:band}）。
+\item \textbf{选择变换}：用原始气压拟合，残差有系统弧形（图 \ref{fig:resid} 左）；按物理学提示取对数后弧形消失。
+\item \textbf{拟合}：$\hatt y=-42.16+0.8956x$，$R^2=0.995$，$s=0.379$。
+\item \textbf{诊断}：残差图中 12 号点标准化残差 $3.71$，杠杆值低。
+\item \textbf{敏感性分析}：删去 12 号点，斜率 $0.8911$，$s=0.114$。斜率结论稳定，精度结论依赖于这个点。
+\item \textbf{报告}：沸点每升高 1°F，$\log_{10}$ 气压约增加 $0.0090$（95\% 区间 $0.0086$ 到 $0.0093$）；由沸点预测对数气压的典型误差约为 $0.4$（含 12 号点）
+或 $0.1$（不含）个单位。12 号点疑为记录误差。在 $194$–$212$°F 范围外使用此直线需谨慎。
+\end{enumerate}
+\end{casestudy}
+
+\section{\starmark\ 深入讨论}
+
+\begin{deeper}[辛普森悖论：合并数据可以颠倒趋势]
+图 \ref{fig:simpson} 中有两组数据，每组内部 $y$ 都随 $x$ 增大而\emph{减小}（斜率约 $-0.46$ 与 $-0.74$）；但两组的位置不同，第二组 $x$ 和 $y$ 都更大。
+把它们合并后拟合一条直线，斜率变成 $+0.74$——方向完全相反。
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.72\linewidth, height=5.2cm, xmin=0, xmax=8.2, ymin=1, ymax=10, xlabel={$x$}, ylabel={$y$}]
+  \addplot[only marks, mark=*, mark size=1.8pt, main] table[x=x,y=y, restrict expr to domain={\thisrow{g}}{1:1}] {figdata/simpson.dat};
+  \addplot[only marks, mark=square*, mark size=1.8pt, accent] table[x=x,y=y, restrict expr to domain={\thisrow{g}}{2:2}] {figdata/simpson.dat};
+  \addplot[main, thick, domain=0.2:3.8] {3.8247935-0.45719349*x};
+  \addplot[accent, thick, domain=4.2:7.9] {11.72372353-0.73558063*x};
+  \addplot[ink, very thick, dashed, domain=0.2:7.9] {2.31698847+0.74152158*x};
+  \node[font=\scriptsize, ink, anchor=west] at (axis cs:5.3,6.65) {合并：斜率 $+0.74$};
+\end{axis}
+\end{tikzpicture}
+\captionof{figure}{辛普森悖论（示意数据）。}\label{fig:simpson}
+\end{center}
+
+教训是：忽略一个同时影响 $x$ 和 $y$ 的变量（这里是“组别”），回归斜率可能完全误导。观察数据中的相关关系，不能直接解释为因果。
+解决办法是把这个变量也放进模型（多元回归），或者用随机化试验切断它的影响。
+\end{deeper}
+
+\begin{deeper}[向均值回归]
+“回归”一词来自 Galton 对父子身高的研究：极高的父亲，儿子平均也高，但\emph{没那么}高。这并非遗传的神秘力量，而是标准化后最小二乘斜率等于相关系数 $r$、
+且 $|r|<1$ 的必然结果：若 $x$ 高于平均 $k$ 个标准差，$y$ 的预测值只高于平均 $rk$ 个标准差。第一次考得特别好的学生第二次平均会退步，
+受罚之后表现“改善”——很多看似因果的现象其实只是向均值回归。
+\end{deeper}
+
+\begin{summary}
+\begin{itemize}
+\item 最小二乘：$\hatt b=S_{xy}/S_{xx}$，$\hatt a=\ybar-\hatt b\xbar$；几何上是正交投影，$\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}$，$R^2=r^2$。
+\item 模型 $Y=a+bx+\varepsilon$ 下：$\Var\hatt b=\sigma^2/S_{xx}$（$x$ 越分散越准）；拟合均值的方差离 $\xbar$ 越远越大；$s^2=\mathrm{SSE}/(n-2)$ 无偏。
+\item 高斯–马尔可夫：最小二乘斜率是方差最小的线性无偏估计。
+\item 正态误差下，斜率与拟合均值的标准化统计量服从 $t_{n-2}$。预测区间比平均响应的置信区间宽，多出的“$1$”永远消不掉。
+\item 一定要画残差图。$R^2$ 高不代表模型对。用标准化残差找离群点，用杠杆值找高杠杆点，用删点公式衡量影响。
+\item 异常点要核查、做敏感性分析、如实报告；警惕外推、辛普森悖论与向均值回归。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+数据 $(1,2),(2,4),(3,5),(4,4),(5,6)$。
+\begin{enumerate}
+\item 求最小二乘直线、各残差、$\mathrm{SSE}$、$s^2$ 与 $R^2$。
+\item 求斜率的 95\% 置信区间（$t_{3,0.975}=3.182$）。在 5\% 水平上能否断言斜率不为零？
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+用自己的话解释 Forbes 分析中的 $R^2=0.995$ 和 $s=0.379$ 各说明了什么。为什么不能仅凭 $R^2$ 判断模型是否合适？
+\end{exercise}
+
+\begin{exercise}
+要在 $x\in[0,10]$ 范围内做 $10$ 次试验估计斜率。比较两种设计的 $\Var\hatt b$：(i) $x=0,1,\dots,9$；(ii) 五次在 $x=0$、五次在 $x=10$。
+第二种设计有什么隐患？
+\end{exercise}
+
+\begin{exercise}
+$x$ 取 $1,2,3,4,10$。求各点的杠杆值 $h_{ii}$，并验证它们之和等于 $2$。
+\end{exercise}
+
+\levelB
+\begin{exercise}
+证明 $\sum_i h_{ii}=2$ 且 $\frac1n\le h_{ii}\le1$，并证明 $h_{ii}=1$ 当且仅当除第 $i$ 个点外其余各点的横坐标全部相同。这时第 $i$ 个点对拟合直线有什么样的影响？
+\end{exercise}
+
+\begin{exercise}
+证明 $R^2=r^2$，其中 $r$ 为样本相关系数；并证明“用 $x$ 预测 $y$”与“用 $y$ 预测 $x$”的两个斜率之积等于 $r^2$。
+\end{exercise}
+
+\begin{exercise}
+两组数据：第一组 $m$ 个观测，令 $x=0$；第二组 $n$ 个，令 $x=1$。证明最小二乘斜率等于两组均值之差，$s^2$ 等于合并样本方差 $S_p^2$，
+因此斜率的 $t$ 统计量就是两样本合并方差 $t$ 统计量。
+\end{exercise}
+
+\begin{exercise}
+在正态误差模型下，若两个新观测在同一个 $x_0$ 处，它们的平均值的预测区间是什么？与单个新观测的预测区间相比如何？
+\end{exercise}
+
+\levelC
+\begin{exercise}[原讲义习题 7.1]
+横坐标固定为 $0,1,3$。设 $g:\R\to\R$ 连续。要求对任意 $y_1,y_2,y_3$，把响应替换为 $g(y_1),g(y_2),g(y_3)$ 后，最小二乘斜率为零当且仅当原斜率为零。求全部这样的 $g$。
+\hint{原斜率为 $(-4y_1-y_2+5y_3)/14$。取 $y_3=(4y_1+y_2)/5$，得到 $g$ 满足的函数方程。}
+\end{exercise}
+
+\begin{exercise}[原讲义习题 7.7]
+固定不全相等的 $x_1,\dots,x_n$ 与实数 $y_1,\dots,y_n$。把响应随机重新排列（$n!$ 种排列等可能），得到的最小二乘斜率记为 $B_\Pi$。
+\begin{enumerate}
+\item 求 $\E B_\Pi$ 与 $\Var B_\Pi$。
+\item 这给出了检验“$x$ 与 $y$ 无关”的置换检验。说明它的合理性来自何处，并与 $t$ 检验比较。
+\end{enumerate}
+\hint{$B_\Pi=\sum_it_iz_{\Pi(i)}/S_{xx}$，$z_j=y_j-\ybar$。随机排列下 $z_{\Pi(i)}$ 与 $z_{\Pi(j)}$ 的协方差与第 1 章不放回抽样的情形相同。}
+\end{exercise}

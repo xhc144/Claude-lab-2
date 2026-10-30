@@ -1,0 +1,303 @@
+% 第2章 估计量及其误差
+\chapter{估计量及其误差}
+\label{ch:estimation}
+
+\begin{chapguide}
+\textbf{\heiti 本章要解决的问题}\quad 同一个参数往往有许多看起来都合理的估计方法。怎样比较它们的好坏？
+本章引入评价估计量的三把尺子：\keyword{偏差}、\keyword{方差}与\keyword{均方误差}，以及大样本下的\keyword{相合性}。
+我们会看到：无偏并不总是最重要的，有偏的估计可能更准；而把几个估计合理地合并，可以比其中最好的一个还要好。\par\smallskip
+\textbf{\heiti 预备}\quad 第 1 章的抽样分布与标准误；第 0 章的马尔可夫不等式与依概率收敛。
+\end{chapguide}
+
+\section{估计量是随机变量}
+
+用正面比例估计 $p$、用样本均值估计 $\mu$，每次抽样都得到一个估计值，它可能偏高，也可能偏低。
+评价一个估计\emph{方法}，要看它在\emph{反复使用}时的表现：平均而言是否瞄准了目标？每次偏离目标多远？
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\foreach \name/\col/\row/\ttl in {tgt_lb_lv/0/0/{偏差小，方差小}, tgt_hb_lv/1/0/{偏差大，方差小}, tgt_lb_hv/0/1/{偏差小，方差大}, tgt_hb_hv/1/1/{偏差大，方差大}}{
+  \begin{scope}[shift={(\col*5.2,-\row*4.6)}]
+    \foreach \r/\c in {1.5/main!6, 1.1/main!12, 0.7/main!20, 0.3/main!35}{\fill[\c] (0,0) circle (\r);}
+    \draw[main!50] (0,0) circle (1.5);
+    \draw[main!60, thin] (-1.6,0) -- (1.6,0) (0,-1.6) -- (0,1.6);
+    \begin{axis}[at={(0,0)}, anchor=origin, xmin=-1.5, xmax=1.5, ymin=-1.5, ymax=1.5, axis lines=none, x=1cm, y=1cm]
+      \addplot[only marks, mark=*, mark size=1.5pt, accent, fill opacity=0.85] table[x=x,y=y] {figdata/\name.dat};
+    \end{axis}
+    \node[font=\small\heiti] at (0,-1.95) {\ttl};
+  \end{scope}
+}
+\end{tikzpicture}
+\caption{偏差与方差：靶心是要估计的真值，每个点是一次抽样得到的估计值。偏差是点群中心离靶心的距离，方差是点群自身的分散程度。}
+\label{fig:target}
+\end{figure}
+
+\section{偏差、方差与均方误差}
+
+\begin{definition}{偏差、无偏与均方误差}{mse}
+设统计量 $T$ 用来估计 $g(\theta)$，且 $\E_\theta T^2<\infty$。称
+\[
+\bias_\theta(T)=\E_\theta T-g(\theta),\qquad \MSE_\theta(T)=\E_\theta\big(T-g(\theta)\big)^2
+\]
+为 $T$ 在 $\theta$ 处的\keyword{偏差}与\keyword{均方误差}。若对\emph{每个} $\theta\in\Theta$ 都有 $\bias_\theta(T)=0$，称 $T$ 为 $g(\theta)$ 的\keyword{无偏估计量}。
+\end{definition}
+
+\begin{theorem}{均方误差的分解}{msedecomp}
+$\MSE_\theta(T)=\Var_\theta(T)+\bias_\theta(T)^2$。
+\end{theorem}
+\begin{proof}
+$T-g(\theta)=\big(T-\E_\theta T\big)+\bias_\theta(T)$。平方后取期望，交叉项中 $\E_\theta(T-\E_\theta T)=0$，故消失。
+\end{proof}
+
+均方误差同时惩罚“瞄不准”和“手不稳”。对无偏估计量，均方误差就是方差。
+由第 1 章，$\Xbar$ 是 $\mu$ 的无偏估计，$\MSE=\sigma^2/n$；$S^2$ 是 $\sigma^2$ 的无偏估计。
+
+\begin{warning}
+无偏性要求“对\emph{每个}参数值，期望都等于目标”。一个在某些参数下恰好期望正确的估计不叫无偏。
+例如常数 $1/2$ 只在 $p=1/2$ 时期望等于 $p$，它不是 $p$ 的无偏估计。
+\end{warning}
+
+\section{案例：估计均匀分布的上界}
+
+设 $X_1,\dots,X_n$ 独立服从 $\Unif(0,\theta)$，$\theta>0$ 未知。例如公交车每 $\theta$ 分钟一班，你在随机时刻到站后等待的时间就服从 $\Unif(0,\theta)$。
+怎样估计 $\theta$？至少有两种自然的想法。
+
+\paragraph{想法一：利用均值}
+$\E X_1=\theta/2$，所以 $T_1=2\Xbar$ 是无偏估计，$\Var T_1=4\cdot\frac{\theta^2/12}{n}=\frac{\theta^2}{3n}$。
+
+\paragraph{想法二：利用最大值}
+$\theta$ 是数据能达到的上界，样本最大值 $M=\max_iX_i$ 应该很接近它。$M\le m$ 当且仅当每个 $X_i\le m$，所以
+\[
+\P(M\le m)=(m/\theta)^n,\qquad\text{密度}\ \ f_M(m)=\frac{nm^{n-1}}{\theta^n}\quad(0<m<\theta).
+\]
+积分得 $\E M=\frac{n}{n+1}\theta$，$\E M^2=\frac{n}{n+2}\theta^2$，$\Var M=\frac{n\theta^2}{(n+1)^2(n+2)}$。
+$M$ 总是偏小（它不可能超过 $\theta$），偏差为 $-\theta/(n+1)$。修正后的 $T_3=\frac{n+1}{n}M$ 是无偏的。
+
+\begin{table}[H]
+\centering\small
+\caption{$\Unif(0,\theta)$ 上界的几个估计量（$\MSE$ 以 $\theta^2$ 为单位）}\label{tab:unifest}
+\begin{tabular}{l c c c}
+\toprule
+估计量 & 偏差 & 均方误差 & $n=10$ 时 \\
+\midrule
+$T_1=2\Xbar$ & $0$ & $\dfrac{1}{3n}$ & $0.0333$ \\[2mm]
+$T_2=M$ & $-\dfrac{\theta}{n+1}$ & $\dfrac{2}{(n+1)(n+2)}$ & $0.0152$ \\[2mm]
+$T_3=\dfrac{n+1}{n}M$ & $0$ & $\dfrac{1}{n(n+2)}$ & $0.0083$ \\[2mm]
+$T_4=\dfrac{n+2}{n+1}M$ & $-\dfrac{\theta}{(n+1)^2}$ & $\dfrac{1}{(n+1)^2}$ & $0.0083$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+（$T_4$ 是所有 $cM$ 中均方误差最小的：$\E(cM-\theta)^2$ 是 $c$ 的二次函数，在 $c=\theta\E M/\E M^2=\frac{n+2}{n+1}$ 处取最小值。
+$n=10$ 时它比 $T_3$ 只小一点点：$1/121$ 对 $1/120$。）
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=2 by 1, horizontal sep=1.6cm}, notesaxis, height=5.2cm]
+\nextgroupplot[width=0.47\linewidth, xmin=0.4, xmax=1.6, ymin=0, ymax=11.5, xlabel={估计值（$\theta=1$）}, ylabel={密度},
+  title={$n=10$ 时的抽样分布}, legend pos=north east]
+  \addplot[main, very thick] table[x=t,y=f2xbar] {figdata/unif_est_density.dat};
+  \addplot[accent, very thick] table[x=t,y=fmax] {figdata/unif_est_density.dat};
+  \draw[midgray, dashed] (axis cs:1,0) -- (axis cs:1,11.5);
+  \legend{$T_1=2\Xbar$, $T_3=\frac{n+1}{n}M$}
+\nextgroupplot[width=0.47\linewidth, xmode=log, ymode=log, xmin=2, xmax=1000, ymin=1e-6, ymax=0.3,
+  xlabel={样本量 $n$}, ylabel={$\MSE/\theta^2$}, title={均方误差随 $n$ 下降的速度}, legend pos=south west]
+  \addplot[main, very thick, domain=2:1000, samples=60] {1/(3*x)};
+  \addplot[accent, very thick, domain=2:1000, samples=60] {1/(x*(x+2))};
+  \legend{$1/(3n)$, $1/(n(n+2))$}
+\end{groupplot}
+\end{tikzpicture}
+\caption{左：$T_1$ 的分布是钟形的，较宽；$T_3$ 的分布高度集中，但不对称（它最多只能比 $\theta$ 大 $\theta/n$）。
+右（对数坐标）：$T_1$ 的均方误差按 $1/n$ 下降，$T_3$ 按 $1/n^2$ 下降，样本量越大差距越悬殊。}
+\label{fig:unifest}
+\end{figure}
+
+\begin{intuition}[为什么最大值好得多]
+$\theta$ 是数据的\emph{边界}。$n$ 个点均匀撒在 $(0,\theta)$ 上，最靠右的点与边界的距离约为 $\theta/n$，
+所以 $M$ 的误差是 $1/n$ 量级；而 $\Xbar$ 的误差是 $1/\sqrt n$ 量级。此外，$2\Xbar$ 甚至可能给出与数据矛盾的值：
+数据 $(1,1,1,5)$ 给出 $2\Xbar=4$，但已经观察到了 $5$，$\theta$ 不可能是 $4$。这说明“用到了数据的哪些部分”至关重要。
+\end{intuition}
+
+\section{无偏性的局限}
+
+无偏性是个好性质，但不应被奉为最高原则。下面几个现象都值得记住。
+
+\subsection{无偏性在非线性变换下不保持}
+
+$\Xbar$ 无偏估计 $p$，但 $\Xbar^2$ 不是 $p^2$ 的无偏估计：
+$\E\Xbar^2=\Var\Xbar+(\E\Xbar)^2=p^2+\frac{p(1-p)}{n}$。
+要得到 $p^2$ 的无偏估计，可以利用“两次都是正面”：$\E(X_iX_j)=p^2$（$i\ne j$），对所有 $i\ne j$ 平均，得
+\[
+\frac{1}{n(n-1)}\sum_{i\ne j}X_iX_j=\frac{K(K-1)}{n(n-1)},\qquad K=\sum X_i .
+\]
+同样的想法也适用于泊松分布：若 $X\sim\Pois(\lambda)$，则 $\E X(X-1)=\lambda^2$（直接对级数求和可得），所以 $X(X-1)$ 无偏估计 $\lambda^2$，而 $X^2$ 多出了 $\lambda$。
+
+\subsection{无偏估计可能不存在}
+
+\begin{example}{\texorpdfstring{$1/p$}{1/p} 没有无偏估计}{nounbiased}
+设 $X_1,\dots,X_n$ 独立服从 $\Bern(p)$，$0<p\le1$。任何统计量 $T$ 只在有限多个结果序列上取值，所以
+\[
+\E_pT=\sum_{x\in\{0,1\}^n}t(x)\,p^{\sum x_i}(1-p)^{n-\sum x_i}
+\]
+是 $p$ 的次数不超过 $n$ 的多项式，在 $p\to0$ 时有界。而 $1/p\to\infty$，所以\emph{不存在}对所有 $p$ 都无偏的估计。
+（若允许样本量随机，例如一直抛到出现正面为止，情况就不同了；见习题 \ref{ex2:randomN}。）
+\end{example}
+
+\subsection{无偏估计可能荒谬}
+
+\begin{example}{一个荒谬的无偏估计}{absurd}
+只观测一次 $X\sim\Pois(\lambda)$，要估计 $g(\lambda)=e^{-2\lambda}$（它是两个相继时段都没有事件发生的概率）。若 $T(X)$ 无偏，则
+\[
+\sum_{k\ge0}T(k)\frac{e^{-\lambda}\lambda^k}{k!}=e^{-2\lambda}\iff\sum_{k\ge0}T(k)\frac{\lambda^k}{k!}=e^{-\lambda}=\sum_{k\ge0}\frac{(-1)^k\lambda^k}{k!}
+\]
+对一切 $\lambda\ge0$ 成立。比较幂级数系数，唯一的无偏估计是 $T(X)=(-1)^X$：观测到奇数时估计一个概率为 $-1$！
+有偏的 $e^{-2X}$ 至少总落在 $[0,1]$ 内。
+\end{example}
+
+\begin{intuition}
+无偏性保证的是“平均而言没有系统误差”，它不保证每次的估计合理，也不保证误差小。实践中更关心的是均方误差（或其他误差度量）。
+但无偏性在合并多个估计、构造区间时仍然很方便，所以它依然是常用的出发点。
+\end{intuition}
+
+\section{合并几个估计：逆方差加权}
+
+两个实验室独立测量同一个物理常数：甲得 $10.2$（标准误 $0.3$），乙得 $9.8$（标准误 $0.6$）。应该怎样合并？
+
+\begin{theorem}{最小方差的线性无偏组合}{ivw}
+设 $Y_1,\dots,Y_m$ 两两不相关，$\E Y_i=\theta$，$\Var Y_i=v_i>0$ 已知。在所有系数固定且满足 $\sum a_i=1$ 的组合 $T=\sum a_iY_i$ 中
+（$\sum a_i=1$ 正是对一切 $\theta$ 无偏的条件），方差最小的是
+\[
+a_i=\frac{1/v_i}{\sum_j1/v_j},\qquad \Var T=\frac{1}{\sum_j1/v_j}.
+\]
+\end{theorem}
+\begin{proof}
+$\Var T=\sum a_i^2v_i$。由柯西–施瓦茨不等式，
+$1=\big(\sum a_i\big)^2=\Big(\sum a_i\sqrt{v_i}\cdot\frac{1}{\sqrt{v_i}}\Big)^2\le\sum a_i^2v_i\cdot\sum\frac1{v_i}$，
+所以 $\Var T\ge1/\sum(1/v_j)$，等号当且仅当 $a_i\sqrt{v_i}\propto1/\sqrt{v_i}$，即 $a_i\propto1/v_i$。
+\end{proof}
+
+\begin{example}{两个实验室}{twolabs}
+权重正比于 $1/0.09$ 与 $1/0.36$，即 $0.8$ 与 $0.2$。合并估计为 $0.8\times10.2+0.2\times9.8=10.12$，
+标准误为 $1/\sqrt{1/0.09+1/0.36}\approx0.268$，比甲单独的 $0.3$ 还小。
+
+如果简单平均，标准误是 $\frac12\sqrt{0.09+0.36}\approx0.335$——\emph{比只用甲的结果更差}。
+精度差的测量并非没用，但要给它较小的权重。
+\end{example}
+
+\section{相合性：样本越大，越接近真值}
+
+偏差和方差都是固定 $n$ 时的性质。另一个基本要求是：数据越来越多时，估计应当越来越准。
+
+\begin{definition}{相合估计量}{consistent}
+设 $T_n$ 是由容量为 $n$ 的样本得到的估计量。若对每个 $\theta\in\Theta$，$T_n\toP g(\theta)$，称 $T_n$ 是 $g(\theta)$ 的\keyword{相合估计量}。
+\end{definition}
+
+\begin{proposition}{均方误差趋于零蕴含相合}{mseconsistent}
+若对每个 $\theta$ 有 $\MSE_\theta(T_n)\to0$，则 $T_n$ 相合。
+\end{proposition}
+\begin{proof}
+对非负变量 $(T_n-g(\theta))^2$ 用马尔可夫不等式：$\P_\theta(|T_n-g(\theta)|>\varepsilon)\le\MSE_\theta(T_n)/\varepsilon^2\to0$。
+\end{proof}
+
+由表 \ref{tab:unifest}，四个均匀分布估计量都相合。相合与无偏是两回事：
+\begin{itemize}
+\item $V_n=\frac1n\sum(X_i-\Xbar)^2$ 有偏，但偏差 $-\sigma^2/n\to0$，它是相合的（例 \ref{ex:s2conv}）；
+\item 只用第一个观测 $X_1$ 估计 $\mu$ 是无偏的，但它的分布不随 $n$ 改变，所以不相合。
+\end{itemize}
+
+\begin{intuition}
+相合性是对估计量的\emph{最低}要求：如果连无穷多数据都估不准，这个方法就有根本缺陷。
+在相合的估计量之间，我们再比较它们的误差有多大、以什么速度下降——这正是图 \ref{fig:unifest} 右图所示。
+\end{intuition}
+
+\section{\starmark\ 深入讨论}
+
+\begin{deeper}[去掉人为的随机性只会更好]
+设 $X_1,X_2$ 独立同分布，均值 $\mu$、方差 $\sigma^2$。抽样后再抛一枚公平硬币：正面用 $X_1$、反面用 $X_2$ 估计 $\mu$。
+这个估计无偏，均方误差为 $\sigma^2$；而对硬币的两种结果取平均，得到 $(X_1+X_2)/2$，均方误差减半。
+
+一般地，设估计量 $t_J(D)$ 依赖数据 $D$ 和一个与数据独立的随机选择 $J$（$\P(J=j)=w_j$）。把 $J$ 平均掉，得
+$\bar t(D)=\sum_jw_jt_j(D)$。由于平方函数是凸的，对每份数据都有
+\[
+\big(\bar t(D)-g\big)^2=\Big(\sum_jw_j\big(t_j(D)-g\big)\Big)^2\le\sum_jw_j\big(t_j(D)-g\big)^2,
+\]
+两边取期望得 $\MSE(\bar t)\le\MSE(t_J)$。所以\emph{与数据无关的随机性只会增加误差}。
+
+这个想法的推广是著名的 \textbf{Rao–Blackwell 定理}：若统计量 $U$ 包含了数据中关于参数的全部信息（称为\keyword{充分统计量}），
+那么用 $\E(T\mid U)$ 代替任何估计量 $T$ 都不会增大均方误差。例如独立抛币时，给定正面总数 $K=k$，
+$k$ 个正面落在哪些位置是等可能的、与 $p$ 无关，所以 $K$ 是充分统计量——关于 $p$ 的信息全在“几次正面”里，不在“哪几次”。
+\end{deeper}
+
+\begin{summary}
+\begin{itemize}
+\item 估计量是随机变量。用偏差衡量系统误差，方差衡量随机波动，$\MSE=\Var+\bias^2$ 综合两者。
+\item 不同估计方法可能差别巨大：$\Unif(0,\theta)$ 中，基于最大值的估计误差是 $1/n$ 量级，基于均值的是 $1/\sqrt n$ 量级。
+\item 无偏性在非线性变换下不保持；无偏估计可能不存在，也可能荒谬；有偏估计的均方误差可能更小。
+\item 合并独立的无偏估计时，按方差的倒数加权最优，合并后的方差为 $1/\sum(1/v_i)$。
+\item 相合性：$T_n\toP g(\theta)$；$\MSE\to0$ 是它的充分条件。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+$X_1,\dots,X_n$ 独立同分布，均值 $\mu$、方差 $\sigma^2$，$n\ge2$。比较 $T=(X_1+X_2)/2$ 与 $\Xbar$ 的偏差、方差与均方误差。$T$ 相合吗？
+\end{exercise}
+
+\begin{exercise}
+三台仪器独立测量同一长度，读数为 $5.03$、$5.11$、$4.98$，已知标准误分别为 $0.02$、$0.05$、$0.04$。求逆方差加权的合并估计及其标准误。
+\end{exercise}
+
+\begin{exercise}\label{ex2:shrink}
+用 $c\Xbar$（$0<c<1$ 为常数）估计 $\mu$。求它的均方误差。$\mu$ 满足什么条件时，它比 $\Xbar$ 更好？这个条件能事先检验吗？
+\end{exercise}
+
+\begin{exercise}
+对 $\Unif(0,\theta)$ 的一组数据 $0.8,\ 2.3,\ 1.1,\ 3.6,\ 0.4$，分别计算表 \ref{tab:unifest} 中四个估计量的值。
+\end{exercise}
+
+\levelB
+\begin{exercise}
+设样本来自正态总体，已知（第 \ref{ch:inference} 章将证明）$\Var S^2=\frac{2\sigma^4}{n-1}$。分别求 $S^2$ 与 $V_n=\frac{n-1}{n}S^2$ 的均方误差，
+证明有偏的 $V_n$ 的均方误差总是更小。
+\end{exercise}
+
+\begin{exercise}[原讲义习题 3.3]
+容量为 $N$ 的总体中有 $M$ 个“成功”单位，$M$ 未知，记 $p=M/N$。不放回简单随机抽取 $n\ge2$ 个，样本中成功数为 $K$。
+\begin{enumerate}
+\item 只用 $K$ 构造 $p^2$ 的无偏估计量。
+\item 求 $(K/n)^2$ 估计 $p^2$ 的偏差，并指出何时偏差为 $0$。
+\end{enumerate}
+\hint{先求 $\E K(K-1)$。$K(K-1)$ 是样本中“有序的不同成功对”的个数。}
+\end{exercise}
+
+\begin{exercise}
+只观测一次 $X\sim\Pois(\lambda)$。证明 $e^{-2\lambda}$ 的无偏估计只有 $(-1)^X$，并计算 $e^{-2X}$ 的偏差。$\lambda$ 很小时哪个均方误差更小？
+\end{exercise}
+
+\begin{exercise}
+对 $\Unif(0,\theta)$，不用均方误差，直接证明 $M=\max X_i\toP\theta$。
+\end{exercise}
+
+\levelC
+\begin{exercise}[原讲义习题 3.7]
+$X_1,\dots,X_n$ 独立服从均值为 $\theta$ 的指数分布，$n\ge2$。比较 $\theta^2$ 的两个无偏估计
+\[
+A_n=\frac{1}{2n}\sum_iX_i^2,\qquad B_n=\frac{1}{n(n-1)}\sum_{i\ne j}X_iX_j
+\]
+的方差。哪一个更好？为什么答案与 $n$ 有关？
+\hint{$\E X^k=k!\,\theta^k$。$B_n$ 中共享一个下标的两项相关。}
+\end{exercise}
+
+\begin{exercise}[原讲义例 3.4]\label{ex2:randomN}
+硬币正面概率为未知的 $p\in[0,1]$。掷币前先独立地随机选一个非负整数 $N$（其分布不依赖 $p$），再掷 $N$ 次；全是反面（含 $N=0$）时记 $T=1$，否则 $T=0$。
+\begin{enumerate}
+\item 求使 $T$ 无偏估计 $1/(1+p)$ 的全部 $N$ 的分布，并求 $\E N$。
+\item 求 $T$ 的最大均方误差，并与“不做观察，恒取 $3/4$”的最大均方误差比较。
+\end{enumerate}
+\hint{$\E_pT=\sum_k\P(N=k)(1-p)^k$；令 $t=1-p$，把 $1/(2-t)$ 展开成幂级数。}
+\end{exercise}

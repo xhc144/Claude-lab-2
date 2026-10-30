@@ -5,3 +5,4 @@ logs/
 marks/
 build/
 *.mp4
+timing.json

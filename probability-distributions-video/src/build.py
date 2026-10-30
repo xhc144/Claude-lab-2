@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""把各场景的画面、配音、背景音乐和字幕合成成片。
+"""把每一集的场景画面、配音、背景音乐和字幕合成成片，每集一个视频。
 
-    python build.py                      # 用 media/<场景>/videos/*/1080p60/ 下的场景，输出 ../probability-distributions-1080p.mp4
-    python build.py 480p15 预览.mp4      # 用低清渲染做预览
+    python build.py                 # 全部 8 集，用 media/<场景>/videos/*/1080p60/，输出 ../EP01-从一枚硬币开始.mp4 等
+    python build.py 3 5             # 只合成第 3、5 集
+    QUALITY=480p15 python build.py  # 用低清渲染做预览
 
 配音按 marks/*.json 里记下的实际起点放置（场景渲染时写出），所以画面和声音不会错位。
 """
@@ -16,10 +17,19 @@ import wave
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCENES = [("scenes_a", "S00"), ("scenes_a", "S01"), ("scenes_b", "S02"), ("scenes_b", "S03"), ("scenes_c", "S04"),
-          ("scenes_c", "S05"), ("scenes_d", "S06"), ("scenes_d", "S07"), ("scenes_e", "S08"), ("scenes_e", "S09")]
 SR = 48000
 BUILD = os.path.join(HERE, "build")
+
+
+def episode_scenes(ep):
+    """第 ep 集的 (模块名, 场景名) 列表：场景写在 ep<N>.py 里。"""
+    from outline import EPISODES
+    return [(f"ep{ep}", sc["id"]) for sc in EPISODES[ep - 1]["scenes"]]
+
+
+def episode_path(ep):
+    from outline import EPISODES
+    return os.path.join(os.path.dirname(HERE), f"EP{ep:02d}-{EPISODES[ep - 1]['title']}.mp4")
 
 
 def probe_duration(path):
@@ -146,17 +156,16 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
 
 
-def main():
-    quality = sys.argv[1] if len(sys.argv) > 1 else "1080p60"
-    out_name = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(HERE),
-                                                                   "probability-distributions-1080p.mp4")
-    root = sys.argv[3] if len(sys.argv) > 3 else os.path.join(HERE, "media")
-    os.makedirs(BUILD, exist_ok=True)
+def build_episode(ep, quality, root):
+    SCENES = episode_scenes(ep)
+    out_name = episode_path(ep)
+    build = os.path.join(BUILD, f"ep{ep}")
+    os.makedirs(build, exist_ok=True)
     with open(os.path.join(HERE, "narration.json"), encoding="utf-8") as f:
         nar = json.load(f)
 
     # 1. 拼接画面
-    lst = os.path.join(BUILD, "concat.txt")
+    lst = os.path.join(build, "concat.txt")
     offsets, t = {}, 0.0
     with open(lst, "w") as f:
         for mod, sid in SCENES:
@@ -165,7 +174,7 @@ def main():
             offsets[sid] = t
             t += probe_duration(p)
     total = t
-    video = os.path.join(BUILD, "video.mp4")
+    video = os.path.join(build, "video.mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", video],
                    check=True)
 
@@ -197,7 +206,7 @@ def main():
     peak = np.max(np.abs(mix))
     if peak > 0.97:
         mix *= 0.97 / peak
-    audio = os.path.join(BUILD, "audio.wav")
+    audio = os.path.join(build, "audio.wav")
     with wave.open(audio, "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)
@@ -206,7 +215,7 @@ def main():
     srt_path = os.path.splitext(out_name)[0] + ".srt"
     with open(srt_path, "w", encoding="utf-8") as f:
         f.write("\n".join(srt))
-    ass_path = os.path.join(BUILD, "subs.ass")
+    ass_path = os.path.join(build, "subs.ass")
     with open(ass_path, "w", encoding="utf-8") as f:
         f.write("".join(ass))
 
@@ -219,6 +228,14 @@ def main():
                     "-shortest", out_name], check=True)
     mb = os.path.getsize(out_name) / 1e6
     print(f"成片 {out_name}：{total / 60:.1f} 分钟，{mb:.1f} MB；字幕 {srt_path}")
+
+
+def main():
+    quality = os.environ.get("QUALITY", "1080p60")
+    root = os.environ.get("MEDIA", os.path.join(HERE, "media"))
+    eps = [int(a) for a in sys.argv[1:]] or list(range(1, 9))
+    for ep in eps:
+        build_episode(ep, quality, root)
 
 
 if __name__ == "__main__":

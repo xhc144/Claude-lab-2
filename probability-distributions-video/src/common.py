@@ -68,57 +68,60 @@ def bullet(*parts, size=26, color=INK, mark=GOLD):
 
 
 # ---------- 版式组件 ----------
-CHAPTERS = {
-    "01": ("分布函数、质量函数与密度", "先分清“分布函数”本身有哪些性质", INK),
-    "02": ("离散分布", "计数、抽样与等待", TEAL),
-    "03": ("连续分布", "均匀、等待时间、钟形与比例", BRICK),
-    "04": ("抽样分布", "由正态样本构造出的三个分布", INDIGO),
-    "05": ("多元正态分布", "协方差矩阵决定一切", INDIGO),
-    "06": ("极限定理与分布之间的关系", "把前面的条目连成一张网", GOLD),
-    "07": ("速查表", "数字特征一页看完", INK),
-}
+EPISODE_COLORS = {1: INK, 2: TEAL, 3: TEAL, 4: TEAL, 5: BRICK, 6: BRICK, 7: INDIGO, 8: INDIGO}
 
 
-def running_header(num):
-    """页眉：左边书名，右边章名（和讲义的页眉一样）。"""
-    title, _, color = CHAPTERS[num]
+def _ep(ep):
+    from outline import EPISODES
+    e = EPISODES[ep - 1]
+    return e["title"], e["sub"], EPISODE_COLORS[ep]
+
+
+def running_header(ep):
+    """页眉：左边系列名，右边“第 N 集 · 集名”。"""
+    title, _, color = _ep(ep)
     left = T("概率分布图鉴", 18, MUTED)
-    right = VGroup(T(num, 18, color, bold=True), T(title, 18, MUTED)).arrange(RIGHT, buff=0.14)
+    right = VGroup(T(f"第 {ep} 集", 18, color, bold=True), T(title, 18, MUTED)).arrange(RIGHT, buff=0.14)
     left.to_corner(UL, buff=0.32)
     right.to_corner(UR, buff=0.32)
     return VGroup(left, right)
 
 
-def chapter_card(num):
-    title, sub, color = CHAPTERS[num]
-    big = Text(num, font=FONT, weight=BOLD, font_size=150, color=color)
-    t = T(title, 54, INK, bold=True)
-    s = T(sub, 28, MUTED)
-    words = VGroup(t, s).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-    card = VGroup(big, words).arrange(RIGHT, buff=0.45, aligned_edge=DOWN)
-    words.shift(UP * 0.12)
-    bar = Line(ORIGIN, RIGHT * big.width, stroke_width=7, color=color)
-    bar.next_to(big, DOWN, buff=0.18, aligned_edge=LEFT)
-    rule = Line(bar.get_right(), bar.get_right() + RIGHT * (card.width - big.width + 0.6),
-                stroke_width=1.5, color=FAINT)
-    g = VGroup(big, words, bar, rule)
-    g.move_to(ORIGIN + UP * 0.3)
-    return g
+def episode_card(ep):
+    title, sub, color = _ep(ep)
+    num = Text(f"{ep:02d}", font=FONT, weight=BOLD, font_size=150, color=color)
+    kicker = T(f"第 {ep} 集", 26, color, bold=True)
+    t = T(title, 60, INK, bold=True)
+    s_ = T(sub, 30, MUTED)
+    words = VGroup(kicker, t, s_).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+    card = VGroup(num, words).arrange(RIGHT, buff=0.5, aligned_edge=DOWN)
+    bar = Line(ORIGIN, RIGHT * num.width, stroke_width=7, color=color).next_to(num, DOWN, buff=0.18, aligned_edge=LEFT)
+    rule = Line(bar.get_right(), bar.get_right() + RIGHT * (card.width - num.width + 0.6), stroke_width=1.5,
+                color=FAINT)
+    return VGroup(num, words, bar, rule).move_to(UP * 0.3)
 
 
-def play_chapter(scene, num, hold=None):
-    """章节卡：数字上浮、标题写出、下划线生长；停到这段配音快念完，再收成页眉。"""
-    card = chapter_card(num)
-    big, words, bar, rule = card
-    scene.play(FadeIn(big, shift=UP * 0.4), run_time=0.7)
-    scene.play(LaggedStart(FadeIn(words[0], shift=RIGHT * 0.3), FadeIn(words[1], shift=RIGHT * 0.3), lag_ratio=0.35),
-               GrowFromEdge(bar, LEFT), Create(rule), run_time=1.1)
+def play_episode_card(scene, ep, hold=None):
+    """集标题卡：数字上浮、标题依次滑入、下划线生长；停到这段配音快念完，再收成页眉。"""
+    card = episode_card(ep)
+    num, words, bar, rule = card
+    scene.play(FadeIn(num, shift=UP * 0.5, scale=0.9), run_time=0.8)
+    scene.play(LaggedStart(*[FadeIn(w, shift=RIGHT * 0.4) for w in words], lag_ratio=0.3),
+               GrowFromEdge(bar, LEFT), Create(rule), run_time=1.3)
     if hold is None:
         hold = max(0.5, scene._end - scene.now - 0.8)
     scene.wait(hold)
-    hdr = running_header(num)
+    hdr = running_header(ep)
     scene.play(FadeOut(card, shift=UP * 0.3), FadeIn(hdr), run_time=0.8)
     return hdr
+
+
+def scene_title(text, color=INK):
+    """场景小标题：左上角页眉下方一行加粗字 + 短色条。"""
+    t = T(text, 30, INK, bold=True)
+    bar = Rectangle(width=0.09, height=t.height + 0.1, fill_color=color, fill_opacity=1, stroke_width=0)
+    g = VGroup(bar, t).arrange(RIGHT, buff=0.2)
+    return g.to_corner(UL, buff=0.32).shift(DOWN * 0.55)
 
 
 def entry_header(cn, en, notation, color, y=2.95, width=12.8):
@@ -355,19 +358,19 @@ def f_pdf(x, d1, d2):
 # ---------- 配音对齐 ----------
 TIMING_PATH = os.path.join(HERE, "timing.json")
 MARKS_DIR = os.path.join(HERE, "marks")
-LEAD, GAP, TAIL = 0.5, 0.45, 0.9
+LEAD, GAP, TAIL = 0.6, 0.7, 1.0
 
 
 def _load_timing():
     if os.path.exists(TIMING_PATH):
         with open(TIMING_PATH, encoding="utf-8") as f:
             return json.load(f)["durations"]
-    # 还没合成配音时按字数估计（每秒 4.6 个字），方便先调画面
+    # 还没合成配音时按字数估计（每秒 4.9 个字），方便先调画面
     from outline import SCENES
-    return {sc["id"]: [n / 4.6 for _, _, n in sc["segs"]] for sc in SCENES}
+    return {sc["id"]: [n / 4.9 for _, _, n in sc["segs"]] for sc in SCENES}
 
 
-class VScene(Scene):
+class VMixin:
     """每段配音调用一次 seg(i)：等上一段念完（加段间停顿）再开始，记下这一段的起点。
 
     画面比配音长也没关系：build.py 按这里记下的实际起点放配音，所以不会错位。
@@ -408,3 +411,15 @@ class VScene(Scene):
         os.makedirs(MARKS_DIR, exist_ok=True)
         with open(os.path.join(MARKS_DIR, self.SID + ".json"), "w") as f:
             json.dump({"marks": self.marks, "durations": self.durs, "end": self.now}, f, indent=1)
+
+
+class VScene(VMixin, Scene):
+    pass
+
+
+class VMovingScene(VMixin, MovingCameraScene):
+    pass
+
+
+class V3Scene(VMixin, ThreeDScene):
+    pass

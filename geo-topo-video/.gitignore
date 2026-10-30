@@ -1,0 +1,8 @@
+# 渲染与合成的中间产物（可由 tts.py / build.py 重新生成）
+media/
+build/
+logs/
+audio/sent/
+audio/seg/
+output/preview.mp4
+__pycache__/

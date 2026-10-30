@@ -1,0 +1,451 @@
+% 第1章 数据与抽样
+\chapter{数据与抽样}
+\label{ch:sampling}
+
+\begin{chapguide}
+\textbf{\heiti 本章要解决的问题}\quad 手里的一组数据怎样概括？如果再抽一次样，这些概括会变多少？
+本章引入统计学最核心的概念——\keyword{抽样分布}：把一个由样本算出的量看成随机变量，研究它的分布。
+样本均值的\keyword{标准误} $\sigma/\sqrt n$、样本方差的分母 $n-1$、不放回抽样的修正因子、分层抽样的好处，都由它导出。\par\smallskip
+\textbf{\heiti 预备}\quad 第 0 章的期望、方差、协方差（定理 \ref{thm:sumvar}）。\par\smallskip
+\textbf{\heiti 贯穿全书的数据}\quad 本章首次出现 Student 的睡眠药物数据，第 \ref{ch:inference}、\ref{ch:twosample} 章还会用到它。
+\end{chapguide}
+
+\section{总体、样本、参数与统计量}
+
+一枚硬币正面朝上的概率为 $p$，我们不知道 $p$ 是多少。独立地抛 $n$ 次，第 $i$ 次正面记 $X_i=1$、反面记 $X_i=0$。
+\emph{给定 $p$}，每一种结果序列的概率都能算出来——这是概率论的问题。统计学的问题方向相反：
+\emph{看到了结果，$p$ 大概是多少？有多大把握？}
+
+\begin{definition}{参数与统计模型}{model}
+描述总体分布的未知常数称为\keyword{参数}，记为 $\theta$（可以是一个数，也可以是一组数）；
+它的全部可能取值组成\keyword{参数空间} $\Theta$。$\theta$ 遍历 $\Theta$ 时得到的一族分布 $\{P_\theta:\theta\in\Theta\}$ 称为\keyword{统计模型}。
+\end{definition}
+
+抛币问题中参数是 $p$，$\Theta=[0,1]$；正态模型 $\N(\mu,\sigma^2)$ 中参数是 $\theta=(\mu,\sigma^2)$，$\Theta=\R\times(0,\infty)$。
+在本讲义中，\emph{参数是固定的未知常数，随机的是数据}。
+
+\begin{definition}{随机样本与统计量}{sample}
+若 $X_1,\dots,X_n$ 相互独立且服从同一总体分布，称它们为容量（样本量）为 $n$ 的\keyword{随机样本}。
+一次抽样实际得到的数 $x_1,\dots,x_n$ 称为\keyword{样本观测值}。
+只用样本计算、\emph{不含任何未知参数}的量 $T=t(X_1,\dots,X_n)$ 称为\keyword{统计量}。用统计量估计某个未知量时，称它为\keyword{估计量}，
+代入观测值得到的数称为\keyword{估计值}。
+\end{definition}
+
+样本均值 $\Xbar$、样本最大值 $\max_i X_i$ 都是统计量；若 $\mu$ 未知，$\Xbar-\mu$ 就不是统计量，因为算它还需要知道 $\mu$。
+同一个估计量（例如“正面比例”）在不同次抽样中给出不同的估计值，如 $1/2$ 或 $3/4$。
+
+\begin{intuition}
+大写字母是“还没抽之前”的随机变量，小写字母是“抽完之后”的具体数。统计学的大部分推理都在大写字母的层面进行：
+我们关心的不是这一次估计值是多少，而是\emph{这个估计方法}在反复使用时表现如何。
+\end{intuition}
+
+\section{描述一组数据}
+
+先把手中的一组实数 $x_1,\dots,x_n$ 当作确定的数来概括。下面这份数据将贯穿全书。
+
+\begin{casestudy}{Student 的睡眠药物数据}
+1908 年，W.\,S.\,Gosset 以笔名 “Student” 发表了 $t$ 分布的论文，其中使用了 Cushny 与 Peebles（1905）的一项试验：
+10 名病人在不同的夜晚分别服用两种催眠药，记录服药后比不服药的夜晚\emph{多睡}的小时数。
+\begin{center}\small
+\begin{tabular}{l*{10}{c}}
+\toprule
+病人 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
+\midrule
+药物 A & 0.7 & $-1.6$ & $-0.2$ & $-1.2$ & $-0.1$ & 3.4 & 3.7 & 0.8 & 0.0 & 2.0\\
+药物 B & 1.9 & 0.8 & 1.1 & 0.1 & $-0.1$ & 4.4 & 5.5 & 1.6 & 4.6 & 3.4\\
+\midrule
+差值 $d=B-A$ & 1.2 & 2.4 & 1.3 & 1.3 & 0.0 & 1.0 & 1.8 & 0.8 & 4.6 & 1.4\\
+\bottomrule
+\end{tabular}
+\end{center}
+关心的问题是：药物 B 是否比药物 A 让人多睡？每位病人都试了两种药，所以自然的做法是看每人的差值 $d_i$。
+本节先描述这 10 个差值；第 \ref{ch:twosample} 章再做正式的推断。
+\end{casestudy}
+
+\subsection{位置与分散：均值和方差}
+
+\begin{definition}{数据的均值与方差}{datamean}
+$n$ 个实数的均值与（以 $n$ 为分母的）数据方差为
+\[
+\xbar=\frac1n\sum_{i=1}^n x_i,\qquad v=\frac1n\sum_{i=1}^n(x_i-\xbar)^2=\frac1n\sum_{i=1}^n x_i^2-\xbar^2 .
+\]
+\end{definition}
+
+第二个等号与 \eqref{eq:varformula} 同理。若 $y_i=a+bx_i$，则 $\ybar=a+b\xbar$，方差变为 $b^2v$。
+对睡眠数据的差值，$\bar d=1.58$ 小时。
+
+\subsection{次序、中位数与箱线图}
+
+把数据从小到大排列为 $x_{(1)}\le x_{(2)}\le\dots\le x_{(n)}$，$x_{(j)}$ 称为第 $j$ 个\keyword{次序统计量}。
+\keyword{中位数}在 $n$ 为奇数时取正中间的一个，为偶数时取中间两个的平均。
+
+\begin{definition}{四分位数与五数概括}{fivenum}
+记中位数为 $Q_2$。$n$ 为偶数时把排序后的数据分成前后两半；$n$ 为奇数时去掉正中一个再分成两半。
+前一半的中位数记为 $Q_1$（下四分位数），后一半的中位数记为 $Q_3$（上四分位数），$I=Q_3-Q_1$ 称为\keyword{四分位距}。
+$(x_{(1)},Q_1,Q_2,Q_3,x_{(n)})$ 称为\keyword{五数概括}。
+\end{definition}
+
+（四分位数有多种略有差别的约定，软件的默认值也不尽相同；样本较大时差别可以忽略。本讲义统一使用上面的约定。）
+
+\keyword{箱线图}把五数概括画出来：箱体从 $Q_1$ 到 $Q_3$，中间一条线标出 $Q_2$；两条“须”从箱体延伸到区间
+$[Q_1-1.5I,\ Q_3+1.5I]$ 内最远的观测值；落在这个区间之外的点单独画出，作为\emph{可能的}异常值提醒我们注意。
+
+\begin{example}{睡眠差值的箱线图}{sleepbox}
+差值排序后为 $0,\ 0.8,\ 1.0,\ 1.2,\ 1.3,\ 1.3,\ 1.4,\ 1.8,\ 2.4,\ 4.6$。前一半 $(0,0.8,1.0,1.2,1.3)$ 的中位数 $Q_1=1.0$，
+后一半 $(1.3,1.4,1.8,2.4,4.6)$ 的中位数 $Q_3=1.8$，$Q_2=1.3$，$I=0.8$。区间 $[Q_1-1.5I,Q_3+1.5I]=[-0.2,\,3.0]$，
+所以须延伸到 $0$ 和 $2.4$，而第 9 号病人的 $4.6$ 被单独标出（图 \ref{fig:sleepbox}）。
+\end{example}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, axis y line=none, axis x line=bottom, width=0.86\linewidth, height=3.4cm,
+  xmin=-0.5, xmax=5, ymin=0, ymax=2, xlabel={差值 $d$（小时）}, xtick={0,1,...,5}]
+  \draw[main, thick, fill=main!15] (axis cs:1.0,0.6) rectangle (axis cs:1.8,1.4);
+  \draw[main, very thick] (axis cs:1.3,0.6) -- (axis cs:1.3,1.4);
+  \draw[main, thick] (axis cs:0,1) -- (axis cs:1.0,1) (axis cs:1.8,1) -- (axis cs:2.4,1);
+  \draw[main, thick] (axis cs:0,0.8) -- (axis cs:0,1.2) (axis cs:2.4,0.8) -- (axis cs:2.4,1.2);
+  \fill[accent] (axis cs:4.6,1) circle (2.2pt);
+  \draw[accent, densely dotted] (axis cs:3.0,0.35) -- (axis cs:3.0,1.65);
+  \node[font=\scriptsize, accent, anchor=south] at (axis cs:3.0,1.65) {$Q_3+1.5I$};
+  \node[font=\scriptsize, accent, anchor=west] at (axis cs:4.65,1.25) {9 号病人};
+  \node[font=\scriptsize, main, anchor=south] at (axis cs:1.0,1.42) {$Q_1$};
+  \node[font=\scriptsize, main, anchor=south] at (axis cs:1.3,1.42) {$Q_2$};
+  \node[font=\scriptsize, main, anchor=south] at (axis cs:1.8,1.42) {$Q_3$};
+  \addplot[only marks, mark=|, mark size=3pt, midgray] coordinates {(0,0.2) (0.8,0.2) (1.0,0.2) (1.2,0.2) (1.3,0.2) (1.4,0.2) (1.8,0.2) (2.4,0.2) (4.6,0.2)};
+  \fill[ink] (axis cs:1.58,0.6) -- ++(-3pt,-5pt) -- ++(6pt,0) -- cycle;
+  \node[font=\scriptsize, anchor=north] at (axis cs:1.58,0.47) {均值};
+\end{axis}
+\end{tikzpicture}
+\caption{睡眠药物数据中 10 个差值的箱线图。下方的短竖线是原始数据（1.3 出现两次），三角形标出均值 1.58。}
+\label{fig:sleepbox}
+\end{figure}
+
+\begin{intuition}[均值与中位数：谁更稳健]
+如果第 9 号病人的记录误写成 $46$ 而不是 $4.6$，箱体和须完全不变，只有那个单独的点向右移；中位数仍是 $1.3$，
+均值却从 $1.58$ 变成 $5.72$。一个极端值可以把均值拉到任意远，却拉不动中位数。描述数据时两者都要看；
+两者差别很大时，要回头检查数据。
+\end{intuition}
+
+\section{抽样分布与标准误}
+
+现在回到随机的视角。同一个统计量，重复抽样会得到不同的值；它的分布就是统计推断的出发点。
+
+\begin{definition}{抽样分布}{sampdist}
+固定总体参数和抽样方式后，统计量的概率分布称为它的\keyword{抽样分布}。
+\end{definition}
+
+\begin{example}{四次抛币}{fourflips}
+公平硬币抛 4 次，正面比例 $\Xbar$ 的抽样分布是
+\begin{center}\small
+\begin{tabular}{c*{5}{c}}
+\toprule
+$\Xbar$ & $0$ & $1/4$ & $1/2$ & $3/4$ & $1$\\
+概率 & $1/16$ & $4/16$ & $6/16$ & $4/16$ & $1/16$\\
+\bottomrule
+\end{tabular}
+\end{center}
+这里每个概率描述的是“整组 4 次试验”的结果；一般地，$n\Xbar\sim\Bin(n,p)$。
+\end{example}
+
+图 \ref{fig:xbar} 画出了 $p=0.3$ 时不同 $n$ 下 $\Xbar$ 的抽样分布。两件事一目了然：分布的中心始终在 $0.3$；
+分布的宽度随 $n$ 增大而收窄——$n$ 从 $5$ 到 $20$ 再到 $80$，每次乘 $4$，宽度每次减半。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=3 by 1, horizontal sep=0.7cm}, notesaxis,
+  width=0.37\linewidth, height=4.3cm, xmin=0, xmax=1, ymin=0, ymax=0.4,
+  xtick={0,0.3,1}, xticklabels={0,0.3,1}, ytick={0,0.1,0.2,0.3,0.4}, yticklabel style={/pgf/number format/fixed},
+  xlabel={$\Xbar$}]
+\nextgroupplot[title={$n=5$}, ylabel={概率}]
+  \addplot[ycomb, main, line width=2.4pt] table[x=x,y=prob] {figdata/xbar_n5.dat};
+  \draw[accent, dashed] (axis cs:0.3,0) -- (axis cs:0.3,0.4);
+\nextgroupplot[title={$n=20$}, yticklabels={}]
+  \addplot[ycomb, main, line width=1.3pt] table[x=x,y=prob] {figdata/xbar_n20.dat};
+  \draw[accent, dashed] (axis cs:0.3,0) -- (axis cs:0.3,0.4);
+\nextgroupplot[title={$n=80$}, yticklabels={}]
+  \addplot[ycomb, main, line width=0.6pt] table[x=x,y=prob] {figdata/xbar_n80.dat};
+  \draw[accent, dashed] (axis cs:0.3,0) -- (axis cs:0.3,0.4);
+\end{groupplot}
+\end{tikzpicture}
+\caption{$p=0.3$ 时正面比例 $\Xbar$ 的精确抽样分布。样本量每增加到 4 倍，分布的宽度减半。}
+\label{fig:xbar}
+\end{figure}
+
+把这个观察写成定理，只需第 0 章的工具。
+
+\begin{theorem}{样本均值的均值与方差}{xbar}
+设 $X_1,\dots,X_n$ 两两不相关（例如独立），均值都是 $\mu$，方差都是 $\sigma^2<\infty$。则
+\[
+\E\Xbar=\mu,\qquad \Var\Xbar=\frac{\sigma^2}{n}.
+\]
+\end{theorem}
+\begin{proof}
+由线性性 $\E\Xbar=\frac1n\sum\E X_i=\mu$；由定理 \ref{thm:sumvar}，$\Var\Xbar=\frac1{n^2}\sum\Var X_i=\frac{\sigma^2}{n}$。
+\end{proof}
+
+\begin{definition}{标准误}{se}
+统计量 $T$ 的抽样分布的标准差 $\SE(T)=\sqrt{\Var T}$ 称为它的\keyword{标准误}。
+\end{definition}
+
+于是 $\SE(\Xbar)=\sigma/\sqrt n$。这是全书最重要的公式之一，它有两层含义：
+\begin{itemize}
+\item \textbf{平均确实有用}：单次测量的标准差是 $\sigma$，$n$ 次的平均只有 $\sigma/\sqrt n$。
+\item \textbf{但收益递减}：精度只按 $\sqrt n$ 提高。想把标准误减半，样本量要变为 $4$ 倍；想提高一位有效数字，要 $100$ 倍。
+\end{itemize}
+
+\begin{warning}
+不要把“总体标准差 $\sigma$”和“均值的标准误 $\sigma/\sqrt n$”混为一谈。样本量增大时，\emph{单个观测}的分散程度不变，
+变小的是\emph{平均值}的波动。标准误也不是“这一次估计值的误差”——那个误差是未知的，标准误描述的是误差的典型大小。
+\end{warning}
+
+\section{样本方差：为什么除以 \texorpdfstring{$n-1$}{n-1}}
+
+$\sigma$ 通常未知，需要从数据估计。自然的想法是用数据方差 $V_n=\frac1n\sum(X_i-\Xbar)^2$，但它系统性地偏小。
+
+\begin{definition}{样本方差}{s2}
+$n\ge2$ 时，称 $S^2=\dfrac1{n-1}\displaystyle\sum_{i=1}^n(X_i-\Xbar)^2$ 为\keyword{样本方差}，$S=\sqrt{S^2}$ 为\keyword{样本标准差}。
+\end{definition}
+
+\begin{theorem}{样本方差的期望}{es2}
+在定理 \ref{thm:xbar} 的条件下，若 $n\ge2$，则 $\E V_n=\frac{n-1}{n}\sigma^2$，$\E S^2=\sigma^2$。
+\end{theorem}
+\begin{proof}
+把 $X_i-\mu$ 写成 $(X_i-\Xbar)+(\Xbar-\mu)$，平方后求和。因为 $\sum_i(X_i-\Xbar)=0$，交叉项消失：
+\begin{equation}\label{eq:ssdecomp}
+\sum_{i=1}^n(X_i-\mu)^2=\sum_{i=1}^n(X_i-\Xbar)^2+n(\Xbar-\mu)^2 .
+\end{equation}
+取期望：左边是 $n\sigma^2$，右边第二项是 $n\Var\Xbar=\sigma^2$。所以 $\E\sum(X_i-\Xbar)^2=(n-1)\sigma^2$。
+\end{proof}
+
+\begin{intuition}[“自由度”从哪里来]
+式 \eqref{eq:ssdecomp} 说明：以 $\Xbar$ 为中心的平方和，总比以真正的 $\mu$ 为中心的平方和小——因为 $\Xbar$ 恰好是使平方和最小的中心。
+少掉的部分平均恰为一个 $\sigma^2$。另一种说法是：$n$ 个离差 $X_i-\Xbar$ 加起来必为零，只有 $n-1$ 个能“自由”变化，
+所以平均时应除以 $n-1$。
+\end{intuition}
+
+\begin{example}{\texorpdfstring{$S^2$}{S²} 无偏，\texorpdfstring{$S$}{S} 却有偏}{sbias}
+设 $X_1,X_2$ 独立服从 $\Bern(1/2)$，$\sigma=1/2$。两数相同时 $S^2=0$，不同时 $S^2=1/2$，各占一半概率。
+于是 $\E S^2=1/4=\sigma^2$，但 $\E S=\frac12\cdot\frac1{\sqrt2}\approx0.354<\frac12=\sigma$。
+一般地，只要 $S$ 不是常数，$(\E S)^2<\E S^2=\sigma^2$（因为 $\Var S>0$），所以 $S$ 总是\emph{低估} $\sigma$。
+无偏性在非线性变换下不保持，第 \ref{ch:estimation} 章还会再谈。
+\end{example}
+
+把 $\sigma$ 换成 $S$，就得到标准误的估计 $S/\sqrt n$。对睡眠差值，$s=1.230$，估计的标准误为 $1.230/\sqrt{10}=0.389$ 小时。
+
+\section{有限总体与不放回抽样}
+
+民意调查从一个城市的选民中抽人，质检从一批产品中抽件——总体是\emph{有限}的，而且不会把同一个人问两次。
+这时各次观测不再独立。
+
+\begin{definition}{有限总体与简单随机抽样}{srs}
+有限总体由 $N$ 个有编号的单位组成，数值为 $a_1,\dots,a_N$。总体均值与总体方差为
+\[
+\mu=\frac1N\sum_{i=1}^Na_i,\qquad \sigma^2=\frac1N\sum_{i=1}^N(a_i-\mu)^2 .
+\]
+从中不放回地抽 $n$ 个单位，若每个含 $n$ 个单位的子集被抽中的概率都是 $1/\binom Nn$，称为\keyword{简单随机抽样}。
+\end{definition}
+
+\begin{example}{有放回与不放回}{srs012}
+总体为 $\{0,1,2\}$（$\mu=1$，$\sigma^2=2/3$），抽两个求平均。有放回时 9 种有序结果等可能，均值的方差为 $\sigma^2/2=1/3$。
+不放回时只有 $\{0,1\},\{0,2\},\{1,2\}$ 三种，均值 $1/2,1,3/2$ 各占 $1/3$，方差为 $1/6$——只有前者的一半。
+\end{example}
+
+\begin{theorem}{不放回抽样均值的方差}{fpc}
+从 $N\ge2$ 个单位中简单随机抽取 $n$ 个，样本均值 $\Xbar$ 满足
+\[
+\E\Xbar=\mu,\qquad \Var\Xbar=\frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}.
+\]
+因子 $\frac{N-n}{N-1}$ 称为\keyword{有限总体修正}。
+\end{theorem}
+\begin{proof}
+把抽中的单位随机排序，依次记其数值为 $X_1,\dots,X_n$。由对称性，每个 $X_r$ 都等可能是 $a_1,\dots,a_N$ 中的任一个，所以
+$\E X_r=\mu$，$\Var X_r=\sigma^2$；任意两个位置 $(X_r,X_s)$ 等可能是任一个\emph{有序的不同}编号对 $(a_i,a_j)$，于是
+\[
+\Cov(X_r,X_s)=\frac{1}{N(N-1)}\sum_{i\ne j}(a_i-\mu)(a_j-\mu)
+=\frac{\big(\sum_i(a_i-\mu)\big)^2-\sum_i(a_i-\mu)^2}{N(N-1)}=-\frac{\sigma^2}{N-1}.
+\]
+这正是例 \ref{ex:urn} 中负相关的一般形式。由定理 \ref{thm:sumvar}，
+\[
+\Var\Xbar=\frac1{n^2}\Big[n\sigma^2-n(n-1)\frac{\sigma^2}{N-1}\Big]=\frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}.
+\]
+\end{proof}
+
+\begin{intuition}[抽样精度取决于 $n$，几乎与 $N$ 无关]
+修正因子约为 $1-n/N$，即 $1$ 减去\emph{抽样比}。从一千万选民中抽 $1000$ 人，修正因子是 $0.9999$，可以忽略；
+从一万人中抽 $1000$ 人，修正因子是 $0.90$，标准误只小约 $5\%$。所以一个全国性的民调和一个城市的民调，
+只要样本量相同，精度几乎一样。这与很多人的直觉相反：要紧的是抽了多少，而不是总体有多大。
+\end{intuition}
+
+\section{分层抽样}
+
+如果事先知道总体由几个差别明显的部分组成（城市与农村、不同年级），可以在每一部分内分别抽样。
+
+\begin{definition}{分层抽样}{strat}
+把总体分成互不重叠的 $k$ 层，第 $h$ 层占总体的比例为 $p_h$，层均值为 $\mu_h$，层方差为 $\sigma_h^2$。
+在各层内独立地简单随机抽样，第 $h$ 层抽 $n_h$ 个，层内样本均值为 $\Xbar_h$。\keyword{分层估计量}为
+$T=\sum_{h=1}^kp_h\Xbar_h$。
+\end{definition}
+
+先看总体方差怎样由各层组成。
+
+\begin{proposition}{方差分解：层内与层间}{vardecomp}
+总体均值 $\mu=\sum_hp_h\mu_h$，总体方差
+\[
+\sigma^2=\underbrace{\sum_hp_h\sigma_h^2}_{\text{层内方差的平均}}+\underbrace{\sum_hp_h(\mu_h-\mu)^2}_{\text{层间方差}} .
+\]
+\end{proposition}
+\begin{proof}
+在第 $h$ 层内，$a-\mu=(a-\mu_h)+(\mu_h-\mu)$。平方后在层内平均，交叉项因 $a-\mu_h$ 的层内平均为零而消失，得
+层内平均平方离差为 $\sigma_h^2+(\mu_h-\mu)^2$。再按 $p_h$ 加权平均即可。
+\end{proof}
+
+\begin{theorem}{分层估计量}{stratvar}
+$\E T=\mu$，$\Var T=\sum_hp_h^2\Var\Xbar_h$，其中 $\Var\Xbar_h=\frac{N_h-n_h}{N_h-1}\frac{\sigma_h^2}{n_h}$（$N_h$ 为该层单位数）。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fpc}，$\E\Xbar_h=\mu_h$，故 $\E T=\sum p_h\mu_h=\mu$。各层独立，协方差为零，由定理 \ref{thm:sumvar} 得方差公式。
+\end{proof}
+
+\begin{warning}
+各层抽样比例不同时，\emph{不能}把全部样本直接平均。例如第一层占 $3/4$、第二层占 $1/4$，两层各抽 $10$ 个，
+全部 $20$ 个数的平均的期望是 $(\mu_1+\mu_2)/2$，一般不等于 $\mu$。必须按总体比例 $p_h$ 加权。
+\end{warning}
+
+\paragraph{分层为什么有效}
+为看清本质，忽略有限总体修正（各层都很大）。总样本量为 $n$，按比例分配 $n_h=p_hn$ 时，
+\[
+\Var T=\sum_hp_h^2\frac{\sigma_h^2}{p_hn}=\frac1n\sum_hp_h\sigma_h^2 .
+\]
+而不分层的简单随机抽样方差为 $\sigma^2/n$。对比命题 \ref{prop:vardecomp}，\emph{分层恰好消去了层间方差}。
+层与层差别越大、层内越均匀，分层的好处越大。
+
+\begin{example}{分得好与分得不好}{stratgood}
+总体为 $\{-3,-1,1,3\}$（$\mu=0$，$\sigma^2=5$），抽两个求平均。
+\begin{itemize}
+\item 简单随机抽样：$\Var=\frac{4-2}{4-1}\cdot\frac52=\frac53$。
+\item 分为 $\{-3,-1\}$、$\{1,3\}$ 两层，各抽一个：层内方差都是 $1$，$\Var T=\frac14+\frac14=\frac12$。
+\item 分为 $\{-3,3\}$、$\{-1,1\}$ 两层，各抽一个：层内方差为 $9$ 和 $1$，$\Var T=\frac94+\frac14=\frac52$，反而比不分层更差。
+\end{itemize}
+第二种分层把“相近的”放在一起，层间差别大；第三种恰好相反。
+\end{example}
+
+\paragraph{最优分配}
+样本量固定为 $n$ 时，怎样分给各层最好？仍忽略有限总体修正，要使 $\sum_hp_h^2\sigma_h^2/n_h$ 最小。
+
+\begin{proposition}{Neyman 分配}{neyman}
+在 $\sum_hn_h=n$ 的约束下（允许 $n_h$ 取实数），$\sum_hp_h^2\sigma_h^2/n_h$ 的最小值为 $\big(\sum_hp_h\sigma_h\big)^2/n$，
+在 $n_h\propto p_h\sigma_h$ 时取到。
+\end{proposition}
+\begin{proof}
+由柯西–施瓦茨不等式，
+$\big(\sum_hp_h\sigma_h\big)^2=\Big(\sum_h\frac{p_h\sigma_h}{\sqrt{n_h}}\sqrt{n_h}\Big)^2\le\sum_h\frac{p_h^2\sigma_h^2}{n_h}\cdot\sum_hn_h$，
+等号成立当且仅当 $\sqrt{n_h}\propto p_h\sigma_h/\sqrt{n_h}$，即 $n_h\propto p_h\sigma_h$。
+\end{proof}
+
+直观上，人多的层、内部差异大的层，应该多抽。实际中 $n_h$ 要取整数，$\sigma_h$ 也只能用先验信息或预调查估计。
+
+\section{\starmark\ 深入讨论}
+
+\begin{deeper}[什么样的抽样规则能处处胜过简单随机抽样]
+设 $N\ge3$。某规则从 $N$ 个单位中抽两个，各二元子集的概率预先固定。若对\emph{任意}实数总体，所抽两数的平均都无偏，
+且方差不超过简单随机抽样，那么它\emph{必是}简单随机抽样。
+
+\emph{证明思路}：记 $I_i$ 为单位 $i$ 入选的示性变量，$T=\frac12\sum a_iI_i$。取 $a_i=1$、其余为 $0$，无偏性给出 $\P(I_i=1)=2/N$。
+再取 $a_i=u$、$a_j=v$、其余为 $0$，比较方差得
+\[
+\Var T-\Var T_{\mathrm{SRS}}=uv\Big(\P(\text{抽中}\{i,j\})-\tbinom N2^{-1}\Big)\Big/2 .
+\]
+取 $u=v=1$ 与 $u=1,v=-1$，两个方向的不等式迫使 $\P(\text{抽中}\{i,j\})=1/\binom N2$。
+
+这个结论说明：没有一种固定的抽样设计能\emph{对所有总体}都更好。分层抽样之所以能更好，是因为它利用了关于总体的额外信息（分层）。
+\end{deeper}
+
+\begin{deeper}[允许两层的抽取相互依赖]
+两层各有 $m$ 个单位，数值为 $a_1<\dots<a_m$ 和 $b_1<\dots<b_m$，每层等概率抽一个，但允许两层的抽取\emph{相关}。
+平均值 $(A+B)/2$ 的方差 $=\frac14\big(\Var A+\Var B+2\Cov(A,B)\big)$，边缘分布固定，所以只需让 $\E(AB)$ 最小。
+用“交换”论证可以证明：唯一的最优方案是等概率选 $i$，同时抽 $a_i$ 与 $b_{m+1-i}$——最小配最大，次小配次大。
+这是\emph{对偶抽样}（antithetic sampling）的思想：人为制造负相关来减小方差，在随机模拟中很常用。
+关键步骤：若第一行（$a_1$）的概率没有全部集中在最后一列（$b_m$），则存在 $q_{1j}>0$（$j<m$）和 $q_{km}>0$（$k>1$），
+把这两格的概率各减 $\delta$、把 $(1,m)$ 和 $(k,j)$ 两格各加 $\delta$，$\E(AB)$ 减少 $\delta(a_k-a_1)(b_m-b_j)>0$。
+\end{deeper}
+
+\begin{deeper}[只保存部分数据，能确定什么]
+若只保存了 $n$、$\sum x_i$ 和 $\sum x_i^2$，均值、方差、$S^2$ 都能算出；但中位数不能：$(0,0,0,3,3)$ 与 $(0,0,1,1,4)$ 的这三个量完全相同
+（$n=5$，和为 $6$，平方和为 $18$），中位数却分别是 $0$ 和 $1$。
+
+一般地，所求量 $t(x)$ 能由保存的量 $h(x)$ 唯一确定，当且仅当 $h(x)=h(y)$ 总蕴含 $t(x)=t(y)$。要证明\emph{不能}确定，
+只需找到一对“保存的量相同、所求的量不同”的数据。这个思想在第 \ref{ch:estimation} 章讨论“数据中哪些部分包含参数的信息”时会再次出现。
+\end{deeper}
+
+\begin{summary}
+\begin{itemize}
+\item 参数固定而未知，数据随机；统计量不含未知参数。
+\item 描述数据看位置（均值、中位数）与分散（方差、四分位距）；箱线图能一眼看出偏斜与可能的异常值，中位数对异常值稳健。
+\item 抽样分布是统计量在重复抽样下的分布。$\E\Xbar=\mu$，$\SE(\Xbar)=\sigma/\sqrt n$：精度按 $\sqrt n$ 提高。
+\item $S^2$ 以 $n-1$ 为分母才无偏；$S$ 仍略低估 $\sigma$。标准误的估计为 $S/\sqrt n$。
+\item 不放回抽样的方差要乘 $\frac{N-n}{N-1}\approx1-\frac nN$；精度主要取决于 $n$ 而非 $N$。
+\item 分层抽样消去层间方差；按比例分配不会更差，Neyman 分配 $n_h\propto p_h\sigma_h$ 最优。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+对数据 $1,1,2,2,2,3,4,10$，求均值、中位数、五数概括，画出箱线图。若把 $10$ 改成 $100$，哪些量变了？
+\end{exercise}
+
+\begin{exercise}
+一台仪器单次测量的标准差为 $2$。取 $4$ 次测量的平均，标准误是多少？要使标准误不超过 $0.25$，至少要测多少次？
+\end{exercise}
+
+\begin{exercise}
+从总体 $\{1,2,3,4,5\}$ 中简单随机抽取 $2$ 个。列出样本均值的全部可能值及其概率，直接计算它的期望和方差，
+并与定理 \ref{thm:fpc} 比较。
+\end{exercise}
+
+\begin{exercise}
+某校学生分为两层：住校生占 $60\%$，成绩标准差约为 $10$；走读生占 $40\%$，标准差约为 $30$。
+总共抽 $100$ 人（忽略有限总体修正）。分别求按比例分配与 Neyman 分配下分层估计量的方差。
+\end{exercise}
+
+\levelB
+\begin{exercise}\label{ex1:pairdiff}
+证明数据方差可以写成所有两两差的平方的平均：$v=\dfrac{1}{2n^2}\displaystyle\sum_{i=1}^n\sum_{j=1}^n(x_i-x_j)^2$。
+由此说明 $S^2=\dfrac{1}{n(n-1)}\displaystyle\sum_{i<j}(X_i-X_j)^2$，并据此再证一次 $\E S^2=\sigma^2$。
+\end{exercise}
+
+\begin{exercise}
+两组数据分别有 $n_1,n_2$ 个，均值为 $\xbar_1,\xbar_2$，数据方差（以 $n$ 为分母）为 $v_1,v_2$。用命题 \ref{prop:vardecomp} 的思路，
+写出合并后 $n_1+n_2$ 个数的数据方差。
+\end{exercise}
+
+\begin{exercise}
+一次民意调查抽取 $n=1000$ 人，支持率真值为 $p=0.5$（每人回答 $0$ 或 $1$，故 $\sigma^2=p(1-p)$）。
+分别对 $N=10^4$ 与 $N=10^7$ 的总体，计算样本比例的标准误。
+\end{exercise}
+
+\begin{exercise}
+设 $X_i$ 独立服从 $\Bern(p)$，$0<p<1$。常用 $\sqrt{\Xbar(1-\Xbar)/n}$ 估计 $\Xbar$ 的标准误。这个估计值等于 $0$ 的概率是多少？
+当 $p=0.05$、$n=20$ 时，这个概率约为多少？这说明了什么？
+\end{exercise}
+
+\levelC
+\begin{exercise}[原讲义习题 1.1]
+设 $a_1<a_2<\dots<a_{2m}$，$m\ge2$。把这 $2m$ 个数分成 $m$ 对，从每对中独立等概率地抽一个，用所得 $m$ 个数的平均估计总体均值。
+求使方差最小的全部配对方式与最小方差，并证明它严格小于从 $2m$ 个数中简单随机抽取 $m$ 个所得均值的方差。
+\hint{一对 $\{u,v\}$ 贡献的方差是 $(u-v)^2/4$。用交换论证说明 $a_1$ 必须与 $a_2$ 配对。比较时，计算“对所有配对方式等概率平均”的方差。}
+\end{exercise}
+
+\begin{exercise}[原讲义例 1.3]
+四个实数构成有限总体。从中简单随机抽取两个，其平均值在 $\frac12,1,\frac32,2,\frac52,3$ 六个值上等可能。求原总体的全部可能取值。
+这说明了什么？
+\end{exercise}
+
+\begin{exercise}[原讲义例 1.4 的一部分]
+设 $n\ge3$ 个实数的均值为 $\mu$，数据方差为 $v>0$。证明极差 $R=\max x_i-\min x_i$ 满足 $R\le\sqrt{2nv}$，并求出取等号的全部数据。
+\hint{不妨设 $\mu=0$。记最小值和最大值为 $a<0<b$，则 $(b-a)^2\le2(a^2+b^2)\le2\sum x_i^2$。}
+\end{exercise}

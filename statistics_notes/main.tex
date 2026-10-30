@@ -1,0 +1,30 @@
+% 数理统计自学讲义（重构版）
+% 编译：xelatex main.tex（两遍），或 latexmk -xelatex main.tex
+\documentclass[fontset=none,zihao=-4,openany,twoside]{ctexbook}
+\usepackage{notes}
+
+\hypersetup{pdftitle={数理统计自学讲义（重构版）},pdfsubject={抽样、估计、检验与回归}}
+
+\begin{document}
+
+\frontmatter
+\input{chapters/cover}
+\input{chapters/preface}
+{\hypersetup{linkcolor=ink}\tableofcontents}
+
+\mainmatter
+\input{chapters/ch0}
+\input{chapters/ch1}
+\input{chapters/ch2}
+\input{chapters/ch3}
+\input{chapters/ch4}
+\input{chapters/ch5}
+\input{chapters/ch6}
+
+\appendix
+\ctexset{chapter/titleformat=\appendixtitlebox, chapter/number={\Alph{chapter}}}
+\addtocontents{toc}{\protect\renewcommand{\protect\cftchappresnum}{}\protect\setlength{\protect\cftchapnumwidth}{4.8em}\protect\renewcommand{\protect\cftchapaftersnum}{}}
+\input{chapters/solutions}
+\input{chapters/tables}
+
+\end{document}

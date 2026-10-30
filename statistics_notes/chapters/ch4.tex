@@ -1,0 +1,427 @@
+% 第4章 置信区间与假设检验
+\chapter{置信区间与假设检验}
+\label{ch:inference}
+
+\begin{chapguide}
+\textbf{\heiti 本章要解决的问题}\quad 一个估计值本身没有告诉我们它有多可靠。本章介绍统计推断的两种基本形式：
+\keyword{置信区间}（给出一个“大概率罩住真值”的范围）和\keyword{假设检验}（判断数据是否与某个具体的说法相矛盾），并说明两者其实是一回事的两面。
+我们会讲清楚 $t$ 分布从哪里来、p 值到底是什么意思、功效与样本量怎样计算，以及几种最常见的误用。\par\smallskip
+\textbf{\heiti 预备}\quad 第 0 章的中心极限定理与 Slutsky 定理；第 1 章的标准误；第 3 章的似然。
+\end{chapguide}
+
+\section{从标准误到置信区间}
+
+估计睡眠药物的平均效果，我们得到 $\bar d=1.58$ 小时，标准误约 $0.39$ 小时。只报告“$1.58$”会让人误以为它很精确；
+更诚实的说法是给出一个范围，并说明这个范围有多可靠。
+
+\begin{definition}{置信区间}{ci}
+设 $L=L(X)$、$U=U(X)$ 是两个统计量，$L\le U$。若对\emph{每个} $\theta\in\Theta$，
+\[
+\P_\theta\big(L\le g(\theta)\le U\big)\ge1-\alpha,
+\]
+称 $[L,U]$ 是 $g(\theta)$ 的置信水平为 $1-\alpha$ 的\keyword{置信区间}。概率左端的最小值称为\keyword{覆盖概率}。
+\end{definition}
+
+最常见的构造方式来自一个近似正态的估计量。由第 0 章式 \eqref{eq:studentized}，$\sqrt n(\Xbar-\mu)/S\tod\N(0,1)$，所以
+\[
+\P\Big(-z_{1-\alpha/2}\le\frac{\Xbar-\mu}{S/\sqrt n}\le z_{1-\alpha/2}\Big)\to1-\alpha,
+\]
+把不等式中的 $\mu$ 解出来，就得到大样本的近似置信区间
+\begin{equation}\label{eq:zci}
+\Xbar\pm z_{1-\alpha/2}\,\frac{S}{\sqrt n}\qquad(\text{95\% 时 }z_{0.975}\approx1.96).
+\end{equation}
+一般的模式是：\textbf{估计值 $\pm$ 临界值 $\times$ 标准误}。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.92\linewidth, height=6cm, xmin=0, xmax=41, ymin=33, ymax=67,
+  xlabel={第几次重复抽样}, ylabel={$\mu$ 的 95\% 置信区间}, xtick={1,10,20,30,40}]
+  \draw[accent, thick, dashed] (axis cs:0,50) -- (axis cs:41,50);
+  \node[accent, font=\scriptsize, anchor=south west] at (axis cs:0.5,50.3) {真值 $\mu=50$};
+  \addplot[main, thick, only marks, mark=-, mark size=0pt,
+    error bars/.cd, y dir=both, y explicit, error mark=none, error bar style={main, line width=1.3pt}]
+    table[x=i, y=m, y error plus expr=\thisrow{hi}-\thisrow{m}, y error minus expr=\thisrow{m}-\thisrow{lo},
+      restrict expr to domain={\thisrow{cover}}{1:1}] {figdata/ci_cover.dat};
+  \addplot[accent, thick, only marks, mark=-, mark size=0pt,
+    error bars/.cd, y dir=both, y explicit, error mark=none, error bar style={accent, line width=1.6pt}]
+    table[x=i, y=m, y error plus expr=\thisrow{hi}-\thisrow{m}, y error minus expr=\thisrow{m}-\thisrow{lo},
+      restrict expr to domain={\thisrow{cover}}{0:0}] {figdata/ci_cover.dat};
+  \addplot[only marks, mark=*, mark size=1.1pt, ink] table[x=i,y=m] {figdata/ci_cover.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{从 $\N(50,10^2)$ 中重复抽取 40 个容量为 10 的样本，各自算出 95\% 的 $t$ 区间（模拟，区间公式见 \ref{sec:exact} 节）。
+40 个区间中有 38 个罩住了真值，2 个（红色）没有。区间的位置和长度都随样本变化，真值始终不动。}
+\label{fig:cicover}
+\end{figure}
+
+\begin{warning}[怎样正确理解 95\%]
+算出睡眠数据的区间 $[0.70,\,2.46]$ 后，\emph{不能}说“$\mu$ 落在 $[0.70,2.46]$ 内的概率是 95\%”。$\mu$ 是固定的数，这个具体区间要么罩住了它，要么没有。
+95\% 描述的是\emph{构造区间的方法}：反复使用这个方法，大约 95\% 的区间会罩住真值（图 \ref{fig:cicover}）。
+我们相信这一次的区间，是因为它出自一个可靠的方法。
+\end{warning}
+
+区间长度 $2z_{1-\alpha/2}S/\sqrt n$ 也直接给出了样本量的计划方法：要使 95\% 区间的半宽不超过 $h$，需要 $n\ge(1.96\,\sigma/h)^2$。
+又一次看到 $\sqrt n$ 规律：区间缩短一半，样本量要 4 倍。
+
+\section{正态样本的精确理论：\texorpdfstring{$t$}{t} 分布}
+\label{sec:exact}
+
+式 \eqref{eq:zci} 依赖大样本。小样本时把 $\sigma$ 换成 $S$ 会额外引入 $S$ 自身的波动，区间应当更宽。
+1908 年，Gosset 求出了正态总体下这个比值的精确分布。
+
+\begin{definition}{卡方分布与 \texorpdfstring{$t$}{t} 分布}{chit}
+设 $Z_1,\dots,Z_\nu$ 独立服从 $\N(0,1)$。$U=Z_1^2+\dots+Z_\nu^2$ 的分布称为自由度为 $\nu$ 的\keyword{卡方分布}，记作 $\chi^2_\nu$。
+若 $Z\sim\N(0,1)$ 与 $U\sim\chi^2_\nu$ 独立，$T=Z/\sqrt{U/\nu}$ 的分布称为自由度为 $\nu$ 的 \keyword{$t$ 分布}，记作 $t_\nu$。
+\end{definition}
+
+由 $\E Z^2=1$、$\E Z^4=3$ 得 $\Var Z^2=2$，所以 $\E\chi^2_\nu=\nu$，$\Var\chi^2_\nu=2\nu$。
+$t_\nu$ 关于 $0$ 对称，比正态分布“尾巴更厚”（图 \ref{fig:tdens}）；$\nu\to\infty$ 时 $U/\nu\toP1$，由 Slutsky 定理 $t_\nu$ 趋于 $\N(0,1)$。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.8\linewidth, height=5cm, xmin=-4.5, xmax=4.5, ymin=0, ymax=0.42,
+  xlabel={$x$}, ylabel={密度}, legend pos=north east, yticklabel style={/pgf/number format/fixed}]
+  \addplot[ink, very thick] table[x=x,y=norm] {figdata/tdens.dat};
+  \addplot[accent, thick] table[x=x,y=t1] {figdata/tdens.dat};
+  \addplot[gold, thick] table[x=x,y=t3] {figdata/tdens.dat};
+  \addplot[main, thick] table[x=x,y=t10] {figdata/tdens.dat};
+  \legend{{$\N(0,1)$}, $t_1$, $t_3$, $t_{10}$}
+\end{axis}
+\end{tikzpicture}
+\caption{$t$ 分布与标准正态分布。自由度越小，中间越矮、两尾越厚；$\nu=10$ 时已经很接近正态。}
+\label{fig:tdens}
+\end{figure}
+
+\begin{theorem}{正态样本的均值与方差}{normalsample}
+设 $X_1,\dots,X_n$（$n\ge2$）独立服从 $\N(\mu,\sigma^2)$。则
+\begin{enumerate}
+\item $\Xbar\sim\N(\mu,\sigma^2/n)$；
+\item $\Xbar$ 与 $S^2$ 相互独立；
+\item $(n-1)S^2/\sigma^2\sim\chi^2_{n-1}$；
+\item $\dfrac{\sqrt n(\Xbar-\mu)}{S}\sim t_{n-1}$。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 $Z_i=(X_i-\mu)/\sigma$，它们独立服从 $\N(0,1)$。取一个 $n\times n$ 正交矩阵 $A$，第一行为 $(1/\sqrt n,\dots,1/\sqrt n)$
+（其余各行可由 Gram–Schmidt 正交化补齐），令 $Y=AZ$。
+
+$Z$ 的联合密度 $(2\pi)^{-n/2}e^{-\|z\|^2/2}$ 只依赖长度 $\|z\|$，而正交变换保持长度、雅可比行列式绝对值为 $1$，
+所以 $Y$ 的联合密度与 $Z$ 相同：$Y_1,\dots,Y_n$ 也独立服从 $\N(0,1)$。现在
+\[
+Y_1=\sqrt n\,\bar Z,\qquad \sum_{i=2}^nY_i^2=\|Y\|^2-Y_1^2=\|Z\|^2-n\bar Z^2=\sum_{i=1}^n(Z_i-\bar Z)^2=\frac{(n-1)S^2}{\sigma^2}.
+\]
+于是 $\sqrt n(\Xbar-\mu)/\sigma=Y_1\sim\N(0,1)$，$(n-1)S^2/\sigma^2=\sum_{i\ge2}Y_i^2\sim\chi^2_{n-1}$，两者分别是不同 $Y_i$ 的函数，故独立。
+(4) 是 (1)(3) 按 $t$ 分布的定义相除的结果：$\dfrac{\sqrt n(\Xbar-\mu)/\sigma}{\sqrt{S^2/\sigma^2}}$。
+\end{proof}
+
+\begin{intuition}[自由度的几何意义]
+把 $n$ 个数据看成 $\R^n$ 中的一个向量。它在“全 1 方向”上的投影给出 $\Xbar$，剩下的部分落在与之垂直的 $n-1$ 维空间里，给出 $S^2$。
+两部分互相垂直，正态分布又是“各向同性”的，所以它们独立；剩下的空间是 $n-1$ 维，所以自由度是 $n-1$。
+第 \ref{ch:regression} 章的回归会把这幅图推广：拟合两个参数，残差落在 $n-2$ 维空间里。
+\end{intuition}
+
+由定理 \ref{thm:normalsample}(4)，正态总体均值的\emph{精确}置信区间为
+\begin{equation}\label{eq:tci}
+\Xbar\pm t_{n-1,\,1-\alpha/2}\,\frac{S}{\sqrt n}.
+\end{equation}
+
+\begin{table}[H]
+\centering\small
+\caption{$t$ 分布与正态分布的 97.5\% 分位数（用于 95\% 双侧区间）}\label{tab:tq}
+\begin{tabular}{l*{9}{c}}
+\toprule
+自由度 $\nu$ & 1 & 2 & 3 & 5 & 10 & 20 & 30 & 60 & $\infty$ \\
+\midrule
+$t_{\nu,0.975}$ & 12.706 & 4.303 & 3.182 & 2.571 & 2.228 & 2.086 & 2.042 & 2.000 & 1.960 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{casestudy}{睡眠数据：药物 B 比 A 多让人睡多久}
+10 个差值的 $\bar d=1.58$，$s=1.230$，标准误 $s/\sqrt{10}=0.389$，$t_{9,0.975}=2.262$。95\% 置信区间为
+\[
+1.58\pm2.262\times0.389=1.58\pm0.88=[0.70,\ 2.46]\ \text{小时}.
+\]
+若误用正态临界值 $1.96$，区间会窄约 $13\%$，覆盖率达不到 95\%。这个区间完全在 $0$ 的右侧——下面会看到，这意味着在 5\% 水平上可以断言两种药有差别。
+（这里假设差值近似正态。第 1 章的箱线图显示有一个偏大的值，第 \ref{ch:twosample} 章会检查这一假设，并给出不依赖正态性的方法。）
+\end{casestudy}
+
+同样，由定理 \ref{thm:normalsample}(3)，$\sigma^2$ 的 $1-\alpha$ 置信区间为
+$\Big[\dfrac{(n-1)S^2}{\chi^2_{n-1,1-\alpha/2}},\ \dfrac{(n-1)S^2}{\chi^2_{n-1,\alpha/2}}\Big]$。不过它对正态性的依赖比 $t$ 区间严重得多，非正态数据慎用。
+
+\section{比例的区间：不要只会用 Wald 区间}
+
+对 $n$ 次伯努利试验，最常见的区间是 \keyword{Wald 区间} $\hatt p\pm z_{1-\alpha/2}\sqrt{\hatt p(1-\hatt p)/n}$，即式 \eqref{eq:zci} 的特例。
+它的毛病在 $\hatt p$ 接近 $0$ 或 $1$ 时暴露无遗：$20$ 次试验 $0$ 次成功时，Wald 区间是 $[0,0]$——它“确信”成功率恰好为零。
+
+问题出在标准误本身也是估计出来的，而且估计得最差的地方恰恰是它最小的地方。一个更好的办法是\emph{不估计标准误}，
+而是收集所有满足 $|\hatt p-p|\le z\sqrt{p(1-p)/n}$ 的 $p$——用的是假设的 $p$ 下的真实标准误。解这个关于 $p$ 的二次不等式，得到
+\keyword{Wilson 区间}：
+\[
+\frac{\hatt p+\frac{z^2}{2n}}{1+\frac{z^2}{n}}\ \pm\ \frac{z}{1+\frac{z^2}{n}}\sqrt{\frac{\hatt p(1-\hatt p)}{n}+\frac{z^2}{4n^2}},\qquad z=z_{1-\alpha/2}.
+\]
+它的中心被拉向 $1/2$，即使 $\hatt p=0$ 也有正的长度：$20$ 次 $0$ 次成功时，95\% Wilson 区间为 $[0,\,0.161]$。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.92\linewidth, height=5.4cm, xmin=0, xmax=1, ymin=0.5, ymax=1,
+  xlabel={真实成功率 $p$}, ylabel={真实覆盖概率}, legend pos=south east, ytick={0.5,0.6,0.7,0.8,0.9,0.95,1}]
+  \addplot[accent, thick] table[x=p,y=wald] {figdata/prop_cover.dat};
+  \addplot[main, thick] table[x=p,y=wilson] {figdata/prop_cover.dat};
+  \draw[ink, dashed] (axis cs:0,0.95) -- (axis cs:1,0.95);
+  \legend{Wald 区间, Wilson 区间}
+\end{axis}
+\end{tikzpicture}
+\caption{$n=30$ 时名义 95\% 的两种比例区间的\emph{精确}覆盖概率。由于二项分布是离散的，两条曲线都锯齿状起伏；
+但 Wald 区间在 $p$ 靠近 $0$ 或 $1$ 时严重不足，Wilson 区间则始终在 95\% 附近。}
+\label{fig:propcover}
+\end{figure}
+
+\begin{intuition}[一个实用的经验法则]
+$n$ 次试验全部失败时，“3 法则”给出成功率的近似 95\% 上界 $3/n$：因为 $(1-p)^n\le0.05$ 当且仅当 $p\ge1-0.05^{1/n}\approx3/n$。
+$n=20$ 时 $3/20=0.15$，与 Wilson 上界 $0.161$ 相近。
+\end{intuition}
+
+\section{假设检验的逻辑}
+
+抛一枚硬币 10 次，得到 9 次正面。它偏吗？即使是公平硬币，9 次正面也\emph{可能}出现。检验的思路是：
+\emph{先假定硬币公平，算出这样极端的结果有多罕见；如果足够罕见，就怀疑原先的假定。}这和反证法很像，只不过“矛盾”是概率意义上的。
+
+\begin{definition}{假设、检验与两类错误}{test}
+把参数空间分成两部分，提出\keyword{原假设} $H_0:\theta\in\Theta_0$ 与\keyword{备择假设} $H_1:\theta\in\Theta_1$。
+\keyword{检验}是一条事先规定的规则：数据落入\keyword{拒绝域} $C$ 时拒绝 $H_0$，否则不拒绝。称
+$\pi(\theta)=\P_\theta(X\in C)$ 为\keyword{功效函数}。
+\begin{center}\small
+\begin{tabular}{c|cc}
+ & 不拒绝 $H_0$ & 拒绝 $H_0$\\
+\hline
+$H_0$ 为真 & 正确 & \textbf{第一类错误}（概率 $\pi(\theta)$，$\theta\in\Theta_0$）\\
+$H_1$ 为真 & \textbf{第二类错误}（概率 $1-\pi(\theta)$） & 正确（概率 $\pi(\theta)$ 称为\keyword{功效}）\\
+\end{tabular}
+\end{center}
+若 $\sup_{\theta\in\Theta_0}\pi(\theta)\le\alpha$，称检验的\keyword{显著性水平}为 $\alpha$。
+\end{definition}
+
+两类错误不能同时任意小：拒绝域越大，第一类错误越多、第二类错误越少。经典的做法是\emph{先把第一类错误控制在 $\alpha$（常取 0.05）以内，
+再在此前提下让功效尽量大}。所以原假设应当是“默认的、需要证据才能推翻的”说法，例如“新药无效”“硬币公平”。
+
+\begin{example}{正态均值的单侧检验}{ztest}
+$X_1,\dots,X_n$ 独立服从 $\N(\mu,1)$，检验 $H_0:\mu\le0$ 对 $H_1:\mu>0$。自然的规则是 $\Xbar$ 足够大时拒绝：
+拒绝域 $\{\sqrt n\,\Xbar>z_{1-\alpha}\}$。它的功效函数为
+\[
+\pi(\mu)=\P_\mu\big(\sqrt n(\Xbar-\mu)>z_{1-\alpha}-\sqrt n\mu\big)=1-\Phi\big(z_{1-\alpha}-\sqrt n\,\mu\big),
+\]
+随 $\mu$ 递增，所以在 $\Theta_0$ 上的最大值在边界 $\mu=0$ 处取到，恰为 $\alpha$。
+\end{example}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, width=0.84\linewidth, height=5.2cm, xmin=-0.5, xmax=1.5, ymin=0, ymax=1.03,
+  xlabel={真实均值 $\mu$（$\sigma=1$）}, ylabel={拒绝 $H_0$ 的概率 $\pi(\mu)$}, legend pos=south east]
+  \fill[accent!10] (axis cs:-0.5,0) rectangle (axis cs:0,1.03);
+  \addplot[main!50, very thick] table[x=mu,y=n10] {figdata/power.dat};
+  \addplot[main, very thick] table[x=mu,y=n40] {figdata/power.dat};
+  \draw[ink, dashed] (axis cs:-0.5,0.05) -- (axis cs:1.5,0.05);
+  \draw[ink, dotted] (axis cs:-0.5,0.8) -- (axis cs:1.5,0.8);
+  \node[font=\scriptsize, accent, anchor=north west] at (axis cs:-0.48,1.0) {$H_0$ 成立};
+  \node[font=\scriptsize, anchor=south west] at (axis cs:1.05,0.05) {$\alpha=0.05$};
+  \node[font=\scriptsize, anchor=south west] at (axis cs:1.05,0.8) {功效 0.8};
+  \legend{$n=10$, $n=40$}
+\end{axis}
+\end{tikzpicture}
+\caption{单侧 $z$ 检验的功效函数。在 $H_0$ 区域内拒绝概率都不超过 $0.05$；在备择区域内，样本量越大，功效上升得越快。
+$n=40$ 时，$\mu=0.4$ 已有约 $0.8$ 的功效；$n=10$ 则需要 $\mu\approx0.79$。}
+\label{fig:power}
+\end{figure}
+
+\paragraph{样本量计划}
+要在 $\mu=\delta$ 处达到功效 $1-\beta$，需要 $z_{1-\alpha}-\sqrt n\,\delta/\sigma\le-z_{1-\beta}$，即
+\[
+n\ge\Big(\frac{(z_{1-\alpha}+z_{1-\beta})\,\sigma}{\delta}\Big)^2 .
+\]
+例如 $\alpha=0.05$、功效 $0.8$、想检测出半个标准差的效应，$n\ge\big((1.645+0.842)/0.5\big)^2\approx24.7$，至少 $25$ 个。
+做试验\emph{之前}算好样本量，是避免“做完了才发现功效太低”的唯一办法。
+
+\section{p 值：用尾概率表示证据}
+
+固定 $\alpha$ 只告诉我们“拒绝”或“不拒绝”。更有信息量的做法是报告：\emph{要把 $\alpha$ 定得多大，这份数据才会被拒绝？}
+
+\begin{definition}{p 值}{pvalue}
+设检验统计量 $T$ 越大越不利于 $H_0$，观测值为 $t_{\text{obs}}$。在 $H_0$（复合时取其中最不利的参数）下，
+\[
+p=\P_{H_0}\big(T\ge t_{\text{obs}}\big)
+\]
+称为\keyword{p 值}：原假设为真时，得到“至少与实际观测一样极端”的结果的概率。p 值 $\le\alpha$ 当且仅当在水平 $\alpha$ 下拒绝。
+\end{definition}
+
+\begin{example}{抛币}{coinp}
+10 次 9 次正面，$H_0:p=1/2$，$T$ 为正面次数。单侧（$H_1:p>1/2$）p 值为
+$\P(T\ge9)=\frac{\binom{10}9+\binom{10}{10}}{2^{10}}=\frac{11}{1024}\approx0.011$。
+若事先关心的是“硬币偏向任何一边”（双侧），另一边同样极端的结果是 $T\le1$，p 值加倍为 $0.021$。
+\end{example}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[notesaxis, axis y line=none, width=0.86\linewidth, height=4.4cm, xmin=-4, xmax=4, ymin=0, ymax=0.43,
+  xlabel={检验统计量在 $H_0$ 下的分布}, xtick={-1.8,0,1.8}, xticklabels={$-t_{\text{obs}}$,0,$t_{\text{obs}}$}]
+  \addplot[name path=f, ink, thick, domain=-4:4, samples=160] {exp(-x^2/2)/sqrt(2*pi)};
+  \path[name path=ax] (axis cs:-4,0) -- (axis cs:4,0);
+  \addplot[accent!45] fill between[of=f and ax, soft clip={domain=1.8:4}];
+  \addplot[accent!20] fill between[of=f and ax, soft clip={domain=-4:-1.8}];
+  \draw[accent, thick] (axis cs:1.8,0) -- (axis cs:1.8,0.0790);
+  \node[font=\scriptsize, accent!80!black, align=center] at (axis cs:2.75,0.12) {单侧 p 值\\$=$ 深色面积};
+  \node[font=\scriptsize, accent!80!black, align=center] at (axis cs:-2.75,0.12) {双侧时\\再加上这块};
+\end{axis}
+\end{tikzpicture}
+\caption{p 值是原假设分布中“比观测更极端”的尾部面积。观测值越靠外，p 值越小，证据越强。}
+\label{fig:pvalue}
+\end{figure}
+
+\begin{warning}[p 值的四个误读]
+\begin{enumerate}
+\item \textbf{p 值不是“$H_0$ 为真的概率”。}它是在\emph{假定} $H_0$ 为真时计算的，不能反过来给出 $H_0$ 的概率。
+\item \textbf{p 值小不等于效应大。}样本量很大时，微不足道的差别也会给出极小的 p 值。要同时报告效应的估计值和置信区间。
+\item \textbf{p 值大不等于 $H_0$ 为真。}“不拒绝”可能只是因为样本太小、功效太低。“没有证据表明有差别”不等于“有证据表明没有差别”。
+\item \textbf{$0.049$ 和 $0.051$ 没有本质区别。}$0.05$ 是约定，不是自然常数。
+\end{enumerate}
+\end{warning}
+
+当 $T$ 在 $H_0$ 下有连续分布 $F$ 时，单侧 p 值等于 $1-F(T)$，它在 $H_0$ 下服从 $\Unif(0,1)$（习题 \ref{ex4:uniform}）。
+所以“$\P_{H_0}(p\le\alpha)=\alpha$”：用 p 值做决定，第一类错误恰好是 $\alpha$。离散时 $\P_{H_0}(p\le\alpha)\le\alpha$，检验偏保守。
+
+\section{检验与区间：一枚硬币的两面}
+
+\begin{theorem}{检验与置信区间的对偶}{duality}
+设对每个 $\theta_0$ 都有一个水平为 $\alpha$ 的检验 $H_0:\theta=\theta_0$，接受域为 $A(\theta_0)$。令
+$C(X)=\{\theta_0:X\in A(\theta_0)\}$（所有不会被拒绝的参数值），则 $C(X)$ 是置信水平为 $1-\alpha$ 的置信集。反之亦然。
+\end{theorem}
+\begin{proof}
+对任意真值 $\theta$，$\theta\in C(X)\iff X\in A(\theta)$，所以 $\P_\theta(\theta\in C(X))=\P_\theta(X\in A(\theta))\ge1-\alpha$。
+反过来，给定置信集 $C$，令 $A(\theta_0)=\{x:\theta_0\in C(x)\}$ 即可。
+\end{proof}
+
+这条对偶在实际中极其有用：\emph{95\% 置信区间不含 $\theta_0$，就等价于在 5\% 水平上拒绝 $\theta=\theta_0$}，而且区间同时告诉我们效应的大小。
+Wilson 区间正是这样由检验“反解”出来的。
+
+\begin{casestudy}{睡眠数据的单样本 $t$ 检验}
+检验 $H_0:\mu_d=0$（两药效果相同）。$t$ 统计量为 $\bar d/(s/\sqrt n)=1.58/0.389=4.06$，在 $H_0$ 下服从 $t_9$，
+双侧 p 值 $=2\P(t_9\ge4.06)\approx0.0028$。与置信区间 $[0.70,2.46]$ 不含 $0$ 一致。结论：药物 B 平均比 A 多让人睡约 $1.6$ 小时
+（95\% 区间 $0.7$ 到 $2.5$ 小时），差别在统计上非常显著。
+\end{casestudy}
+
+\section{常见的陷阱}
+
+\paragraph{看了数据再选方向}
+设 $Z\sim\N(0,1)$。若事先规定做上侧检验，$\P(Z>z_{1-\alpha})=\alpha$。但如果看到 $Z>0$ 就做上侧、看到 $Z<0$ 就做下侧，
+真正的拒绝事件是 $|Z|>z_{1-\alpha}$，概率为 $2\alpha$。\emph{用数据决定检验方式，就改变了检验本身}，必须重新计算第一类错误。
+单侧还是双侧，要在看数据之前根据研究问题决定。
+
+\paragraph{多重检验}
+同时做 $20$ 个相互独立的检验，每个水平 $0.05$。即使所有原假设都成立，至少一个被拒绝的概率也是 $1-0.95^{20}\approx0.64$。
+如果只报告“显著”的那一个，读者会被严重误导。最简单的补救是 \keyword{Bonferroni 校正}：每个检验用水平 $\alpha/m$，
+则由 $\P(\bigcup A_j)\le\sum\P(A_j)$，犯任一第一类错误的概率不超过 $\alpha$。
+
+\paragraph{统计显著与实际重要}
+一项涉及一百万人的调查发现两组平均身高相差 $0.1$ 厘米，p 值可以小到 $10^{-6}$，但这个差别毫无实际意义。
+反过来，一个小试验中“不显著”的差别可能很重要，只是证据还不够。这就是为什么应当\emph{优先报告置信区间}。
+
+\section{\starmark\ 深入讨论}
+
+\begin{deeper}[最优检验：Neyman–Pearson 引理]
+对简单原假设 $H_0:\theta=\theta_0$ 对简单备择 $H_1:\theta=\theta_1$，哪个水平 $\alpha$ 的检验功效最大？答案是\emph{似然比检验}：
+当 $f_{\theta_1}(x)/f_{\theta_0}(x)>k$ 时拒绝，$k$ 选得使 $\P_{\theta_0}(\text{拒绝})=\alpha$。
+
+\emph{证明}：设 $\phi^*$ 是似然比检验的拒绝示性函数，$\phi$ 是任一水平 $\le\alpha$ 的检验。对每个 $x$，若 $\phi^*(x)=1$，则 $f_1-kf_0>0$ 且 $\phi^*-\phi\ge0$；
+若 $\phi^*(x)=0$，则 $f_1-kf_0\le0$ 且 $\phi^*-\phi\le0$。总有 $(\phi^*-\phi)(f_1-kf_0)\ge0$。积分得
+\[
+\E_{\theta_1}\phi^*-\E_{\theta_1}\phi\ \ge\ k\big(\E_{\theta_0}\phi^*-\E_{\theta_0}\phi\big)=k(\alpha-\E_{\theta_0}\phi)\ge0 .
+\]
+例 \ref{ex:ztest} 中，对任意 $\mu_1>0$，似然比 $\exp\big(n\mu_1\bar x-n\mu_1^2/2\big)$ 是 $\bar x$ 的增函数，所以“$\Xbar$ 大时拒绝”同时对所有 $\mu_1>0$ 最优——
+这样的检验称为\keyword{一致最优势检验}。
+\end{deeper}
+
+\begin{deeper}[离散检验与随机化]
+二项分布的尾概率是一档一档跳的。$n=10$、$p_0=1/2$ 时，$\P(T\ge9)=0.011$，$\P(T\ge8)=0.055$，任何非随机的拒绝域都无法使水平恰为 $0.05$。
+理论上可以引入\emph{随机化}：$T\ge9$ 时拒绝，$T=8$ 时以概率 $\gamma=(0.05-0.0107)/0.0439\approx0.89$ 拒绝，使水平恰为 $0.05$。
+这在理论上（如 Neyman–Pearson 引理的离散版本）是必需的，但实践中很少有人愿意“抛一枚硬币”决定结论，通常接受偏保守的非随机检验，并报告 p 值。
+\end{deeper}
+
+\begin{summary}
+\begin{itemize}
+\item 置信区间 $=$ 估计值 $\pm$ 临界值 $\times$ 标准误；95\% 是方法的覆盖率，不是这一个区间含真值的概率。
+\item 正态样本：$\Xbar$ 与 $S^2$ 独立，$(n-1)S^2/\sigma^2\sim\chi^2_{n-1}$，$\sqrt n(\Xbar-\mu)/S\sim t_{n-1}$。小样本用 $t$ 临界值。
+\item 比例区间优先用 Wilson 区间；Wald 区间在 $p$ 接近 $0,1$ 或 $n$ 较小时覆盖不足。
+\item 检验先控制第一类错误 $\le\alpha$，再追求功效；功效函数和样本量公式 $n\ge\big((z_{1-\alpha}+z_{1-\beta})\sigma/\delta\big)^2$ 用于试验设计。
+\item p 值是 $H_0$ 下“至少同样极端”的概率；不是 $H_0$ 的概率，不衡量效应大小。
+\item 区间与检验对偶：区间不含 $\theta_0$ $\iff$ 拒绝 $\theta=\theta_0$。
+\item 不要看数据选方向；多重检验要校正；显著不等于重要，不显著不等于没有差别。
+\end{itemize}
+\end{summary}
+
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+
+\levelA
+\begin{exercise}
+来自正态总体的 $16$ 个观测，$\xbar=52.3$，$s=4.8$。求 $\mu$ 的 95\% 置信区间（$t_{15,0.975}=2.131$）。在 5\% 水平上能否拒绝 $\mu=50$？
+\end{exercise}
+
+\begin{exercise}
+公平性检验：一枚硬币抛 $20$ 次得到 $15$ 次正面。求 $H_0:p=1/2$ 对 $H_1:p>1/2$ 的精确 p 值。
+\end{exercise}
+
+\begin{exercise}
+判断下列说法是否正确，并说明理由。
+\begin{enumerate}
+\item “95\% 置信区间 $[2.1,3.4]$ 表示 $\mu$ 有 95\% 的概率在 $2.1$ 与 $3.4$ 之间。”
+\item “p 值为 $0.03$，所以原假设为真的概率是 $3\%$。”
+\item “p 值为 $0.40$，所以我们证明了两组没有差别。”
+\item “其他条件相同，样本量越大，95\% 置信区间越短。”
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+已知总体标准差约为 $10$，希望 $\mu$ 的 95\% 置信区间半宽不超过 $2$。至少需要多少个观测？若半宽要求不超过 $1$ 呢？
+\end{exercise}
+
+\levelB
+\begin{exercise}
+在例 \ref{ex:ztest} 中，取 $\alpha=0.05$，$\sigma$ 一般（不一定为 $1$）。推导在 $\mu=\delta>0$ 处达到功效 $1-\beta$ 所需的样本量，并验证正文中 $\delta=0.5\sigma$、功效 $0.8$ 时 $n=25$ 的结论。
+\end{exercise}
+
+\begin{exercise}\label{ex4:uniform}
+设 $T$ 在 $H_0$ 下的分布函数 $F$ 连续且严格递增。证明 p 值 $P=1-F(T)$ 在 $H_0$ 下服从 $\Unif(0,1)$。
+\end{exercise}
+
+\begin{exercise}
+对睡眠数据的差值，求 $\sigma^2$ 与 $\sigma$ 的 95\% 置信区间（$\chi^2_{9,0.025}=2.700$，$\chi^2_{9,0.975}=19.023$）。
+\end{exercise}
+
+\begin{exercise}
+某研究者对同一份数据先后做了上侧检验和下侧检验（各在 $\alpha=0.05$ 水平），只要有一个显著就宣布“有差别”。
+在正态 $z$ 检验中，他的真实第一类错误是多少？他其实在做什么检验？
+\end{exercise}
+
+\levelC
+\begin{exercise}[原讲义习题 4.3]
+$P_1,P_2$ 是同一原假设的两个合法 p 值，即对 $H_0$ 下的每个 $u\in[0,1]$ 有 $\P(P_i\le u)\le u$。
+\begin{enumerate}
+\item 若二者独立且都服从 $\Unif(0,1)$，求 $Q=P_1P_2$ 的分布函数，并据此把 $Q$ 变成一个服从 $\Unif(0,1)$ 的 p 值。
+\item 不再假设独立。证明 $\min\{1,\,2\sqrt{P_1P_2}\}$ 仍是合法 p 值，而常数 $2$ 不能再减小。
+\end{enumerate}
+\hint{(2) 若 $P_1>u/2$ 且 $P_2>u/2$，则 $2\sqrt{P_1P_2}>u$。证明常数最优时，构造 $P_1=U$，并在 $U<s$ 时令 $P_2=s-U$、否则 $P_2=U$。}
+\end{exercise}
+
+\begin{exercise}[原讲义习题 4.5]
+$X_1,X_2$ 独立服从 $\Unif(0,\theta)$。检验 $H_0:\theta\le1$ 对 $H_1:\theta>1$，$0<\alpha<1/2$。
+\begin{enumerate}
+\item 证明任何水平 $\le\alpha$ 的检验，在 $\theta>1$ 时的功效不超过 $1-(1-\alpha)/\theta^2$。
+\item 构造一个只依赖 $\max(X_1,X_2)$ 的拒绝域，对每个 $\theta>1$ 达到这一上界。
+\end{enumerate}
+\hint{$\theta>1$ 时，把样本空间分成 $(0,1)^2$ 和其余部分；前者上的概率是 $\theta=1$ 时的 $1/\theta^2$ 倍。}
+\end{exercise}

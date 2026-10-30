@@ -1,0 +1,279 @@
+% 数理统计自学讲义（重构版）的版式
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notes}
+
+% ---------- 页面 ----------
+\RequirePackage[a4paper,inner=26mm,outer=24mm,top=26mm,bottom=26mm,headsep=9mm,footskip=12mm]{geometry}
+\linespread{1.42}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{0.35em}
+
+% ---------- 字体 ----------
+\RequirePackage{amsmath,amssymb,mathtools}
+\RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}[Scale=0.92]
+\setmathfont{TeX Gyre Pagella Math}
+\setmathfont{TeX Gyre Pagella Math}[range={\mathcal,\mathscr},StylisticSet=1]
+\setCJKmainfont{Noto Serif CJK SC}[BoldFont=Noto Serif CJK SC Bold,ItalicFont=LXGW WenKai,BoldItalicFont=LXGW WenKai Bold]
+\newCJKfontfamily\kaiti{LXGW WenKai}[BoldFont=LXGW WenKai Bold,ItalicFont=Noto Sans CJK SC,BoldItalicFont=Noto Sans CJK SC Bold]
+\setCJKsansfont{Noto Sans CJK SC}[BoldFont=Noto Sans CJK SC Bold]
+\setCJKmonofont{Noto Sans Mono CJK SC}
+\newCJKfontfamily\heiti{Noto Sans CJK SC}[BoldFont=Noto Sans CJK SC Bold]
+\newCJKfontfamily\lightsans{Noto Sans CJK SC Light}
+\newCJKfontfamily\titlefont{Noto Serif CJK SC SemiBold}
+\newCJKfontfamily\blackfont{Noto Serif CJK SC Black}
+
+% ---------- 颜色 ----------
+\RequirePackage{xcolor}
+\definecolor{ink}{HTML}{22313F}
+\definecolor{main}{HTML}{1F5F73}      % 主色：深青
+\definecolor{mainlight}{HTML}{E8F1F3}
+\definecolor{accent}{HTML}{B4533A}    % 强调：赭红
+\definecolor{accentlight}{HTML}{FBEEE9}
+\definecolor{gold}{HTML}{B8862B}
+\definecolor{goldlight}{HTML}{FBF5E6}
+\definecolor{sage}{HTML}{4F7A4B}
+\definecolor{sagelight}{HTML}{EEF4EC}
+\definecolor{plum}{HTML}{5B4A86}
+\definecolor{plumlight}{HTML}{F1EEF7}
+\definecolor{softgray}{HTML}{F4F5F6}
+\definecolor{midgray}{HTML}{8A949C}
+\color{ink}
+
+% ---------- 章节标题 ----------
+\ctexset{
+  chapter = {
+    format = \raggedright,
+    nameformat = {},
+    name = {},
+    number = {\arabic{chapter}},
+    aftername = {},
+    titleformat = \chaptertitlebox,
+    beforeskip = 0pt,
+    afterskip = 24pt,
+    pagestyle = chapfirst,
+  },
+  section = {
+    format = \raggedright\color{main}\large\bfseries\heiti,
+    number = {\thechapter.\arabic{section}},
+    aftername = \hspace{0.9em},
+    beforeskip = 1.6em plus 0.3em,
+    afterskip = 0.7em,
+  },
+  subsection = {
+    format = \raggedright\color{ink}\normalsize\bfseries\heiti,
+    aftername = \hspace{0.7em},
+    beforeskip = 1.1em,
+    afterskip = 0.4em,
+  },
+  paragraph = {
+    format = \bfseries\heiti\color{main},
+    aftername = \hspace{0.6em},
+  },
+}
+\newcommand{\chaptertitlebox}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[main] (current page.north west) rectangle ([yshift=-6.2cm]current page.north east);
+    \fill[accent] ([yshift=-6.2cm]current page.north west) rectangle ([yshift=-6.35cm]current page.north east);
+  \end{tikzpicture}%
+  \vspace*{-0.6cm}%
+  {\color{white}\fontsize{13}{16}\selectfont\lightsans\ifnum\value{chapter}>0 第\,\thechapter\,章\else 预备\fi\par}%
+  \vspace{0.25cm}%
+  {\color{white}\fontsize{26}{32}\selectfont\titlefont #1\par}%
+  \vspace{1.9cm}%
+}
+\newcommand{\appendixtitlebox}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[ink] (current page.north west) rectangle ([yshift=-6.2cm]current page.north east);
+    \fill[gold] ([yshift=-6.2cm]current page.north west) rectangle ([yshift=-6.35cm]current page.north east);
+  \end{tikzpicture}%
+  \vspace*{-0.6cm}%
+  {\color{white}\fontsize{13}{16}\selectfont\lightsans 附录\,\thechapter\par}%
+  \vspace{0.25cm}%
+  {\color{white}\fontsize{26}{32}\selectfont\titlefont #1\par}%
+  \vspace{1.9cm}%
+}
+\newcommand{\plaintitlebox}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[main] (current page.north west) rectangle ([yshift=-6.2cm]current page.north east);
+    \fill[accent] ([yshift=-6.2cm]current page.north west) rectangle ([yshift=-6.35cm]current page.north east);
+  \end{tikzpicture}%
+  \vspace*{0.1cm}%
+  {\color{white}\fontsize{26}{32}\selectfont\titlefont #1\par}%
+  \vspace{1.9cm}%
+}
+
+% ---------- 页眉页脚 ----------
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[LE]{\small\color{midgray}\lightsans 数理统计自学讲义}
+\fancyhead[RO]{\small\color{midgray}\lightsans\leftmark}
+\fancyfoot[LE,RO]{\small\color{main}\bfseries\thepage}
+\fancypagestyle{chapfirst}{\fancyhf{}\fancyfoot[LE,RO]{\small\color{main}\bfseries\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\small\color{main}\bfseries\thepage}}
+\renewcommand{\chaptermark}[1]{\markboth{\ifnum\value{chapter}>0 第\thechapter 章\quad\fi #1}{}}
+
+% ---------- 图形 ----------
+\RequirePackage{tikz,pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,calc,positioning,shapes.geometric,decorations.pathreplacing,patterns,3d,fit,backgrounds}
+\usepgfplotslibrary{fillbetween,statistics,groupplots}
+\pgfplotsset{
+  every axis/.append style={
+    axis line style={midgray},
+    tick style={midgray},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    legend style={font=\footnotesize,draw=none,fill=white,fill opacity=0.85,text opacity=1},
+    title style={font=\small\heiti},
+  },
+  notesaxis/.style={axis lines=left, grid=none, enlargelimits=false, clip=false},
+}
+\RequirePackage{float}
+\RequirePackage[font=small,labelfont={bf,color=main},labelsep=quad,skip=6pt]{caption}
+
+% ---------- 表格 ----------
+\RequirePackage{booktabs,array,tabularx,multirow,colortbl}
+\renewcommand{\arraystretch}{1.25}
+
+% ---------- 列表 ----------
+\RequirePackage{enumitem}
+\setlist{itemsep=0.15em,topsep=0.35em,leftmargin=1.8em}
+\setlist[enumerate,1]{label=\textup{(\arabic*)}}
+
+% ---------- 盒子 ----------
+\RequirePackage[most]{tcolorbox}
+\tcbset{
+  base/.style={enhanced, breakable, boxrule=0pt, arc=1.5mm, outer arc=1.5mm,
+    left=4mm, right=4mm, top=2.2mm, bottom=2.2mm, before skip=0.9em, after skip=0.9em,
+    fonttitle=\bfseries\heiti, coltitle=ink, parbox=false},
+}
+% 定义
+\newtcbtheorem[number within=chapter]{definition}{定义}{base,
+  colback=mainlight, borderline west={1.2mm}{0pt}{main}, sharp corners=west,
+  coltitle=main, attach title to upper, after title={\quad}, separator sign none,
+  description delimiters none, description font=\bfseries\heiti, terminator sign none}{def}
+% 定理（命题共用编号）
+\newtcbtheorem[use counter from=definition]{theorem}{定理}{base,
+  colback=white, colframe=main, boxrule=0.6pt, arc=1.5mm,
+  colbacktitle=main, coltitle=white, fonttitle=\bfseries\heiti,
+  description delimiters={（}{）}, separator sign none, terminator sign none,
+  titlerule=0pt, toptitle=0.8mm, bottomtitle=0.8mm}{thm}
+\newtcbtheorem[use counter from=definition]{proposition}{命题}{base,
+  colback=white, colframe=main!70, boxrule=0.5pt,
+  colbacktitle=main!12, coltitle=main!90!black, fonttitle=\bfseries\heiti,
+  description delimiters={（}{）}, separator sign none, terminator sign none,
+  titlerule=0pt, toptitle=0.8mm, bottomtitle=0.8mm}{prop}
+% 例
+\newtcbtheorem[number within=chapter]{example}{例}{base, colback=white,
+  borderline west={0.6mm}{0pt}{accent}, sharp corners, left=4mm,
+  coltitle=accent, attach title to upper, after title={\quad}, separator sign none,
+  description delimiters={（}{）}, description font=\bfseries\heiti, terminator sign none}{ex}
+% 直观理解
+\newtcolorbox{intuition}[1][直观理解]{base, colback=goldlight, colframe=gold, boxrule=0pt,
+  borderline north={0.5pt}{0pt}{gold}, borderline south={0.5pt}{0pt}{gold}, sharp corners,
+  title={\tikz[baseline=-0.6ex]\fill[gold] (0,0) -- (0.8ex,0.8ex) -- (1.6ex,0) -- (0.8ex,-0.8ex) -- cycle;\ \ #1}, coltitle=gold!70!black,
+  attach title to upper, after title={\par\smallskip}, fontupper=\kaiti}
+% 易错提醒
+\newtcolorbox{warning}[1][常见误区]{base, colback=accentlight, colframe=accent, boxrule=0pt,
+  borderline west={1.2mm}{0pt}{accent}, sharp corners=west,
+  title={#1}, coltitle=accent!80!black, attach title to upper, after title={\par\smallskip}}
+% 本章导引
+\newtcolorbox{chapguide}{base, colback=softgray, colframe=softgray, arc=2mm,
+  left=5mm,right=5mm,top=3.5mm,bottom=3.5mm, fontupper=\small}
+% 本章小结
+\newtcolorbox{summary}{base, colback=sagelight, colframe=sage, boxrule=0.5pt, arc=2mm,
+  title={本章小结}, colbacktitle=sage, coltitle=white, fonttitle=\bfseries\heiti,
+  toptitle=1mm, bottomtitle=1mm}
+% 深入讨论（可跳过）
+\DeclareRobustCommand{\starmarkpic}{\tikz[baseline=-0.55ex]\node[star,star points=5,star point ratio=2.3,fill=plum,inner sep=0pt,minimum size=1.55ex]{};}
+\newcommand{\starmark}{\texorpdfstring{\starmarkpic}{★}}
+\newtcolorbox{deeper}[1][]{base, colback=plumlight, colframe=plum, boxrule=0pt,
+  borderline west={1.2mm}{0pt}{plum}, sharp corners=west,
+  title={\starmark\ 深入讨论\ifx&#1&\else：#1\fi}, coltitle=plum, attach title to upper, after title={\par\smallskip}}
+% 数据分析案例
+\newtcolorbox{casestudy}[1]{base, colback=white, colframe=sage, boxrule=0.6pt, arc=2mm,
+  title={\tikz[baseline=-0.6ex]{\draw[sage,line width=0.6pt] (0,-0.75ex) rectangle (1.5ex,0.75ex); \fill[sage] (0.4ex,-0.35ex) rectangle (1.1ex,0.35ex);}\ \ 案例\ \ #1}, colbacktitle=sage!12, coltitle=sage!70!black,
+  fonttitle=\bfseries\heiti, toptitle=1mm, bottomtitle=1mm}
+% 动手算一算
+\newtcolorbox{checkpoint}[1][停下来想一想]{base, colback=white, colframe=midgray!60, boxrule=0.4pt,
+  arc=1.5mm, title={\tikz[baseline=-0.6ex]\draw[midgray,line width=0.6pt] (0.75ex,0) circle (0.75ex) (0.75ex,0.4ex) -- (0.75ex,0) -- (1.1ex,-0.2ex);\ \ #1}, coltitle=midgray!60!black, attach title to upper,
+  after title={\quad}, fontupper=\small}
+
+% 证明与解答
+\newenvironment{proof}[1][证明]{\par\smallskip\noindent{\heiti\bfseries\color{main}#1.}\enspace}{\hfill{\color{main}$\blacksquare$}\par\smallskip}
+\newenvironment{solution}[1][解]{\par\smallskip\noindent{\heiti\bfseries\color{accent}#1.}\enspace}{\hfill{\color{accent}$\square$}\par\smallskip}
+
+% ---------- 习题 ----------
+\newcounter{exer}[chapter]
+\renewcommand{\theexer}{\thechapter.\arabic{exer}}
+\newcommand{\exerlevel}[2]{%
+  \par\medskip\noindent
+  \begin{tikzpicture}[baseline=-0.6ex]
+    \node[fill=#1, text=white, rounded corners=1.2mm, inner xsep=2.2mm, inner ysep=1mm, font=\small\bfseries\heiti] {#2};
+  \end{tikzpicture}\par\smallskip}
+\newcommand{\levelA}{\exerlevel{sage}{A\ \ 基础：熟悉概念与计算}}
+\newcommand{\levelB}{\exerlevel{main}{B\ \ 进阶：推导与理解}}
+\newcommand{\levelC}{\exerlevel{plum}{C\ \ 挑战：综合与探索（选做）}}
+\newenvironment{exercise}[1][]{\refstepcounter{exer}\par\smallskip\noindent
+  {\heiti\bfseries\color{main}习题\,\theexer}\ifx&#1&\else\ {\small\color{midgray}（#1）}\fi\enspace\ignorespaces}{\par}
+\newcommand{\hint}[1]{\par{\small\color{midgray}\heiti 提示：}{\small #1}}
+
+% 解答附录中的题号
+\newcommand{\soltitle}[1]{\par\medskip\noindent{\heiti\bfseries\color{main}#1}\enspace}
+
+% ---------- 常用记号 ----------
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Corr}{\operatorname{Corr}}
+\newcommand{\SE}{\operatorname{SE}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\bias}{\operatorname{bias}}
+\newcommand{\Bin}{\operatorname{Bin}}
+\newcommand{\Pois}{\operatorname{Poisson}}
+\newcommand{\Bern}{\operatorname{Bernoulli}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\Unif}{\operatorname{U}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\iid}{\overset{\text{iid}}{\sim}}
+\newcommand{\toP}{\xrightarrow{\;\mathrm{P}\;}}
+\newcommand{\tod}{\xrightarrow{\;\mathrm{d}\;}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\Xbar}{\bar{X}}
+\newcommand{\Ybar}{\bar{Y}}
+\newcommand{\xbar}{\bar{x}}
+\newcommand{\ybar}{\bar{y}}
+\newcommand{\hatt}[1]{\widehat{#1}}
+\newcommand{\keyword}[1]{{\heiti\bfseries\color{main}#1}}
+\newcommand{\emphx}[1]{{\color{accent}\heiti #1}}
+
+% ---------- 目录 ----------
+\RequirePackage[hidelinks,bookmarksnumbered]{hyperref}
+\ctexset{contentsname={目\quad 录}}
+\RequirePackage{tocloft}
+\renewcommand{\cftchapfont}{\heiti\bfseries\color{main}}
+\renewcommand{\cftchappagefont}{\heiti\bfseries\color{main}}
+\renewcommand{\cftsecfont}{\small}
+\renewcommand{\cftsecpagefont}{\small}
+\renewcommand{\cftchapleader}{\hfill}
+\setlength{\cftbeforechapskip}{0.7em}
+\setlength{\cftchapnumwidth}{4.2em}
+\setlength{\cftsecindent}{4.2em}
+\setlength{\cftsecnumwidth}{2.8em}
+\renewcommand{\cftchappresnum}{第\,}
+\renewcommand{\cftchapaftersnum}{\,章}
+
+% 编号一律带章号（第 0 章也是 0.x）
+\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+\renewcommand{\thetable}{\thechapter.\arabic{table}}
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+\setcounter{tocdepth}{1}
+
+\endinput

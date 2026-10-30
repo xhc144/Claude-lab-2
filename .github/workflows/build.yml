@@ -93,10 +93,14 @@ jobs:
           else
             echo "::warning::UPDATE_SIGNING_KEY 格式无法识别，本次打包不校验更新签名"
           fi
-      - name: 在本系统上测试文字识别和自动更新
+      - name: 在本系统上测试自动更新（改动更新相关代码后必须通过，见 CLAUDE.md）
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m pytest -q tests/test_ocr.py tests/test_update.py tests/test_ai.py
+        run: python -m pytest -q -rA tests/test_update.py
+      - name: 在本系统上测试文字识别和 AI 接口
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q tests/test_ocr.py tests/test_ai.py
       - name: 测试单实例（命名管道）、工具窗口和右键菜单（Windows）
         if: runner.os == 'Windows'
         env:

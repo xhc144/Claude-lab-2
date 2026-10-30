@@ -1,0 +1,7 @@
+audio/
+media/
+media_prev/
+logs/
+marks/
+build/
+*.mp4

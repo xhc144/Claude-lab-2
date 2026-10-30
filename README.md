@@ -9,7 +9,7 @@
 | 目录 / 文件 | 内容 |
 |---|---|
 | `folio/`、`packaging/`、`shellext/`、`tests/`、`run.py` | **Folio PDF 阅读器**，见下文 [Folio PDF 阅读器](#folio-pdf-阅读器) |
-| [`probability-distributions-video/`](probability-distributions-video/) | 《概率分布图鉴》讲解视频：Manim 动画，千问写口播稿、千问语音配音；附讲义原文和生成源码 |
+| [`probability-distributions-video/`](probability-distributions-video/) | 《概率分布图鉴》8 集系列讲解视频：从一枚硬币讲到多元正态，Manim 动画，千问语音配音；附讲义原文和生成源码 |
 | [`geo-topo-video/`](geo-topo-video/) | 讲解视频：几何与拓扑中的五道经典难题 |
 | [`knot-theory-video/`](knot-theory-video/) | 讲解视频：扭结理论速通 |
 | [`langlands-video/`](langlands-video/) | 科普短片：朗兰兹纲领 |

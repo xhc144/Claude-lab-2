@@ -4,7 +4,7 @@
     export DASHSCOPE_API_KEY=...
     python tts.py                 # 换音色：export QWEN_VOICE=Ethan
 
-字幕显示的是原文（λ、σ 等符号照写），送去合成的是 spoken() 换成读音后的文字。
+字幕和送去合成的文字基本一样，希腊字母原样保留；spoken() 只去掉破折号。
 合成结果按文字内容缓存在 audio/cache/，改了哪段只重新合成哪段。
 """
 import hashlib
@@ -27,8 +27,9 @@ VOICE = os.environ.get("QWEN_VOICE", "Maia")
 URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
 SR = 24000
 
-READ = [("λ", "兰姆达"), ("μ", "缪"), ("σ", "西格玛"), ("α", "阿尔法"), ("β", "贝塔"), ("ν", "纽"),
-        ("ρ", "柔"), ("γ", "伽马"), ("φ", "斐"), ("–", ""), ("—", "，")]
+# 希腊字母原样送去合成：qwen3-tts-flash 能直接读出 λ、μ、σ 等（试过把 λ 换成“兰姆达”，反而念得别扭）。
+# 只处理两种破折号，免得被读成奇怪的停顿。
+READ = [("–", ""), ("—", "，")]
 
 
 def spoken(text):

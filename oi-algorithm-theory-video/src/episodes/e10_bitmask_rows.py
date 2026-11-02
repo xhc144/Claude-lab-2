@@ -55,15 +55,18 @@ def build(S):
     S.say("换一种方式：一行一行地放。处理完前 i 行，接下来还需要知道什么？")
 
     # ------------------------------------------------------------ 接口
-    S.section("一行一行：接口只有最后一行")
+    S.section("一行一行：接口只有最后一行", keep=[board])
     S.say("第 i+1 行的国王只会和第 i 行的国王冲突，和更上面的行碰不到。所以前 i 行对未来的影响，只通过第 i 行这一排。")
     S.note("第 i+1 行只和第 i 行冲突 → 接口 = 最后一行的放法", color=Y)
+    S.play(board[(0, 0)].to(text="K", tc=CY, fill=tint(CY, 0.3)), board[(1, 2)].to(text="K", tc=CY, fill=tint(CY, 0.3)),
+           dur=0.5)
     hl = board.frame(1, 0, 1, 3, Y)
-    S.play(FadeIn(hl), *[board[(0, j)].to(fill=alpha(BG3, 0.4)) for j in range(4)], dur=0.5)
+    S.play(FadeIn(hl), *[board[(0, j)].to(op=0.35) for j in range(4)], dur=0.5)
     S.say("另外还要知道已经放了几个国王（总数必须正好是 K）。至于上面几行具体怎么放，未来不关心。")
     S.note("{y|f[i][S][k]}：前 i 行，第 i 行的放法是 S，共放了 k 个", color=Y)
-    S.play(FadeOut(hl), *[board[(0, j)].to(fill=BG3) for j in range(4)], dur=0.4)
     S.say("一行的放法 S 用二进制表示：第 j 位是 1 表示第 j 列有国王。")
+    S.play(FadeOut(hl), *[board[(0, j)].to(op=1.0) for j in range(4)],
+           board[(0, 0)].to(text="", fill=BG3), board[(1, 2)].to(text="", fill=BG3), dur=0.4)
     row = Array(["0", "1", "0", "1"], x=360, y=760, cw=70, ch=56, gap=6, size=28, index=False)
     S.show(row)
     S.play(board[(2, 1)].to(text="K", tc=Y, fill=tint(Y, 0.3)), board[(2, 3)].to(text="K", tc=Y, fill=tint(Y, 0.3)),

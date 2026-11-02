@@ -663,10 +663,13 @@ class _NodeHost(Group):
                 out.append(self.nodes[v].to(fill=node_fill))
         return out
 
-    def token(self, v, color=C.YELLOW, r=9):
-        """一个可以沿边移动的小圆点。"""
+    def token(self, v, color=C.YELLOW, r=None, ring=True):
+        """标记“当前位置”的圆环（套在结点外面，不挡住编号），可以沿边移动。"""
         x, y = self.nodes[v].g("x", 0), self.nodes[v].g("y", 0)
-        d = Circle(x, y, r, fill=color, stroke=None, sw=0)
+        if ring:
+            d = Circle(x, y, self.nodes[v].radius + 6, fill=(0, 0, 0, 0), stroke=color, sw=4.5)
+        else:
+            d = Circle(x, y, r or 9, fill=color, stroke=None, sw=0)
         d.tr["op"].base = 0.0
         d.z = 5
         self.add(d)
@@ -1013,7 +1016,8 @@ class SegTree(Group):
     def __getitem__(self, lr):
         return self.nodes[lr]
 
-    def parent(self, lr):
+    def up(self, lr):
+        """结点 lr 的父结点（根返回 None）。"""
         for p, kids in self.kids.items():
             if lr in kids:
                 return p

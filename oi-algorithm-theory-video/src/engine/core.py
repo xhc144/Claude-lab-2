@@ -152,9 +152,18 @@ class Node:
             self.children.append(k)
         return kids[0] if len(kids) == 1 else kids
 
+    def _check_alive(self, S, t0):
+        r = self
+        while r.parent is not None:
+            r = r.parent
+        if r in S._registered and r.dead < t0 - 0.05 and not getattr(r, "_warned_dead", False):
+            r._warned_dead = True
+            S.warn(f"动画作用在已经消失的对象上（{type(r).__name__}，消失于 {r.dead:.1f}s）——换小节时忘了 keep？")
+
     def to(self, dur=None, ease="io", delay=0.0, **kw):
         """把若干属性动画到目标值。"""
         def fn(S, t0, d):
+            self._check_alive(S, t0)
             for k, v in kw.items():
                 if k not in self.tr:
                     self.tr[k] = Track(v)

@@ -63,7 +63,7 @@ SUP = {"⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶
 OPS = {"max", "min", "log", "gcd", "lcm", "lg", "ln", "exp", "sin", "cos", "tan", "det", "deg", "lim", "sup",
        "inf", "arg"}
 RELS = set("=<>≤≥≠≈≡→←↔⇒⇔⇐⇝↦∈∉⊆⊂∝")
-WORDS2 = {"mx", "mn", "ok", "an", "am"}     # 看起来像两个变量相乘、其实是标识符或单词的两字母词
+WORDS2 = {"mx", "mn", "ok", "an", "am", "in", "is", "it", "lp"}     # 看起来像两个变量相乘、其实是标识符或单词的两字母词
 BINS = set("+−-×·÷∪∩⊕±∘")
 
 
@@ -105,7 +105,7 @@ def convert(run):
                 op_tail = True
                 i = j
                 continue
-            elif len(word) == 2 and word not in WORDS2 and word[0] in "abcmnkpqx" and word[1] in "xyzbnmkpqBVWLK":
+            elif len(word) == 2 and word not in WORDS2 and word[0] in "abcijklmnpqx" and word[1] in "xyzbijklnmpqBVWLK":
                 out.append(word)               # ax、by、O(nm)、O(qB) 这类是两个变量相乘，不是单词
             elif len(word) == 1:
                 out.append(word)

@@ -45,7 +45,7 @@ SYM = {
     "∪": "\\cup ", "∩": "\\cap ", "⊆": "\\subseteq ", "⊂": "\\subset ", "∅": "\\varnothing ", "⊕": "\\oplus ",
     "∀": "\\forall ", "∃": "\\exists ", "¬": "\\neg ", "∧": "\\wedge ", "∨": "\\vee ", "±": "\\pm ",
     "⌊": "\\lfloor ", "⌋": "\\rfloor ", "⌈": "\\lceil ", "⌉": "\\rceil ", "′": "'", "″": "''",
-    "…": "\\ldots ", "⋯": "\\cdots ", "∣": "\\mid ", "∤": "\\nmid ", "∘": "\\circ ", "⊥": "\\perp ", "∠": "\\angle ",
+    "…": "\\ldots ", "⋯": "\\cdots ", "∣": "\\mid ", "∤": "\\nmid ", "½": "\\tfrac{1}{2}", "⅓": "\\tfrac{1}{3}", "¼": "\\tfrac{1}{4}", "∘": "\\circ ", "⊥": "\\perp ", "∠": "\\angle ",
     "α": "\\alpha ", "β": "\\beta ", "γ": "\\gamma ", "δ": "\\delta ", "ε": "\\varepsilon ", "θ": "\\theta ",
     "λ": "\\lambda ", "μ": "\\mu ", "π": "\\pi ", "σ": "\\sigma ", "φ": "\\varphi ", "ω": "\\omega ",
     "Δ": "\\Delta ", "Ω": "\\Omega ", "Γ": "\\Gamma ", "Λ": "\\Lambda ", "Φ": "\\Phi ",

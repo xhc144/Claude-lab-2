@@ -1,8 +1,8 @@
 """下载视频用到的字体到 build/fonts/（字体文件太大，不放进仓库）。
 
-- 思源黑体（Noto Sans SC）Regular / Bold：全部中文文字
-- JetBrains Mono：状态、下标、公式里的等宽部分
-- Noto Sans Math、Noto Sans、Noto Sans Symbols 2：⌊⌋、上下标、✓✗ 等符号的后备字体
+- 思源宋体（Noto Serif SC）Medium / Bold / Black：全部中文文字（正文 / 强调 / 大标题）
+- 思源黑体（Noto Sans SC）、Noto Sans Math、Noto Sans Symbols 2：个别字形的后备字体
+西文、数字和公式不用这里的字体，而是交给 LaTeX（Latin Modern），见 engine/latex.py。
 """
 
 import re
@@ -14,11 +14,11 @@ ROOT = Path(__file__).resolve().parent
 DIR = ROOT / "build" / "fonts"
 
 GOOGLE = {
+    "NotoSerifSC-Medium.ttf": "Noto+Serif+SC:wght@500",
+    "NotoSerifSC-Bold.ttf": "Noto+Serif+SC:wght@700",
+    "NotoSerifSC-Black.ttf": "Noto+Serif+SC:wght@900",
     "NotoSansSC-Regular.ttf": "Noto+Sans+SC:wght@400",
-    "NotoSansSC-Bold.ttf": "Noto+Sans+SC:wght@700",
-    "JetBrainsMono-Medium.ttf": "JetBrains+Mono:wght@500",
     "NotoSansMath-Regular.ttf": "Noto+Sans+Math",
-    "NotoSans-Regular.ttf": "Noto+Sans:wght@400",
     "NotoSansSymbols2-Regular.ttf": "Noto+Sans+Symbols+2",
 }
 

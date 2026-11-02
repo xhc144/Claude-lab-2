@@ -5,9 +5,9 @@
 
 - 共 8 个单元、57 集（规划见下方导航），每集 5～10 分钟，围绕一个明确的子问题。
 - 每集的结构：一个有代表性的问题 → 朴素方法卡在哪里 → 推导出新方法（状态为什么这样定义、要维护哪些信息、为什么不漏不重、优化为什么成立）→ 完整例子逐步推演 → 正确性、复杂度、适用条件 → 变式或反例 → **手推 / 建模题**（出题后有“暂停思考”倒计时，再给解答）→ 小结。
-- **没有人声和旁白**，只有轻柔的纯音乐。讲解全部由分步出现的中文文字承担：画面下方是逐句出现的讲解，右侧“板书”保留关键结论，左侧是会真实变化的图解（DP 表逐格填写、树上的值向上汇总、线段树结点合并、增广路上的流量改变……）。
+- **没有人声和旁白**，只有轻快、柔和的纯音乐（电钢琴、贝斯、轻爵士鼓、颤音琴等真实乐器采样演奏的 lo-fi / 爵士流行小段，每集不同）。讲解全部由分步出现的中文文字承担：画面下方是逐句出现的讲解，右侧“板书”保留关键结论，左侧是会真实变化的图解（DP 表逐格填写、树上的值向上汇总、线段树结点合并、增广路上的流量改变……）。
 - 每句话按字数留出阅读时间；遇到需要想一想的地方可以随时暂停。
-- 1920×1080，30 fps，H.264 + AAC。画面和音乐全部由本目录的 Python 程序生成，没有用到任何外部素材。
+- 1920×1080，30 fps，H.264 + AAC。画面和音乐全部由本目录的 Python 程序生成：公式和西文用 LaTeX 排版（Latin Modern），中文用思源宋体；音乐由程序编曲，用 FluidSynth 和开源的 FluidR3_GM 音色库演奏。
 
 先修关系：集号就是推荐的观看顺序，后面的集只依赖前面的集（每集的“先修”一栏列出直接依赖的集号；“—”表示只需要基础算法）。
 每集片头会列出“用到的旧知识”，没学过的内容在用到时会先补一句。
@@ -126,15 +126,23 @@
 | 右侧板书 | 状态定义、转移、关键结论，一条条累积；换小节时清空 |
 | 下方讲解 | 一次一句（最多两行），按字数停留 |
 
+公式、变量、数字一律是 LaTeX 排出来的（单个字母是斜体变量，`max`、`log` 等是正体算子），和中文按同一条基线排在一起。
+
 颜色：黄色是当前关注的对象和结论；青色、橙色区分两个对象（两条路线、左右两半……）；绿色是“成立 / 正确”；红色是“反例 / 出错”；灰色是已经过去或无效的部分。
 
 ## 怎么重新生成
 
-需要 Python 3.10+、ffmpeg，以及 `skia-python`、`numpy`、`scipy`、`requests`（skia-python 在 Linux 上还需要 `libegl1`）。字体（思源黑体等）首次运行时自动下载到 `src/build/fonts/`。
+需要 Python 3.10+、ffmpeg、LaTeX（`latex` + `dvipng`，以及 lmodern、amsmath、preview 宏包）、FluidSynth 和 GM 音色库，Python 包 `skia-python`、`mido`、`numpy`、`pillow`、`requests`（skia-python 在 Linux 上还需要 `libegl1`）。字体（思源宋体等）首次运行时自动下载到 `src/build/fonts/`；LaTeX 片段编译一次后按内容缓存在 `src/build/tex/`。
+
+Debian / Ubuntu 上：
+
+```bash
+sudo apt install ffmpeg libegl1 texlive-latex-base texlive-latex-recommended texlive-fonts-recommended lmodern preview-latex-style dvipng fluidsynth fluid-soundfont-gm
+```
 
 ```bash
 cd src
-pip install skia-python numpy scipy requests
+pip install skia-python mido numpy pillow requests
 python build.py 1                 # 渲染第 1 集 → videos/、transcripts/
 python build.py 1-12 -j 4         # 并行渲染第 1～12 集
 python build.py all -j 4          # 渲染全部已写好的集
@@ -144,7 +152,7 @@ python build.py 5 --at 30,95.5    # 指定时刻的静帧
 python docs.py                    # 按实际成片刷新本 README 的导航和 PROGRESS.md
 ```
 
-一集在 4 核机器上大约 3～5 分钟（没有动画的阅读时间直接复用上一帧，只有约两成的帧需要真正绘制）。
+一集在 4 核机器上大约 5～10 分钟（没有动画的阅读时间直接复用上一帧，只有约两成的帧需要真正绘制）。
 
 ## 文件
 
@@ -158,11 +166,12 @@ python docs.py                    # 按实际成片刷新本 README 的导航和
 | `src/engine/core.py` | 动画内核：属性轨道、时间线、逐帧渲染到 ffmpeg |
 | `src/engine/scene.py` | 一集的搭建器：讲解、板书、章节卡、片头、手推题倒计时、小结，以及阅读时间规则 |
 | `src/engine/widgets.py` | 画面部件：方格、数组、表格、树、图、坐标系、卡片、矩阵 |
-| `src/engine/text.py` | 中文富文本排版（`{y|高亮}`、`{m|等宽公式}`、自动换行、后备字体） |
-| `src/engine/music.py` | 背景音乐合成（钢琴分解和弦 + 铺底，每集调性和种子不同） |
+| `src/engine/text.py` | 中西文混排（`{y|高亮}`、`{y!|粗体}`、`$…$` 显式公式、自动换行、避头尾、标点挤压、中西文间距） |
+| `src/engine/latex.py` | 把西文和公式片段转成 LaTeX，整集一次编译成图片并缓存，按颜色和字号贴到画面上 |
+| `src/engine/music.py` | 背景音乐：程序编曲（和弦进行、伴奏、贝斯、鼓、旋律）→ MIDI → FluidSynth 渲染 → 统一响度 |
 | `src/build.py` | 渲染入口；`src/docs.py` 刷新导航和进度 |
 
-`src/build/`（字体、音频、静帧等中间文件）不提交。
+`src/build/`（字体、LaTeX 缓存、音频、静帧等中间文件）不提交。
 
 ### 写一集的方式
 

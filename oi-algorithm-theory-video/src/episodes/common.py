@@ -34,7 +34,7 @@ def token(parent, x, y, color, r=13, label=None):
     d.z = 3
     parent.add(d)
     if label:
-        d.add(Text(0, 0, label, size=16, color=C.BG, chain="bold"))
+        d.add(Text(0, 0, label, size=int(r * 1.15), color=C.BG, chain="bold"))
     return d
 
 

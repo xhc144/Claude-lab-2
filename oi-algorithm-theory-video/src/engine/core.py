@@ -310,7 +310,7 @@ class Renderer:
 
     def frame(self, t):
         cv = self.surface.getCanvas()
-        cv.clear(skia.Color4f(*theme.BG))
+        theme.background(cv)
         for layer in (self.S.under, self.S.objs, self.S.over):
             for o in sorted(layer, key=lambda n: n.z) if any(n.z for n in layer) else layer:
                 o.draw(cv, t)

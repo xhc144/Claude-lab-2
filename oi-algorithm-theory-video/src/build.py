@@ -26,13 +26,49 @@ TRANSCRIPTS = ROOT.parent / "transcripts"
 BUILD = ROOT / "build"
 
 
-def make_scene(ep):
+def _scene_once(ep):
     meta = dict(ep)
     meta["unit_name"] = catalog.UNITS[ep["unit"]]
     S = Scene(meta)
     mod = importlib.import_module(f"episodes.{ep['module']}")
     mod.build(S)
     S.finish()
+    return S
+
+
+def all_texts(S):
+    """时间线上出现过的每一段文字（含字号）。"""
+    from engine.widgets import Text
+    out = []
+    for layer in (S.under, S.objs, S.over):
+        for top in layer:
+            for n in top.walk():
+                if not isinstance(n, Text):
+                    continue
+                texts = {n.tr["text"].base} | {v for seg in n.tr["text"].segs for v in (seg[2], seg[3], seg[5])}
+                sizes = {n.tr["size"].base} | {v for seg in n.tr["size"].segs for v in (seg[2], seg[3], seg[5])}
+                for s in texts:
+                    if s:
+                        for z in sizes:
+                            out.append((n, s, z))
+    return out
+
+
+def make_scene(ep):
+    """搭时间线。西文和公式要先用 LaTeX 编译才知道准确宽度：
+    第一遍用估计宽度搭好，收集所有片段一次编译，再用准确宽度重新搭一遍（搭建本身很快）。"""
+    from engine import latex as TX
+    from engine import text as TT
+    for _ in range(3):
+        S = _scene_once(ep)
+        for n, s, z in all_texts(S):
+            n.lay(s, z)
+        if not TX.has_pending():
+            break
+        TX.compile_pending()
+        TT.refresh()
+    for w in S.warnings:
+        print(f"  [警告] {w}")
     return S
 
 
@@ -143,7 +179,7 @@ def build_one(num, stills=False, still_times=None, crf=30, preset="medium", only
     adir = BUILD / "audio"
     adir.mkdir(parents=True, exist_ok=True)
     wav = adir / f"{num:02d}.wav"
-    music.write_wav(wav, music.compose(S.t + 0.5, ep["unit"], ep["num"]))
+    music.render(wav, S.t + 0.5, ep["unit"], ep["num"])
     out = video_path(ep)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.with_suffix(".part.mp4")

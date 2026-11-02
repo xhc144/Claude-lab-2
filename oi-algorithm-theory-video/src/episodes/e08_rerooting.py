@@ -88,7 +88,7 @@ def build(S):
     S.section("第一遍：向下汇总", keep=[tree])
     S.say("第一遍 DFS 算两样东西：子树大小 size[u]，以及 down[u] = u 到它子树里所有点的距离和。")
     S.note("size[u]：u 子树的点数")
-    S.note("down[u] = Σ_{子树内 x} dist(u, x)")
+    S.note("down[u] = Σ dist(u, x)，x 取遍 u 的子树")
     S.say("down 怎么合并？儿子 c 子树里的每个点，到 u 都比到 c 多走一步，一共多出 size[c]。")
     S.note("down[u] = Σ_c ( down[c] + size[c] )", color=Y)
     tgs = {v: tree.tag(v, "", "r" if ch[v] else "d", CY, 22) for v in order}

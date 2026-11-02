@@ -9,7 +9,7 @@ import math
 from . import text as T
 from . import theme as C
 from .core import Anim, FadeIn, FadeOut, Appear, flatten, Node, INF
-from .widgets import Text, Rect, Line, Circle, Arc, Group, Card
+from .widgets import Text, Rect, Line, Circle, Arc, Group, Card, GradLine, Band
 
 READ_RATE = 4.6        # 每秒读几个汉字（技术内容，边读边看图）
 READ_BASE = 1.3        # 每句话的基础停留
@@ -36,6 +36,7 @@ class Scene:
         self.sections = []      # (t, 名称)
         self.layout = "panel"
         self.checks = []        # 检查画面重叠的时刻
+        self.warnings = []
         self._build_chrome()
 
     # ------------------------------------------------------------ 基础
@@ -102,37 +103,48 @@ class Scene:
         m = self.meta
         uc = C.UNIT_COLORS.get(m.get("unit", 1), C.YELLOW)
         self.ucolor = uc
+        hy = C.HEADER_H / 2 + 4
         hdr = Group(0, 0)
-        hdr.add(Rect(C.W / 2, C.HEADER_H / 2, C.W, C.HEADER_H, fill=C.BG2, stroke=None, sw=0, r=0))
-        hdr.add(Line(0, C.HEADER_H, C.W, C.HEADER_H, color=C.LINE, w=2))
-        chip_t = m.get("unit_name", "")
-        chip = Text(56, C.HEADER_H / 2, chip_t, size=24, color=C.BG, anchor="lm", chain="bold")
-        cw = T.layout(chip_t, 24, None).w + 30
-        hdr.add(Rect(41 + cw / 2, C.HEADER_H / 2, cw, 40, fill=uc, stroke=None, sw=0, r=20))
-        hdr.add(chip)
-        hdr.add(Text(41 + cw + 22, C.HEADER_H / 2,
-                     f"{{d|第 {m['num']} 集}}  {m['title']}", size=28, anchor="lm", chain="bold"))
-        self.sec_text = Text(C.W - 48, C.HEADER_H / 2, "", size=26, color=C.DIM, anchor="rm")
+        # 单元标签（描边小胶囊）
+        parts = m.get("unit_name", "").split(" ")
+        chip_t = " · ".join(parts)
+        cw = T.layout(chip_t, 21, None, None, "bold").w + 34
+        hdr.add(Rect(48 + cw / 2, hy, cw, 36, fill=C.alpha(uc, 0.13), stroke=C.alpha(uc, 0.55), sw=1.5, r=18))
+        hdr.add(Text(48 + cw / 2, hy, chip_t, size=21, color=uc, chain="bold"))
+        x = 48 + cw + 26
+        ep = f"第 {m['num']} 集"
+        hdr.add(Text(x, hy, ep, size=24, color=C.DIM, anchor="lm"))
+        x += T.layout(ep, 24, None).w + 20
+        hdr.add(Rect(x, hy, 2, 26, fill=C.alpha(C.LINE2, 0.9), stroke=None, sw=0, r=1))
+        hdr.add(Text(x + 20, hy, m["title"], size=30, anchor="lm", chain="bold"))
+        self.sec_text = Text(C.W - 52, hy, "", size=24, color=C.DIM, anchor="rm")
         hdr.add(self.sec_text)
+        hdr.add(GradLine(48, C.HEADER_H, C.W - 48, [(0.0, C.alpha(uc, 0.85)), (0.18, C.alpha(C.LINE2, 0.7)),
+                                                    (1.0, C.alpha(C.LINE2, 0.0))], w=1.5))
         hdr.tr["op"].base = 0.0
         self.header = hdr
         self.over.append(hdr)
 
         px0, py0, px1, py1 = C.PANEL
         pan = Group(0, 0)
-        pan.add(Rect((px0 + px1) / 2, (py0 + py1) / 2, px1 - px0, py1 - py0, fill=C.BG2,
-                     stroke=C.alpha(C.LINE, 0.7), sw=2, r=14))
-        pan.add(Text(px0 + 24, py0 + 26, "板书", size=22, color=C.FAINT, anchor="lm"))
+        pan.add(Rect((px0 + px1) / 2, (py0 + py1) / 2, px1 - px0, py1 - py0, fill=C.alpha(C.BG2, 0.92),
+                     stroke=C.alpha(C.LINE, 0.9), sw=1.5, r=22, shadow=1.0))
+        pan.add(Circle(px0 + 32, py0 + 34, 5, fill=uc, stroke=None, sw=0))
+        pan.add(Text(px0 + 48, py0 + 34, "板书", size=22, color=C.DIM, anchor="lm", chain="bold"))
+        pan.add(GradLine(px0 + 24, py0 + 62, px1 - 24, [(0.0, C.alpha(C.LINE2, 0.8)), (1.0, C.alpha(C.LINE2, 0.0))],
+                         w=1.2))
         pan.tr["op"].base = 0.0
         self.panel = pan
         self.under.append(pan)
 
         cx0, cy0, cx1, cy1 = C.CAPTION
         cap = Group(0, 0)
-        cap.add(Line(cx0, cy0 - 6, cx1, cy0 - 6, color=C.alpha(C.LINE, 0.8), w=2))
+        cap.add(Band(0, cy0 - 30, C.W, C.H - cy0 + 30, C.alpha(C.BG0, 0.0), C.alpha(C.BG0, 0.55)))
+        cap.add(GradLine(48, cy0 - 14, C.W - 48, [(0.0, C.alpha(C.LINE2, 0.0)), (0.5, C.alpha(C.LINE2, 0.55)),
+                                                  (1.0, C.alpha(C.LINE2, 0.0))], w=1.2))
         cap.tr["op"].base = 0.0
         self.capbar = cap
-        self.under.append(cap)
+        self.under.insert(0, cap)
 
     def chrome(self, on=True, dur=0.6):
         objs = [self.header, self.capbar] + ([self.panel] if self.layout == "panel" else [])
@@ -181,16 +193,22 @@ class Scene:
             self.captions[-1][1] = t0
             self.checks.append(t0 - 0.05)
         cx0, cy0, cx1, cy1 = C.CAPTION
-        cap = Text(cx0 + 10, (cy0 + cy1) / 2, text, size=C.CAPTION_SIZE, anchor="lm",
-                   maxw=cx1 - cx0 - 20, lh=1.5)
+        maxw = cx1 - cx0
+        L = T.layout(text, C.CAPTION_SIZE, None, maxw, "sans", 1.5)
+        if len(L.lines) > 2:
+            self.warn(f"讲解超过两行：{text}")
+        cy = (cy0 + cy1) / 2
+        cap = Group(0, 0)
+        bar_h = max(1, len(L.lines)) * C.CAPTION_SIZE * 1.5 - C.CAPTION_SIZE * 0.55
+        cap.add(Rect(cx0 - 26, cy, 4, bar_h, fill=C.alpha(self.ucolor, 0.9), stroke=None, sw=0, r=2))
+        cap.add(Text(cx0, cy, text, size=C.CAPTION_SIZE, anchor="lm", maxw=maxw, lh=1.5))
         cap.tr["op"].base = 0.0
         self.over.append(cap)
         cap.born = t0 + 0.15
         self._registered.add(cap)
         cap.tr["op"].add(t0 + 0.15, 0.35, 1.0, "out")
-        L = T.layout(text, C.CAPTION_SIZE, None, cx1 - cx0 - 20, "sans", 1.5)
-        if len(L.lines) > 2:
-            self.warn(f"讲解超过两行：{text}")
+        cap.tr["y"].add(t0 + 0.15, 0, 8)
+        cap.tr["y"].add(t0 + 0.15, 0.35, 0, "out")
         self.caption = cap
         n = T.plain_len(text)
         need = hold if hold is not None else READ_BASE + n / READ_RATE + extra
@@ -199,33 +217,39 @@ class Scene:
         self.t = t0 + 0.45
         return cap
 
-    def note(self, text, color=None, size=C.NOTE_SIZE, gap=16, indent=0, bullet=True, read=True):
-        """板书追加一条。返回这条的 Text，之后可以改颜色或闪烁。"""
+    def note(self, text, color=None, size=C.NOTE_SIZE, gap=18, indent=0, bullet=True, read=True):
+        """板书追加一条：左边一道小色条，右边是文字。返回这一条（Group）。"""
         if self.layout == "wide":
             self.warn(f"板书收起时写了板书：{text}")
         px0, py0, px1, py1 = C.PANEL
-        y = py0 + 58
+        y = py0 + 80
         for n in self.notes:
             if n.tr["op"].last() > 0.01:
                 y = max(y, n._bottom + gap)
-        maxw = px1 - px0 - 48 - indent
-        tx = Text(px0 + 24 + indent, y, text, size=size, color=color or C.FG, anchor="lt", maxw=maxw, lh=1.4)
+        x0 = px0 + 30 + indent
+        tx0 = x0 + (18 if bullet else 0)
+        maxw = px1 - 26 - tx0
         L = T.layout(text, size, None, maxw, "sans", 1.4)
-        tx._bottom = y + L.h
-        if tx._bottom > py1 - 14:
+        item = Group(0, 0)
+        if bullet:
+            mk = color if color is not None else C.alpha(self.ucolor, 0.55)
+            item.add(Rect(x0 + 2, y + size * 0.7, 4, size * 0.78, fill=mk, stroke=None, sw=0, r=2))
+        item.add(Text(tx0, y, text, size=size, color=color or C.FG, anchor="lt", maxw=maxw, lh=1.4))
+        item._bottom = y + L.h
+        if item._bottom > py1 - 14:
             self.warn(f"板书超出：{text}")
-        tx.tr["op"].base = 0.0
-        tx.born = self.t
-        self.under.append(tx)
-        self._registered.add(tx)
-        tx.tr["op"].add(self.t, 0.45, 1.0, "out")
-        tx.tr["x"].add(self.t, 0, px0 + 24 + indent + 14)
-        tx.tr["x"].add(self.t, 0.45, px0 + 24 + indent, "out")
-        self.notes.append(tx)
+        item.tr["op"].base = 0.0
+        item.born = self.t
+        self.under.append(item)
+        self._registered.add(item)
+        item.tr["op"].add(self.t, 0.45, 1.0, "out")
+        item.tr["x"].add(self.t, 0, 14)
+        item.tr["x"].add(self.t, 0.45, 0, "out")
+        self.notes.append(item)
         self.note_log.append((self.t, text, self.section_name))
         if read:
             self.read_until = max(self.read_until, self.t + 0.5 + T.plain_len(text) / NOTE_RATE)
-        return tx
+        return item
 
     def note_space(self, h=10):
         if self.notes:
@@ -241,7 +265,7 @@ class Scene:
             self.t += dur
 
     def warn(self, msg):
-        print(f"  [警告] {self.meta.get('code', '')} t={self.t:.1f}s：{msg}")
+        self.warnings.append(f"t={self.t:.1f}s：{msg}")
 
     # ------------------------------------------------------------ 章节
     def section(self, title, keep=(), card=True):
@@ -256,15 +280,15 @@ class Scene:
         self.clear_notes(dur=0.4)
         self.section_name = title
         self.sections.append((self.t, title))
-        self.play(self.sec_text.to(text=title), dur=0.5, wait=False)
+        self.play(self.sec_text.to(text=f"{{f|{len(self.sections):02d}}}　{title}"), dur=0.5, wait=False)
         kept = [o for o in flatten(list(keep)) if o.alive(self.t)]
         if card and kept:
             self.play(*[o.to(op=0.08) for o in kept], dur=0.4, wait=False)
         if card:
             k = len(self.sections)
-            num = Text(self.cx, self.cy - 70, f"{k:02d}", size=40, color=self.ucolor, chain="mono")
-            tt = Text(self.cx, self.cy, title, size=56, chain="bold")
-            ln = Line(self.cx - 160, self.cy + 56, self.cx + 160, self.cy + 56, color=self.ucolor, w=3, prog=0.0)
+            num = Text(self.cx, self.cy - 92, f"{k:02d}", size=46, color=self.ucolor, chain="bold")
+            tt = Text(self.cx, self.cy, title, size=60, chain="black", maxw=self.stage[2] - self.stage[0] - 120)
+            ln = Line(self.cx - 70, self.cy + 64, self.cx + 70, self.cy + 64, color=self.ucolor, w=3, prog=0.0)
             self.play(FadeIn(num, dy=10), FadeIn(tt, dy=16), FadeIn(ln), ln.to(prog=1.0), dur=0.6)
             self.wait(1.0 + T.plain_len(title) / 8)
             self.play(FadeOut(num, tt, ln), dur=0.45)
@@ -277,24 +301,50 @@ class Scene:
     def cover(self, goal, prereq=(), series="信息竞赛算法理论进阶"):
         m = self.meta
         uc = self.ucolor
+        cx = C.W / 2
         objs = []
-        objs.append(Text(C.W / 2, 210, series, size=30, color=C.DIM))
-        objs.append(Text(C.W / 2, 268, f"{m.get('unit_name', '')} · 第 {m['num']} 集", size=30, color=uc))
-        objs.append(Text(C.W / 2, 370, m["title"], size=72, chain="bold"))
+        objs.append(Text(cx, 176, series, size=26, color=C.DIM))
+        parts = m.get("unit_name", "").split(" ")
+        chip_t = " · ".join(parts + [f"第 {m['num']} 集"])
+        cw = T.layout(chip_t, 24, None, None, "bold").w + 44
+        chip = Group(cx, 236)
+        chip.add(Rect(0, 0, cw, 44, fill=C.alpha(uc, 0.13), stroke=C.alpha(uc, 0.6), sw=1.5, r=22))
+        chip.add(Text(0, 0, chip_t, size=24, color=uc, chain="bold"))
+        objs.append(chip)
+        objs.append(Text(cx, 352, m["title"], size=92, chain="black"))
         if m.get("subtitle"):
-            objs.append(Text(C.W / 2, 462, m["subtitle"], size=36, color=C.FG))
-        ln = Line(C.W / 2 - 260, 520, C.W / 2 + 260, 520, color=uc, w=3, prog=0.0)
+            objs.append(Text(cx, 452, m["subtitle"], size=38, color=C.DIM))
+        ln = Line(cx - 60, 510, cx + 60, 510, color=uc, w=3, prog=0.0)
         self.play(*[FadeIn(o, dy=14) for o in objs], FadeIn(ln), ln.to(prog=1.0), dur=0.8, lag=0.12)
-        y = 600
-        g = Text(C.W / 2, y, f"{{d|本集问题}}  {goal}", size=32, maxw=1500)
-        self.play(FadeIn(g, dy=10), dur=0.6)
+        # 本集问题：一张卡片
+        gw = 1360
+        GL = T.layout(goal, 32, None, gw - 96)
+        gh = GL.h + 96
+        gy = 560 + gh / 2
+        g = Group(cx, gy)
+        g.add(Rect(0, 0, gw, gh, fill=C.alpha(C.BG2, 0.9), stroke=C.alpha(C.LINE, 0.9), sw=1.5, r=22, shadow=1.0))
+        g.add(Text(-gw / 2 + 48, -gh / 2 + 30, "本集问题", size=22, color=uc, anchor="lt", chain="bold"))
+        g.add(Text(-gw / 2 + 48, -gh / 2 + 70, goal, size=32, anchor="lt", maxw=gw - 96))
+        self.play(FadeIn(g, dy=12), dur=0.6)
         rest = [g]
         need = 2.5 + T.plain_len(goal) / READ_RATE
         if prereq:
-            y += 30 + T.layout(f"本集问题  {goal}", 32, None, 1500).h
-            p = Text(C.W / 2, y + 20, "{d|用到的旧知识}  " + "　·　".join(prereq), size=28, color=C.FG, maxw=1500)
-            self.play(FadeIn(p, dy=10), dur=0.6)
-            rest.append(p)
+            py = gy + gh / 2 + 66
+            lab = "用到的旧知识"
+            chips = Group(0, py)
+            widths = [T.layout(p, 24, None).w + 40 for p in prereq]
+            lw = T.layout(lab, 24, None).w
+            total = lw + 24 + sum(widths) + 16 * (len(widths) - 1)
+            x = cx - total / 2
+            chips.add(Text(x, 0, lab, size=24, color=C.DIM, anchor="lm"))
+            x += lw + 24
+            for p, w in zip(prereq, widths):
+                chips.add(Rect(x + w / 2, 0, w, 44, fill=C.alpha(C.BG3, 0.9), stroke=C.alpha(C.LINE2, 0.8), sw=1.5,
+                               r=22))
+                chips.add(Text(x + w / 2, 0, p, size=24, color=C.FG))
+                x += w + 16
+            self.play(FadeIn(chips, dy=10), dur=0.6)
+            rest.append(chips)
             need += T.plain_len("".join(prereq)) / 6
         self.wait(need)
         self.play(FadeOut(*objs, ln, *rest), dur=0.6)
@@ -327,10 +377,10 @@ class Scene:
         self.flush()
         x = x if x is not None else self.cx
         y = y if y is not None else self.stage[3] - 110
-        ring_bg = Circle(x, y, 46, fill=(0, 0, 0, 0), stroke=C.LINE, sw=6)
+        ring_bg = Circle(x, y, 46, fill=C.alpha(C.BG2, 0.9), stroke=C.alpha(C.LINE, 0.9), sw=6)
         ring = Arc(x, y, 46, -90, 360, color=self.ucolor, w=6)
-        num = Text(x, y, str(secs), size=34, chain="mono", color=self.ucolor)
-        lab = Text(x, y + 82, "暂停思考", size=26, color=C.DIM)
+        num = Text(x, y, str(secs), size=34, chain="bold", color=self.ucolor)
+        lab = Text(x, y + 82, "暂停思考", size=26, color=C.DIM, chain="bold")
         self.show(ring_bg, ring, num, lab, dur=0.4)
         t0 = self.t
         ring.tr["sweep"].add(t0, secs, 0.0, "lin")
@@ -346,19 +396,30 @@ class Scene:
     def recap(self, points, next_title=None):
         self.section("本集小结")
         self.wide()
-        x0 = self.stage[0] + 80
-        y = self.stage[1] + 40
+        x0 = self.stage[0] + 90
+        y = self.stage[1] + 46
         items = []
         for i, p in enumerate(points):
-            dot = Text(x0, y, f"{i + 1}", size=30, color=self.ucolor, chain="mono", anchor="lt")
-            tx = Text(x0 + 46, y, p, size=32, anchor="lt", maxw=C.W - x0 - 46 - 120)
+            dot = Group(x0 + 20, y + 24)
+            dot.add(Circle(0, 0, 21, fill=C.alpha(self.ucolor, 0.14), stroke=C.alpha(self.ucolor, 0.7), sw=1.8))
+            dot.add(Text(0, 0, f"{i + 1}", size=24, color=self.ucolor, chain="bold"))
+            tx = Text(x0 + 66, y, p, size=32, anchor="lt", maxw=C.W - x0 - 66 - 120)
             L = T.layout(p, 32, None, tx.maxw)
             self.play(FadeIn(dot, dx=-10), FadeIn(tx, dx=-10), dur=0.5)
             self.wait(1.0 + T.plain_len(p) / READ_RATE)
             items += [dot, tx]
-            y += L.h + 26
+            y += L.h + 30
         if next_title:
-            nt = Text(C.W / 2, min(y + 50, 820), f"{{d|下一集}}  {next_title}", size=30, color=C.FG)
+            lab = "下一集"
+            lw = T.layout(lab, 24, None, None, "bold").w + 36
+            tw = T.layout(next_title, 32, None, None, "bold").w
+            total = lw + 20 + tw
+            ny = min(y + 60, 810)
+            nt = Group(C.W / 2 - total / 2, ny)
+            nt.add(Rect(lw / 2, 0, lw, 42, fill=C.alpha(self.ucolor, 0.13), stroke=C.alpha(self.ucolor, 0.6),
+                        sw=1.5, r=21))
+            nt.add(Text(lw / 2, 0, lab, size=24, color=self.ucolor, chain="bold"))
+            nt.add(Text(lw + 20, 0, next_title, size=32, anchor="lm", chain="bold"))
             self.play(FadeIn(nt, dy=10), dur=0.5)
             self.wait(2.5 + T.plain_len(next_title) / READ_RATE)
             items.append(nt)

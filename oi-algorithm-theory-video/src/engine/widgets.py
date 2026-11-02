@@ -47,15 +47,27 @@ def glow_paint(c, o, w, sigma=9):
 
 
 # ------------------------------------------------------------------ 基本图形
+_SHADOW = skia.MaskFilter.MakeBlur(skia.kNormal_BlurStyle, 16)
+
+
 class Rect(Node):
-    def __init__(self, x=0, y=0, w=100, h=60, fill=C.BG3, stroke=C.LINE, sw=2.0, r=8.0, glow=0.0, dash=None, **kw):
+    """圆角矩形。shadow > 0 时下面带一层柔和的投影（卡片、板书用）。"""
+
+    def __init__(self, x=0, y=0, w=100, h=60, fill=C.BG3, stroke=C.LINE, sw=2.0, r=10.0, glow=0.0, dash=None,
+                 shadow=0.0, **kw):
         super().__init__(x, y, w=float(w), h=float(h), fill=fill, stroke=stroke, sw=float(sw), r=float(r),
                          glow=float(glow), **kw)
         self.dash = dash
+        self.shadow = shadow
 
     def paint(self, cv, t, o):
         w, h, r = self.g("w", t), self.g("h", t), self.g("r", t)
         rect = skia.Rect.MakeXYWH(-w / 2, -h / 2, w, h)
+        if self.shadow > 0:
+            sp = skia.Paint(AntiAlias=True)
+            sp.setColor4f(skia.Color4f(0.02, 0.02, 0.06, min(1.0, 0.55 * self.shadow * o)))
+            sp.setMaskFilter(_SHADOW)
+            cv.drawRoundRect(skia.Rect.MakeXYWH(-w / 2, -h / 2 + 10, w, h), r, r, sp)
         fill = self.g("fill", t)
         if fill and fill[3] > 0:
             cv.drawRoundRect(rect, r, r, fill_paint(fill, o))
@@ -193,6 +205,37 @@ def _radius(n):
     return 0.0
 
 
+class GradLine(Node):
+    """水平渐变细线（页眉下沿、讲解区上沿）。stops: [(位置 0~1, 颜色)]。"""
+
+    def __init__(self, x1, y, x2, stops, w=1.5, **kw):
+        super().__init__(x1, y, **kw)
+        self.len = x2 - x1
+        self.stops = stops
+        self.lw = w
+
+    def paint(self, cv, t, o):
+        p = skia.Paint(AntiAlias=True)
+        p.setShader(skia.GradientShader.MakeLinear(
+            [(0, 0), (self.len, 0)], [_color(c, o).toColor() for _, c in self.stops], [u for u, _ in self.stops]))
+        cv.drawRect(skia.Rect.MakeXYWH(0, -self.lw / 2, self.len, self.lw), p)
+
+
+class Band(Node):
+    """竖直渐变的色带（讲解区背后的暗带）。"""
+
+    def __init__(self, x, y, w, h, top, bottom, **kw):
+        super().__init__(x, y, **kw)
+        self.w, self.h, self.top, self.bottom = w, h, top, bottom
+
+    def paint(self, cv, t, o):
+        p = skia.Paint(AntiAlias=True)
+        p.setDither(True)
+        p.setShader(skia.GradientShader.MakeLinear(
+            [(0, 0), (0, self.h)], [_color(self.top, o).toColor(), _color(self.bottom, o).toColor()], [0.0, 1.0]))
+        cv.drawRect(skia.Rect.MakeXYWH(0, 0, self.w, self.h), p)
+
+
 class Poly(Node):
     def __init__(self, pts, fill=None, stroke=C.LINE2, sw=2.0, closed=True, dash=None, **kw):
         super().__init__(0, 0, pts=tuple(tuple(map(float, p)) for p in pts), fill=fill or (0, 0, 0, 0),
@@ -239,8 +282,9 @@ class Text(Node):
     改 text 会交叉淡入淡出。color 是没有颜色标记部分的颜色。"""
 
     def __init__(self, x=0, y=0, text="", size=30, color=None, anchor="cm", maxw=None, align=None,
-                 chain="sans", lh=1.45, **kw):
+                 chain="sans", lh=1.45, bg=None, **kw):
         super().__init__(x, y, text=str(text), size=float(size), color=color or C.FG, **kw)
+        self.bg = bg            # 底衬颜色：压在线上的标注（边权、流量）垫一块底色，线不会穿过文字
         self.anchor = anchor
         self.maxw = maxw
         self.align = align or ("c" if anchor[0] == "c" else anchor[0])
@@ -262,6 +306,16 @@ class Text(Node):
         a, b, u = self.tr["text"].state(t)
         size = self.g("size", t)
         col = self.g("color", t)
+        if self.bg is not None:
+            boxes = [self.lay(s, size) for s in (a, b) if s]
+            if boxes:
+                L = max(boxes, key=lambda q: q.w)
+                x0, y0 = self._origin(L)
+                pad = size * 0.28
+                h = size * 1.15
+                cy = y0 + L.h / 2
+                cv.drawRoundRect(skia.Rect.MakeXYWH(x0 - pad, cy - h / 2, L.w + 2 * pad, h), h / 2, h / 2,
+                                 fill_paint(self.bg, o))
         if a == b or u >= 1.0:
             if b:
                 L = self.lay(b, size)
@@ -647,7 +701,11 @@ class _NodeHost(Group):
             nx, ny = -nx * s, -ny * s
         elif ny > 0 or (abs(ny) < 1e-6 and nx < 0):
             nx, ny = -nx, -ny
-        tx = Text(mx + nx * off, my + ny * off, text, size=size, color=color or C.DIM)
+        # 标注框的半宽、半高在法线方向上的投影，保证文字不压在线上
+        L0 = T.layout(str(text), int(size), None)
+        ext = abs(nx) * (L0.w / 2 + size * 0.3) + abs(ny) * size * 0.58
+        d = max(off, ext + 4)
+        tx = Text(mx + nx * d, my + ny * d, text, size=size, color=color or C.DIM, bg=C.alpha(C.BG, 0.82))
         if hidden:
             tx.tr["op"].base = 0.0
         self.add(tx)
@@ -914,12 +972,15 @@ class Card(Group):
     def __init__(self, x, y, w, h, title="", body="", color=C.YELLOW, size=30, title_size=30,
                  fill=None, maxw=None, align="l"):
         super().__init__(x, y)
-        self.box = self.add(Rect(0, 0, w, h, fill=fill or C.BG2, stroke=C.alpha(color, 0.8), sw=2.5, r=16))
-        top = -h / 2 + 24
+        self.box = self.add(Rect(0, 0, w, h, fill=fill or C.BG2, stroke=C.alpha(color, 0.45), sw=1.8, r=20,
+                                 shadow=1.0))
+        top = -h / 2 + 26
         if title:
-            self.title = self.add(Text(-w / 2 + 34, top, title, size=title_size, color=color, anchor="lt",
+            self.add(Rect(-w / 2 + 40, top + title_size * 1.45 / 2, 6, title_size * 0.9, fill=color, stroke=None,
+                          sw=0, r=3))
+            self.title = self.add(Text(-w / 2 + 56, top, title, size=title_size, color=color, anchor="lt",
                                        chain="bold"))
-            top += title_size * 1.6
+            top += title_size * 1.7
         self.body = self.add(Text(-w / 2 + 34, top, body, size=size, color=C.FG, anchor="lt",
                                   maxw=maxw or (w - 68), align=align))
 

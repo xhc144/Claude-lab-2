@@ -73,7 +73,7 @@ def build(S):
     tree = Tree(EDGES, 1, x=460, y=460, w=620, h=460, r=30, size=26)
     S.show(tree)
     S.say("树上对应的汇总方式是{y|子树和}：最终 val[v] = v 子树里所有 c 的和（从叶子往上累加一遍）。")
-    S.note("树上：val[v] = Σ_{w 在 v 子树里} c[w]", color=Y)
+    S.note("树上：val[v] = Σ c[w]，w 取遍 v 的子树", color=Y)
     S.say("那么在点 w 上加 x，会影响哪些点的子树和？正好是 w 和它的所有祖先——一条从 w 到根的链。")
     S.play(tree[8].to(fill=tint(G, 0.5), stroke=G), dur=0.4)
     S.play(*[tree[v].to(stroke=Y, sw=4) for v in (8, 5, 2, 1)], dur=0.6)

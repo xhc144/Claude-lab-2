@@ -30,6 +30,7 @@ PREAMBLE = r"""\documentclass[12pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage[active,tightpage]{preview}
+\DeclareMathOperator{\lcm}{lcm}
 \PreviewBorder=0pt
 \begin{document}
 """
@@ -44,7 +45,7 @@ SYM = {
     "∪": "\\cup ", "∩": "\\cap ", "⊆": "\\subseteq ", "⊂": "\\subset ", "∅": "\\varnothing ", "⊕": "\\oplus ",
     "∀": "\\forall ", "∃": "\\exists ", "¬": "\\neg ", "∧": "\\wedge ", "∨": "\\vee ", "±": "\\pm ",
     "⌊": "\\lfloor ", "⌋": "\\rfloor ", "⌈": "\\lceil ", "⌉": "\\rceil ", "′": "'", "″": "''",
-    "…": "\\ldots ", "⋯": "\\cdots ", "∣": "\\mid ", "∘": "\\circ ", "⊥": "\\perp ", "∠": "\\angle ",
+    "…": "\\ldots ", "⋯": "\\cdots ", "∣": "\\mid ", "∤": "\\nmid ", "∘": "\\circ ", "⊥": "\\perp ", "∠": "\\angle ",
     "α": "\\alpha ", "β": "\\beta ", "γ": "\\gamma ", "δ": "\\delta ", "ε": "\\varepsilon ", "θ": "\\theta ",
     "λ": "\\lambda ", "μ": "\\mu ", "π": "\\pi ", "σ": "\\sigma ", "φ": "\\varphi ", "ω": "\\omega ",
     "Δ": "\\Delta ", "Ω": "\\Omega ", "Γ": "\\Gamma ", "Λ": "\\Lambda ", "Φ": "\\Phi ",
@@ -56,10 +57,13 @@ SUB = {"₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4", "₅": "5", "
        "ᵢ": "i", "ⱼ": "j", "ₖ": "k", "ₙ": "n", "ₘ": "m", "ₓ": "x", "₊": "+", "₋": "-", "ᵤ": "u", "ᵥ": "v",
        "ₐ": "a", "ₑ": "e", "ₒ": "o", "ₗ": "l", "ₛ": "s", "ₜ": "t", "ₚ": "p", "ₕ": "h"}
 SUP = {"⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9",
-       "ⁿ": "n", "⁺": "+", "⁻": "-", "ᵏ": "k", "ⁱ": "i", "ᵐ": "m"}
+       "ⁿ": "n", "⁺": "+", "⁻": "-", "ᵏ": "k", "ⁱ": "i", "ᵐ": "m", "ᵖ": "p", "ᵃ": "a", "ᵇ": "b", "ᶜ": "c",
+       "ᵈ": "d", "ᵉ": "e", "ᶠ": "f", "ᵍ": "g", "ʰ": "h", "ʲ": "j", "ˡ": "l", "ᵒ": "o", "ʳ": "r", "ˢ": "s",
+       "ᵗ": "t", "ᵘ": "u", "ᵛ": "v", "ʷ": "w", "ˣ": "x", "ʸ": "y", "ᶻ": "z", "⁽": "(", "⁾": ")"}
 OPS = {"max", "min", "log", "gcd", "lcm", "lg", "ln", "exp", "sin", "cos", "tan", "det", "deg", "lim", "sup",
        "inf", "arg"}
 RELS = set("=<>≤≥≠≈≡→←↔⇒⇔⇐⇝↦∈∉⊆⊂∝")
+WORDS2 = {"mx", "mn", "ok", "an", "am"}     # 看起来像两个变量相乘、其实是标识符或单词的两字母词
 BINS = set("+−-×·÷∪∩⊕±∘")
 
 
@@ -73,6 +77,8 @@ def is_word_char(c):
 
 def convert(run):
     """把一段西文/符号转成数学模式里的 LaTeX。"""
+    if "(mod " in run:                               # 同余式里的 (mod m)
+        run = re.sub(r"\(mod ((?:[^()]|\([^()]*\))+)\)", lambda m: "$(\\operatorname{mod} " + convert(m.group(1)) + ")$", run)
     out = []
     i, n = 0, len(run)
     op_tail = False         # 刚输出过 \log、\sum 这类算子（后面可能还跟着上下标）：后面的空格不要
@@ -99,8 +105,8 @@ def convert(run):
                 op_tail = True
                 i = j
                 continue
-            elif len(word) == 2 and word[0] in "nmkq" and word[1] in "nmkqBVWLK":
-                out.append(word)               # O(nm)、O(qB) 这类是两个变量相乘，不是单词
+            elif len(word) == 2 and word not in WORDS2 and word[0] in "abcmnkpqx" and word[1] in "xyzbnmkpqBVWLK":
+                out.append(word)               # ax、by、O(nm)、O(qB) 这类是两个变量相乘，不是单词
             elif len(word) == 1:
                 out.append(word)
                 # x1 → x_1（单个字母后面紧跟数字）
@@ -223,6 +229,7 @@ def texttt(s):
 _index = None
 _pending = {}
 FAILED = []
+_bad = set()
 _images = {}
 
 
@@ -246,7 +253,7 @@ def _save_index():
         disk = json.loads(f.read_text()) if f.exists() else {}
     except ValueError:
         disk = {}
-    disk.update(_index)
+    disk.update({k: v for k, v in _index.items() if k not in _bad})
     _index.update(disk)
     tmp = CACHE / f"index.{os.getpid()}.tmp"
     tmp.write_text(json.dumps(disk))
@@ -291,6 +298,7 @@ def _compile_split(items):
     k, (tex, bold) = items[0]
     print(f"  [LaTeX] 无法编译，改为纯文本：{tex}")
     FAILED.append(tex)
+    _bad.add(k)                     # 退回纯文本的结果不写进磁盘缓存，下次还会重试
     safe = "\\text{" + re.sub(r"[^A-Za-z0-9 ()\[\],.:;=+*/<>!?'-]", "", tex.replace("\\", " ")) + "}"
     if not _compile([(k, (safe, bold))]):
         _index[k] = [0, 0, 0]

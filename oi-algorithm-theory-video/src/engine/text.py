@@ -4,7 +4,7 @@
 - 所有西文、数字、符号和公式都交给 LaTeX（见 latex.py），和中文按同一条基线排在一起，中西文之间自动留空。
 
 富文本标记：{y|文字} 把“文字”染成黄色；颜色字母见 theme.TAG_COLORS。
-在颜色字母后面加 m 表示公式片段（保留原写法），加 ! 表示粗体，例如 {y!|重点}。
+在颜色字母后面加 t 表示字符串（打字机字体，如 {t|abab}），加 ! 表示粗体，例如 {y!|重点}。
 标记可以嵌套：{y|状态 f[i] 表示……}。显式公式写在 $…$ 里，例如 $\\sum_{i<j} a_i a_j$。
 """
 
@@ -30,8 +30,10 @@ FILES = {
 }
 
 # 富文本里的“字体链”名字 → 中文字体
-CJK_FONT = {"sans": "serif", "mono": "serif", "bold": "serifb", "monob": "serifb", "black": "serifk"}
-BOLD = {"bold", "monob", "black"}
+CJK_FONT = {"sans": "serif", "mono": "serif", "bold": "serifb", "monob": "serifb", "black": "serifk",
+            "tt": "serif", "ttb": "serifb"}
+BOLD = {"bold", "monob", "black", "ttb"}
+TT = {"tt", "ttb"}          # 字符串里的字符：用 LaTeX 的打字机字体（\texttt），不当作数学变量
 
 LATEX_SCALE = 1.0       # LaTeX 8pt 字形的 1em 和中文字号相当
 AUTOSPACE = 0.22        # 中西文之间自动留的空（em）
@@ -88,7 +90,7 @@ def metrics(size):
 
 
 # ------------------------------------------------------------------ 解析
-_TAG = re.compile(r"\{([ycgrpobkdwf]?)(m?)(!?)\|")
+_TAG = re.compile(r"\{([ycgrpobkdwf]?)(m?)(t?)(!?)\|")
 
 
 def parse(markup, color, chain="sans"):
@@ -106,7 +108,7 @@ def parse(markup, color, chain="sans"):
                 i = j + 1
                 continue
             m = _TAG.match(s, i) if s[i] == "{" else None
-            if m and (m.group(1) or m.group(2) or m.group(3)):
+            if m and (m.group(1) or m.group(2) or m.group(3) or m.group(4)):
                 depth, j = 1, m.end()
                 while j < len(s) and depth:
                     if s[j] == "{":
@@ -119,10 +121,11 @@ def parse(markup, color, chain="sans"):
                         out.append(("".join(buf), col, ch))
                         buf = []
                     c2 = theme.TAG_COLORS.get(m.group(1), col) if m.group(1) else col
-                    if m.group(3):
-                        ch2 = "bold" if ch not in ("black",) else ch
-                    else:
-                        ch2 = ch
+                    ch2 = ch
+                    if m.group(3):                      # t：字符串（打字机字体）
+                        ch2 = "ttb" if ch in BOLD else "tt"
+                    if m.group(4):                      # !：粗体
+                        ch2 = {"tt": "ttb", "ttb": "ttb", "black": "black"}.get(ch2, "bold")
                     rec(s[m.end():j - 1], c2, ch2)
                     i = j
                     continue
@@ -197,6 +200,7 @@ def _tokens(runs, size, maxw=None):
     """切成不可再分的“词”：每个汉字一个词（处理避头尾），每个西文小块一个词。
     词 = (宽度, [Piece], 左边是否要求和前一个词之间留空, 类型)"""
     toks = []
+    trailing = False            # 上一段（不同颜色 / 字体的富文本片段）是否以空格结尾
     for text, col, ch in runs:
         cjk_font = CJK_FONT.get(ch, "serif")
         bold = ch in BOLD
@@ -233,8 +237,16 @@ def _tokens(runs, size, maxw=None):
                     chunks += [(c2, sp if k == 0 else s2) for k, (c2, s2) in enumerate(sub)]
                 else:
                     chunks.append((chunk, sp))
+            if ch in TT:                         # 字符串：整段原样用打字机字体，不拆
+                chunks = [(run.strip(" "), False)]
+            # 片段之间的空格（如 “border {t|aba}”）要保留成词间距
+            if chunks and (lead or (i == 0 and trailing)):
+                chunks[0] = (chunks[0][0], True)
             for chunk, sp in chunks:
-                tex = TX.convert(chunk) if chunk.strip() else ""
+                if ch in TT:
+                    tex = TX.texttt(chunk) if chunk else ""
+                else:
+                    tex = TX.convert(chunk) if chunk.strip() else ""
                 if not tex:
                     continue
                 w, h, d = TX.metrics(tex, bold)
@@ -242,9 +254,8 @@ def _tokens(runs, size, maxw=None):
                 p.kind, p.tex, p.bold, p.scale, p.color = "tex", tex, bold, sc, col
                 p.w = w * sc
                 toks.append([p.w, [p], WORDSPACE * size if sp else 0.0, "lat", chunk])
-            if lead and toks and toks[-1] != "\n":
-                pass
             i = j
+        trailing = text.endswith(" ")
     # 标点挤压：两个全角标点相邻（如“），”），前一个只占半个字宽
     for a, b in zip(toks, toks[1:]):
         if a != "\n" and b != "\n" and a[3] == "cjk" and b[3] == "cjk" and a[4] in _CLOSE \

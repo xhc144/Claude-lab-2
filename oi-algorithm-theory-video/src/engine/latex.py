@@ -210,6 +210,15 @@ def convert(run):
     return "".join(out).strip()
 
 
+_TT_ESC = {"#": "\\#", "$": "\\$", "%": "\\%", "&": "\\&", "_": "\\_", "{": "\\{", "}": "\\}",
+           "~": "\\textasciitilde{}", "^": "\\textasciicircum{}", "\\": "\\textbackslash{}", " ": "\\ "}
+
+
+def texttt(s):
+    """字符串原样用打字机字体排（字符串题里的字符、模式串）。"""
+    return "\\texttt{" + "".join(_TT_ESC.get(c, c) for c in s) + "}"
+
+
 # ------------------------------------------------------------------ 编译与缓存
 _index = None
 _pending = {}

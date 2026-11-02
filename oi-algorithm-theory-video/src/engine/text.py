@@ -60,7 +60,7 @@ def _has(name, ch):
 
 
 # 这些符号用西文字体更好看（中文字体里的引号带全角空白，≤ 是斜体样式）
-PREFER_LATIN = set("“”‘’≤≥")
+PREFER_LATIN = set("“”‘’≤≥·")
 
 
 def pick(chain, ch):

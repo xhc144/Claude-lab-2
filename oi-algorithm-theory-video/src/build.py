@@ -124,6 +124,11 @@ def build_one(num, stills=False, still_times=None, crf=30, preset="medium", only
     for s in issues[:40]:
         print(f"  [检查] {s}")
     if only_lint:
+        if only_lint == "times":
+            for t, name in S.sections:
+                print(f"  {t:7.1f}s  == {name}")
+            for c in S.captions:
+                print(f"  {c[0]:7.1f}s  {strip_markup(c[2])[:40]}")
         return num, S.t, len(issues)
     if stills or still_times:
         d = BUILD / "stills" / f"{num:02d}"
@@ -165,6 +170,7 @@ def main():
     ap.add_argument("--stills", action="store_true", help="只渲染每句讲解结束时的静帧")
     ap.add_argument("--at", default=None, help="只渲染这些时刻的静帧，逗号分隔")
     ap.add_argument("--lint", action="store_true", help="只检查版面")
+    ap.add_argument("--times", action="store_true", help="列出各小节和每句讲解的开始时刻")
     ap.add_argument("-j", type=int, default=1)
     ap.add_argument("--crf", type=int, default=30)
     ap.add_argument("--preset", default="medium")
@@ -181,7 +187,7 @@ def main():
             else:
                 nums.append(int(s))
     at = [float(x) for x in a.at.split(",")] if a.at else None
-    jobs = [(n, a.stills, at, a.crf, a.preset, a.lint) for n in nums]
+    jobs = [(n, a.stills, at, a.crf, a.preset, "times" if a.times else a.lint) for n in nums]
     if a.j > 1 and len(jobs) > 1:
         with mp.Pool(a.j) as pool:
             for r in pool.imap_unordered(_job, jobs):

@@ -144,12 +144,14 @@ class Scene:
     def wide(self, dur=0.5):
         """收起板书，图解区占满宽度。"""
         if self.layout != "wide":
+            self.flush()
             self.layout = "wide"
             self.clear_notes(dur=dur, wait=False)
             self.play(self.panel.to(op=0.0), dur=dur, wait=False)
 
     def narrow(self, dur=0.5):
         if self.layout != "panel":
+            self.flush()
             self.layout = "panel"
             self.play(self.panel.to(op=1.0), dur=dur, wait=False)
 
@@ -307,6 +309,10 @@ class Scene:
         self.show(card, dy=20)
         self.say("先别急着看答案：按暂停，在纸上推一推。", hold=3.0)
         self.think(think, y=y + h / 2 + 110 if y + h / 2 + 110 < 800 else None)
+        # 解答时把题目缩小放到左上角，腾出地方
+        k = 0.6
+        self.play(card.to(sc=k, x=self.stage[0] + 10 + w * k / 2, y=self.stage[1] + 4 + h * k / 2), dur=0.7)
+        self.quiz_bottom = self.stage[1] + 4 + h * k
         return card
 
     def think(self, secs=15, x=None, y=None):

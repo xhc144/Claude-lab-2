@@ -342,22 +342,27 @@ class Pointer(Group):
         self.label = self.add(Text(0, 34 * s, label, size=size, color=color))
 
 
+class _BracketLabel(Text):
+    def local_xy(self, t):
+        b = self.parent
+        x1, x2, y = b.g("x1", t), b.g("x2", t), b.g("yy", t)
+        return (x1 + x2) / 2, y + b.s * (b.tick + 6 + b.size * 0.7)
+
+
 class Bracket(Group):
     """横向方括号：标出 [x1, x2] 这一段，label 写在外侧。side='above' 时括号开口朝下。"""
 
     def __init__(self, x1, x2, y, label="", color=C.YELLOW, side="below", size=24, w=3, tick=12):
         super().__init__(0, 0)
-        s = 1 if side == "below" else -1
-        self.s = s
-        self.add_tracks = None
+        self.s = 1 if side == "below" else -1
         self.tr["x1"] = Track(float(x1))
         self.tr["x2"] = Track(float(x2))
         self.tr["yy"] = Track(float(y))
         self.color = color
         self.lw = w
         self.tick = tick
-        self.label = self.add(Text(0, 0, label, size=size, color=color))
         self.size = size
+        self.label = self.add(_BracketLabel(0, 0, label, size=size, color=color))
 
     def paint(self, cv, t, o):
         x1, x2, y = self.g("x1", t), self.g("x2", t), self.g("yy", t)
@@ -368,15 +373,6 @@ class Bracket(Group):
         path.lineTo(x2, y + s * k)
         path.lineTo(x2, y)
         cv.drawPath(path, stroke_paint(self.color, o, self.lw))
-        self.label.tr["x"].base = (x1 + x2) / 2
-        self.label.tr["y"].base = y + s * (k + 6 + self.size * 0.7)
-
-    def draw(self, cv, t, op=1.0):
-        # 标签位置跟随括号（每帧更新）
-        x1, x2, y = self.g("x1", t), self.g("x2", t), self.g("yy", t)
-        self.label.tr["x"] = Track((x1 + x2) / 2)
-        self.label.tr["y"] = Track(y + self.s * (self.tick + 6 + self.size * 0.7))
-        super().draw(cv, t, op)
 
     def span(self, x1, x2, dur=None):
         return self.to(dur, x1=float(x1), x2=float(x2))

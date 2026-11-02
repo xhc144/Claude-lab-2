@@ -182,7 +182,8 @@ class Node:
         o = op * self.tr["op"].at(t)
         if o <= 0.002:
             return
-        x, y, sc = self.tr["x"].at(t), self.tr["y"].at(t), self.tr["sc"].at(t)
+        x, y = self.local_xy(t)
+        sc = self.tr["sc"].at(t)
         cv.save()
         cv.translate(x, y)
         if sc != 1.0:
@@ -195,6 +196,9 @@ class Node:
     def paint(self, cv, t, o):
         pass
 
+    def local_xy(self, t):
+        return self.tr["x"].at(t), self.tr["y"].at(t)
+
     def walk(self):
         yield self
         for c in self.children:
@@ -202,12 +206,13 @@ class Node:
 
     def abs_xy(self, t):
         """节点原点在画面上的绝对坐标。"""
-        x, y = self.tr["x"].at(t), self.tr["y"].at(t)
+        x, y = self.local_xy(t)
         p = self.parent
         while p is not None:
             s = p.tr["sc"].at(t)
-            x = p.tr["x"].at(t) + s * x
-            y = p.tr["y"].at(t) + s * y
+            px, py = p.local_xy(t)
+            x = px + s * x
+            y = py + s * y
             p = p.parent
         return x, y
 

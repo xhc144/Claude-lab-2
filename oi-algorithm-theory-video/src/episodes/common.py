@@ -6,7 +6,7 @@ from engine.widgets import (Text, Rect, Circle, Line, Poly, Arc, Group, Cell, Ar
                             Axes, Card, Matrix, Bracket, Pointer, hidden)
 
 Y, CY, G, R, P, O, B, K = C.YELLOW, C.CYAN, C.GREEN, C.RED, C.PURPLE, C.ORANGE, C.BLUE, C.PINK
-FG, DIM, FAINT, BG3, LINE = C.FG, C.DIM, C.FAINT, C.BG3, C.LINE
+FG, DIM, FAINT, BG3, LINE, LINE2 = C.FG, C.DIM, C.FAINT, C.BG3, C.LINE, C.LINE2
 tint = C.tint
 alpha = C.alpha
 

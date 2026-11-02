@@ -785,7 +785,7 @@ class Graph(_NodeHost):
 
     def __init__(self, pos, edges, x=640, y=460, directed=False, r=26, size=24, labels=None,
                  fill=C.BG3, stroke=C.LINE2, ecolor=C.LINE2, ew=3, wsize=22, head=14, bends=None,
-                 hidden_edges=False, wcolor=None):
+                 hidden_edges=False, wcolor=None, wpos=None):
         super().__init__(x, y)
         self._init_host()
         self.directed = directed
@@ -813,7 +813,8 @@ class Graph(_NodeHost):
             self.add(self.nodes[v])
         for e in edges:
             if len(e) > 2 and e[2] is not None:
-                self.etag(e[0], e[1], str(e[2]), color=wcolor or C.DIM, size=wsize, hidden=hidden_edges)
+                tpos = (wpos or {}).get((e[0], e[1]), 0.5)
+                self.etag(e[0], e[1], str(e[2]), color=wcolor or C.DIM, size=wsize, hidden=hidden_edges, t=tpos)
 
 
 class Axes(Group):
@@ -951,3 +952,112 @@ class Matrix(Group):
 def hidden(node):
     node.tr["op"].base = 0.0
     return node
+
+
+class SegTree(Group):
+    """线段树的示意图：结点是圆角矩形，上方小字写区间，中间写信息。(x, y) 是根结点的中心。
+    nodes[(l, r)] 是结点（Cell），info[(l, r)] 是结点下方/内部的信息文字。"""
+
+    def __init__(self, n, x=640, y=170, w=1150, level_h=125, node_h=56, leaf_w=None, size=22, base=1,
+                 info_size=20, show_range=True, vals=None):
+        super().__init__(x, y)
+        self.n, self.base = n, base
+        self.level_h = level_h
+        leaf_w = leaf_w or (w / n)
+        self.leaf_w = leaf_w
+        self.nodes, self.info, self.ranges, self.edges = {}, {}, {}, {}
+        self.depth = {}
+        self.kids = {}
+
+        def lx(i):
+            return -w / 2 + leaf_w / 2 + (i - base) * (w - leaf_w) / max(1, n - 1) if n > 1 else 0
+
+        self.leaf_x = lx
+
+        def build(l, r, d):
+            self.depth[(l, r)] = d
+            cx = (lx(l) + lx(r)) / 2
+            span = (r - l + 1) * w / n
+            nw = min(span - 10, 230) if l != r else leaf_w - 10
+            c = Cell(cx, d * level_h, nw, node_h, "", size, fill=C.BG3, stroke=C.LINE2, r=10)
+            self.nodes[(l, r)] = c
+            if l < r:
+                m = (l + r) // 2
+                self.kids[(l, r)] = [(l, m), (m + 1, r)]
+                build(l, m, d + 1)
+                build(m + 1, r, d + 1)
+
+        build(base, base + n - 1, 0)
+        for p, kids in self.kids.items():
+            for k in kids:
+                a, b = self.nodes[p], self.nodes[k]
+                ln = Line(a.g("x", 0), a.g("y", 0) + node_h / 2, b.g("x", 0), b.g("y", 0) - node_h / 2, color=C.LINE2, w=2.5)
+                self.edges[(p, k)] = ln
+                self.add(ln)
+        for key, c in self.nodes.items():
+            self.add(c)
+            l, r = key
+            if show_range:
+                if l != r:
+                    nw = c.box.g("w", 0)
+                    t = Text(c.g("x", 0) - nw / 2 - 8, c.g("y", 0), f"[{l},{r}]", size=19, color=C.DIM, anchor="rm")
+                else:
+                    t = Text(c.g("x", 0), c.g("y", 0) + node_h / 2 + 16, f"{l}", size=19, color=C.DIM)
+                self.ranges[key] = self.add(t)
+            self.info[key] = c.label
+            c.label.tr["size"].base = float(info_size)
+        if vals is not None:
+            for i, v in enumerate(vals):
+                self.nodes[(base + i, base + i)].label.tr["text"].base = str(v)
+
+    def __getitem__(self, lr):
+        return self.nodes[lr]
+
+    def parent(self, lr):
+        for p, kids in self.kids.items():
+            if lr in kids:
+                return p
+        return None
+
+    def decompose(self, ql, qr):
+        """查询 [ql, qr] 拆成的结点（从左到右）。"""
+        out = []
+
+        def go(l, r):
+            if qr < l or r < ql:
+                return
+            if ql <= l and r <= qr:
+                out.append((l, r))
+                return
+            for k in self.kids[(l, r)]:
+                go(*k)
+
+        go(self.base, self.base + self.n - 1)
+        return out
+
+    def visited(self, ql, qr):
+        """查询时经过的所有结点。"""
+        out = []
+
+        def go(l, r):
+            if qr < l or r < ql:
+                return
+            out.append((l, r))
+            if ql <= l and r <= qr:
+                return
+            for k in self.kids[(l, r)]:
+                go(*k)
+
+        go(self.base, self.base + self.n - 1)
+        return out
+
+    def postorder(self):
+        out = []
+
+        def go(lr):
+            for k in self.kids.get(lr, []):
+                go(k)
+            out.append(lr)
+
+        go((self.base, self.base + self.n - 1))
+        return out

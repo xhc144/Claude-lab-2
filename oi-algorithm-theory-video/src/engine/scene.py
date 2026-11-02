@@ -201,6 +201,8 @@ class Scene:
 
     def note(self, text, color=None, size=C.NOTE_SIZE, gap=16, indent=0, bullet=True, read=True):
         """板书追加一条。返回这条的 Text，之后可以改颜色或闪烁。"""
+        if self.layout == "wide":
+            self.warn(f"板书收起时写了板书：{text}")
         px0, py0, px1, py1 = C.PANEL
         y = py0 + 58
         for n in self.notes:
@@ -255,6 +257,9 @@ class Scene:
         self.section_name = title
         self.sections.append((self.t, title))
         self.play(self.sec_text.to(text=title), dur=0.5, wait=False)
+        kept = [o for o in flatten(list(keep)) if o.alive(self.t)]
+        if card and kept:
+            self.play(*[o.to(op=0.08) for o in kept], dur=0.4, wait=False)
         if card:
             k = len(self.sections)
             num = Text(self.cx, self.cy - 70, f"{k:02d}", size=40, color=self.ucolor, chain="mono")
@@ -263,6 +268,8 @@ class Scene:
             self.play(FadeIn(num, dy=10), FadeIn(tt, dy=16), FadeIn(ln), ln.to(prog=1.0), dur=0.6)
             self.wait(1.0 + T.plain_len(title) / 8)
             self.play(FadeOut(num, tt, ln), dur=0.45)
+            if kept:
+                self.play(*[o.to(op=1.0) for o in kept], dur=0.5)
         self.read_until = self.t
         self.anim_end = self.t
 

@@ -3,7 +3,7 @@
 from engine import theme as C
 from engine.core import Anim, FadeIn, FadeOut, Appear, Call, flatten
 from engine.widgets import (Text, Rect, Circle, Line, Poly, Arc, Group, Cell, Array, Grid, Tree, Graph,
-                            Axes, Card, Matrix, Bracket, Pointer, hidden)
+                            Axes, Card, Matrix, Bracket, Pointer, SegTree, hidden)
 
 Y, CY, G, R, P, O, B, K = C.YELLOW, C.CYAN, C.GREEN, C.RED, C.PURPLE, C.ORANGE, C.BLUE, C.PINK
 FG, DIM, FAINT, BG3, LINE, LINE2 = C.FG, C.DIM, C.FAINT, C.BG3, C.LINE, C.LINE2

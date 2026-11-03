@@ -1,0 +1,235 @@
+\subsection{积分技巧}
+
+\begin{结论}{区间反射 $x\mapsto a+b-x$}
+\重点{\int_a^bf(x)\dd x=\int_a^bf(a+b-x)\dd x}，与原式相加常消掉难项：
+\[
+\int_0^{\pi/2}\frac{\sin^nx}{\sin^nx+\cos^nx}\dd x=\frac\pi4,\qquad \int_0^\pi xf(\sin x)\dd x=\frac\pi2\int_0^\pi f(\sin x)\dd x,
+\]
+如 $\int_0^\pi\frac{x\sin x}{1+\cos^2x}\dd x=\frac{\pi^2}4$。
+\end{结论}
+
+\begin{结论}{$\int_0^{\pi/2}\ln\sin x\,\dd x$ 与 $\int_0^1\frac{\ln(1+x)}{1+x^2}$}
+$I=\int_0^{\pi/2}\ln\sin x=\int_0^{\pi/2}\ln\cos x$，相加用 $\sin x\cos x=\frac12\sin2x$ 得 $2I=-\frac\pi2\ln2+I$：
+\[
+\重点{\int_0^{\pi/2}\ln\sin x\,\dd x=-\frac\pi2\ln2}.
+\]
+$x=\tan\theta$ 后用反射 $\theta\mapsto\frac\pi4-\theta$：$\ln(1+\tan(\frac\pi4-\theta))=\ln2-\ln(1+\tan\theta)$，故 $\int_0^1\frac{\ln(1+x)}{1+x^2}\dd x=\frac\pi8\ln2$。
+\end{结论}
+
+\begin{结论}{$\int(\sin x/x)^n$ 的前几个值}
+\[
+\int_0^\infty\frac{\sin x}{x}=\int_0^\infty\frac{\sin^2x}{x^2}=\frac\pi2,\qquad \int_0^\infty\frac{\sin^3x}{x^3}=\frac{3\pi}8,\qquad \int_0^\infty\frac{\sin^4x}{x^4}=\frac\pi3 .
+\]
+做法：降幂成 $\sin kx$ 或 $\cos kx$ 的组合，分部积分 $n-1$ 次把分母降到 $x$，再用 $\int_0^\infty\frac{\sin kx}{x}=\frac\pi2\sgn k$。等价地：$\frac{\sin x}{x}$ 的 Fourier 变换是方波，$n$ 次幂对应 $n$ 重卷积（B 样条）在 $0$ 的值。
+\end{结论}
+
+\begin{结论}{$\int_0^\infty x^{a-1}\ee^{\ii x}\dd x$：Fresnel 一族}
+$0<a<1$：
+\[
+\重点{\int_0^\infty x^{a-1}\cos x\,\dd x=\Gamma(a)\cos\frac{\pi a}2},\qquad \int_0^\infty x^{a-1}\sin x\,\dd x=\Gamma(a)\sin\frac{\pi a}2\ (-1<a<1).
+\]
+来自把 $\int_0^\infty x^{a-1}\ee^{-sx}\dd x=\Gamma(a)s^{-a}$ 延拓到 $s=-\ii$。$a=\frac12$ 并换元 $x=t^2$：$\int_0^\infty\cos t^2\dd t=\int_0^\infty\sin t^2\dd t=\sqrt{\pi/8}$。
+\end{结论}
+
+\begin{结论}{Gauss 矩与带线性项、带余弦的 Gauss 积分}
+$a>0$：
+\[
+\int_{-\infty}^{\infty}x^{2n}\ee^{-ax^2}=\frac{(2n-1)!!}{(2a)^n}\sqrt{\frac\pi a},\quad \int_0^\infty x^{2n+1}\ee^{-ax^2}=\frac{n!}{2a^{n+1}},
+\]
+\[
+\重点{\int_{-\infty}^\infty\ee^{-ax^2}\cos bx\,\dd x=\sqrt{\frac\pi a}\ee^{-b^2/4a}}.
+\]
+任何 $\int x^k\ee^{-ax^2+bx}$ 都可由 $\sqrt{\pi/a}\,\ee^{b^2/4a}$ 对 $b$ 求导得到。
+\end{结论}
+
+\begin{结论}{Bose 与 Fermi 积分}
+$\operatorname{Re}s>1$（Fermi 型 $\operatorname{Re}s>0$）：
+\[
+\重点{\int_0^\infty\frac{x^{s-1}}{\ee^x-1}\dd x=\Gamma(s)\zeta(s)},\qquad \int_0^\infty\frac{x^{s-1}}{\ee^x+1}\dd x=(1-2^{1-s})\Gamma(s)\zeta(s).
+\]
+常用值：$\int\frac{x^3}{\ee^x-1}=\frac{\pi^4}{15}$，$\int\frac{x}{\ee^x+1}=\frac{\pi^2}{12}$，$\int\frac{x^2}{\ee^x-1}=2\zeta(3)$，$\int\frac{x^4\ee^x}{(\ee^x-1)^2}=\frac{4\pi^4}{15}$。做法：展开成 $\sum\ee^{-kx}$ 逐项积分。
+\end{结论}
+
+\begin{结论}{Feynman 参数与 Schwinger 参数}
+\[
+\重点{\frac1{AB}=\int_0^1\frac{\dd x}{[xA+(1-x)B]^2}},\qquad \frac1{A^aB^b}=\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\int_0^1\frac{x^{a-1}(1-x)^{b-1}}{[xA+(1-x)B]^{a+b}}\dd x,
+\]
+\[
+\frac1{A^s}=\frac1{\Gamma(s)}\int_0^\infty t^{s-1}\ee^{-tA}\dd t\quad(\operatorname{Re}A>0).
+\]
+用途：把乘积分母合成一个（配方后成 Gauss 型），或把 $\frac1x$ 写成积分以交换次序：$\int_0^\infty\frac{\sin x}{x}=\int_0^\infty\!\int_0^\infty\ee^{-tx}\sin x\,\dd x\dd t=\int_0^\infty\frac{\dd t}{1+t^2}$。
+\end{结论}
+
+\begin{结论}{对参数求导的三个标准例}
+\[
+\int_0^1\frac{x^a-1}{\ln x}\dd x=\ln(1+a)\ (a>-1),\qquad \int_0^\infty\frac{\ee^{-ax}\sin bx}{x}\dd x=\arctan\frac ba\ (a>0),
+\]
+\[
+\重点{\int_0^\pi\ln(1-2a\cos x+a^2)\dd x=2\pi\ln\max(1,|a|)}\quad(|a|\ne1).
+\]
+选参数的原则：让被积函数对参数求导后\textbf{分母中的难项消失}（第一例 $\partial_ax^a=x^a\ln x$ 消去 $\ln x$）。
+\end{结论}
+
+\begin{结论}{万能代换下的两个闭式}
+$t=\tan\frac x2$：$\sin x=\frac{2t}{1+t^2}$，$\cos x=\frac{1-t^2}{1+t^2}$，$\dd x=\frac{2\dd t}{1+t^2}$。$a>|b|$：
+\[
+\重点{\int_0^{2\pi}\frac{\dd x}{a+b\cos x}=\frac{2\pi}{\sqrt{a^2-b^2}}},\qquad \int_0^{2\pi}\frac{\dd x}{(a+b\cos x)^2}=\frac{2\pi a}{(a^2-b^2)^{3/2}}.
+\]
+第二式由第一式对 $a$ 求导。整周期上更快的是 $z=\ee^{\ii x}$ 后用留数。
+\end{结论}
+
+\begin{结论}{哪些积分“积不出”}
+Chebyshev：$\int x^m(a+bx^n)^p\dd x$（$m,n,p\in\mathbb Q$）是初等函数 \重点{\iff p,\ \frac{m+1}n,\ \frac{m+1}n+p\text{ 之一为整数}}。
+Liouville：$f,g$ 有理、$g$ 非常数，$\int f\ee^g$ 初等 $\iff$ 存在有理函数 $R$ 使 $f=R'+g'R$。由此 $\int\ee^{-x^2}$、$\int\frac{\ee^x}{x}$、$\int\frac{\sin x}{x}$、$\int\frac{\dd x}{\ln x}$ 非初等；$\int\sqrt{1+x^3}$ 由 Chebyshev 判定非初等。
+\end{结论}
+
+\begin{结论}{Ostrogradsky：有理函数积分的有理部分}
+$\deg P<\deg Q$，$Q_1=\gcd(Q,Q')$，$Q_2=Q/Q_1$：
+\[
+\重点{\int\frac PQ\dd x=\frac{P_1}{Q_1}+\int\frac{P_2}{Q_2}\dd x},\quad \deg P_1<\deg Q_1,\ \deg P_2<\deg Q_2 ,
+\]
+$P_1,P_2$ 由求导比较系数确定（线性方程组）。右边积分只含对数和反正切。重根多时比部分分式省事。
+\end{结论}
+
+\begin{结论}{Glasser 主定理与 Cauchy--Schlömilch 变换}
+$a_i>0$，$b_i$ 实：\重点{\int_{-\infty}^\infty f\Bigl(x-\sum_i\frac{a_i}{x-b_i}\Bigr)\dd x=\int_{-\infty}^\infty f(x)\dd x}（$f$ 可积）。
+半轴版：$a,b>0$，$\int_0^\infty f\bigl((ax-\tfrac bx)^2\bigr)\dd x=\frac1a\int_0^\infty f(y^2)\dd y$。由此
+\[
+\int_0^\infty\ee^{-ax^2-b/x^2}\dd x=\frac12\sqrt{\frac\pi a}\,\ee^{-2\sqrt{ab}}.
+\]
+\end{结论}
+
+\begin{结论}{Ramanujan 主定理（Mellin 变换的捷径）}
+$f(x)=\sum_{k\ge0}\frac{\varphi(k)}{k!}(-x)^k$，$\varphi$ 满足适当增长条件（Carlson 型）：
+\[
+\重点{\int_0^\infty x^{s-1}f(x)\dd x=\Gamma(s)\varphi(-s)}.
+\]
+$f=(1+x)^{-a}$：$\varphi(k)=\frac{\Gamma(a+k)}{\Gamma(a)}$，得 $\int_0^\infty\frac{x^{s-1}}{(1+x)^a}\dd x=\frac{\Gamma(s)\Gamma(a-s)}{\Gamma(a)}$。\注意 条件不满足时会给错误结果，结果须另行核对。
+\end{结论}
+
+\begin{结论}{展开成级数再积分的经典值}
+\[
+\int_0^1\frac{\ln(1-x)}x\dd x=-\frac{\pi^2}6,\qquad \int_0^1\ln x\ln(1-x)\dd x=2-\frac{\pi^2}6,\qquad \重点{\int_0^1x^{-x}\dd x=\sum_{n\ge1}n^{-n}}.
+\]
+$\int_0^1x^m\ln^nx\,\dd x=\frac{(-1)^nn!}{(m+1)^{n+1}}$（$x=\ee^{-t}$ 化成 $\Gamma$），配合 $x^{-x}=\sum\frac{(-x\ln x)^k}{k!}$ 逐项积分即得第三式。
+\end{结论}
+
+\begin{结论}{Laplace 变换交换法}
+若 $g=\mathcal L[h]$，即 $g(x)=\int_0^\infty h(s)\ee^{-sx}\dd s$，则
+\[
+\重点{\int_0^\infty f(x)g(x)\dd x=\int_0^\infty\mathcal L[f](s)\,h(s)\dd s}.
+\]
+$\frac1x=\mathcal L[1]$，$\frac1{x^2}=\mathcal L[s]$：$\int_0^\infty\frac{\sin x}x\dd x=\int_0^\infty\frac{\dd s}{1+s^2}=\frac\pi2$；$\int_0^\infty\frac{1-\cos x}{x^2}\dd x=\int_0^\infty\frac{s}{s(1+s^2)}\dd s=\frac\pi2$。
+\end{结论}
+
+\begin{结论}{单纯形上的 Dirichlet 积分与 Liouville 推广}
+\[
+\int_{x_i\ge0,\ \sum x_i\le1}x_1^{a_1-1}\cdots x_n^{a_n-1}\dd x=\frac{\Gamma(a_1)\cdots\Gamma(a_n)}{\Gamma(1+a_1+\cdots+a_n)},
+\]
+\[
+\重点{\int_{x_i\ge0,\ \sum x_i\le1}f\Bigl(\sum x_i\Bigr)\prod x_i^{a_i-1}\dd x=\frac{\prod\Gamma(a_i)}{\Gamma(\sum a_i)}\int_0^1f(t)\,t^{\sum a_i-1}\dd t}.
+\]
+如单位单纯形体积 $\frac1{n!}$；$\{x_i\ge0,\sum x_i^{p}\le1\}$ 的体积换元 $u_i=x_i^p$ 后为 $\frac{\Gamma(1+1/p)^n}{\Gamma(1+n/p)}$。
+\end{结论}
+
+\begin{结论}{整周期上的 $\cos^{2n}$ 与 $\ee^{a\cos\theta}$}
+\[
+\int_0^{2\pi}\cos^{2n}\theta\,\dd\theta=2\pi\frac{\binom{2n}{n}}{4^n},\qquad \重点{\int_0^{2\pi}\ee^{a\cos\theta}\dd\theta=2\pi I_0(a)=2\pi\sum_{n\ge0}\frac{(a/2)^{2n}}{(n!)^2}}.
+\]
+$\int_0^{2\pi}\ee^{a\cos\theta}\cos n\theta\,\dd\theta=2\pi I_n(a)$。看到 $\ee^{a\cos\theta}$ 即展开后用第一式。
+\end{结论}
+
+\begin{结论}{完全椭圆积分：级数与 AGM}
+$K(k)=\int_0^{\pi/2}\frac{\dd\theta}{\sqrt{1-k^2\sin^2\theta}}$，$E(k)=\int_0^{\pi/2}\sqrt{1-k^2\sin^2\theta}\,\dd\theta$：
+\[
+K(k)=\frac\pi2\sum_{n\ge0}\Bigl(\frac{\binom{2n}n}{4^n}\Bigr)^2k^{2n},\qquad \重点{K(k)=\frac{\pi}{2\,\mathrm{AGM}(1,\sqrt{1-k^2})}}.
+\]
+AGM 二次收敛，几步即达机器精度。椭圆周长 $4aE(e)$；摆角振幅 $\theta_0$ 的单摆周期 $T=4\sqrt{l/g}\,K(\sin\frac{\theta_0}2)$。
+\end{结论}
+
+\begin{结论}{$\int_0^\infty\frac{\dd x}{(x^2+a^2)^n}$}
+\[
+\重点{\int_0^\infty\frac{\dd x}{(x^2+a^2)^n}=\frac{\pi}{2a^{2n-1}}\cdot\frac{(2n-3)!!}{(2n-2)!!}}\qquad(a>0,\ n\ge1,\ (-1)!!=0!!=1).
+\]
+由 $n=1$ 的 $\frac\pi{2a}$ 对 $a^2$ 求导 $n-1$ 次；也等于 $\frac{\sqrt\pi\,\Gamma(n-\frac12)}{2\Gamma(n)a^{2n-1}}$。
+\end{结论}
+
+\begin{结论}{主值积分}
+\[
+\mathrm{PV}\!\int_{-\infty}^\infty\frac{\ee^{\ii kx}}{x}\dd x=\ii\pi\sgn k,\qquad \mathrm{PV}\!\int_0^\infty\frac{\dd x}{x^2-a^2}=0,\qquad \mathrm{PV}\!\int_0^\infty\frac{x^{s-1}}{1-x}\dd x=\pi\cot\pi s\ (0<s<1).
+\]
+主值的计算：极点两侧对称挖去 $(a-\varepsilon,a+\varepsilon)$；用围道时绕实轴极点的小半圆贡献 $\mp\ii\pi\Res$。
+\end{结论}
+
+\begin{结论}{$\ln$ 与 $\Gamma$ 导数：$\gamma$ 的积分表示}
+$\Gamma'(1)=-\gamma$，$\psi=\Gamma'/\Gamma$：
+\[
+\int_0^\infty\ee^{-x}\ln x\,\dd x=-\gamma,\qquad \int_0^\infty\ee^{-x^2}\ln x\,\dd x=-\frac{\sqrt\pi}4(\gamma+2\ln2),
+\]
+\[
+\重点{\int_0^1x^{a-1}(1-x)^{b-1}\ln x\,\dd x=B(a,b)\bigl(\psi(a)-\psi(a+b)\bigr)}.
+\]
+套路：含 $\ln x$ 的积分 $=$ 不含 $\ln$ 的 $\Gamma$/$B$ 积分对指数求导。$\psi(\frac12)=-\gamma-2\ln2$，$\psi(n+1)=H_n-\gamma$。
+\end{结论}
+
+\begin{结论}{$\int_0^\infty\frac{x^{s-1}}{1+x}$ 及其换元族}
+\[
+\重点{\int_0^\infty\frac{x^{s-1}}{1+x}\dd x=\frac{\pi}{\sin\pi s}}\ (0<s<1),\qquad \int_0^\infty\frac{x^{s-1}}{1+x^n}\dd x=\frac{\pi}{n\sin(\pi s/n)}\ (0<s<n).
+\]
+$\int_0^{\pi/2}\sqrt{\tan x}\,\dd x=\int_0^\infty\frac{t^{1/2}}{1+t^2}\dd t=\frac\pi{\sqrt2}$；$\int_0^1\frac{\dd x}{(1-x^n)^{1/n}}=\frac{\pi}{n\sin(\pi/n)}$（换元 $u=x^n$ 化成 $B(\frac1n,1-\frac1n)/n$）。
+\end{结论}
+
+\begin{结论}{$x\mapsto1/x$ 对称化}
+$\int_0^\infty f(x)\frac{\dd x}{1+x^2}$：令 $x\mapsto\frac1x$，$\frac{\dd x}{1+x^2}$ 不变。于是
+\[
+\int_0^\infty\frac{\ln x}{1+x^2}\dd x=0,\qquad \重点{\int_0^\infty\frac{\dd x}{(1+x^2)(1+x^\alpha)}=\frac\pi4}\ (\text{任意 }\alpha).
+\]
+第二式：两式相加 $\frac1{1+x^\alpha}+\frac{x^\alpha}{1+x^\alpha}=1$。一般 $\int_0^\infty f(x)\frac{\dd x}{x}$ 在 $x\mapsto1/x$ 下不变，适合拆成 $\int_0^1+\int_1^\infty$。
+\end{结论}
+
+\begin{结论}{有理函数乘 $\cos/\sin$ 的半轴积分}
+$a,b>0$：
+\[
+\int_0^\infty\frac{\cos ax}{x^2+b^2}\dd x=\frac{\pi\ee^{-ab}}{2b},\qquad \int_0^\infty\frac{x\sin ax}{x^2+b^2}\dd x=\frac\pi2\ee^{-ab},\qquad
+\重点{\int_0^\infty\frac{\sin ax}{x(x^2+b^2)}\dd x=\frac{\pi(1-\ee^{-ab})}{2b^2}}.
+\]
+第三式由前两式：$\frac1{x(x^2+b^2)}=\frac1{b^2}\bigl(\frac1x-\frac{x}{x^2+b^2}\bigr)$。注意它们关于 $a$ 在 $0$ 处不光滑（$|a|$），正对应 Fourier 变换的指数衰减。
+\end{结论}
+
+\begin{结论}{Raabe 积分与 $\ln\Gamma$}
+\[
+\重点{\int_0^1\ln\Gamma(x)\dd x=\frac12\ln(2\pi)},\qquad \int_a^{a+1}\ln\Gamma(x)\dd x=\frac12\ln(2\pi)+a\ln a-a\ (a\ge0).
+\]
+由余元公式 $\ln\Gamma(x)+\ln\Gamma(1-x)=\ln\pi-\ln\sin\pi x$ 与 $\int_0^1\ln\sin\pi x=-\ln2$。
+\end{结论}
+
+\begin{结论}{Lobachevsky 积分公式}
+$f$ 连续、周期 $\pi$、$f(\pi-x)=f(x)$：
+\[
+\重点{\int_0^\infty\frac{\sin x}{x}f(x)\dd x=\int_0^{\pi/2}f(x)\dd x},\qquad \int_0^\infty\frac{\sin^2x}{x^2}f(x)\dd x=\int_0^{\pi/2}f(x)\dd x .
+\]
+例：$f=1$ 回到 Dirichlet 积分；$f=\frac{1}{1+\cos^2x}$ 等可直接算。来源：$\sum_k\frac{(-1)^k}{x+k\pi}=\frac1{\sin x}$。
+\end{结论}
+
+\begin{结论}{降幂、分部积分循环与递推}
+$\int\ee^{ax}\cos bx\,\dd x=\frac{\ee^{ax}(a\cos bx+b\sin bx)}{a^2+b^2}$（分部两次回到自身）。
+$I_n=\int\sec^nx\,\dd x$：\重点{I_n=\frac{\sec^{n-2}x\tan x}{n-1}+\frac{n-2}{n-1}I_{n-2}}，$\int\sec x=\ln|\sec x+\tan x|$，$\int\sec^3x=\frac12(\sec x\tan x+\ln|\sec x+\tan x|)$。复数法：$\int\ee^{(a+\ii b)x}$ 取实部更快。
+\end{结论}
+
+\begin{结论}{积分中的“加零”换元：$\int_0^\infty f(x+\frac1x)$}
+$\int_0^\infty g(x)\Bigl(1-\frac1{x^2}\Bigr)\dd x$ 型：令 $u=x+\frac1x$ 或 $u=x-\frac1x$。
+\[
+\int_0^\infty\frac{x^2+1}{x^4+1}\dd x=\int_0^\infty\frac{1+x^{-2}}{(x-x^{-1})^2+2}\dd x=\int_{-\infty}^\infty\frac{\dd u}{u^2+2}=\重点{\frac{\pi}{\sqrt2}}.
+\]
+同法 $\int_0^\infty\frac{x^2-1}{x^4+1}\dd x=0$，于是 $\int_0^\infty\frac{\dd x}{1+x^4}=\int_0^\infty\frac{x^2\dd x}{1+x^4}=\frac{\pi}{2\sqrt2}$。
+\end{结论}
+
+\begin{结论}{Gauss 积分在多重积分中的“配方后平移”}
+$\int_{\mathbb R^n}\ee^{-\frac12x^{\mathsf T}Ax}(x^{\mathsf T}Bx)\dd x=\sqrt{\frac{(2\pi)^n}{\det A}}\,\重点{\tr(A^{-1}B)}$；
+\[
+\frac{\int(x^{\mathsf T}Bx)^2\ee^{-\frac12x^{\mathsf T}Ax}}{\int\ee^{-\frac12x^{\mathsf T}Ax}}=(\tr A^{-1}B)^2+2\tr\bigl((A^{-1}B)^2\bigr).
+\]
+即正态向量二次型的均值与二阶矩；方差 $=2\tr((A^{-1}B)^2)$。
+\end{结论}
+
+\参考{Gradshteyn--Ryzhik, \emph{Table of Integrals}；Nahin, \emph{Inside Interesting Integrals}；Boros--Moll, \emph{Irresistible Integrals}；Whittaker--Watson 第 12--13 章；MIT 18.04/18.304。}

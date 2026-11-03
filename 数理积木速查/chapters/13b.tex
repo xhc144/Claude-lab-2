@@ -1,0 +1,94 @@
+\subsection{跨学科模型}
+
+\begin{结论}{传热：热阻、Biot 数与扩散时间}
+导热热阻 $R=\frac{L}{kA}$（串联相加），对流 $\frac{1}{hA}$。集总冷却 $T-T_\infty\propto\ee^{-t/\tau}$，$\tau=\frac{mc}{hA}$，适用条件
+\[
+\重点{\mathrm{Bi}=\frac{hL}{k}<0.1}\ (\text{内部温差可忽略}).
+\]
+扩散时间 $t\sim L^2/\alpha$（$\alpha=k/\rho c$）：水 $\alpha\approx1.4\times10^{-7}\,\mathrm{m^2/s}$，$1\,$cm 约 $10\,$min；煮蛋时间 $\propto$（质量）$^{2/3}$。
+\end{结论}
+
+\begin{结论}{行星平衡温度}
+吸收 $=$ 辐射（快速自转、反照率 $A$）：
+\[
+\重点{T_{\mathrm{eq}}=T_\odot\sqrt{\frac{R_\odot}{2d}}\,(1-A)^{1/4}}.
+\]
+地球 $A=0.3$：$255\,$K；实际平均 $288\,$K，差 $33\,$K 为温室效应。$T\propto d^{-1/2}$：火星约 $210\,$K。若只由向阳半球辐射（潮汐锁定、无热输运），平均温度高 $2^{1/4}$ 倍。
+\end{结论}
+
+\begin{结论}{恒星的量级估计}
+位力定理给中心温度 \重点{kT_c\sim\frac{GMm_p}{R}}：太阳约 $10^7\,$K，足以点燃 pp 链。
+主序寿命 $t\approx10\,\mathrm{Gyr}\,(M/M_\odot)^{-2.5}$（$L\propto M^{3.5}$）；白矮星由电子简并压支撑，$R\propto M^{-1/3}$，质量上限 Chandrasekhar $\approx1.4M_\odot$；中子星半径约 $10\,$km，密度 $\sim$ 核密度。
+\end{结论}
+
+\begin{结论}{等离子体特征尺度}
+\[
+\lambda_D=\sqrt{\frac{\varepsilon_0kT}{ne^2}},\quad \omega_p=\sqrt{\frac{ne^2}{\varepsilon_0m_e}},\quad r_L=\frac{mv_\perp}{qB},\quad \重点{v_A=\frac{B}{\sqrt{\mu_0\rho}}}.
+\]
+等离子体参数 $N_D=\frac43\pi n\lambda_D^3\gg1$ 才算等离子体（集体行为）；$\lambda_D\omega_p=\sqrt{kT/m_e}$（热速度）。Alfvén 波沿磁力线传播，太阳风中约 $50\,$km/s。
+\end{结论}
+
+\begin{结论}{Nernst 电位与低 Reynolds 数的生命}
+离子 $z$ 的膜平衡电位：\重点{V=\frac{kT}{ze}\ln\frac{c_{\mathrm{out}}}{c_{\mathrm{in}}}}；$37^\circ$C 时 $kT/e=26.7\,$mV，K$^+$（$5$ vs $140\,$mM）约 $-89\,$mV，接近静息电位。
+细菌 $\mathrm{Re}\sim10^{-5}$：惯性可忽略，停止推进后滑行距离 $\sim0.1\,$\AA；Stokes 流可逆，往复运动无净位移（Purcell 扇贝定理），故需旋转鞭毛等非互易运动。
+\end{结论}
+
+\begin{结论}{扩散限制的反应速率（Smoluchowski）}
+半径 $a$ 的吸收球，周围浓度 $c_\infty$，稳态扩散通量：
+\[
+\重点{J=4\pi Dac_\infty}\quad\Rightarrow\quad k=4\pi(D_1+D_2)(a_1+a_2).
+\]
+小分子约 $10^9$--$10^{10}\,\mathrm{M^{-1}s^{-1}}$，是溶液中双分子反应速率的上限。表面上 $N$ 个半径 $s$ 的小吸收斑（Berg--Purcell）：$J=\frac{4\pi DaNs}{Ns+\pi a}$，覆盖很小比例即接近全吸收。
+\end{结论}
+
+\begin{结论}{Arrhenius 与 Michaelis--Menten}
+$k=A\ee^{-E_a/RT}$：室温附近“每升温 $10\,$K 速率翻倍”对应 \重点{E_a\approx50\,\mathrm{kJ/mol}}。由两温度速率比 $\ln\frac{k_2}{k_1}=\frac{E_a}{R}\bigl(\frac1{T_1}-\frac1{T_2}\bigr)$ 求 $E_a$。
+酶动力学（准稳态）：$v=\frac{V_{\max}[S]}{K_m+[S]}$，$[S]=K_m$ 时为半最大速率；Lineweaver--Burk 线性化 $\frac1v=\frac{K_m}{V_{\max}}\frac1{[S]}+\frac1{V_{\max}}$（但会放大低浓度点的误差，宜直接非线性拟合）。
+\end{结论}
+
+\begin{结论}{Logistic 增长与 Lotka--Volterra}
+$\dot N=rN(1-N/K)$：$N(t)=\dfrac{K}{1+\frac{K-N_0}{N_0}\ee^{-rt}}$，$N=K/2$ 处增长最快。
+捕食--被捕食 $\dot x=\alpha x-\beta xy$，$\dot y=\delta xy-\gamma y$：
+\[
+\重点{V=\delta x-\gamma\ln x+\beta y-\alpha\ln y\ \text{守恒}},
+\]
+轨道为围绕 $(\gamma/\delta,\alpha/\beta)$ 的闭曲线（中心，结构不稳定）；一周期内的平均值恰等于平衡值。
+\end{结论}
+
+\begin{结论}{SIR 模型：阈值、群体免疫与最终规模}
+$R_0=\beta/\gamma$。$R_0>1$ 才暴发；易感比例低于 $1/R_0$ 时减退：群体免疫阈值 \重点{1-1/R_0}。
+最终感染比例 $z$ 满足 $z=1-\ee^{-R_0z}$：$R_0=2$ 时 $z\approx0.80$，超过免疫阈值 $0.5$（过冲）。初期指数增长率 $r=\gamma(R_0-1)$。与随机图巨分支方程同形。
+\end{结论}
+
+\begin{结论}{Rayleigh--Bénard 对流的起始}
+\[
+\mathrm{Ra}=\frac{g\beta\Delta T\,L^3}{\nu\kappa},\qquad \重点{\mathrm{Ra}_c\approx1708}\ (\text{上下刚性边界}),\quad 657.5\ (\text{双自由边界}).
+\]
+$\mathrm{Ra}<\mathrm{Ra}_c$ 时纯导热；超过后形成对流卷，宽度约等于层厚。$\mathrm{Ra}\propto L^3$：薄层难对流（双层玻璃的原理），大气、地幔则强烈对流。
+\end{结论}
+
+\begin{结论}{机电类比：力--电压对应}
+$m\ddot x+b\dot x+kx=F$ $\leftrightarrow$ $L\ddot q+R\dot q+q/C=V$：
+\[
+\重点{m\leftrightarrow L,\quad b\leftrightarrow R,\quad k\leftrightarrow1/C,\quad x\leftrightarrow q,\quad F\leftrightarrow V}.
+\]
+热学类比：温度 $\leftrightarrow$ 电压，热流 $\leftrightarrow$ 电流，热阻、热容 $\leftrightarrow$ $R$、$C$，时间常数 $RC$。复杂耦合系统（扬声器、传感器）用等效电路一次求解。
+\end{结论}
+
+\begin{结论}{Logistic 映射与 Feigenbaum 常数}
+$x_{n+1}=rx_n(1-x_n)$：$r=3$ 开始倍周期，$r_\infty\approx3.5699$ 进入混沌。分岔间隔之比
+\[
+\重点{\delta=\lim\frac{r_n-r_{n-1}}{r_{n+1}-r_n}=4.6692\ldots}
+\]
+对所有单峰（二次极大）映射普适。$r=4$ 时 Lyapunov 指数 $\ln2$（换元 $x=\sin^2\theta$ 化为倍角映射）；$r=1+\sqrt8$ 处出现周期 3 窗口（“周期 3 蕴含混沌”）。
+\end{结论}
+
+\begin{结论}{Shannon 信道容量}
+带宽 $B$、信噪比 $S/N$（加性白高斯噪声）：
+\[
+\重点{C=B\log_2\Bigl(1+\frac SN\Bigr)}\ \text{bit/s}.
+\]
+$S/N\ll1$：$C\approx\frac{S}{N_0\ln2}$，每比特最少能量 $E_b/N_0\ge\ln2$（$-1.6\,$dB，Shannon 极限）。电话线 $3\,$kHz、$30\,$dB 约 $30\,$kbit/s。
+\end{结论}
+
+\参考{Incropera--DeWitt, \emph{Fundamentals of Heat and Mass Transfer}；Carroll--Ostlie, \emph{An Introduction to Modern Astrophysics}；Chen, \emph{Introduction to Plasma Physics}；Berg, \emph{Random Walks in Biology}；Phillips et al., \emph{Physical Biology of the Cell}；Strogatz；Cover--Thomas。}

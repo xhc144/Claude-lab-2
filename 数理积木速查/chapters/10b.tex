@@ -1,0 +1,75 @@
+\subsection{几何光学与成像}
+
+\begin{结论}{薄透镜：磨镜者公式与 Newton 形式}
+\[
+\frac1f=(n-1)\Bigl(\frac1{R_1}-\frac1{R_2}\Bigr),\qquad \frac1{s}+\frac1{s'}=\frac1f,\qquad \重点{x\,x'=f^2}\ (\text{自两焦点量起}).
+\]
+横向放大率 $m=-s'/s=-f/x$，纵向放大率 $m^2$（立体像被拉伸）。浸入折射率 $n_0$ 的介质中 $(n-1)\to(n/n_0-1)$：玻璃透镜在水中焦距变为约 4 倍。
+\end{结论}
+
+\begin{结论}{单球面折射与组合透镜}
+单球面：\重点{\frac{n_1}{s}+\frac{n_2}{s'}=\frac{n_2-n_1}{R}}；平面（$R\to\infty$）给视深 $d'=d\,n_2/n_1$（水池看起来浅 $1/4$）。球面镜 $f=R/2$。
+相距 $d$ 的两薄透镜：
+\[
+\frac1f=\frac1{f_1}+\frac1{f_2}-\frac{d}{f_1f_2}.
+\]
+$d=f_1+f_2$ 时 $1/f=0$（无焦系统，望远镜）。
+\end{结论}
+
+\begin{结论}{棱镜最小偏向角与彩虹角}
+顶角 $A$ 的棱镜，最小偏向时光路对称：\重点{n=\frac{\sin\frac{A+D_m}{2}}{\sin\frac A2}}（测折射率的标准方法）。
+水滴内一次反射，偏向角取极值的条件 $\cos^2\theta_i=\frac{n^2-1}{3}$：$n=1.333$ 时偏向 $138^\circ$，即彩虹在反日点 $42^\circ$ 处；二次反射 $\cos^2\theta_i=\frac{n^2-1}{8}$，副虹约 $51^\circ$、色序相反。
+\end{结论}
+
+\begin{结论}{望远镜与显微镜的放大率}
+望远镜角放大率 \重点{M=-\frac{f_o}{f_e}}，出瞳直径 $D/|M|$（应不大于眼瞳 $\sim7\,$mm）。
+显微镜（筒长 $L$，明视距离 $25\,$cm）：$M\approx-\frac{L}{f_o}\cdot\frac{25\,\mathrm{cm}}{f_e}$。超过“有效放大率”（约 $500$--$1000\times\mathrm{NA}$）只放大模糊，不增加细节。
+\end{结论}
+
+\begin{结论}{Abbe 分辨极限与数值孔径}
+\[
+\重点{d_{\min}=\frac{\lambda}{2\,\mathrm{NA}}},\qquad \mathrm{NA}=n\sin\theta_{\max}.
+\]
+油浸物镜 $\mathrm{NA}\approx1.4$，可见光极限约 $200\,$nm。Rayleigh 形式 $0.61\lambda/\mathrm{NA}$（两点分辨）。超分辨（STED、PALM）利用荧光开关的非线性绕过此极限，不违反衍射理论。
+\end{结论}
+
+\begin{结论}{光学扩展量守恒：不能把阳光聚得比太阳更热}
+无损光学系统中 \重点{n^2A\,\Omega\ \text{守恒}}（Liouville 定理），辐亮度 $L/n^2$ 不能增大。
+聚光比上限 $C_{\max}=\frac{n^2}{\sin^2\theta_s}$（$\theta_s\approx0.27^\circ$ 为太阳角半径），约 $46000$；靶温不能超过太阳表面温度（否则违反第二定律）。
+\end{结论}
+
+\begin{结论}{像面照度与 $f$ 数}
+Lambert 光源辐亮度 $L$，出射度 $\pi L$。镜头 $f$ 数 $N=f/D$，远物像面照度
+\[
+\重点{E\approx\frac{\pi L}{4N^2}}.
+\]
+光圈每档 $\sqrt2$，曝光量减半。离轴像点照度按 $\cos^4\theta$ 下降（渐晕之外的自然暗角）。景深 $\approx\frac{2Ncs^2}{f^2}$（$c$ 为容许弥散圆，$s$ 为物距）。
+\end{结论}
+
+\begin{结论}{消色差双合透镜}
+Abbe 数 $V=\frac{n_d-1}{n_F-n_C}$（冕牌玻璃约 60，火石约 36）。两薄透镜密接，消除 F、C 两色焦距差：
+\[
+\重点{\frac{1}{f_1V_1}+\frac{1}{f_2V_2}=0},\qquad \frac1{f_1}+\frac1{f_2}=\frac1f .
+\]
+故需一正一负、两种不同色散的玻璃；残余“二级光谱”需第三种玻璃（复消色差）。
+\end{结论}
+
+\begin{结论}{光纤：数值孔径、模式色散与单模条件}
+阶跃折射率纤芯 $n_1$、包层 $n_2$：\重点{\mathrm{NA}=\sqrt{n_1^2-n_2^2}}。
+多模光纤模式色散：$\Delta t\approx\frac{Ln_1}{c}\frac{n_1-n_2}{n_2}$（$n_1=1.5$、$\Delta n=0.01$ 时约 $34\,$ns/km）。单模条件 $V=\frac{2\pi a}{\lambda}\mathrm{NA}<2.405$（$J_0$ 的第一个零点）；渐变折射率光纤把模式色散降低约 $\Delta n/(2n)$ 倍。
+\end{结论}
+
+\begin{结论}{梯度折射率介质中的光线}
+光线方程 \重点{\frac{\dd}{\dd s}\Bigl(n\frac{\dd\mathbf r}{\dd s}\Bigr)=\nabla n}：光线向折射率高处弯曲，曲率 $\kappa=\frac{|\nabla_\perp n|}{n}$。
+分层介质中 $n\sin\theta=$ 常数（$\theta$ 从梯度方向量起）。海市蜃楼：地面热空气 $n$ 小，光线上弯；大气折射使日落时太阳已在地平线下约 $0.5^\circ$。
+\end{结论}
+
+\begin{结论}{全反射的相移与 Fresnel 菱体}
+$n=n_2/n_1<1$，$\theta>\theta_c=\arcsin n$：$|r|=1$，相移
+\[
+\tan\frac{\delta_s}{2}=\frac{\sqrt{\sin^2\theta-n^2}}{\cos\theta},\qquad \tan\frac{\delta_p}{2}=\frac{\sqrt{\sin^2\theta-n^2}}{n^2\cos\theta}.
+\]
+$s$、$p$ 相移之差在玻璃（$n_1\approx1.51$）中约 $54.6^\circ$ 入射时为 $45^\circ$：两次全反射（Fresnel 菱体）得 \重点{90^\circ}，作宽带四分之一波片。
+\end{结论}
+
+\参考{Hecht, \emph{Optics} 第 5--6 章；Pedrotti, \emph{Introduction to Optics}；Born--Wolf 第 3--4 章；Smith, \emph{Modern Optical Engineering}；Winston--Miñano--Benítez, \emph{Nonimaging Optics}（MIT 2.71 / 8.03）。}

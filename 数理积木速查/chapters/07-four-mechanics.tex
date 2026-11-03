@@ -1,0 +1,172 @@
+\section{四大力学}
+
+\subsection{理论力学}
+
+\begin{结论}{带电粒子的 Lagrange 量与正则动量}
+\[
+\重点{L=\tfrac12m\mathbf v^2-q\phi+q\,\mathbf v\cdot\mathbf A},\qquad \mathbf p=m\mathbf v+q\mathbf A,\qquad H=\frac{(\mathbf p-q\mathbf A)^2}{2m}+q\phi .
+\]
+守恒的是\textbf{正则}动量：均匀 $B\hat z$ 中取 $\mathbf A=Bx\hat y$，$y$ 为循环坐标，$p_y=m\dot y+qBx$ 守恒，直接给出回旋中心 $x_0=p_y/(qB)$。
+\end{结论}
+
+\begin{结论}{简正模：$\det(K-\omega^2M)=0$}
+$L=\frac12\dot q^{\mathsf T}M\dot q-\frac12q^{\mathsf T}Kq$：\重点{\det(K-\omega^2M)=0}，模态对 $M$ 正交。
+两单摆（摆长 $\ell$）由弹簧 $k$ 相连：$\omega_1=\sqrt{g/\ell}$（同相），$\omega_2=\sqrt{g/\ell+2k/m}$（反相）；从单侧起振时能量以拍频 $\omega_2-\omega_1$ 来回转移。$N$ 质点链（间距 $a$）：\重点{\omega(q)=2\sqrt{k/m}\,\bigl|\sin\tfrac{qa}{2}\bigr|}。
+\end{结论}
+
+\begin{结论}{绝热不变量 $J=\oint p\,\dd q$}
+参数变化时间尺度远大于周期时 \重点{J=\oint p\,\dd q} 近似守恒；谐振子 $J=2\pi E/\omega$，即 $E/\omega$ 不变。
+缓慢缩短摆长：$E\propto\ell^{-1/2}$，振幅 $\theta_0\propto\ell^{-3/4}$。磁场中回旋：磁矩 $\mu=\frac{mv_\perp^2}{2B}$ 不变，由此得磁镜反射条件 $\sin^2\alpha_0>B_0/B_{\max}$。
+\end{结论}
+
+\begin{结论}{Euler 方程：中间轴不稳定}
+主轴系：$I_1\dot\omega_1=(I_2-I_3)\omega_2\omega_3$（轮换）。绕轴 2 以 $\Omega$ 转动时线性化：
+\[
+\ddot\omega_1=\重点{\frac{(I_1-I_2)(I_2-I_3)}{I_1I_3}}\Omega^2\omega_1 .
+\]
+$I_2$ 居中时系数为正，扰动指数增长（网球拍定理）。对称陀螺 $I_1=I_2$ 自由转动：体坐标中 $\boldsymbol\omega$ 绕对称轴以 $\frac{I_3-I_1}{I_1}\omega_3$ 进动。
+\end{结论}
+
+\subsection{电动力学}
+
+\begin{结论}{辐射功率：Larmor 与 Liénard}
+非相对论：\重点{P=\frac{q^2a^2}{6\pi\varepsilon_0c^3}}。相对论（实验室系）：
+\[
+P=\frac{q^2\gamma^6}{6\pi\varepsilon_0c^3}\Bigl(a^2-\frac{|\mathbf v\times\mathbf a|^2}{c^2}\Bigr).
+\]
+$\mathbf a\parallel\mathbf v$ 时 $\propto\gamma^6a^2$；圆周运动 $\mathbf a\perp\mathbf v$ 时 $\propto\gamma^4a^2$，同步辐射每圈能损 $\propto\gamma^4/R$，故电子环比质子环受限严重 $(m_p/m_e)^4$ 倍。
+\end{结论}
+
+\begin{结论}{偶极辐射与短天线辐射电阻}
+$p(t)=p_0\cos\omega t$，远场 $\frac{\dd P}{\dd\Omega}\propto\sin^2\theta$：
+\[
+\重点{\langle P\rangle=\frac{\mu_0p_0^2\omega^4}{12\pi c}},\qquad \langle P\rangle_{\text{磁偶极}}=\frac{\mu_0m_0^2\omega^4}{12\pi c^3}.
+\]
+长 $\ell\ll\lambda$、电流均匀 $I_0$ 的短天线：$p_0=I_0\ell/\omega$，\重点{R_{\mathrm{rad}}=\frac{2\pi}{3}Z_0\Bigl(\frac\ell\lambda\Bigr)^2\approx790\,(\ell/\lambda)^2\ \Omega}。$\omega^4$ 依赖解释天空蓝色（Rayleigh 散射）。
+\end{结论}
+
+\begin{结论}{Maxwell 应力张量求力}
+\[
+\重点{T_{ij}=\varepsilon_0\bigl(E_iE_j-\tfrac12\delta_{ij}E^2\bigr)+\tfrac1{\mu_0}\bigl(B_iB_j-\tfrac12\delta_{ij}B^2\bigr)},\qquad
+\mathbf F=\oint_ST\cdot\dd\mathbf a-\varepsilon_0\mu_0\frac{\dd}{\dd t}\int_V\mathbf S\,\dd\tau .
+\]
+静场时取一个把物体包住、场易算的曲面（如对称面加无穷远半球面）。导体表面受力面密度 $\frac{\sigma^2}{2\varepsilon_0}$；平面波辐射压：全吸收 $I/c$，全反射 $2I/c$。
+\end{结论}
+
+\begin{结论}{场的 Lorentz 变换与不变量}
+参考系以 $\mathbf v$ 运动：
+\[
+\mathbf E'_\parallel=\mathbf E_\parallel,\quad \重点{\mathbf E'_\perp=\gamma(\mathbf E+\mathbf v\times\mathbf B)_\perp},\quad \mathbf B'_\parallel=\mathbf B_\parallel,\quad \mathbf B'_\perp=\gamma\Bigl(\mathbf B-\frac{\mathbf v\times\mathbf E}{c^2}\Bigr)_\perp .
+\]
+不变量 \重点{E^2-c^2B^2,\ \mathbf E\cdot\mathbf B}。若 $\mathbf E\cdot\mathbf B=0$ 且 $E<cB$，存在一个参考系只有磁场（速度 $\frac{\mathbf E\times\mathbf B}{B^2}$），即 $\mathbf E\times\mathbf B$ 漂移。
+\end{结论}
+
+\begin{结论}{匀速运动电荷的场：压扁的 Coulomb 场}
+电荷以 $v$ 匀速运动，$\theta$ 为场点相对\textbf{现时位置}与速度的夹角：
+\[
+\重点{\mathbf E=\frac{q}{4\pi\varepsilon_0}\frac{1-\beta^2}{(1-\beta^2\sin^2\theta)^{3/2}}\frac{\hat{\mathbf R}}{R^2}},\qquad \mathbf B=\frac{\mathbf v\times\mathbf E}{c^2}.
+\]
+横向场增强 $\gamma$ 倍，纵向削弱 $\gamma^{-2}$ 倍；掠过距离 $b$ 的冲量 $\Delta p_\perp=\frac{2kqQ}{bv}$（$k=\frac1{4\pi\varepsilon_0}$）与 $\gamma$ 无关。
+\end{结论}
+
+\subsection{热力学与统计物理}
+
+\begin{结论}{配分函数的四条导数}
+$\beta=1/kT$：
+\[
+F=-kT\ln Z,\quad U=-\partial_\beta\ln Z,\quad \重点{\langle(\Delta E)^2\rangle=\partial_\beta^2\ln Z=kT^2C_V},\quad S=\frac{U-F}{T}.
+\]
+二能级（间隙 $\Delta$）：$C=Nk\,x^2\frac{\ee^{x}}{(1+\ee^x)^2}$，$x=\Delta/kT$，在 $kT\approx0.42\Delta$ 处出现 Schottky 峰。独立子系统 $Z=Z_1^N$（可分辨）或 $Z_1^N/N!$（不可分辨、经典极限）。
+\end{结论}
+
+\begin{结论}{Jacobi 行列式推 Maxwell 关系}
+$\dfrac{\partial(T,S)}{\partial(p,V)}=1$，从而 $\Bigl(\dfrac{\partial S}{\partial V}\Bigr)_T=\Bigl(\dfrac{\partial p}{\partial T}\Bigr)_V$ 等四式。常用结果：
+\[
+\重点{C_p-C_V=\frac{TV\alpha^2}{\kappa_T}},\qquad \Bigl(\frac{\partial U}{\partial V}\Bigr)_T=T\Bigl(\frac{\partial p}{\partial T}\Bigr)_V-p,\qquad \mu_{\mathrm{JT}}=\frac{V(T\alpha-1)}{C_p}.
+\]
+$\alpha=\frac1V(\partial_TV)_p$，$\kappa_T=-\frac1V(\partial_pV)_T$。理想气体 $T\alpha=1$，Joule--Thomson 系数为零。
+\end{结论}
+
+\begin{结论}{简并 Fermi 气体与 Bose 凝聚}
+自旋 $\tfrac12$ 自由电子，数密度 $n$：
+\[
+\重点{E_F=\frac{\hbar^2}{2m}(3\pi^2n)^{2/3}},\qquad C_V=\frac{\pi^2}{2}Nk\frac{T}{T_F},\qquad P=\frac25nE_F\ (T=0).
+\]
+理想 Bose 气体（无自旋）：\重点{kT_c=\frac{2\pi\hbar^2}{m}\Bigl(\frac{n}{\zeta(3/2)}\Bigr)^{2/3}}，$T<T_c$ 时凝聚比例 $1-(T/T_c)^{3/2}$。二维理想 Bose 气体无凝聚（积分发散）。
+\end{结论}
+
+\begin{结论}{黑体与 Debye：$T^4$ 与 $T^3$}
+\[
+\重点{u=\frac{\pi^2k^4}{15\hbar^3c^3}T^4},\quad \text{出射通量 }\sigma T^4=\frac c4u,\quad \lambda_{\max}T=2.898\times10^{-3}\,\mathrm{m\,K},\quad p=\frac u3 .
+\]
+光子数密度 $\propto T^3$，每个光子平均能量 $\approx2.70\,kT$。固体低温：\重点{C_V=\frac{12\pi^4}{5}Nk\Bigl(\frac{T}{\Theta_D}\Bigr)^3}；高温回到 Dulong--Petit $3Nk$。
+\end{结论}
+
+\begin{结论}{Landau 平均场：指数与比热跃变}
+$f=a(T-T_c)m^2+bm^4$（$a,b>0$）：
+\[
+m^2=\frac{a(T_c-T)}{2b}\ (T<T_c),\qquad \重点{\Delta C=\frac{a^2T_c}{2b}}\ (\text{单位体积}).
+\]
+平均场指数 $\beta=\frac12$，$\gamma=1$，$\delta=3$，$\alpha=0$（跃变）。Ising 平均场 $kT_c=zJ$（$z$ 为配位数）；一维无有限温相变，平均场在 $d<4$ 时给错误指数。
+\end{结论}
+
+\subsection{量子力学}
+
+\begin{结论}{对易子三件套：$[x,f(p)]$、Ehrenfest、位力}
+\[
+\重点{[x,f(p)]=\ii\hbar f'(p)},\quad [p,g(x)]=-\ii\hbar g'(x),\quad \frac{\dd}{\dd t}\langle Q\rangle=\frac{\ii}{\hbar}\langle[H,Q]\rangle+\langle\partial_tQ\rangle .
+\]
+取 $Q=\mathbf r\cdot\mathbf p$ 于定态：\重点{2\langle T\rangle=\langle\mathbf r\cdot\nabla V\rangle}。幂律势 $V\propto r^n$ 给 $2\langle T\rangle=n\langle V\rangle$；氢原子 $\langle T\rangle=-E_n$。
+\end{结论}
+
+\begin{结论}{谐振子：升降算符直接算矩阵元}
+\[
+\重点{x=\sqrt{\frac{\hbar}{2m\omega}}\,(a+a^\dagger)},\quad p=\ii\sqrt{\frac{m\hbar\omega}{2}}\,(a^\dagger-a),\quad a|n\rangle=\sqrt n|n-1\rangle,\ a^\dagger|n\rangle=\sqrt{n+1}|n+1\rangle .
+\]
+$\langle n|x^2|n\rangle=\frac{\hbar}{m\omega}(n+\tfrac12)$，$\langle n|x^4|n\rangle=\frac{3\hbar^2}{4m^2\omega^2}(2n^2+2n+1)$。相干态 $a|\alpha\rangle=\alpha|\alpha\rangle$，光子数为 Poisson 分布，均值 $|\alpha|^2$，$\Delta x\Delta p=\hbar/2$。
+\end{结论}
+
+\begin{结论}{非简并微扰：二阶公式与符号}
+\[
+E_n^{(1)}=V_{nn},\qquad \重点{E_n^{(2)}=\sum_{m\ne n}\frac{|V_{mn}|^2}{E_n^{(0)}-E_m^{(0)}}}.
+\]
+基态二阶修正恒 $\le0$。核对例：谐振子加 $V=\lambda x$，只有 $m=1$ 项，$E_0^{(2)}=-\frac{\lambda^2}{2m\omega^2}$，与配方的精确结果一致。简并能级先在简并子空间对角化 $V$，再用好基矢做非简并公式。
+\end{结论}
+
+\begin{结论}{Fermi 黄金规则}
+常数微扰 $V$ 打开后，跃迁到连续态的速率：
+\[
+\重点{\Gamma_{i\to f}=\frac{2\pi}{\hbar}|\langle f|V|i\rangle|^2\rho(E_f)}.
+\]
+简谐微扰 $V\ee^{-\ii\omega t}+\text{h.c.}$ 时 $\rho$ 在 $E_f=E_i\pm\hbar\omega$ 取值。适用时间窗：$\hbar/\Delta E_{\text{连续带}}\ll t\ll 1/\Gamma$。
+\end{结论}
+
+\begin{结论}{角动量耦合：$\mathbf L\cdot\mathbf S$ 与 Landé 因子}
+在 $|j,m_j\rangle$ 基下：
+\[
+\重点{\langle\mathbf L\cdot\mathbf S\rangle=\frac{\hbar^2}{2}\bigl[j(j+1)-l(l+1)-s(s+1)\bigr]},\qquad g_J=1+\frac{j(j+1)+s(s+1)-l(l+1)}{2j(j+1)}.
+\]
+弱场 Zeeman：$\Delta E=g_J\mu_Bm_jB$。$j_1\otimes j_2=\bigoplus_{j=|j_1-j_2|}^{j_1+j_2}j$，维数核对 $(2j_1+1)(2j_2+1)$。两个自旋 $\tfrac12$：$\mathbf S_1\cdot\mathbf S_2=\frac{\hbar^2}{4}$（三重态）或 $-\frac{3\hbar^2}{4}$（单态）。
+\end{结论}
+
+\begin{结论}{变分法：试探函数的标度参数}
+任意归一化 $\psi$：$\langle H\rangle\ge E_0$。对含标度参数 $b$ 的试探族，$\langle T\rangle\propto b^{-2}$、$\langle V\rangle\propto b^{n}$，极小化给 \重点{2\langle T\rangle=n\langle V\rangle}（试探族内的位力定理）。
+氢原子用 Gauss 试探 $\ee^{-r^2/b^2}$：$E_{\min}=-\frac{8}{3\pi}\,\mathrm{Ry}\approx-0.85\,\mathrm{Ry}$。与基态正交的试探函数给第一激发态的上界。
+\end{结论}
+
+\begin{结论}{WKB：量子化条件与隧穿}
+\[
+\重点{\oint p\,\dd x=2\pi\hbar\,(n+\tfrac12)}\ (\text{两个光滑转折点});\quad \text{一侧硬墙 }n+\tfrac34;\quad \text{两侧硬墙 }n+1 .
+\]
+势垒穿透 \重点{T\approx\exp\Bigl(-\frac2\hbar\int_{x_1}^{x_2}\sqrt{2m(V-E)}\,\dd x\Bigr)}。Gamow：$\alpha$ 衰变寿命的对数与 $Z/\sqrt{E}$ 近似线性（Geiger--Nuttall）。
+\end{结论}
+
+\begin{结论}{氢原子的径向期望值}
+$a_0$ 为 Bohr 半径，$E_n=-\frac{13.6\ \mathrm{eV}}{n^2}$（$Z=1$；类氢 $\times Z^2$，长度 $\div Z$）：
+\[
+\重点{\Bigl\langle\frac1r\Bigr\rangle=\frac{1}{n^2a_0}},\quad \langle r\rangle=\frac{a_0}{2}\bigl[3n^2-l(l+1)\bigr],\quad \Bigl\langle\frac{1}{r^2}\Bigr\rangle=\frac{1}{n^3(l+\frac12)a_0^2}.
+\]
+$\langle 1/r^3\rangle=\frac{1}{n^3l(l+\frac12)(l+1)a_0^3}$（$l\ge1$）用于精细结构；$\langle1/r\rangle$ 也可由 Feynman--Hellmann 对 $e^2$ 求导得到。
+\end{结论}
+
+\参考{Goldstein, \emph{Classical Mechanics}；Landau--Lifshitz 第 1 卷（MIT 8.09 / 8.223）；Griffiths, \emph{Introduction to Electrodynamics}；Jackson, \emph{Classical Electrodynamics}（8.07）；Kardar, \emph{Statistical Physics of Particles}（8.333）；Schroeder, \emph{Thermal Physics}（8.044）；Sakurai, \emph{Modern Quantum Mechanics}；Griffiths, \emph{Introduction to Quantum Mechanics}（8.04--8.06）。}

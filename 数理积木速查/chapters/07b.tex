@@ -1,0 +1,92 @@
+\subsection{分析力学与电动力学续}
+
+\begin{结论}{正则变换与作用量--角变量}
+变换正则 $\iff$ \重点{\{Q,P\}_{q,p}=1}。生成函数 $F_1(q,Q)$：$p=\partial_qF_1$，$P=-\partial_QF_1$。
+谐振子取 $q=\sqrt{\frac{2J}{m\omega}}\sin\theta$，$p=\sqrt{2Jm\omega}\cos\theta$（$F_1=\frac12m\omega q^2\cot\theta$）：$H=\omega J$，$\dot\theta=\omega$，$J=E/\omega$ 即绝热不变量。可积系统 $H=H(J_1,\dots,J_n)$，频率 $\omega_i=\partial H/\partial J_i$。
+\end{结论}
+
+\begin{结论}{Hamilton--Jacobi 方程与分离变量}
+\[
+\重点{H\Bigl(q,\frac{\partial S}{\partial q},t\Bigr)+\frac{\partial S}{\partial t}=0};\qquad H\text{ 不含 }t:\ S=W(q)-Et .
+\]
+分离常数即守恒量；$\frac{\partial S}{\partial\alpha_i}=\beta_i$ 给出轨道。$S$ 就是量子力学中 $\psi\sim\ee^{\ii S/\hbar}$ 的相位，HJ 方程是 Schrödinger 方程的 $\hbar\to0$ 极限（WKB 的出发点）。
+\end{结论}
+
+\begin{结论}{能量函数与转动系中的 Jacobi 积分}
+$L$ 不显含 $t$ $\Rightarrow$ $h=\sum\dot q_ip_i-L$ 守恒；只有 $T$ 是 $\dot q$ 的二次齐次式时 $h=T+V$。
+转动系（角速度 $\boldsymbol\Omega$）：\重点{H'=H-\boldsymbol\Omega\cdot\mathbf L} 守恒而 $E$ 不守恒。限制性三体问题的 Jacobi 常数 $C=2U_{\mathrm{eff}}-v^2$ 决定零速度曲线、限制粒子可达区域。
+\end{结论}
+
+\begin{结论}{约束力：从球顶滑下何时脱离}
+光滑球面顶端静止滑下，约束力 $N=mg\cos\theta-\frac{mv^2}{R}$，$v^2=2gR(1-\cos\theta)$：
+\[
+\重点{\cos\theta=\frac23}\ \text{时 }N=0\ \text{脱离}.
+\]
+一般方法：用 Lagrange 乘子保留约束 $f(q)=0$，乘子 $\lambda\nabla f$ 即约束力；约束力变号的时刻即单侧约束失效的时刻。
+\end{结论}
+
+\begin{结论}{球面摆与锥摆}
+$\phi$ 为循环坐标，$p_\phi=m\ell^2\sin^2\theta\,\dot\phi$ 守恒：
+\[
+U_{\mathrm{eff}}(\theta)=\frac{p_\phi^2}{2m\ell^2\sin^2\theta}-mg\ell\cos\theta .
+\]
+锥摆（$\theta$ 恒定）：\重点{\omega^2=\frac{g}{\ell\cos\theta}}；绕锥摆的小振动频率 $\omega_\theta^2=\omega^2(1+3\cos^2\theta)$。一般轨道在两条纬线间振荡，进动角不是 $2\pi$ 的有理倍时不闭合。
+\end{结论}
+
+\begin{结论}{双摆的简正模}
+等质量 $m$、等长 $\ell$ 的双摆小振动：
+\[
+\重点{\omega^2=(2\mp\sqrt2)\frac g\ell},\qquad \text{振幅比 }\frac{\theta_2}{\theta_1}=\pm\sqrt2 .
+\]
+慢模同相、快模反相。大振幅时为混沌系统，对初值指数敏感。
+\end{结论}
+
+\begin{结论}{Kapitza 摆：快速振动稳定倒立}
+悬点以 $a\cos\Omega t$ 竖直振动，$\Omega\gg\sqrt{g/\ell}$，对快变量平均得
+\[
+U_{\mathrm{eff}}=-mg\ell\cos\theta+\frac{ma^2\Omega^2}{4}\sin^2\theta,\qquad \text{倒立稳定}\iff\重点{a^2\Omega^2>2g\ell}.
+\]
+一般原理：快振动力 $f\cos\Omega t$ 产生有效势 $\frac{\overline{f^2}}{2m\Omega^2}$。Paul 离子阱与光学有质动力势同理。
+\end{结论}
+
+\begin{结论}{推迟势与 Liénard--Wiechert 势}
+Lorenz 规范：$\Box\phi=-\rho/\varepsilon_0$，解为推迟势（源取 $t_r=t-|\mathbf r-\mathbf r'|/c$）。点电荷：
+\[
+\重点{\phi=\frac{q}{4\pi\varepsilon_0}\frac{1}{(1-\hat{\mathbf n}\cdot\boldsymbol\beta)R}\Big|_{t_r}},\qquad \mathbf A=\frac{\mathbf v}{c^2}\phi .
+\]
+因子 $(1-\hat{\mathbf n}\cdot\boldsymbol\beta)^{-1}$ 是“迎面而来的电荷看起来更多”的几何效应；辐射场 $\propto1/R$，速度场 $\propto1/R^2$。
+\end{结论}
+
+\begin{结论}{辐射阻尼与经典原子塌缩}
+Abraham--Lorentz：$\mathbf F_{\mathrm{rad}}=m\tau\dot{\mathbf a}$，\重点{\tau=\frac{q^2}{6\pi\varepsilon_0mc^3}\approx6.3\times10^{-24}\,\mathrm s}（电子）。
+经典 Bohr 轨道的电子按 Larmor 辐射螺旋坠落，用时 $t=\frac{a_0^3}{4r_e^2c}\approx1.6\times10^{-11}\,$s——经典物理无法解释原子稳定。振子辐射线宽 $\Gamma=\omega_0^2\tau$。
+\end{结论}
+
+\begin{结论}{Thomson、Rayleigh 散射与 Eddington 光度}
+自由电子 \重点{\sigma_T=\frac{8\pi}{3}r_e^2=6.65\times10^{-29}\,\mathrm{m^2}}，与频率无关。束缚电子（固有频率 $\omega_0$）：
+\[
+\sigma=\sigma_T\frac{\omega^4}{(\omega_0^2-\omega^2)^2+\gamma^2\omega^2}\ \xrightarrow{\ \omega\ll\omega_0\ }\ \sigma_T\Bigl(\frac{\omega}{\omega_0}\Bigr)^4 .
+\]
+辐射压与引力平衡：$L_{\mathrm{Edd}}=\frac{4\pi GMm_pc}{\sigma_T}\approx1.26\times10^{31}\,\mathrm W\cdot(M/M_\odot)$，限制吸积天体的光度。
+\end{结论}
+
+\begin{结论}{静电自能与经典电子半径}
+均匀带电球 $\frac35\frac{Q^2}{4\pi\varepsilon_0R}$，球壳 $\frac12\frac{Q^2}{4\pi\varepsilon_0R}$；点电荷自能发散。
+令自能 $\sim m_ec^2$：\重点{r_e=\frac{e^2}{4\pi\varepsilon_0m_ec^2}=2.82\times10^{-15}\,\mathrm m}。尺度阶梯：$r_e=\alpha\lambdabar_C=\alpha^2a_0$（$\lambdabar_C=\hbar/m_ec$）。
+\end{结论}
+
+\begin{结论}{协变形式与磁刚度}
+$\partial_\mu F^{\mu\nu}=\mu_0J^\nu$，$\frac{\dd p^\mu}{\dd\tau}=qF^{\mu\nu}u_\nu$；不变量 $F_{\mu\nu}F^{\mu\nu}=2(B^2-E^2/c^2)$。
+均匀磁场中：$\omega_c=\frac{qB}{\gamma m}$，$r=\frac{p_\perp}{qB}$，即 \重点{p\,[\mathrm{GeV}/c]=0.3\,B\,[\mathrm T]\;r\,[\mathrm m]}（单位电荷）。LHC：$7\,$TeV、偶极场 $8.3\,$T，弯转半径约 $2.8\,$km。
+\end{结论}
+
+\begin{结论}{多极辐射的量级与引力波四极公式}
+源尺度 $a$，$ka\ll1$：磁偶极与电四极辐射都比电偶极小 $(ka)^2$ 倍（$(v/c)^2$）。
+引力波没有单极、偶极（动量守恒），领头为质量四极：
+\[
+P=\frac{G}{5c^5}\bigl\langle\dddot Q_{ij}\dddot Q_{ij}\bigr\rangle,\qquad \text{圆轨道双星 }\重点{P=\frac{32G^4}{5c^5}\frac{(m_1m_2)^2(m_1+m_2)}{a^5}}.
+\]
+$P\propto a^{-5}$ 使轨道加速收缩（并合）；频率为轨道频率的 2 倍。
+\end{结论}
+
+\参考{Goldstein--Poole--Safko 第 8--10 章；Landau--Lifshitz 第 1、2 卷；José--Saletan, \emph{Classical Dynamics}；Jackson 第 6、14、16 章；Rybicki--Lightman, \emph{Radiative Processes in Astrophysics}（MIT 8.09 / 8.311）。}

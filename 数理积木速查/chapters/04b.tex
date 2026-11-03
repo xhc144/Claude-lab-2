@@ -1,0 +1,92 @@
+\subsection{数值方法进阶}
+
+\begin{结论}{浮点：单位舍入与相消}
+IEEE 双精度 \重点{u=2^{-53}\approx1.1\times10^{-16}}（$\varepsilon_{\mathrm{mach}}=2u$）。两近似数相减，相对误差放大 $\frac{|a|+|b|}{|a-b|}$ 倍。改写消去相减：
+\[
+\sqrt{x+1}-\sqrt x=\frac{1}{\sqrt{x+1}+\sqrt x},\qquad x_1=\frac{-b-\operatorname{sgn}(b)\sqrt{b^2-4ac}}{2a},\ \ x_2=\frac{c}{ax_1}.
+\]
+$1-\cos x=2\sin^2\frac x2$；$\ln(1+x)$、$\ee^x-1$ 用 \texttt{log1p}、\texttt{expm1}。Kahan 补偿求和的误差界与项数无关（一阶）。
+\end{结论}
+
+\begin{结论}{差商求导的最优步长}
+截断误差与舍入误差平衡：
+\[
+\text{前向差：}\ h^*\sim\sqrt{u},\ \text{误差}\sim\sqrt u\approx10^{-8};\qquad \text{中心差：}\ \重点{h^*\sim u^{1/3}},\ \text{误差}\sim u^{2/3}\approx10^{-11}.
+\]
+h 取更小反而更差。复步长法 \重点{f'(x)\approx\frac{\Im f(x+\ii h)}{h}}（$f$ 实解析）没有相减，可取 $h=10^{-20}$ 得到机器精度。
+\end{结论}
+
+\begin{结论}{直接法的运算量与稳定性}
+$n\times n$：LU \重点{\tfrac23n^3}，Cholesky $\frac13n^3$，Householder QR（$m\times n$）$2mn^2-\frac23n^3$，回代 $n^2$。
+部分选主元 LU 增长因子 $\le2^{n-1}$（最坏情形罕见，实践中稳定）；Cholesky 与 Householder QR 无条件后向稳定。已有 LU 后每个新右端只需 $O(n^2)$：不要显式求 $A^{-1}$。
+\end{结论}
+
+\begin{结论}{三次样条：最小弯曲与误差}
+插值 $C^2$ 三次样条解一个三对角方程组（$O(n)$）。自然样条（端点 $s''=0$）在所有 $C^2$ 插值函数中使
+\[
+\重点{\int_a^b s''(x)^2\,\dd x\ \text{最小}}.
+\]
+给定端点导数的完全样条误差 $\|f-s\|_\infty\le\frac{5}{384}h^4\|f^{(4)}\|_\infty$；自然样条在 $f''(a),f''(b)\ne0$ 时端点附近退化为 $O(h^2)$。
+\end{结论}
+
+\begin{结论}{用正交多项式拟合，避开 Hilbert 矩阵}
+单项式基在 $[0,1]$ 上的 Gram 矩阵是 Hilbert 矩阵 $H_{ij}=\frac{1}{i+j-1}$，\重点{\kappa_2(H_n)\sim\ee^{3.5n}}（$n=10$ 已约 $10^{13}$）。
+改用 $[-1,1]$ 上 Legendre 或 Chebyshev 基，Gram 矩阵为对角，系数 $c_k=\frac{\langle f,P_k\rangle}{\langle P_k,P_k\rangle}$ 独立计算，加项不改旧系数；离散数据用三项递推构造离散正交多项式。
+\end{结论}
+
+\begin{结论}{Aitken 加速与二分次数}
+线性收敛序列 $x_n-x^*\approx C\lambda^n$：
+\[
+\重点{\hat x_n=x_n-\frac{(x_{n+1}-x_n)^2}{x_{n+2}-2x_{n+1}+x_n}}
+\]
+消去主误差；对不动点迭代每步都这样做（Steffensen）可得二阶收敛且不需导数。二分法达到精度 $\varepsilon$ 需 $\lceil\log_2\frac{b-a}{\varepsilon}\rceil$ 步，稳健但慢；Brent 法组合二分与反插值。
+\end{结论}
+
+\begin{结论}{线性多步法与 Dahlquist 屏障}
+Adams--Bashforth 2：$y_{n+1}=y_n+\frac h2(3f_n-f_{n-1})$；梯形法 $y_{n+1}=y_n+\frac h2(f_n+f_{n+1})$（A-稳定，二阶）。
+\重点{\text{A-稳定的线性多步法阶数}\le2}（第二屏障），梯形法误差常数最小。刚性问题用 BDF：BDF2 $y_{n+1}-\frac43y_n+\frac13y_{n-1}=\frac23hf_{n+1}$；BDF 阶数超过 6 即零不稳定。
+\end{结论}
+
+\begin{结论}{嵌入式 Runge--Kutta 的步长控制}
+同一组级值给出 $p$ 阶与 $p+1$ 阶两个解，差值 $\mathrm{err}$ 估计局部误差：
+\[
+\重点{h_{\mathrm{new}}=0.9\,h\Bigl(\frac{\mathrm{tol}}{\mathrm{err}}\Bigr)^{1/(p+1)}}.
+\]
+Dormand--Prince 5(4)（\texttt{ode45}/\texttt{RK45}）用 5 阶解推进。显式方法在刚性问题上步长被稳定性而非精度限制：若步长异常小，换隐式求解器。
+\end{结论}
+
+\begin{结论}{FFT、卷积与谱方法}
+DFT $O(N^2)\to$ FFT \重点{O(N\log N)}；循环卷积 $=\mathcal F^{-1}(\hat a\cdot\hat b)$，线性卷积先补零到 $\ge N_a+N_b-1$。
+周期光滑函数的谱微分 $\widehat{f'}_k=\ii k\hat f_k$，解析函数的误差随 $N$ \textbf{指数}下降；非线性项需按 $3/2$ 规则补零去混叠。
+\end{结论}
+
+\begin{结论}{Monte Carlo 方差缩减}
+控制变量：$g$ 的均值已知，$\hat\mu=\overline{f+c(g-\E g)}$，最优
+\[
+\重点{c^*=-\frac{\Cov(f,g)}{\Var g}},\qquad \Var\ \text{降为}\ (1-\rho_{fg}^2)\Var f .
+\]
+对偶变量：$\frac12[f(U)+f(1-U)]$，方差 $\frac{\sigma^2}{2}(1+\rho)$，$f$ 单调时 $\rho<0$。重要抽样见第 13 章；分层抽样把方差中的“层间”部分去掉。
+\end{结论}
+
+\begin{结论}{梯度法的步长与动量}
+二次目标 $\frac12x^{\mathsf T}Ax$，$\kappa=\lambda_{\max}/\lambda_{\min}$：固定步长最优 \重点{\eta=\frac{2}{\lambda_{\min}+\lambda_{\max}}}，收缩因子 $\frac{\kappa-1}{\kappa+1}$；$\eta>2/\lambda_{\max}$ 发散。
+重球动量（最优参数）收缩因子 $\frac{\sqrt\kappa-1}{\sqrt\kappa+1}$，与 CG 同阶。Newton 法一步解出二次问题；拟 Newton（BFGS）用梯度差更新 Hessian 近似，超线性收敛。
+\end{结论}
+
+\begin{结论}{一维有限元：刚度矩阵就是差分矩阵}
+$-u''=f$，$u(0)=u(1)=0$，均匀网格帽函数 $\phi_i$：
+\[
+\重点{K=\frac1h\,\mathrm{tridiag}(-1,2,-1)},\qquad F_i=\int f\phi_i\approx hf(x_i).
+\]
+误差：能量范数（$H^1$）$O(h)$，$L^2$ 范数 $O(h^2)$；一维时若载荷积分精确，节点值恰为精确解（超收敛）。Galerkin 解是能量范数下的最佳逼近（Céa 引理）。
+\end{结论}
+
+\begin{结论}{用惯性数数特征值}
+对称 $A$ 与实数 $x$：作 $A-xI=LDL^{\mathsf T}$，
+\[
+\重点{\#\{\lambda_i(A)<x\}=D\ \text{中负元个数}}\quad(\text{Sylvester 惯性定律}).
+\]
+三对角矩阵的 $LDL^{\mathsf T}$ 只需 $O(n)$：配合二分即可求任意第 $k$ 个特征值（Sturm 序列法），也用于验证区间内的特征值个数。
+\end{结论}
+
+\参考{Trefethen--Bau, \emph{Numerical Linear Algebra}；Higham, \emph{Accuracy and Stability of Numerical Algorithms}；Hairer--Nørsett--Wanner, \emph{Solving ODEs I/II}；Trefethen, \emph{Spectral Methods in MATLAB}；Nocedal--Wright, \emph{Numerical Optimization}；Strang--Fix, \emph{An Analysis of the Finite Element Method}。}

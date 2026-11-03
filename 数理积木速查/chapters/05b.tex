@@ -1,0 +1,110 @@
+\subsection{常微分方程与特殊函数}
+
+\begin{结论}{指数响应公式（含共振）}
+常系数 $p(D)y=\ee^{st}$：
+\[
+\重点{y_p=\frac{\ee^{st}}{p(s)}}\ (p(s)\ne0);\qquad y_p=\frac{t\,\ee^{st}}{p'(s)}\ (p(s)=0\ne p'(s));\qquad \frac{t^m\ee^{st}}{p^{(m)}(s)}\ (m\text{ 重根}).
+\]
+正弦强迫先复化：$y''+\omega^2y=\cos\omega t$ 取实部 $\Re\frac{t\ee^{\ii\omega t}}{2\ii\omega}=\frac{t\sin\omega t}{2\omega}$，振幅线性增长。
+\end{结论}
+
+\begin{结论}{常数变易、Abel 恒等式与降阶}
+$y''+p(x)y'+q(x)y=g$，$W=y_1y_2'-y_1'y_2$：
+\[
+\重点{y_p=-y_1\int\frac{y_2g}{W}\dd x+y_2\int\frac{y_1g}{W}\dd x},\qquad W=C\,\ee^{-\int p\,\dd x}.
+\]
+只知一个解 $y_1$ 时：$y_2=y_1\int\frac{\ee^{-\int p}}{y_1^2}\dd x$。例：$y_1=\ee^{x}$ 是 $y''-2y'+y=0$ 的解，得 $y_2=x\ee^x$。
+\end{结论}
+
+\begin{结论}{Euler--Cauchy 方程}
+$x^2y''+axy'+by=0$：试 $y=x^r$，\重点{r(r-1)+ar+b=0}。
+重根 $r$：$x^r$ 与 $x^r\ln x$；复根 $\alpha\pm\ii\beta$：$x^\alpha\cos(\beta\ln x)$、$x^\alpha\sin(\beta\ln x)$。等价于换元 $x=\ee^t$ 化为常系数方程。圆盘/球内 Laplace 方程的径向部分正是这种方程。
+\end{结论}
+
+\begin{结论}{Bessel 函数：零点与渐近}
+$x^2y''+xy'+(x^2-\nu^2)y=0$ 的解 $J_\nu,Y_\nu$（$Y_\nu$ 在 0 处奇异）。大 $x$：
+\[
+\重点{J_\nu(x)\approx\sqrt{\frac{2}{\pi x}}\cos\Bigl(x-\frac{\nu\pi}{2}-\frac\pi4\Bigr)}.
+\]
+零点：$J_0$：$2.405,\ 5.520,\ 8.654$；$J_1$：$3.832,\ 7.016$。递推 $J_{\nu-1}+J_{\nu+1}=\frac{2\nu}{x}J_\nu$，$(x^\nu J_\nu)'=x^\nu J_{\nu-1}$；$J_0'=-J_1$。
+\end{结论}
+
+\begin{结论}{Legendre 多项式：母函数即多极展开}
+\[
+\重点{\frac{1}{\sqrt{1-2xt+t^2}}=\sum_{n\ge0}P_n(x)t^n},\qquad \int_{-1}^1P_mP_n\,\dd x=\frac{2}{2n+1}\delta_{mn},\qquad P_n=\frac{1}{2^nn!}\frac{\dd^n}{\dd x^n}(x^2-1)^n .
+\]
+$\frac{1}{|\mathbf r-\mathbf r'|}=\sum\frac{r_<^n}{r_>^{n+1}}P_n(\cos\gamma)$。$P_n(1)=1$，$P_n(-x)=(-1)^nP_n(x)$；递推 $(n+1)P_{n+1}=(2n+1)xP_n-nP_{n-1}$。
+\end{结论}
+
+\begin{结论}{Hermite 多项式（物理学约定）}
+母函数 $\ee^{2xt-t^2}=\sum H_n(x)\frac{t^n}{n!}$；
+\[
+\重点{H_{n+1}=2xH_n-2nH_{n-1}},\qquad H_n'=2nH_{n-1},\qquad \int_{-\infty}^{\infty}H_mH_n\ee^{-x^2}\dd x=\sqrt\pi\,2^nn!\,\delta_{mn}.
+\]
+$H_0=1$，$H_1=2x$，$H_2=4x^2-2$。谐振子本征函数 $\psi_n\propto H_n(\xi)\ee^{-\xi^2/2}$，$\xi=x\sqrt{m\omega/\hbar}$。
+\end{结论}
+
+\begin{结论}{球谐函数加法定理}
+$\gamma$ 为 $\hat{\mathbf r}$ 与 $\hat{\mathbf r}'$ 的夹角：
+\[
+\重点{P_l(\cos\gamma)=\frac{4\pi}{2l+1}\sum_{m=-l}^{l}Y_{lm}^*(\hat{\mathbf r}')Y_{lm}(\hat{\mathbf r})}.
+\]
+取 $\hat{\mathbf r}=\hat{\mathbf r}'$ 得 Unsöld 定理 $\sum_m|Y_{lm}|^2=\frac{2l+1}{4\pi}$：满壳层电荷分布球对称。
+\end{结论}
+
+\begin{结论}{Sturm--Liouville：Rayleigh 商与零点}
+$-(pu')'+qu=\lambda wu$（$p,w>0$），Dirichlet 边界：本征值实、单重、递增到 $\infty$，本征函数关于权 $w$ 正交，第 $n$ 个恰有 $n-1$ 个内部零点。
+\[
+\重点{\lambda_1=\min_{u}\frac{\int(pu'^2+qu^2)}{\int wu^2}}
+\]
+任何试探函数给出 $\lambda_1$ 的上界。Sturm 比较：$q$ 变小（或 $\lambda$ 变大）零点变密。
+\end{结论}
+
+\begin{结论}{Laplace 变换的运算规则}
+\[
+\重点{\mathcal L[y'']=s^2Y-sy(0)-y'(0)},\quad \ee^{at}f\to F(s-a),\quad u(t-c)f(t-c)\to\ee^{-cs}F(s),\quad f*g\to FG .
+\]
+$t^n\to\frac{n!}{s^{n+1}}$，$\delta(t-c)\to\ee^{-cs}$，$tf(t)\to-F'(s)$。初值定理 $f(0^+)=\lim_{s\to\infty}sF(s)$。冲激响应 $h=\mathcal L^{-1}[1/p(s)]$，任意输入的响应 $=h*g$。
+\end{结论}
+
+\begin{结论}{非齐次线性系统与 Jordan 块的指数}
+\[
+\重点{x(t)=\ee^{At}x_0+\int_0^t\ee^{A(t-s)}f(s)\,\dd s}.
+\]
+Jordan 块 $\lambda I+N$（$N^k=0$）：$\ee^{(\lambda I+N)t}=\ee^{\lambda t}\bigl(I+tN+\cdots+\frac{t^{k-1}}{(k-1)!}N^{k-1}\bigr)$，出现 $t^j\ee^{\lambda t}$ 项。全部 $\Re\lambda<0$ 时指数稳定；$\Re\lambda=0$ 且有非平凡 Jordan 块时多项式增长。
+\end{结论}
+
+\begin{结论}{Lyapunov 函数与 Lyapunov 方程}
+$V>0$（除平衡点）、$\dot V=\nabla V\cdot f\le0$ $\Rightarrow$ 稳定；$\dot V<0$ $\Rightarrow$ 渐近稳定；只有 $\le0$ 时用 LaSalle：轨道趋于 $\{\dot V=0\}$ 中的最大不变集。
+线性系统：$A$ 稳定 $\iff$ 对任意 $Q\succ0$，\重点{A^{\mathsf T}P+PA=-Q} 有解 $P\succ0$，$V=x^{\mathsf T}Px$。阻尼摆取能量为 $V$，$\dot V=-b\dot\theta^2$，LaSalle 给出趋于最低点。
+\end{结论}
+
+\begin{结论}{一维分岔的标准形}
+\[
+\text{鞍结：}\dot x=r+x^2;\quad \text{跨临界：}\dot x=rx-x^2;\quad \text{超临界叉形：}\重点{\dot x=rx-x^3}\ (x^*=\pm\sqrt r).
+\]
+亚临界叉形 $\dot x=rx+x^3-x^5$ 有滞后（跳跃）。超临界 Hopf：$\dot r=\mu r-r^3$，极限环半径 $\sqrt\mu$、频率 $\approx\omega_0$。判别依据：分岔点处 $f=f_x=0$，再看 $f_r$、$f_{xx}$、$f_{xxx}$ 的符号。
+\end{结论}
+
+\begin{结论}{排除或确认周期轨道}
+Bendixson--Dulac：单连通区域内 \重点{\nabla\cdot(Bf)\ \text{不变号且不恒为零}} $\Rightarrow$ 无闭轨（$B$ 为任意光滑正函数）。
+Poincaré--Bendixson：平面上有界、不含平衡点的正不变闭区域必含闭轨（陷阱区域法）。Van der Pol $\ddot x-\mu(1-x^2)\dot x+x=0$：$\mu\gg1$ 时为张弛振荡，周期 $\approx(3-2\ln2)\mu$。
+\end{结论}
+
+\begin{结论}{参数共振（Mathieu）}
+$\ddot x+\omega_0^2\bigl[1+h\cos\bigl((2\omega_0+\epsilon)t\bigr)\bigr]x=0$，$h\ll1$：
+\[
+\重点{|\epsilon|<\frac{h\omega_0}{2}\ \text{时不稳定}},\qquad \text{增长率 }s=\frac12\sqrt{\Bigl(\frac{h\omega_0}{2}\Bigr)^2-\epsilon^2}.
+\]
+驱动频率在 $2\omega_0/n$ 附近都有不稳定区，宽度 $\propto h^n$。秋千靠周期性改变重心、Paul 离子阱靠稳定区工作。
+\end{结论}
+
+\begin{结论}{Airy 函数：转折点附近的标准解}
+$y''=xy$ 的衰减解 $\mathrm{Ai}$：
+\[
+\重点{\mathrm{Ai}(x)\sim\frac{\ee^{-\frac23x^{3/2}}}{2\sqrt\pi\,x^{1/4}}}\ (x\to+\infty),\qquad \mathrm{Ai}(-x)\sim\frac{\sin\bigl(\frac23x^{3/2}+\frac\pi4\bigr)}{\sqrt\pi\,x^{1/4}}\ (x\to+\infty).
+\]
+线性势中的量子粒子、WKB 连接公式（相位 $\pi/4$ 的来源）、彩虹附近的光强都由它描述。$\mathrm{Ai}$ 的零点 $-2.338,\ -4.088,\dots$ 给出线性势阱能级。
+\end{结论}
+
+\参考{Boyce--DiPrima, \emph{Elementary Differential Equations}；MIT 18.03 讲义（指数响应公式）；Arfken--Weber, \emph{Mathematical Methods for Physicists}；Strogatz, \emph{Nonlinear Dynamics and Chaos}；Landau--Lifshitz 第 1 卷 §27；DLMF（NIST 数学函数手册）。}

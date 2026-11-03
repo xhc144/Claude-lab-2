@@ -1,0 +1,109 @@
+\subsection{线性代数与抽象代数进阶}
+
+\begin{结论}{Cayley--Hamilton 降次}
+$p_A(A)=0$，故 $A^N$ 等于 $x^N$ 除以 $p_A(x)$ 的余式在 $A$ 处的值。$2\times2$：
+\[
+\重点{A^2=(\tr A)A-(\det A)I},\qquad A^{-1}=\frac{(\tr A)I-A}{\det A}.
+\]
+特征值互异时，余式 $r(x)$（次数 $<n$）由 $r(\lambda_i)=\lambda_i^N$ 插值确定；有重根时补导数条件 $r'(\lambda)=N\lambda^{N-1}$。
+\end{结论}
+
+\begin{结论}{矩阵函数：Sylvester 公式}
+$A$ 可对角化、互异特征值 $\lambda_1,\dots,\lambda_k$：
+\[
+\重点{f(A)=\sum_{i=1}^kf(\lambda_i)P_i,\qquad P_i=\prod_{j\ne i}\frac{A-\lambda_jI}{\lambda_i-\lambda_j}}.
+\]
+$P_i$ 是到特征子空间的投影，$P_iP_j=\delta_{ij}P_i$，$\sum P_i=I$。例：$\ee^{tA}$、$\sqrt A$（$A\succ0$）、$A^{1/2}$ 的唯一正定平方根都由此得到。
+\end{结论}
+
+\begin{结论}{SVD 与最优低秩逼近（Eckart--Young）}
+$A=\sum_i\sigma_iu_iv_i^{\mathsf T}$，$A_k=\sum_{i\le k}\sigma_iu_iv_i^{\mathsf T}$：
+\[
+\重点{\min_{\rank B\le k}\|A-B\|_2=\sigma_{k+1}},\qquad \min_{\rank B\le k}\|A-B\|_F^2=\sum_{i>k}\sigma_i^2 .
+\]
+伪逆 $A^+=\sum\sigma_i^{-1}v_iu_i^{\mathsf T}$；$x=A^+b$ 是最小二乘解中范数最小的一个。$\|A\|_2=\sigma_1$，$\|A\|_F^2=\sum\sigma_i^2$。
+\end{结论}
+
+\begin{结论}{正定性判别与分块正定}
+实对称 $A\succ0\iff$ 全部\textbf{顺序}主子式 $>0$（Sylvester）$\iff$ 存在 Cholesky 分解 $A=LL^{\mathsf T}$。
+\[
+\重点{\begin{pmatrix}A&B\\B^{\mathsf T}&C\end{pmatrix}\succ0\iff A\succ0\ \text{且}\ C-B^{\mathsf T}A^{-1}B\succ0}.
+\]
+\注意 半正定要检查\textbf{全部}主子式，只看顺序主子式不够：$\begin{pmatrix}0&0\\0&-1\end{pmatrix}$ 的顺序主子式为 $0,0$。
+\end{结论}
+
+\begin{结论}{Gershgorin 圆盘}
+每个特征值落在某个圆盘 \重点{|z-a_{ii}|\le\sum_{j\ne i}|a_{ij}|} 内；$k$ 个圆盘构成与其余不交的连通块时，块内恰有 $k$ 个特征值。
+推论：严格对角占优矩阵可逆；对角为正的严格对角占优实对称矩阵正定。对 $A^{\mathsf T}$（按列求和）同样成立，可取两者之交。
+\end{结论}
+
+\begin{结论}{循环矩阵：用 Fourier 向量直接对角化}
+首行 $(c_0,c_1,\dots,c_{n-1})$ 的循环矩阵，$\omega=\ee^{2\pi\ii/n}$：
+\[
+\重点{\lambda_k=\sum_{j=0}^{n-1}c_j\,\omega^{jk}},\qquad v_k=(1,\omega^k,\omega^{2k},\dots)^{\mathsf T},\quad k=0,\dots,n-1 .
+\]
+周期离散 Laplace（首行 $2,-1,0,\dots,0,-1$）：$\lambda_k=2-2\cos\frac{2\pi k}{n}=4\sin^2\frac{\pi k}{n}$；乘积给出 $n$ 圈图的生成树数 $n$。
+\end{结论}
+
+\begin{结论}{两个必背行列式/谱}
+Vandermonde：$\det[x_i^{\,j-1}]=\prod_{i<j}(x_j-x_i)$。三对角 Toeplitz（对角 $a$，上 $b$，下 $c$，$bc>0$）：
+\[
+\重点{\lambda_k=a+2\sqrt{bc}\cos\frac{k\pi}{n+1}},\qquad k=1,\dots,n .
+\]
+Dirichlet 离散 Laplace（$2,-1$）：$\lambda_k=4\sin^2\frac{k\pi}{2(n+1)}$，条件数 $\sim\frac{4(n+1)^2}{\pi^2}$。
+\end{结论}
+
+\begin{结论}{Kronecker 积与 Sylvester 方程}
+\[
+\重点{\mathrm{vec}(AXB)=(B^{\mathsf T}\otimes A)\,\mathrm{vec}(X)},\qquad \sigma(A\otimes B)=\{\lambda_i\mu_j\},\quad \sigma(A\otimes I+I\otimes B)=\{\lambda_i+\mu_j\}.
+\]
+$AX-XB=C$ 化为 $(I\otimes A-B^{\mathsf T}\otimes I)\mathrm{vec}X=\mathrm{vec}C$：唯一可解 $\iff\sigma(A)\cap\sigma(B)=\varnothing$。二维网格 Laplace $=L_n\otimes I+I\otimes L_n$，特征值为一维的两两之和。
+\end{结论}
+
+\begin{结论}{Perron--Frobenius}
+非负不可约矩阵 $A$：谱半径 $\rho$ 是单重特征值，有\textbf{正}特征向量；
+\[
+\重点{\min_i\sum_ja_{ij}\le\rho(A)\le\max_i\sum_ja_{ij}}.
+\]
+随机矩阵 $\rho=1$；Leslie 人口模型的长期增长率、PageRank、Markov 链平稳分布都是 Perron 向量。周期为 $d$ 时模为 $\rho$ 的特征值共 $d$ 个。
+\end{结论}
+
+\begin{结论}{行列式与逆的微分}
+\[
+\重点{\frac{\dd}{\dd t}\det A=\det A\cdot\tr\bigl(A^{-1}\dot A\bigr)},\qquad \frac{\partial\ln\det A}{\partial A}=A^{-\mathsf T},\qquad \dd(A^{-1})=-A^{-1}(\dd A)A^{-1}.
+\]
+Liouville 公式：$\dot X=A(t)X$ 的 Wronski 行列式 $\det X(t)=\det X(0)\exp\int_0^t\tr A$。Gauss 似然对协方差求导、Hellmann--Feynman 型计算直接用。
+\end{结论}
+
+\begin{结论}{轨道--稳定子与正多面体旋转群}
+\重点{|G|=|G\cdot x|\cdot|G_x|}。立方体旋转群：6 个面各有 4 阶稳定子，$|G|=24\cong S_4$（作用于 4 条体对角线）；正四面体 $12\cong A_4$；正十二/二十面体 $60\cong A_5$。
+与 Burnside 合用：立方体 6 面用 $k$ 色着色（只计旋转）的方案数 $\frac{1}{24}(k^6+3k^4+12k^3+8k^2)$。
+\end{结论}
+
+\begin{结论}{特征标：不可约表示的维数与重数}
+有限群：不可约表示个数 $=$ 共轭类个数，\重点{\sum_\rho(\dim\rho)^2=|G|}。表示 $V$ 中 $\rho$ 的重数
+\[
+\重点{m_\rho=\frac1{|G|}\sum_{g}\overline{\chi_\rho(g)}\,\chi_V(g)}.
+\]
+$S_3$：维数 $1,1,2$（$1+1+4=6$）。物理用途：分子振动模按对称性分类、选择定则（$\langle f|O|i\rangle\ne0$ 需 $\rho_f\subset\rho_O\otimes\rho_i$）。
+\end{结论}
+
+\begin{结论}{Euler 定理与中国剩余定理}
+$\gcd(a,n)=1\Rightarrow$ \重点{a^{\varphi(n)}\equiv1\pmod n}，故指数可模 $\varphi(n)$ 约化：$3^{100}\bmod7$，$100\equiv4\pmod 6$，答案 $3^4\equiv4$。
+模数两两互素时 $\mathbb Z/(mn)\cong\mathbb Z/m\times\mathbb Z/n$（CRT）：先分别算模 $m$、模 $n$ 再合并。$(\mathbb Z/p)^\times$ 是 $p-1$ 阶循环群（存在原根）。
+\end{结论}
+
+\begin{结论}{有限域上不可约多项式的个数}
+$x^{p^n}-x=\prod\{\mathbb F_p\text{ 上次数 }d\mid n\text{ 的首一不可约多项式}\}$，比较次数并 Möbius 反演：
+\[
+\重点{N_p(n)=\frac1n\sum_{d\mid n}\mu(d)\,p^{n/d}}.
+\]
+$p=2,n=3$：$\frac{8-2}{3}=2$（$x^3+x+1,\ x^3+x^2+1$）。$N_p(n)\approx p^n/n$，故随机多项式不可约的概率约 $1/n$。
+\end{结论}
+
+\begin{结论}{有限生成 Abel 群：Smith 标准形}
+$\mathbb Z^m/\langle\text{关系矩阵 }M\text{ 的行}\rangle\cong\bigoplus\mathbb Z/d_i\oplus\mathbb Z^{r}$，$d_1\mid d_2\mid\cdots$ 为 Smith 标准形对角元，\重点{d_1d_2\cdots d_k=\text{第 }k\text{ 阶行列式因子}}（全部 $k$ 阶子式的 gcd）。
+例：关系 $(2,4),(6,8)$：$d_1=\gcd(2,4,6,8)=2$，$d_1d_2=|\det|=8$，得 $\mathbb Z/2\oplus\mathbb Z/4$。$p^n$ 阶 Abel 群的同构类个数 $=$ $n$ 的分拆数。
+\end{结论}
+
+\参考{Horn--Johnson, \emph{Matrix Analysis}；Strang, \emph{Linear Algebra and Its Applications}（MIT 18.06 / 18.700）；Artin, \emph{Algebra}（18.701--18.702）；Serre, \emph{Linear Representations of Finite Groups}；Ireland--Rosen, \emph{A Classical Introduction to Modern Number Theory}。}

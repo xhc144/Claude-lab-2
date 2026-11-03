@@ -1,0 +1,95 @@
+\section{电磁实验}
+
+\subsection{核心积木}
+
+\begin{结论}{荷质比：Helmholtz 线圈 $+$ 电子束}
+加速电压 $V$，圆轨道半径 $r$，线圈 $N$ 匝、半径 $R$、电流 $I$：
+\[
+\重点{\frac em=\frac{2V}{B^2r^2}},\qquad B=\Bigl(\frac45\Bigr)^{3/2}\frac{\mu_0NI}{R}.
+\]
+$r$ 以平方进入，是主要误差源：固定 $I$ 改变 $V$，拟合直线 $r^2=\frac{2m}{eB^2}V$，由斜率求 $e/m$，同时可检验截距（接触电势、地磁场）。地磁场分量应与线圈轴对齐后扣除，或正反电流平均。
+\end{结论}
+
+\begin{结论}{Millikan 油滴：两次终端速度}
+无场下落 $v_1$，加场 $E$ 上升 $v_2$，油密度 $\rho$（扣除空气浮力），粘滞系数 $\eta$：
+\[
+a=\sqrt{\frac{9\eta v_1}{2\rho g}},\qquad \重点{q=\frac{6\pi\eta a\,(v_1+v_2)}{E}}.
+\]
+$a\sim1\,\mu$m 与空气平均自由程可比，用 Cunningham 修正 $\eta_{\mathrm{eff}}=\eta/(1+\frac{b}{pa})$。同一油滴改变电荷（电离源）后 $v_2$ 的跳变比 $q$ 本身更能直接显示量子化。
+\end{结论}
+
+\begin{结论}{Hall 效应与 van der Pauw 法}
+厚 $t$ 的样品，电流 $I$，垂直磁场 $B$：
+\[
+\重点{V_H=\frac{IB}{nqt}},\qquad R_H=\frac1{nq}\ (\text{符号定载流子类型}),\qquad \mu=|R_H|\sigma .
+\]
+电极错位带来的不等势电压不随 $B$ 反号：取 $(\pm B,\pm I)$ 四种组合平均消去。任意形状薄片的方块电阻：$\ee^{-\pi R_A/R_s}+\ee^{-\pi R_B/R_s}=1$，对称时 \重点{R_s=\frac{\pi R}{\ln2}}。
+\end{结论}
+
+\begin{结论}{Johnson 噪声与散粒噪声：测 $k$ 与 $e$}
+\[
+\重点{\langle V^2\rangle=4kTR\,\Delta f},\qquad \重点{\langle\delta I^2\rangle=2eI\,\Delta f}.
+\]
+$300\,$K、$1\,$k$\Omega$：$4.07\,\mathrm{nV}/\sqrt{\mathrm{Hz}}$。测 $k$：改变 $R$ 或 $T$，做 $\langle V^2\rangle$ 对 $R$ 的直线，截距为放大器自身噪声；$\Delta f$ 必须用实测增益平方对频率的积分（等效噪声带宽），而非标称带宽。
+\end{结论}
+
+\begin{结论}{锁相放大器：乘法 $+$ 低通}
+信号 $V_s\sin(\omega t+\phi)$ 乘参考 $V_r\sin\omega t$ 再低通：
+\[
+\重点{X=\tfrac12V_sV_r\cos\phi},\quad Y=\tfrac12V_sV_r\sin\phi,\quad R=\sqrt{X^2+Y^2}\ (\text{与相位无关}).
+\]
+时间常数 $\tau$ 的一阶 RC 低通等效噪声带宽 $\frac1{4\tau}$（6\,dB/oct），信噪比随 $\sqrt\tau$ 提高；调制频率选在 $1/f$ 噪声拐角之上且避开工频谐波。
+\end{结论}
+
+\begin{结论}{RC 滤波与运放增益}
+一阶低通 $H=\frac{1}{1+\ii\omega RC}$：\重点{f_c=\frac{1}{2\pi RC}} 处 $-3\,$dB、相移 $-45^\circ$，之后 $-20\,$dB/十倍频。
+理想运放（虚短、虚断）：反相 $-R_f/R_i$，同相 $1+R_f/R_i$，积分器 $-\frac{1}{RC}\int V\,\dd t$。增益带宽积 $GBW$ 固定：闭环增益 $G$ 时带宽约 $GBW/G$。
+\end{结论}
+
+\begin{结论}{电桥与四线法}
+Wheatstone 平衡：\重点{R_x=R_3\frac{R_2}{R_1}}（与电源电压无关，零示法）。不平衡小量 $\delta$：输出 $\approx\frac{V}{4}\frac{\delta R}{R}$（四臂相等时）。
+小电阻用四线法：电流线与电压线分开，电压表几乎无电流，引线与接触电阻不进入读数。交流电桥平衡须同时满足幅值与相位两个条件。
+\end{结论}
+
+\begin{结论}{Zeeman 效应：用 F--P 环读小分裂}
+正常 Zeeman 分裂 $\Delta E=\mu_BB$，$\mu_B/h=14.0\,$GHz/T。F--P 标准具（间隔 $d$）的环满足 $r_p^2$ 等差，相邻环差 $\Delta(r^2)$；同一级内两分量的差 $\delta(r^2)$：
+\[
+\重点{\Delta\tilde\nu=\frac{1}{2d}\,\frac{\delta(r^2)}{\Delta(r^2)}}\quad(\tilde\nu=1/\lambda).
+\]
+只用平方半径的\textbf{比值}，焦距与级次都消掉。偏振：沿 $B$ 观察只见 $\sigma^\pm$（圆偏振），垂直观察见 $\pi$（平行 $B$）与 $\sigma$（垂直 $B$）。
+\end{结论}
+
+\begin{结论}{Franck--Hertz：峰间距而非峰位}
+汞蒸气中电流峰间距 $\approx4.9\,$eV $=hc/253.7\,$nm（$6^3P_1$ 激发）。第一峰位置含接触电势，\重点{\text{只用相邻峰间距}}。
+精细效应：电子达到激发阈值后还要再走约一个平均自由程 $\lambda$ 才碰撞，额外获得能量，使间距随级次近似线性增大（每级增量约 $E_a\lambda/L$，$L$ 为阴栅距离）；对级次外推到零可得更准的激发能。
+\end{结论}
+
+\begin{结论}{磁共振：Larmor 频率与自旋回波}
+\重点{\omega=\gamma B}：质子 $\gamma/2\pi=42.58\,$MHz/T，自由电子 $g\mu_B/h=28.0\,$GHz/T。
+$90^\circ$--$\tau$--$180^\circ$ 序列在 $2\tau$ 处出现回波，消去静态不均匀场：回波幅度 $\propto\ee^{-2\tau/T_2}$，而自由感应衰减按 $\frac1{T_2^*}=\frac1{T_2}+\gamma\Delta B$ 衰减。$T_1$ 用反转恢复 $M_z=M_0(1-2\ee^{-t/T_1})$，零点在 $t=T_1\ln2$。
+\end{结论}
+
+\begin{结论}{光电效应测 $h/e$}
+\[
+\重点{eV_s=hf-\phi}\ \Rightarrow\ V_s=\frac he f-\frac\phi e .
+\]
+对多条谱线做 $V_s$--$f$ 直线，斜率为 $h/e$，与光强无关。截止电压的读取受阳极反向电流与接触电势影响：后者只平移截距，不改斜率；前者需用“电流开始偏离本底”的判据统一处理。
+\end{结论}
+
+\begin{结论}{电子衍射：环半径到晶面间距}
+加速电压 $V$，相对论修正：
+\[
+\重点{\lambda=\frac{h}{\sqrt{2m_eeV\bigl(1+\frac{eV}{2m_ec^2}\bigr)}}},\qquad 2d\sin\theta=\lambda,\qquad d\approx\frac{2L\lambda}{r}\ (\text{屏距 }L\text{，小角}).
+\]
+$10\,$kV 时修正约 $0.5\%$。多晶环按 $d_{hkl}=a/\sqrt{h^2+k^2+l^2}$ 指标化：比较 $r^2$ 之比与允许的 $h^2+k^2+l^2$ 序列（FCC：3,4,8,11,\dots）。
+\end{结论}
+
+\begin{结论}{谐振法测 $L$：把杂散电容线性化}
+$f=\frac{1}{2\pi\sqrt{L(C+C_s)}}$ 中 $C_s$ 未知。改变已知 $C$，作
+\[
+\重点{\frac{1}{f^2}=4\pi^2L\,C+4\pi^2LC_s},
+\]
+斜率给 $L$，截距与斜率之比给 $C_s$。同一思路：未知偏移量只要以加性方式进入，就改写为线性关系由截距吸收。
+\end{结论}
+
+\参考{Melissinos--Napolitano, \emph{Experiments in Modern Physics}；MIT 8.13--8.14 Junior Lab 实验讲义；Horowitz--Hill, \emph{The Art of Electronics}；Bevington--Robinson, \emph{Data Reduction and Error Analysis}。}

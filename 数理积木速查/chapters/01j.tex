@@ -1,0 +1,195 @@
+\subsection{级数与无穷乘积}
+
+\begin{结论}{Abel 定理与 Tauber 逆定理}
+$\sum a_n$ 收敛 $\Rightarrow$ \重点{\lim_{x\to1^-}\sum a_nx^n=\sum a_n}。例：$\arctan x=\sum\frac{(-1)^nx^{2n+1}}{2n+1}$ 给 $1-\frac13+\frac15-\cdots=\frac\pi4$；$\ln2=1-\frac12+\frac13-\cdots$。
+逆向需附加条件：$\lim_{x\to1^-}\sum a_nx^n=s$ 且 $a_n=o(1/n)$（Tauber），或 $a_n=O(1/n)$（Littlewood）$\Rightarrow\sum a_n=s$。反例 $\sum(-1)^n$：Abel 和为 $\frac12$ 但发散。
+\end{结论}
+
+\begin{结论}{收敛半径 $=$ 到最近奇点的距离}
+$\frac1R=\limsup|a_n|^{1/n}$。若 $f$ 在 $|z-z_0|<\rho$ 解析，则 Taylor 级数在此圆盘收敛，\重点{R=\text{到最近奇点的距离}}。
+$\frac1{1+x^2}$ 在实轴上处处光滑，但在 $0$ 展开 $R=1$（奇点 $\pm\ii$）；$\frac{x}{\ee^x-1}$ 的 $R=2\pi$，故 Bernoulli 数 $|B_{2n}|\sim\frac{2(2n)!}{(2\pi)^{2n}}$。
+\end{结论}
+
+\begin{结论}{Cauchy 乘积：Mertens 条件}
+$\sum a_n=A$ 绝对收敛、$\sum b_n=B$ 收敛 $\Rightarrow$ $\sum c_n=AB$，$c_n=\sum_{k\le n}a_kb_{n-k}$。
+两者都只条件收敛时可能发散：$a_n=b_n=\frac{(-1)^n}{\sqrt{n+1}}$ 有 $|c_n|\ge\sum_k\frac{1}{\sqrt{(k+1)(n-k+1)}}\ge\frac{2(n+1)}{n+2}\not\to0$。但\重点文{若 $\sum c_n$ 收敛，则必等于 $AB$}（Abel 定理）。
+\end{结论}
+
+\begin{结论}{交换求和次序：$\zeta$ 值的和}
+非负项二重级数可任意换序：
+\[
+\重点{\sum_{n\ge2}\bigl(\zeta(n)-1\bigr)=\sum_{k\ge2}\sum_{n\ge2}k^{-n}=\sum_{k\ge2}\frac1{k(k-1)}=1},\qquad \sum_{n\ge2}\frac{\zeta(n)-1}{n}=1-\gamma .
+\]
+类似 $\sum_{n\ge1}(\zeta(2n)-1)=\frac34$，$\sum_{n\ge2}(-1)^n(\zeta(n)-1)=\frac12$。
+\end{结论}
+
+\begin{结论}{用积分表示分母：把级数解耦}
+$\frac1{m+n+c}=\int_0^1x^{m+n+c-1}\dd x$，$\frac1{k^2}=-\int_0^1x^{k-1}\ln x\,\dd x$ 等，把耦合的指标分开后先求几何和：
+\[
+\zeta(2)=\int_0^1\!\!\int_0^1\frac{\dd x\dd y}{1-xy},\qquad \重点{\sum_{m,n\ge1}\frac{1}{mn(m+n+2)}=\int_0^1x\ln^2(1-x)\dd x=\frac74}.
+\]
+\end{结论}
+
+\begin{结论}{分式裂项与反正切裂项}
+\[
+\sum_{n\ge1}\frac1{n(n+k)}=\frac{H_k}{k},\qquad \sum_{n\ge1}\frac1{n(n+1)(n+2)}=\frac14,\qquad \sum_{n\ge1}\frac1{4n^2-1}=\frac12 .
+\]
+$\arctan a-\arctan b=\arctan\frac{a-b}{1+ab}$：\重点{\sum_{n\ge1}\arctan\frac{1}{n^2+n+1}=\frac\pi4},\ $\sum_{n\ge1}\arctan\frac2{n^2}=\frac{3\pi}4$（$\frac2{n^2}=\frac{(n+1)-(n-1)}{1+(n+1)(n-1)}$）。
+\end{结论}
+
+\begin{结论}{调和数的级数}
+\[
+\sum_{n\ge1}H_nx^n=\frac{-\ln(1-x)}{1-x},\qquad \重点{\sum_{n\ge1}\frac{H_n}{n^2}=2\zeta(3)},\qquad \sum_{n\ge1}\frac{(-1)^{n+1}H_n}{n}=\frac{\pi^2}{12}-\frac{\ln^22}2,
+\]
+$\sum_{n\ge1}\frac{H_n}{n2^n}=\frac{\pi^2}{12}$。来源：对第一式除以 $x$ 积分，或用 $H_n=\int_0^1\frac{1-t^n}{1-t}\dd t$。
+\end{结论}
+
+\begin{结论}{常用生成函数与数值}
+\[
+\sum_{n\ge0}\binom{n+k}{k}x^n=\frac1{(1-x)^{k+1}},\quad \sum\binom{2n}nx^n=\frac1{\sqrt{1-4x}},
+\]
+\[
+\sum nx^n=\frac{x}{(1-x)^2},\quad \sum n^2x^n=\frac{x(1+x)}{(1-x)^3}.
+\]
+$x=\frac12$：$\sum\frac{n}{2^n}=2$，$\sum\frac{n^2}{2^n}=6$，$\sum\frac{n^3}{2^n}=26$，$\sum\frac{1}{n2^n}=\ln2$。一般 $\sum n^kx^n=\bigl(x\frac{\dd}{\dd x}\bigr)^k\frac1{1-x}$。
+\end{结论}
+
+\begin{结论}{中心二项式倒数的级数}
+\[
+\重点{\sum_{n\ge1}\frac{(2x)^{2n}}{n^2\binom{2n}{n}}=2\arcsin^2x}\quad(|x|\le1).
+\]
+$x=\frac12$：$\sum\frac1{n^2\binom{2n}n}=\frac{\pi^2}{18}$；求导再取值：$\sum_{n\ge1}\frac1{\binom{2n}n}=\frac13+\frac{2\pi\sqrt3}{27}$，$\sum\frac{1}{n\binom{2n}{n}}=\frac{\pi\sqrt3}9$。
+\end{结论}
+
+\begin{结论}{无穷乘积：收敛判据与可求值的例子}
+$a_n\ge0$（或 $\sum|a_n|<\infty$）：\重点{\prod(1+a_n)\text{ 收敛到非零值}\iff\sum a_n\text{ 收敛}}。
+\[
+\prod_{n\ge2}\Bigl(1-\frac1{n^2}\Bigr)=\frac12,\qquad \prod_{n\ge2}\frac{n^3-1}{n^3+1}=\frac23,\qquad \prod_{n\ge1}\Bigl(1+\frac1{n^2}\Bigr)=\frac{\sinh\pi}{\pi},\qquad \prod_{k\ge1}\cos\frac{x}{2^k}=\frac{\sin x}{x}.
+\]
+第二式：$\frac{n-1}{n+1}$ 与 $\frac{n^2+n+1}{n^2-n+1}=\frac{(n+1)^2-(n+1)+1}{n^2-n+1}$ 分别伸缩相消。
+\end{结论}
+
+\begin{结论}{Euler 乘积与素数倒数和}
+$\operatorname{Re}s>1$：\重点{\zeta(s)=\prod_p(1-p^{-s})^{-1}}。由此 $\sum_p\frac1p$ 发散，且（Mertens）
+\[
+\sum_{p\le x}\frac1p=\ln\ln x+M+o(1),\qquad \prod_{p\le x}\Bigl(1-\frac1p\Bigr)\sim\frac{\ee^{-\gamma}}{\ln x},
+\]
+$M\approx0.2615$。“随机整数没有 $\le x$ 的素因子”的概率约 $\frac{\ee^{-\gamma}}{\ln x}$。
+\end{结论}
+
+\begin{结论}{交错级数余项与 Euler 变换}
+$a_n\downarrow0$：$\sum_{n\ge0}(-1)^na_n$ 的余项 $|R_N|\le a_{N+1}$，与首个略去项同号。加速：
+\[
+\重点{\sum_{n\ge0}(-1)^na_n=\sum_{k\ge0}\frac{(-1)^k(\Delta^ka)_0}{2^{k+1}}},\qquad \Delta a_n=a_{n+1}-a_n .
+\]
+$\ln2=\sum\frac{(-1)^n}{n+1}$ 经变换成 $\sum_{k\ge1}\frac1{k2^k}$，几何收敛。
+\end{结论}
+
+\begin{结论}{Kummer 加速：减去已知和的同阶级数}
+$a_n\sim cb_n$ 且 $\sum b_n=B$ 已知：$\sum a_n=cB+\sum(a_n-cb_n)$，新级数衰减更快。
+\[
+\zeta(2)=1+\sum_{n\ge1}\Bigl(\frac1{n^2}-\frac1{n(n+1)}\Bigr)=\重点{1+\sum_{n\ge1}\frac{1}{n^2(n+1)}},
+\]
+重复一次再减 $\frac1{n(n+1)(n+2)}$，误差从 $O(\frac1N)$ 依次降到 $O(\frac1{N^2})$、$O(\frac1{N^3})$。
+\end{结论}
+
+\begin{结论}{Bernoulli 数：$\tan$、$\coth$ 展开与 $\zeta(2n)$}
+$\frac{x}{\ee^x-1}=\sum B_n\frac{x^n}{n!}$（$B_1=-\frac12$，$B_2=\frac16$，$B_4=-\frac1{30}$，$B_6=\frac1{42}$）：
+\[
+\tan x=\sum_{n\ge1}\frac{(-1)^{n-1}2^{2n}(2^{2n}-1)B_{2n}}{(2n)!}x^{2n-1},\qquad \重点{\zeta(2n)=\frac{(-1)^{n+1}B_{2n}(2\pi)^{2n}}{2(2n)!}}.
+\]
+$x\coth x=\sum\frac{2^{2n}B_{2n}}{(2n)!}x^{2n}$；$\zeta(1-2n)=-\frac{B_{2n}}{2n}$（如 $\zeta(-1)=-\frac1{12}$）。
+\end{结论}
+
+\begin{结论}{奇点分析：由奇点类型读系数渐近}
+$f$ 在 $|z|<\rho$ 解析、主奇点在 $z=\rho$ 且 $f(z)\sim C(1-z/\rho)^{-\alpha}$（$\alpha\notin\{0,-1,-2,\dots\}$，满足 $\Delta$ 域条件）：
+\[
+\重点{[z^n]f(z)\sim\frac{C}{\Gamma(\alpha)}\rho^{-n}n^{\alpha-1}}.
+\]
+Catalan：$\frac{1-\sqrt{1-4z}}{2z}\approx2-2(1-4z)^{1/2}$，$\Gamma(-\frac12)=-2\sqrt\pi$，得 $C_n\sim\frac{4^n}{\sqrt\pi n^{3/2}}$。多个模相同的奇点时贡献相加。
+\end{结论}
+
+\begin{结论}{三条可直接用的 Fourier 级数和}
+$0<x<2\pi$：
+\[
+\sum_{n\ge1}\frac{\sin nx}{n}=\frac{\pi-x}2,\qquad \sum_{n\ge1}\frac{\cos nx}{n}=-\ln\Bigl(2\sin\frac x2\Bigr),\qquad \重点{\sum_{n\ge1}\frac{\cos nx}{n^2}=\frac{\pi^2}6-\frac{\pi x}2+\frac{x^2}4}
+\]
+（第三式在 $[0,2\pi]$ 上成立）。再积分得 $\sum\frac{\sin nx}{n^3}=\frac{\pi^2x}{6}-\frac{\pi x^2}4+\frac{x^3}{12}$；代特殊点得各种 $\zeta$、$\beta$ 值。
+\end{结论}
+
+\begin{结论}{幂和公式（Faulhaber）}
+\[
+\sum_{k=1}^nk^2=\frac{n(n+1)(2n+1)}6,\quad \sum_{k=1}^nk^3=\Bigl(\frac{n(n+1)}2\Bigr)^2,\quad \sum_{k=1}^nk^4=\frac{n(n+1)(2n+1)(3n^2+3n-1)}{30}.
+\]
+一般 \重点{\sum_{k=0}^{n-1}k^p=\frac1{p+1}\sum_{j=0}^{p}\binom{p+1}{j}B_jn^{p+1-j}}（$B_1=-\frac12$）。求低次幂和也可用 $k^p$ 的下降阶乘展开（Stirling 数）后套 $\sum\binom kr=\binom{n+1}{r+1}$。
+\end{结论}
+
+\begin{结论}{二项级数在端点的收敛}
+$(1+x)^\alpha=\sum\binom\alpha nx^n$，$\alpha\notin\mathbb N$，$R=1$：
+\[
+\重点{x=1:\ \text{收敛}\iff\alpha>-1;\qquad x=-1:\ \text{收敛}\iff\alpha\ge0},
+\]
+$\alpha\ge0$ 时在 $[-1,1]$ 上绝对一致收敛（$\binom{\alpha}{n}=O(n^{-\alpha-1})$）。用于 $\sqrt{1-x}$、$|x|=\sqrt{1-(1-x^2)}$ 的多项式一致逼近（Weierstrass 定理的一种证明）。
+\end{结论}
+
+\begin{结论}{$\eta$、$\lambda$、$\beta$ 三个“半个 $\zeta$”}
+\[
+\eta(s)=\sum\frac{(-1)^{n-1}}{n^s}=(1-2^{1-s})\zeta(s),\qquad \lambda(s)=\sum_{n\text{ 奇}}\frac1{n^s}=(1-2^{-s})\zeta(s),
+\]
+\[
+\beta(s)=\sum_{n\ge0}\frac{(-1)^n}{(2n+1)^s}.
+\]
+$\eta(2)=\frac{\pi^2}{12}$，$\lambda(2)=\frac{\pi^2}8$，$\lambda(4)=\frac{\pi^4}{96}$，$\beta(1)=\frac\pi4$，\重点{\beta(3)=\frac{\pi^3}{32}}，$\beta(2)=G\approx0.9160$（Catalan 常数，未知闭式）。
+\end{结论}
+
+\begin{结论}{超几何级数：比值是有理函数即可识别}
+$t_{n+1}/t_n=\frac{(n+a)(n+b)}{(n+c)(n+1)}z$ $\Rightarrow$ $\sum t_n=t_0\,{}_2F_1(a,b;c;z)$。Gauss 求和：
+\[
+\重点{{}_2F_1(a,b;c;1)=\frac{\Gamma(c)\Gamma(c-a-b)}{\Gamma(c-a)\Gamma(c-b)}}\quad(\operatorname{Re}(c-a-b)>0),
+\]
+终止情形 Chu--Vandermonde：${}_2F_1(-n,b;c;1)=\frac{(c-b)_n}{(c)_n}$。很多二项式和恒等式是它的特例。
+\end{结论}
+
+\begin{结论}{一致收敛：M 判别、Dirichlet 判别与典型反例}
+Weierstrass：$|u_n(x)|\le M_n$，$\sum M_n<\infty$ $\Rightarrow$ 一致收敛。Dirichlet：$a_n(x)$ 关于 $n$ 单调且\textbf{一致}趋于 $0$，$\sum b_n(x)$ 部分和一致有界 $\Rightarrow\sum a_nb_n$ 一致收敛。
+反例：$\sum_{n\ge0}x^n(1-x)$ 在 $[0,1]$ 上和为 $1$（$x<1$）、$0$（$x=1$），不一致；\重点{\text{连续函数的一致极限连续}}，所以极限不连续即可断言非一致收敛。
+\end{结论}
+
+\begin{结论}{积分判别的余项界}
+$f$ 正、递减：
+\[
+\重点{\int_{N+1}^\infty f\le\sum_{n>N}f(n)\le\int_N^\infty f}.
+\]
+例：$\sum_{n>N}n^{-2}\in\bigl(\frac1{N+1},\frac1N\bigr)$；取两界平均 $\approx\frac{1}{N+1/2}$ 误差只有 $O(N^{-3})$。用于决定截断项数。
+\end{结论}
+
+\begin{结论}{Lambert 级数与除数函数}
+\[
+\sum_{n\ge1}\frac{x^n}{1-x^n}=\sum_{n\ge1}d(n)x^n,\qquad \sum_{n\ge1}\frac{\varphi(n)x^n}{1-x^n}=\frac{x}{(1-x)^2},\qquad \sum_{n\ge1}\frac{\mu(n)x^n}{1-x^n}=x .
+\]
+一般 \重点{\sum_n\frac{a_nx^n}{1-x^n}=\sum_m\Bigl(\sum_{d\mid m}a_d\Bigr)x^m}：Lambert 级数把 Dirichlet 卷积 $a*1$ 变成幂级数系数。
+\end{结论}
+
+\begin{结论}{条件收敛的典型：$\sum\frac{\sin n}{n}$ 与 $\sum\frac{|\sin n|}{n}$}
+$\sum_{n\ge1}\frac{\sin n}{n}=\frac{\pi-1}{2}$（Fourier 和 $x=1$）；而 $\sum\frac{|\sin n|}{n}$ 发散：$|\sin n|\ge\sin^2n=\frac{1-\cos2n}2$，$\sum\frac{\cos2n}n$ 收敛，$\sum\frac1{2n}$ 发散。
+同理 \重点{\sum\frac{\sin n}{n^p}} 对 $p>0$ 收敛、仅当 $p>1$ 绝对收敛。
+\end{结论}
+
+\begin{结论}{倍元恒等式求级数}
+利用 $\cot x-2\cot2x=\tan x$：
+\[
+\重点{\sum_{k\ge1}\frac1{2^k}\tan\frac{x}{2^k}=\frac1x-\cot x}.
+\]
+（它就是 $\prod_k\cos\frac{x}{2^k}=\frac{\sin x}{x}$ 取对数后求导。）同法由 $4\sin^4\frac y2=4\sin^2\frac y2-\sin^2y$ 伸缩：
+\[
+\sum_{k\ge1}4^k\sin^4\frac{x}{2^k}=x^2-\sin^2x .
+\]
+找法：寻找 $g(y)-c\,g(2y)$ 恰为通项的函数 $g$，部分和就是 $c^{-N}g(x/2^N)$ 型的边界项。
+\end{结论}
+
+\begin{结论}{幂级数在收敛圆上的行为}
+收敛圆周上可以：处处发散（$\sum z^n$）、处处收敛（$\sum\frac{z^n}{n^2}$）、除一点外收敛（$\sum\frac{z^n}{n}$ 只在 $z=1$ 发散）。
+\重点{\text{系数单调趋零}\Rightarrow\text{除 }z=1\text{ 外圆周上收敛}}（Dirichlet 判别）。系数非负时 $z=R$ 必为奇点（Pringsheim）。
+\end{结论}
+
+\参考{Knopp, \emph{Theory and Application of Infinite Series}；Flajolet--Sedgewick, \emph{Analytic Combinatorics} 第 VI 章；Borwein--Bailey, \emph{Experimentation in Mathematics}；Apostol, \emph{Introduction to Analytic Number Theory} 第 3、11 章；MIT 18.100、18.304。}

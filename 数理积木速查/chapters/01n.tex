@@ -1,0 +1,191 @@
+\subsection{组合与图论}
+
+\begin{结论}{Catalan 数}
+\[
+\重点{C_n=\frac1{n+1}\binom{2n}{n}=\binom{2n}n-\binom{2n}{n+1}},\qquad C_{n+1}=\sum_{k=0}^nC_kC_{n-k},\qquad \sum C_nx^n=\frac{1-\sqrt{1-4x}}{2x}.
+\]
+计数：$n$ 对括号、$n+2$ 边形三角剖分、$n$ 个内节点的二叉树、不越过对角线的格路、$123$-避免排列、不交配对。第二个等式即反射原理。$C_n\sim\frac{4^n}{\sqrt\pi n^{3/2}}$。
+\end{结论}
+
+\begin{结论}{Stirling 数：两种基的转换}
+第二类 $S(n,k)$（$n$ 元集分成 $k$ 个非空块）：\重点{x^n=\sum_kS(n,k)\,x^{\underline k}}，$S(n,k)=\frac1{k!}\sum_j(-1)^j\binom kj(k-j)^n$，满射数 $k!S(n,k)$。
+第一类 $c(n,k)$（$k$ 个圈的置换数）：$x^{\overline n}=\sum_kc(n,k)x^k$。递推 $S(n+1,k)=kS(n,k)+S(n,k-1)$，$c(n+1,k)=nc(n,k)+c(n,k-1)$。求 $\sum k^p$ 时把 $k^p$ 换成下降阶乘再用 $\sum_{k<n}k^{\underline r}=\frac{n^{\underline{r+1}}}{r+1}$。
+\end{结论}
+
+\begin{结论}{Bell 数与 Dobinski 公式}
+$B_n=\sum_kS(n,k)$（集合分拆数）：
+\[
+B_{n+1}=\sum_k\binom nkB_k,\qquad \sum B_n\frac{x^n}{n!}=\ee^{\ee^x-1},\qquad \重点{B_n=\frac1\ee\sum_{k\ge0}\frac{k^n}{k!}}.
+\]
+Dobinski 即 Poisson(1) 的 $n$ 阶矩 $\E X^n=B_n$。$B_0,\dots,B_6=1,1,2,5,15,52,203$。
+\end{结论}
+
+\begin{结论}{整数分拆：生成函数与五边形数定理}
+$\sum p(n)x^n=\prod_{k\ge1}\frac1{1-x^k}$；不同部分的分拆数 $=$ 奇数部分的分拆数（$\prod(1+x^k)=\prod\frac{1-x^{2k}}{1-x^k}$）。
+\[
+\重点{\prod_{k\ge1}(1-x^k)=\sum_{m\in\mathbb Z}(-1)^mx^{m(3m-1)/2}}\ \Rightarrow\ p(n)=p(n-1)+p(n-2)-p(n-5)-p(n-7)+\cdots
+\]
+Hardy--Ramanujan：$p(n)\sim\frac{1}{4n\sqrt3}\ee^{\pi\sqrt{2n/3}}$。共轭（Ferrers 图转置）：最大部分为 $k$ 的分拆数 $=$ 恰 $k$ 个部分的分拆数。
+\end{结论}
+
+\begin{结论}{容斥：错排与“有上界的”分配}
+错排 $D_n=n!\sum_{k=0}^n\frac{(-1)^k}{k!}=\operatorname{round}(n!/\ee)$，$D_n=(n-1)(D_{n-1}+D_{n-2})$。
+$x_1+\cdots+x_k=n$，$0\le x_i\le m$ 的整数解数：
+\[
+\重点{\sum_{j\ge0}(-1)^j\binom kj\binom{n-j(m+1)+k-1}{k-1}}.
+\]
+一般容斥：恰好满足 $0$ 个性质的个数 $=\sum_S(-1)^{|S|}N(\ge S)$；恰好 $r$ 个：$\sum_{j\ge r}(-1)^{j-r}\binom jrS_j$。
+\end{结论}
+
+\begin{结论}{二项式恒等式的常用五条}
+\[
+\sum_k\binom mk\binom n{r-k}=\binom{m+n}r,\quad \sum_{i=r}^n\binom ir=\binom{n+1}{r+1},\quad \sum_k\binom nk^2=\binom{2n}n,
+\]
+\[
+\sum_kk\binom nk=n2^{n-1},\qquad \重点{\sum_k(-1)^k\binom nkk^m=\begin{cases}0,&m<n\\(-1)^nn!,&m=n\end{cases}}.
+\]
+最后一式是 $n$ 阶差分作用于 $m$ 次多项式；$\sum_k(-1)^k\binom nk\frac1{x+k}=\frac{n!}{x(x+1)\cdots(x+n)}$（部分分式）。
+\end{结论}
+
+\begin{结论}{二项式反演}
+\[
+\重点{g(n)=\sum_{k=0}^n\binom nkf(k)\iff f(n)=\sum_{k=0}^n(-1)^{n-k}\binom nkg(k)}.
+\]
+例：$g(n)=n!$（全排列按不动点集分类，$f$ 为错排）立即给 $D_n$。类似地 Möbius 反演、Stirling 反演 $\sum_kS(n,k)c(k,m)(-1)^{k-m}=\delta_{nm}$ 都是“下三角矩阵求逆”。
+\end{结论}
+
+\begin{结论}{线性递推与 Fibonacci 恒等式}
+$a_n=c_1a_{n-1}+\cdots+c_ka_{n-k}$：特征根 $r$ 重数 $m$ 贡献 $(\alpha_0+\cdots+\alpha_{m-1}n^{m-1})r^n$。Fibonacci（$F_0=0,F_1=1$）：
+\[
+\begin{pmatrix}F_{n+1}&F_n\\F_n&F_{n-1}\end{pmatrix}=\begin{pmatrix}1&1\\1&0\end{pmatrix}^n,\quad F_{m+n}=F_mF_{n+1}+F_{m-1}F_n,\quad \重点{\gcd(F_m,F_n)=F_{\gcd(m,n)}},
+\]
+Cassini $F_{n+1}F_{n-1}-F_n^2=(-1)^n$（取行列式）；$F_n=\frac{\varphi^n-\psi^n}{\sqrt5}$；$\sum_{k\le n}F_k=F_{n+2}-1$。
+\end{结论}
+
+\begin{结论}{Cayley 公式与 Prüfer 序列}
+$n$ 个标号顶点的树有 \重点{n^{n-2}} 棵；度数序列为 $(d_1,\dots,d_n)$ 的树有 $\frac{(n-2)!}{\prod(d_i-1)!}$ 棵（Prüfer 序列中 $i$ 恰出现 $d_i-1$ 次）。
+$k$ 棵树、指定 $k$ 个根的森林：$kn^{n-k-1}$ 个。有根标号树 $n^{n-1}$，其指数生成函数 $T=x\ee^T$。
+\end{结论}
+
+\begin{结论}{矩阵树定理}
+图 Laplace 矩阵 $L=D-A$：生成树个数 $=$ $L$ 的任一余子式 $=$ \重点{\frac1n\prod_{i=2}^n\mu_i}（$\mu_i$ 为非零特征值）。
+$K_n$：$n^{n-2}$；$K_{m,n}$：$m^{n-1}n^{m-1}$；$n$ 维超立方体：$2^{2^n-n-1}\prod_{k=1}^nk^{\binom nk}$；圈 $C_n$：$n$ 棵。有向图版本数以某点为根的外向树形图。
+\end{结论}
+
+\begin{结论}{Lagrange 反演与 $k$ 叉树计数}
+形式幂级数 $y=x\varphi(y)$，$y(0)=0$（特征 $0$）：
+\[
+\重点{[x^n]F(y)=\frac1n[t^{n-1}]F'(t)\varphi(t)^n}.
+\]
+$k$ 叉树（每内节点 $k$ 个有序孩子）：$\varphi=(1+t)^k$，$n$ 个内节点的个数 $\frac1n\binom{kn}{n-1}=\frac1{(k-1)n+1}\binom{kn}n$（$k=2$ 即 Catalan）。有根标号树 $T=x\ee^T$ 给 $n![x^n]T=n^{n-1}$。
+\end{结论}
+
+\begin{结论}{Hall、König、Dilworth 三联}
+二部图 $X\cup Y$：存在饱和 $X$ 的匹配 $\iff$ \重点{|N(S)|\ge|S|\ \forall S\subseteq X}（Hall）。推论：$k$-正则二部图有完美匹配，边可分成 $k$ 个完美匹配。
+König：二部图最大匹配 $=$ 最小点覆盖。Dilworth：偏序集最小链覆盖数 $=$ 最大反链大小；对偶（Mirsky）：最小反链覆盖数 $=$ 最长链长。Erdős--Szekeres：长为 $(r-1)(s-1)+1$ 的实数列含长 $r$ 递增或长 $s$ 递减子列。
+\end{结论}
+
+\begin{结论}{Ramsey 数与 Turán 定理}
+$R(3,3)=6$，$R(3,4)=9$，$R(3,5)=14$，$R(4,4)=18$；上界 $R(s,t)\le\binom{s+t-2}{s-1}$；下界 $R(k,k)>2^{k/2}$（随机着色，$\binom nk2^{1-\binom k2}<1$）。
+Turán：不含 $K_{r+1}$ 的 $n$ 点图边数 \重点{\le\Bigl(1-\frac1r\Bigr)\frac{n^2}2}，等号由完全 $r$ 部均衡图达到；$r=2$ 即 Mantel：无三角形图至多 $\lfloor n^2/4\rfloor$ 条边。
+\end{结论}
+
+\begin{结论}{平面图的 Euler 公式及推论}
+连通平面图 \重点{V-E+F=2}。简单平面图 $E\le3V-6$（$V\ge3$），无三角形时 $E\le2V-4$。故 $K_5$（$10>9$）、$K_{3,3}$（$9>8$）非平面；平面图有度 $\le5$ 的顶点（五色定理的起点）。
+正多面体：$\frac1p+\frac1q>\frac12$ 只有 $5$ 个解；足球（截角二十面体）$12$ 个五边形由 $\sum(6-\text{边数})=12$ 决定。
+\end{结论}
+
+\begin{结论}{色多项式}
+删边--缩边：\重点{P(G,t)=P(G-e,t)-P(G/e,t)}。
+树（$n$ 点）$t(t-1)^{n-1}$；圈 $C_n$：$(t-1)^n+(-1)^n(t-1)$；$K_n$：$t^{\underline n}$。$P(G,-1)$ 的绝对值 $=$ 无圈定向数（Stanley）。$\chi(G)\le\Delta+1$，除完全图和奇圈外 $\le\Delta$（Brooks）。
+\end{结论}
+
+\begin{结论}{指数公式：连通结构与整体结构}
+标号结构由连通分量自由组合：\重点{A(x)=\exp(C(x))}（EGF）。
+置换 $=$ 圈的集合：$\exp(\ln\frac1{1-x})=\frac1{1-x}$；对合：$\ee^{x+x^2/2}$；错排：$\frac{\ee^{-x}}{1-x}$；集合分拆：$\ee^{\ee^x-1}$；所有标号图 $\sum2^{\binom n2}\frac{x^n}{n!}=\exp(\text{连通图 EGF})$。限制圈长在集合 $L$ 中：$\exp\bigl(\sum_{\ell\in L}\frac{x^\ell}\ell\bigr)$。
+\end{结论}
+
+\begin{结论}{Pólya 计数：带权的 Burnside}
+循环指标 $Z_G=\frac1{|G|}\sum_g\prod_kx_k^{c_k(g)}$（$c_k$ 为 $g$ 的 $k$-圈数），代入 $x_k\mapsto\sum_{\text{颜色}}w^k$ 得按颜色计数的生成函数。立方体面旋转：
+\[
+\重点{Z=\tfrac1{24}\bigl(x_1^6+6x_1^2x_4+3x_1^2x_2^2+6x_2^3+8x_3^2\bigr)},
+\]
+$k$ 色：$\frac{k^6+3k^4+12k^3+8k^2}{24}$；两色中恰 $2$ 红：$r^2b^4$ 系数 $=2$（相邻或相对）。
+\end{结论}
+
+\begin{结论}{Gauss 二项式（$q$-二项式）}
+\[
+\binom nk_q=\frac{(1-q^n)\cdots(1-q^{n-k+1})}{(1-q)\cdots(1-q^k)},\qquad \重点{\#\{k\text{ 维子空间}\subseteq\mathbb F_q^n\}=\binom nk_q}.
+\]
+也是装在 $k\times(n-k)$ 盒中的分拆按大小的生成函数；$q\to1$ 回到 $\binom nk$。$\prod_{i=0}^{n-1}(1+q^ix)=\sum_kq^{\binom k2}\binom nk_qx^k$。$\mathbb F_q^n$ 中可逆矩阵数 $\prod_{i<n}(q^n-q^i)$。
+\end{结论}
+
+\begin{结论}{钩长公式与 RSK}
+形状 $\lambda\vdash n$ 的标准 Young 表个数：
+\[
+\重点{f^\lambda=\frac{n!}{\prod_{c\in\lambda}h(c)}},\qquad \sum_{\lambda\vdash n}(f^\lambda)^2=n!.
+\]
+$h(c)$ 为格子的钩长（右方 $+$ 下方 $+1$）。$f^\lambda$ 也是 $S_n$ 不可约表示的维数；RSK 对应下，排列的最长递增子列长 $=$ $\lambda$ 第一行长，期望 $\sim2\sqrt n$。
+\end{结论}
+
+\begin{结论}{Sperner、LYM 与 Erdős--Ko--Rado}
+$2^{[n]}$ 中反链 $\mathcal A$：LYM 不等式 $\sum_{A\in\mathcal A}\binom{n}{|A|}^{-1}\le1$，故 \重点{|\mathcal A|\le\binom n{\lfloor n/2\rfloor}}（Sperner）。
+EKR：$n\ge2k$，两两相交的 $k$ 元子集族 $|\mathcal F|\le\binom{n-1}{k-1}$（固定一点的“星”取等）。证明：Katona 圈排列计数。
+\end{结论}
+
+\begin{结论}{“十二种计数”（$n$ 球放入 $k$ 盒）}
+\[
+\begin{array}{l|ccc}
+&\text{任意}&\text{每盒}\le1&\text{每盒}\ge1\\\hline
+\text{球、盒都可区分}&k^n&k^{\underline n}&k!\,S(n,k)\\
+\text{球相同、盒可区分}&\binom{n+k-1}{k-1}&\binom kn&\binom{n-1}{k-1}\\
+\text{球可区分、盒相同}&\sum_{j\le k}S(n,j)&[n\le k]&S(n,k)\\
+\text{球、盒都相同}&p_{\le k}(n)&[n\le k]&p_k(n)
+\end{array}
+\]
+$p_k(n)$ 为恰 $k$ 部分的分拆数。先判断\重点文{哪边可区分、有无上下限}，再查表。
+\end{结论}
+
+\begin{结论}{多米诺铺砌：Fibonacci 与 Kasteleyn}
+$2\times n$ 用 $1\times2$ 铺满：$F_{n+1}$ 种；$3\times2n$：$a_n=4a_{n-1}-a_{n-2}$（$a_0=1,a_1=3$）。$m\times n$（$mn$ 偶）：
+\[
+\重点{T=\prod_{j=1}^{\lceil m/2\rceil}\prod_{k=1}^{\lceil n/2\rceil}\Bigl(4\cos^2\frac{\pi j}{m+1}+4\cos^2\frac{\pi k}{n+1}\Bigr)},
+\]
+$8\times8$ 棋盘 $12988816$ 种。Pfaffian 方法：平面图的完美匹配数 $=|\operatorname{Pf}(K)|$（Kasteleyn 定向）。
+\end{结论}
+
+\begin{结论}{Euler 回路与 Hamilton 圈的判据}
+连通图有 Euler 回路 $\iff$ 所有顶点度为偶数；有 Euler 路 $\iff$ 奇度顶点 $0$ 或 $2$ 个。有向图：每点入度 $=$ 出度且弱连通。
+Hamilton 圈无好的判据（NP 完全），常用充分条件：\重点{\delta(G)\ge n/2}（Dirac）；或任意不相邻 $u,v$ 有 $\deg u+\deg v\ge n$（Ore）。de Bruijn 序列：$k$ 字母长 $n$ 的循环序列包含每个长 $n$ 的串一次，个数 $\frac{(k!)^{k^{n-1}}}{k^n}$。
+\end{结论}
+
+\begin{结论}{Euler 数（排列的降序数）}
+$A(n,k)$：$n$ 元排列中恰 $k$ 个降序（$\sigma_i>\sigma_{i+1}$）的个数：
+\[
+A(n,k)=\sum_{j=0}^{k}(-1)^j\binom{n+1}j(k+1-j)^n,\qquad \重点{x^n=\sum_kA(n,k)\binom{x+k}{n}}\ (\text{Worpitzky}).
+\]
+$\sum_{m\ge0}m^nx^m=\frac{x\sum_kA(n,k)x^{k}}{(1-x)^{n+1}}$（$n\ge1$）。均匀和 $U_1+\cdots+U_n$ 落在 $[k,k+1)$ 的概率 $=\frac{A(n,k)}{n!}$。
+\end{结论}
+
+\begin{结论}{格路计数：反射与“循环引理”}
+$(0,0)\to(m,n)$ 单位步（右、上）：$\binom{m+n}m$。不碰到直线 $y=x+1$（$m\ge n$）的路数
+\[
+\重点{\binom{m+n}{n}-\binom{m+n}{n-1}=\frac{m-n+1}{m+1}\binom{m+n}n}.
+\]
+循环引理：$\pm1$ 序列和为 $1$ 时，$n$ 个循环移位中恰有一个所有部分和为正——直接给 Catalan 与 Lagrange 反演的组合证明。
+\end{结论}
+
+\begin{结论}{鸽笼原理的两个高级用法}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item Dirichlet 逼近：对实数 $\alpha$ 与 $N$，存在 $1\le q\le N$ 使 $\|q\alpha\|\le\frac1{N+1}$（$N+1$ 个小数部分放进 $N+1$ 个区间，加上端点）。
+\item 从 $\{1,\dots,2n\}$ 中任取 $n+1$ 个数，必有两个互素（相邻），必有一个整除另一个（写成 $2^am$，$m$ 奇只有 $n$ 种）。
+\end{itemize}
+\重点{\text{选好“笼子”}}是关键：通常按奇数部分、余数类或区间划分。
+\end{结论}
+
+\begin{结论}{双计数与 Handshake}
+$\sum_v\deg v=2E$；奇度顶点数为偶。双计数例：$\sum_k k\binom nk^2=n\binom{2n-1}{n-1}$（从 $n$ 男 $n$ 女选 $n$ 人并指定一位男队长）。
+三角形计数：$\#\triangle=\frac16\tr A^3$；长为 $k$ 的闭路数 $\tr A^k=\sum\lambda_i^k$；\重点{\#\text{含 }v\text{ 的 }k\text{ 步路}=(A^k)_{vv}}。
+\end{结论}
+
+\参考{Stanley, \emph{Enumerative Combinatorics} I--II；Graham--Knuth--Patashnik, \emph{Concrete Mathematics}；van Lint--Wilson, \emph{A Course in Combinatorics}；Diestel, \emph{Graph Theory}；Flajolet--Sedgewick 第 II 章；MIT 18.211、18.212。}

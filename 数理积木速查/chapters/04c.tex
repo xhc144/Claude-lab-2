@@ -1,0 +1,115 @@
+\subsection{统计推断与建模进阶}
+
+\begin{结论}{充分统计量与 UMVUE}
+因子分解：$f(x\mid\theta)=g(T(x),\theta)h(x)$ $\Rightarrow$ $T$ 充分。Rao--Blackwell：\重点{\E[\hat\theta\mid T]\ \text{的方差不超过}\ \hat\theta}；$T$ 完备时它就是唯一 UMVUE（Lehmann--Scheffé）。
+例：Poisson 样本估计 $P(X=0)=\ee^{-\lambda}$。从 $\mathbf 1\{X_1=0\}$ 出发，以 $T=\sum X_i$ 为条件：$\E[\mathbf 1\{X_1=0\}\mid T]=\bigl(1-\frac1n\bigr)^T$。
+\end{结论}
+
+\begin{结论}{$U(0,\theta)$：MLE、无偏修正与矩估计}
+MLE $X_{(n)}$，$\E X_{(n)}=\frac{n}{n+1}\theta$。比较两个无偏估计：
+\[
+\重点{\Var\Bigl(\tfrac{n+1}{n}X_{(n)}\Bigr)=\frac{\theta^2}{n(n+2)}}\qquad\text{vs}\qquad \Var(2\bar X)=\frac{\theta^2}{3n}.
+\]
+前者误差阶 $1/n$，后者 $1/\sqrt n$。支撑依赖参数时 Cramér--Rao 不适用，能“超过”$1/\sqrt n$。
+\end{结论}
+
+\begin{结论}{Neyman--Pearson 与样本量公式}
+简单假设对简单假设：似然比检验 $\frac{L(\theta_1)}{L(\theta_0)}>k$ 是给定水平下功效最大的检验。
+单样本均值，双侧水平 $\alpha$、功效 $1-\beta$、效应 $\delta$：
+\[
+\重点{n=\Bigl(\frac{(z_{1-\alpha/2}+z_{1-\beta})\,\sigma}{\delta}\Bigr)^2};\qquad \alpha=0.05,\ 80\%\text{ 功效：}(1.96+0.84)^2\approx7.85 .
+\]
+两组比较每组样本量再乘 2。效应减半需四倍样本。
+\end{结论}
+
+\begin{结论}{多重检验：Bonferroni 与 BH}
+$m$ 个检验：Bonferroni 用 $\alpha/m$ 控制族错误率（FWER）。Benjamini--Hochberg 控制错误发现率 $q$：
+\[
+\重点{\text{取最大的 }k\text{ 使 }p_{(k)}\le\frac{k}{m}q,\ \text{拒绝 }p_{(1)},\dots,p_{(k)}}.
+\]
+独立（或正相关）检验下 FDR $\le q$。20 个真零假设各以 $0.05$ 检验，至少一个“显著”的概率 $1-0.95^{20}\approx64\%$。
+\end{结论}
+
+\begin{结论}{比例的置信区间：Wilson 与“三法则”}
+Wald 区间 $\hat p\pm z\sqrt{\hat p(1-\hat p)/n}$ 在 $\hat p$ 接近 0、1 或 $n$ 小时覆盖率很差。Wilson：
+\[
+\frac{\hat p+\frac{z^2}{2n}\pm z\sqrt{\frac{\hat p(1-\hat p)}{n}+\frac{z^2}{4n^2}}}{1+\frac{z^2}{n}}.
+\]
+$n$ 次试验 0 次发生：$95\%$ 上限 \重点{\approx3/n}（由 $(1-p)^n=0.05$，$\ln20\approx3$）。
+\end{结论}
+
+\begin{结论}{两样本 $t$：Welch 自由度与配对}
+方差不等时 $t=\frac{\bar x_1-\bar x_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}}$，
+\[
+\重点{\nu\approx\frac{(s_1^2/n_1+s_2^2/n_2)^2}{\frac{(s_1^2/n_1)^2}{n_1-1}+\frac{(s_2^2/n_2)^2}{n_2-1}}}\quad(\text{Welch--Satterthwaite}).
+\]
+同一对象前后测量用配对 $t$（对差值做单样本检验）：$\Var(\bar d)=\frac{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}{n}$，正相关时远小于独立两样本。
+\end{结论}
+
+\begin{结论}{非参数检验的零分布}
+Mann--Whitney：$\E U=\frac{n_1n_2}{2}$，\重点{\Var U=\frac{n_1n_2(n_1+n_2+1)}{12}}（无结），大样本正态近似。
+符号检验：差值为正的个数 $\sim\mathrm{Bin}(n,\frac12)$。单样本 Kolmogorov--Smirnov：$\sqrt n\,D_n$ 的 $5\%$ 临界值约 $1.36$；参数由同一数据估计时临界值须改用 Lilliefors 表。
+\end{结论}
+
+\begin{结论}{单因素方差分析}
+$k$ 组共 $N$ 个观测：$SST=SSB+SSW$，
+\[
+\重点{F=\frac{SSB/(k-1)}{SSW/(N-k)}\sim F_{k-1,N-k}}\ (H_0:\ \text{各组均值相等}).
+\]
+$k=2$ 时 $F=t^2$。前提：组内正态、方差齐、独立；方差不齐用 Welch ANOVA。拒绝后的两两比较需做多重校正（Tukey）。
+\end{结论}
+
+\begin{结论}{回归：均值置信区间 vs 预测区间}
+新点 $x_0$：
+\[
+\text{均值：}\ \hat y_0\pm t\,\hat\sigma\sqrt{x_0^{\mathsf T}(X^{\mathsf T}X)^{-1}x_0},\qquad \text{预测：}\ \重点{\hat y_0\pm t\,\hat\sigma\sqrt{1+x_0^{\mathsf T}(X^{\mathsf T}X)^{-1}x_0}}.
+\]
+样本量增大时前者 $\to0$，后者 $\to\pm t\sigma$（不可约噪声）。一元情形 $x_0^{\mathsf T}(X^{\mathsf T}X)^{-1}x_0=\frac1n+\frac{(x_0-\bar x)^2}{\sum(x_i-\bar x)^2}$，远离 $\bar x$ 时变宽。
+\end{结论}
+
+\begin{结论}{岭回归与 Lasso：SVD 下的收缩}
+$X=UDV^{\mathsf T}$：岭估计 $\hat\beta_\lambda=(X^{\mathsf T}X+\lambda I)^{-1}X^{\mathsf T}y$ 在第 $i$ 个主方向上乘
+\[
+\重点{\frac{d_i^2}{d_i^2+\lambda}}\ (\text{小奇异值方向收缩最多}),\qquad \text{有效自由度 }\sum\frac{d_i^2}{d_i^2+\lambda}.
+\]
+正交设计下 Lasso（$\frac12\|y-X\beta\|^2+\lambda\|\beta\|_1$）为软阈值 $\hat\beta_j=\mathrm{sgn}(z_j)(|z_j|-\lambda)_+$，$z_j=x_j^{\mathsf T}y$，能把系数压到恰好 0。
+\end{结论}
+
+\begin{结论}{模型选择：AIC、BIC 与留一交叉验证捷径}
+$\mathrm{AIC}=2k-2\ln\hat L$，$\mathrm{BIC}=k\ln n-2\ln\hat L$（$n\ge8$ 时 BIC 惩罚更重，倾向小模型）。
+线性平滑器 $\hat y=Hy$（OLS、岭回归）不必重拟合 $n$ 次：
+\[
+\重点{\mathrm{CV}_{\mathrm{LOO}}=\frac1n\sum_i\Bigl(\frac{y_i-\hat y_i}{1-h_{ii}}\Bigr)^2}.
+\]
+\end{结论}
+
+\begin{结论}{EM 算法：Gauss 混合}
+E 步：责任度 $\gamma_{ik}=\dfrac{\pi_kN(x_i\mid\mu_k,\Sigma_k)}{\sum_j\pi_jN(x_i\mid\mu_j,\Sigma_j)}$；M 步：
+\[
+\重点{\pi_k=\frac{1}{n}\sum_i\gamma_{ik},\quad \mu_k=\frac{\sum_i\gamma_{ik}x_i}{\sum_i\gamma_{ik}}},\quad \Sigma_k=\frac{\sum_i\gamma_{ik}(x_i-\mu_k)(x_i-\mu_k)^{\mathsf T}}{\sum_i\gamma_{ik}}.
+\]
+每轮似然不减，但只收敛到局部极大；某分量塌缩到单点时似然无界，需多初值或方差下限。
+\end{结论}
+
+\begin{结论}{Jeffreys 先验与 Laplace 近似}
+Jeffreys 先验 \重点{\pi(\theta)\propto\sqrt{I(\theta)}}，在重参数化下不变：Bernoulli 为 $\mathrm{Beta}(\frac12,\frac12)$，Poisson 为 $\lambda^{-1/2}$，正态尺度为 $1/\sigma$。
+后验的 Laplace 近似：$p(\theta\mid x)\approx N\bigl(\hat\theta_{\mathrm{MAP}},[-\ell''(\hat\theta)]^{-1}\bigr)$，大样本下与频率派区间一致（Bernstein--von Mises）。
+\end{结论}
+
+\begin{结论}{AR(1)：自相关与有效样本量}
+$X_t=\phi X_{t-1}+\varepsilon_t$，$|\phi|<1$：$\Var X=\frac{\sigma^2}{1-\phi^2}$，$\rho(k)=\phi^{|k|}$。样本均值
+\[
+\Var\bar X\approx\frac{\Var X}{n}\cdot\frac{1+\phi}{1-\phi},\qquad \重点{n_{\mathrm{eff}}\approx n\,\frac{1-\phi}{1+\phi}}.
+\]
+$\phi=0.9$ 时 1000 个点只相当于约 53 个独立点。忽略自相关会严重低估误差（MCMC 输出、漂移数据）。
+\end{结论}
+
+\begin{结论}{主成分分析 $=$ 中心化数据的 SVD}
+中心化数据矩阵 $X_c=U\Sigma V^{\mathsf T}$（$n\times p$）：主方向为 $V$ 的列，主成分得分 $U\Sigma$，
+\[
+\重点{\text{第 }k\text{ 主成分方差}=\frac{\sigma_k^2}{n-1}},\qquad \text{前 }k\text{ 个解释比例 }\frac{\sum_{i\le k}\sigma_i^2}{\sum_i\sigma_i^2}.
+\]
+变量量纲不同时先标准化（即对相关矩阵做 PCA）；PCA 方向对离群点敏感。
+\end{结论}
+
+\参考{Casella--Berger, \emph{Statistical Inference}；Wasserman, \emph{All of Statistics}；Hastie--Tibshirani--Friedman, \emph{The Elements of Statistical Learning}；Gelman et al., \emph{Bayesian Data Analysis}；Rice, \emph{Mathematical Statistics and Data Analysis}（MIT 18.650 / 18.655）。}

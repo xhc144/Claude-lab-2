@@ -1,0 +1,93 @@
+\subsection{复分析}
+
+\begin{结论}{由实部求解析函数（Milne-Thomson）}
+$f=u+\ii v$ 解析：$u_x=v_y$，$u_y=-v_x$，$f'=u_x-\ii u_y$。令 $x=z,\ y=0$：
+\[
+\重点{f'(z)=u_x(z,0)-\ii\,u_y(z,0)},
+\]
+积分后差一个纯虚常数。例：$u=x^3-3xy^2+x$ 给 $f'=3z^2+1$，$f=z^3+z+\ii c$。只适用于 $f$ 在实轴附近解析的情形。
+\end{结论}
+
+\begin{结论}{Cauchy 估计与 Liouville}
+$f$ 在 $|z-z_0|\le R$ 上解析且 $|f|\le M$：\重点{|f^{(n)}(z_0)|\le\frac{n!\,M}{R^{n}}}。
+整函数有界 $\Rightarrow$ 常数；$|f(z)|\le C(1+|z|)^m$ $\Rightarrow$ $f$ 是次数 $\le m$ 的多项式。代数基本定理：$1/p(z)$ 若无极点则有界整函数，矛盾。
+\end{结论}
+
+\begin{结论}{辐角原理与 Rouché：数零点}
+\[
+\frac{1}{2\pi\ii}\oint_\gamma\frac{f'}{f}\dd z=Z-P;\qquad \重点{\text{在 }\gamma\text{ 上 }|g|<|f|\Rightarrow f+g\text{ 与 }f\text{ 在内部零点数相同}}.
+\]
+例：$z^5+3z+1$。$|z|=1$ 上 $|z^5+1|\le2<|3z|$，单位圆内 1 个零点；$|z|=2$ 上 $|3z+1|\le7<32$，$|z|<2$ 内 5 个，故环形 $1<|z|<2$ 内 4 个。
+\end{结论}
+
+\begin{结论}{留数计算：高阶极点与无穷远点}
+$m$ 阶极点：$\Res_{z_0}f=\frac{1}{(m-1)!}\lim_{z\to z_0}\frac{\dd^{m-1}}{\dd z^{m-1}}\bigl[(z-z_0)^mf\bigr]$；$f=p/q$、单零点 $q(z_0)=0$：$\Res=\frac{p(z_0)}{q'(z_0)}$。
+\[
+\重点{\Res_\infty f=-\Res_{0}\Bigl[\frac{1}{z^2}f\Bigl(\frac1z\Bigr)\Bigr]},\qquad \text{全部留数（含 }\infty\text{）之和为 }0 .
+\]
+例：$\oint_{|z|=2}\frac{z^9}{z^{10}-1}\dd z$ 内有 10 个极点，改算无穷远：$\Res_\infty=-1$，积分 $=2\pi\ii$。
+\end{结论}
+
+\begin{结论}{扇形围道：$\int_0^\infty\frac{\dd x}{1+x^n}$}
+取扇形 $0\le\arg z\le\frac{2\pi}{n}$：射线 $z=r\ee^{2\pi\ii/n}$ 上被积函数不变，围道只含极点 $\ee^{\ii\pi/n}$：
+\[
+\bigl(1-\ee^{2\pi\ii/n}\bigr)I=2\pi\ii\,\Res_{\ee^{\ii\pi/n}}\frac{1}{1+z^n}\ \Rightarrow\ \重点{\int_0^\infty\frac{\dd x}{1+x^n}=\frac{\pi/n}{\sin(\pi/n)}}\quad(n\ge2).
+\]
+同一扇形算 Fresnel 积分：$\int_0^\infty\cos x^2\,\dd x=\int_0^\infty\sin x^2\,\dd x=\frac12\sqrt{\pi/2}$。
+\end{结论}
+
+\begin{结论}{实轴上的极点：半个留数与 Sokhotski--Plemelj}
+单极点在积分路径上时，用半径 $\varepsilon$ 的小半圆绕开：逆时针绕过半圆贡献 \重点{\ii\pi\Res}（顺时针为 $-\ii\pi\Res$）。
+\[
+\mathrm P\!\int_{-\infty}^{\infty}\frac{\ee^{\ii x}}{x}\dd x=\ii\pi,\qquad \重点{\frac{1}{x\mp\ii0^+}=\mathrm P\frac1x\pm\ii\pi\delta(x)}.
+\]
+后者是推迟 Green 函数、Kramers--Kronig 和散射理论中 $\ii\varepsilon$ 处方的来源。
+\end{结论}
+
+\begin{结论}{Schwarz 引理与圆盘自同构}
+$f:\mathbb D\to\mathbb D$ 解析，$f(0)=0$：\重点{|f(z)|\le|z|,\ |f'(0)|\le1}，等号仅当 $f=\ee^{\ii\theta}z$。
+圆盘自同构全为 $\varphi(z)=\ee^{\ii\theta}\frac{z-a}{1-\bar az}$（$|a|<1$）。复合后得 Schwarz--Pick：$\frac{|f'(z)|}{1-|f(z)|^2}\le\frac{1}{1-|z|^2}$，即解析自映射不增加双曲距离。
+\end{结论}
+
+\begin{结论}{常用共形映射}
+上半平面 $\to$ 单位圆盘：\重点{w=\frac{z-\ii}{z+\ii}}；分式线性变换保交比、把圆（含直线）映为圆。
+$w=z^{\pi/\alpha}$ 把角 $0<\arg z<\alpha$ 展平为上半平面；$w=\log z$ 把上半平面变为带形 $0<\Im w<\pi$；Joukowski $w=z+\frac1z$ 把单位圆映为线段 $[-2,2]$，$|z|=r>1$ 映为椭圆（翼型绕流）。调和函数在共形映射下仍调和，边值随点搬运。
+\end{结论}
+
+\begin{结论}{Laurent 展开：Bessel 函数的母函数}
+在环 $0<|z|<\infty$ 上
+\[
+\重点{\exp\Bigl[\frac t2\Bigl(z-\frac1z\Bigr)\Bigr]=\sum_{n\in\mathbb Z}J_n(t)z^n},\qquad J_n(t)=\frac{1}{2\pi}\int_0^{2\pi}\cos(n\theta-t\sin\theta)\,\dd\theta .
+\]
+系数公式 $a_n=\frac{1}{2\pi\ii}\oint\frac{f(z)}{z^{n+1}}\dd z$ 取单位圆即得积分表示；$J_{-n}=(-1)^nJ_n$，平面波展开 $\ee^{\ii kr\cos\theta}=\sum\ii^nJ_n(kr)\ee^{\ii n\theta}$。
+\end{结论}
+
+\begin{结论}{部分分式与无穷乘积}
+\[
+\pi\cot\pi z=\frac1z+\sum_{n\ne0}\Bigl(\frac{1}{z-n}+\frac1n\Bigr),\qquad \frac{\pi^2}{\sin^2\pi z}=\sum_{n\in\mathbb Z}\frac{1}{(z-n)^2},\qquad \重点{\sin\pi z=\pi z\prod_{n\ge1}\Bigl(1-\frac{z^2}{n^2}\Bigr)}.
+\]
+比较乘积展开的 $z^3$ 系数：$-\frac{\pi^3}{6}=-\pi\sum\frac1{n^2}$，再得 $\zeta(2)$；取对数求导回到第一式。
+\end{结论}
+
+\begin{结论}{解析延拓：$\Gamma$ 的极点与 $\zeta$ 的特殊值}
+$\Gamma(s)$ 在 $s=-n$ 有单极点，\重点{\Res_{s=-n}\Gamma=\frac{(-1)^n}{n!}}（由 $\Gamma(s)=\Gamma(s+n+1)/[s(s+1)\cdots(s+n)]$）。
+函数方程 $\zeta(s)=2^s\pi^{s-1}\sin\frac{\pi s}{2}\Gamma(1-s)\zeta(1-s)$ 给出 $\zeta(0)=-\frac12$，$\zeta(-1)=-\frac1{12}$，$\zeta(-2n)=0$（平凡零点）；$\zeta$ 在 $s=1$ 有留数 1 的单极点。
+\end{结论}
+
+\begin{结论}{Bromwich 反演：有理像函数只需留数}
+$f(t)=\dfrac{1}{2\pi\ii}\int_{c-\ii\infty}^{c+\ii\infty}F(s)\ee^{st}\dd s$，$c$ 在所有奇点右侧；$F$ 有理且真分式时向左闭合：
+\[
+\重点{f(t)=\sum_{\text{极点}}\Res\bigl(F(s)\ee^{st}\bigr)}\quad(t>0).
+\]
+$\frac{1}{(s+a)^2}\to t\ee^{-at}$；$\frac{\omega}{s^2+\omega^2}\to\sin\omega t$。终值定理 $\lim_{t\to\infty}f=\lim_{s\to0}sF(s)$ 只在 $sF$ 的极点全在左半平面时成立。
+\end{结论}
+
+\begin{结论}{Poisson 求和公式}
+$\hat f(\xi)=\int f(x)\ee^{-\ii\xi x}\dd x$，$f$ 及 $\hat f$ 衰减足够快：
+\[
+\重点{\sum_{n\in\mathbb Z}f(n)=\sum_{k\in\mathbb Z}\hat f(2\pi k)}.
+\]
+取 Gauss 函数得 theta 变换 $\sum\ee^{-\pi n^2t}=t^{-1/2}\sum\ee^{-\pi n^2/t}$：高温级数与低温级数互换，小 $t$ 时左边慢收敛而右边几乎只剩 $k=0$ 项。
+\end{结论}
+
+\参考{Ahlfors, \emph{Complex Analysis}；Stein--Shakarchi, \emph{Complex Analysis}（MIT 18.04 / 18.112）；Needham, \emph{Visual Complex Analysis}；Ablowitz--Fokas, \emph{Complex Variables}。}

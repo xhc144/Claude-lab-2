@@ -1,0 +1,90 @@
+\section{电磁学}
+
+\subsection{核心积木}
+
+\begin{结论}{导体平面与导体球的镜像}
+平面：电荷 $q$ 距接地平面 $d$，感应面密度 $\sigma=-\dfrac{qd}{2\pi(\rho^2+d^2)^{3/2}}$（总量 $-q$），引力 $\dfrac{q^2}{16\pi\varepsilon_0d^2}$。
+接地球（半径 $R$，$q$ 距球心 $d>R$）：
+\[
+\重点{q'=-\frac{R}{d}q,\qquad b=\frac{R^2}{d}}\ (\text{镜像在球心与 }q\text{ 连线上}).
+\]
+孤立不带电球再在球心加 $+\frac Rdq$；带电 $Q$ 的孤立球在球心加 $Q+\frac Rdq$。
+\end{结论}
+
+\begin{结论}{偶极场与球内平均场}
+\[
+\重点{\mathbf E_{\mathrm{dip}}=\frac{1}{4\pi\varepsilon_0}\frac{3(\mathbf p\cdot\hat{\mathbf r})\hat{\mathbf r}-\mathbf p}{r^3}},\quad \mathbf F=\nabla(\mathbf p\cdot\mathbf E),\quad \boldsymbol\tau=\mathbf p\times\mathbf E,\quad U=-\mathbf p\cdot\mathbf E .
+\]
+半径 $R$ 球内的平均场：电荷都在球外时 $=$ 球心处的场；都在球内时 $=-\dfrac{\mathbf p}{4\pi\varepsilon_0R^3}$。磁偶极同形（$\mathbf p\to\mathbf m$，$\frac1{\varepsilon_0}\to\mu_0$），球内平均 $B=\frac{2\mu_0}{3}\frac{\mathbf m}{\frac43\pi R^3}$。
+\end{结论}
+
+\begin{结论}{均匀外场中的球：一个偶极就够}
+外场 $E_0\hat z$，球外 $V=-E_0r\cos\theta+\frac{A\cos\theta}{r^2}$，球内 $V=-E_{\mathrm{in}}r\cos\theta$。
+\[
+\text{导体球：}p=4\pi\varepsilon_0R^3E_0,\ \sigma=3\varepsilon_0E_0\cos\theta;\qquad \text{介质球：}\重点{\mathbf E_{\mathrm{in}}=\frac{3}{\varepsilon_r+2}\mathbf E_0}.
+\]
+均匀极化球内 $\mathbf E=-\frac{\mathbf P}{3\varepsilon_0}$；均匀磁化球内 $\mathbf B=\frac23\mu_0\mathbf M$。
+\end{结论}
+
+\begin{结论}{能量法求力：固定 $Q$ 与固定 $V$ 的符号}
+\[
+\重点{F_x=-\Bigl(\frac{\partial W}{\partial x}\Bigr)_Q=+\Bigl(\frac{\partial W}{\partial x}\Bigr)_V},\qquad W=\tfrac12CV^2=\frac{Q^2}{2C}.
+\]
+固定 $V$ 时电池做功 $V\dd Q=2\,\dd W$，这就是符号反转的原因。介质板（宽 $w$、间距 $d$）被吸入平行板：$F=\dfrac{\varepsilon_0(\varepsilon_r-1)wV^2}{2d}$，与插入深度无关。
+\end{结论}
+
+\begin{结论}{Biot--Savart 的两条基本结果}
+有限直导线，角从场点到导线的垂线量起：$B=\dfrac{\mu_0I}{4\pi s}(\sin\theta_2-\sin\theta_1)$。圆环轴线：
+\[
+\重点{B_z=\frac{\mu_0IR^2}{2(R^2+z^2)^{3/2}}}.
+\]
+Helmholtz 线圈（两环间距 $=R$）使中点 $\partial_z^2B=0$，中心 $B=\bigl(\tfrac45\bigr)^{3/2}\frac{\mu_0NI}{R}$；正 $n$ 边形线圈中心场由 $n$ 段直导线叠加。
+\end{结论}
+
+\begin{结论}{同轴线：$L$、$C$ 与特征阻抗}
+内半径 $a$、外半径 $b$，单位长度：
+\[
+\frac{L}{\ell}=\frac{\mu}{2\pi}\ln\frac ba,\quad \frac C\ell=\frac{2\pi\varepsilon}{\ln(b/a)},\quad \重点{Z_0=\frac{1}{2\pi}\sqrt{\frac\mu\varepsilon}\ln\frac ba},\quad \frac{L}{\ell}\cdot\frac C\ell=\mu\varepsilon .
+\]
+$LC=\mu\varepsilon$ 对任何横截面的 TEM 传输线都成立，信号速度 $1/\sqrt{\mu\varepsilon}$。（$L$ 为外导体内电流的外电感，忽略导体内部。）
+\end{结论}
+
+\begin{结论}{动生电动势：终端速度与电磁阻尼}
+导轨间距 $\ell$，电阻 $R$，杆质量 $m$ 在重力下沿竖直导轨滑落，垂直磁场 $B$：
+\[
+m\dot v=mg-\frac{B^2\ell^2}{R}v,\qquad \重点{v_\infty=\frac{mgR}{B^2\ell^2}},\qquad \tau=\frac{mR}{B^2\ell^2}.
+\]
+磁通法则 $\mathcal E=-\dot\Phi$ 在回路形状改变时仍成立，但“导体在磁场中不动、只是接触点移动”的情形须回到 $\oint(\mathbf E+\mathbf v\times\mathbf B)\cdot\dd\boldsymbol\ell$。
+\end{结论}
+
+\begin{结论}{RLC：特征量与充电损耗}
+串联 RLC：$\omega_0=\frac{1}{\sqrt{LC}}$，\重点{Q=\frac1R\sqrt{\frac LC}}，临界阻尼 $R=2\sqrt{L/C}$；时间常数 $RC$、$L/R$。
+恒压 $V$ 经任意电阻给电容充满：电池做功 $CV^2$，电容储能 $\frac12CV^2$，\重点{\text{电阻耗散 }\tfrac12CV^2\text{，与 }R\text{ 无关}}。两等容电容一充一空相连，同样损失一半能量。
+\end{结论}
+
+\begin{结论}{等效电阻的两个对称技巧}
+无限方格电阻网（每边 $R$），相邻两节点间 \重点{R_{\mathrm{eq}}=R/2}：注入 $I$ 与抽出 $I$ 两种情形叠加，每种情形该边分到 $I/4$。
+无限梯形网（串 $R$、并 $R$）：自相似 $R_\infty=R+\frac{RR_\infty}{R+R_\infty}$，得 $R_\infty=\frac{1+\sqrt5}{2}R$。立方体对顶点间 $\frac56R$。
+\end{结论}
+
+\begin{结论}{界面条件与场线折射}
+\[
+\重点{D_{1\perp}-D_{2\perp}=\sigma_f,\quad \mathbf E_{1\parallel}=\mathbf E_{2\parallel},\quad B_{1\perp}=B_{2\perp},\quad \hat{\mathbf n}\times(\mathbf H_1-\mathbf H_2)=\mathbf K_f}.
+\]
+无自由面电荷时 $\dfrac{\tan\theta_1}{\tan\theta_2}=\dfrac{\varepsilon_1}{\varepsilon_2}$（$\theta$ 从法线量）；高 $\mu$ 材料内磁感线几乎平行于表面，这是磁屏蔽的原理。
+\end{结论}
+
+\begin{结论}{趋肤深度与电荷弛豫}
+良导体（$\sigma\gg\varepsilon\omega$）：\重点{\delta=\sqrt{\frac{2}{\mu\sigma\omega}}}；铜在 $60\,$Hz 约 $8.4\,$mm，$1\,$MHz 约 $65\,\mu$m。导体内自由电荷按 $\ee^{-t/\tau}$ 消散，\重点{\tau=\varepsilon/\sigma}。
+良导体反射：表面阻抗 $Z_s=(1+\ii)/(\sigma\delta)$，正入射吸收比例 $A\approx\dfrac{4\,\Re Z_s}{Z_0}=\dfrac{2\omega\delta}{c}$（$\mu=\mu_0$，领头阶）。
+\end{结论}
+
+\begin{结论}{电路中的能量走 Poynting 矢量}
+载流 $I$ 的直导线（电阻 $R$，长 $\ell$，半径 $a$）：表面 $E=IR/\ell$，$B=\frac{\mu_0I}{2\pi a}$，
+\[
+\重点{\oint\mathbf S\cdot\dd\mathbf a=\frac{EB}{\mu_0}\cdot2\pi a\ell=I^2R}.
+\]
+能量从外部场流入导线而非沿导线内部流动；充电电容中能量同样从侧面流入极板间隙。
+\end{结论}
+
+\参考{Purcell--Morin, \emph{Electricity and Magnetism}（MIT 8.022）；Griffiths, \emph{Introduction to Electrodynamics}（8.02 / 8.07）；Zangwill, \emph{Modern Electrodynamics}；Horowitz--Hill, \emph{The Art of Electronics}。}

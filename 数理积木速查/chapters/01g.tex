@@ -1,0 +1,194 @@
+\subsection{微分学与中值定理}
+
+\begin{结论}{Rolle 辅助函数对照表}
+要证某 $\xi\in(a,b)$ 使左栏成立，取右栏 $F$ 并验证 $F(a)=F(b)$：
+\[
+\begin{array}{ll}
+f'(\xi)+g'(\xi)f(\xi)=0 & F=\ee^{g(x)}f(x)\\
+\xi f'(\xi)+kf(\xi)=0 & F=x^kf(x)\\
+f'(\xi)g(\xi)-f(\xi)g'(\xi)=0 & F=f/g\ (g\ne0)\\
+f''(\xi)=f(\xi) & F=\ee^{-x}(f'+f)\ \text{（或 }\ee^{x}(f'-f)\text{）}\\
+f'(\xi)(b-\xi)=f(\xi)-f(a) & F=(f(x)-f(a))(b-x)
+\end{array}
+\]
+规律：把目标写成 \重点{(\text{某因子})\cdot F'(\xi)=0}，因子取积分因子 $\ee^{\int}$。
+\end{结论}
+
+\begin{结论}{双中值点：先用介值定理选分点}
+$f\in C[0,1]$，在 $(0,1)$ 可导，$f(0)=0,\ f(1)=1$。
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 取 $c$ 使 \重点{f(c)=1-c}，两段分别用 Lagrange：$f'(\xi)f'(\eta)=\frac{1-c}{c}\cdot\frac{c}{1-c}=1$。
+\item 取 $c$ 使 $f(c)=\frac12$：$\frac1{f'(\xi)}+\frac1{f'(\eta)}=2c+2(1-c)=2$。
+\end{itemize}
+一般：让两段的差商之积或倒数和与 $c$ 无关，反解 $f(c)$ 应取的值。
+\end{结论}
+
+\begin{结论}{Taylor 余项：四种形式各管什么}
+\[
+R_n=\frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}=\frac{f^{(n+1)}(\eta)}{n!}(x-\eta)^n(x-a)=\frac1{n!}\int_a^x f^{(n+1)}(t)(x-t)^n\dd t=o((x-a)^n).
+\]
+Lagrange 型做界；\textbf{Cauchy 型}证 $(1+x)^\alpha$、$\ln(1+x)$ 在 $(-1,0)$ 上展开收敛（Lagrange 型此时估不住）；\重点文{积分型}最适合求导、估计和含参分析；Peano 型只用于极限。
+\end{结论}
+
+\begin{结论}{两端为零的函数：$|f|\le\frac M2(x-a)(b-x)$}
+$f\in C^2[a,b]$，$f(a)=f(b)=0$，$|f''|\le M$：
+\[
+\重点{|f(x)|\le\frac M2(x-a)(b-x)},\qquad \max|f|\le\frac{M(b-a)^2}{8}.
+\]
+证：$g=\frac M2(x-a)(b-x)\mp f$ 满足 $g''\le0$、两端为零，故 $g\ge0$。反用：若 $\max|f|=H$，则存在 $\xi$ 使 $|f''(\xi)|\ge\frac{8H}{(b-a)^2}$。
+\end{结论}
+
+\begin{结论}{差商中值定理}
+$f\in C^n$，节点 $x_0,\dots,x_n$ 在 $[a,b]$ 中：
+\[
+\重点{f[x_0,\dots,x_n]=\frac{f^{(n)}(\xi)}{n!}},\qquad f[x_0,\dots,x_n]=\sum_i\frac{f(x_i)}{\prod_{j\ne i}(x_i-x_j)}.
+\]
+证明“某个组合等于 $f^{(n)}(\xi)/n!$”时，先认出它是差商。例：$\frac{f(a)-2f(\frac{a+b}2)+f(b)}{(b-a)^2/4}=f''(\xi)$。
+\end{结论}
+
+\begin{结论}{凸函数的等价刻画与三弦引理}
+$f$ 在区间 $I$ 上凸 $\Leftrightarrow$ 对 $x<y<z$：
+\[
+\重点{\frac{f(y)-f(x)}{y-x}\le\frac{f(z)-f(x)}{z-x}\le\frac{f(z)-f(y)}{z-y}}.
+\]
+推论：开区间上凸函数连续，左右导数处处存在且 $f'_-\le f'_+$，至多可数个不可导点；可导时 $\Leftrightarrow f'$ 单增 $\Leftrightarrow$ $f(y)\ge f(x)+f'(x)(y-x)$。
+\end{结论}
+
+\begin{结论}{Barbalat 引理：$f$ 收敛何时推出 $f'\to0$}
+$f(x)\to L$（$x\to\infty$）且 \重点{f'\text{ 一致连续}}（如 $f''$ 有界）$\Rightarrow f'(x)\to0$。
+反例（无一致连续）：$f=\frac{\sin x^2}{x}$。定量版：$|f|\le A$，$|f''|\le B$ 在 $[x,\infty)$ 上 $\Rightarrow$ $|f'|\le2\sqrt{AB}$（Landau）。控制论中证明 Lyapunov 函数导数趋零。
+\end{结论}
+
+\begin{结论}{$f+\lambda f'\to L$ 推出 $f\to L$}
+$\lambda>0$，$f$ 可导，$f(x)+\lambda f'(x)\to L$ $\Rightarrow$ \重点{f(x)\to L}。
+证：$f=\frac{\ee^{x/\lambda}f}{\ee^{x/\lambda}}$，分母 $\to\infty$，L'Hôpital 给 $\lim\frac{\ee^{x/\lambda}(f+\lambda f')/\lambda}{\ee^{x/\lambda}/\lambda}=L$。$\lambda<0$ 时结论不成立（$f=\ee^{x}$ 配 $\lambda=-1$）。
+\end{结论}
+
+\begin{结论}{含参积分求导（Leibniz 一般式）}
+\[
+\重点{\frac{\dd}{\dd x}\int_{a(x)}^{b(x)}f(x,t)\dd t=f(x,b)\,b'-f(x,a)\,a'+\int_{a(x)}^{b(x)}\partial_xf(x,t)\dd t}.
+\]
+条件：$f,\partial_xf$ 连续。例：$F(x)=\int_0^x(x-t)^{n-1}g(t)\dd t/(n-1)!$ 满足 $F^{(n)}=g$，即 $n$ 重积分的 Cauchy 公式。
+\end{结论}
+
+\begin{结论}{L'Hôpital 的适用边界}
+$\frac\infty\infty$ 型只需\textbf{分母}$\to\infty$；结论只是充分条件：$\frac{x+\sin x}{x}\to1$ 但导数比 $1+\cos x$ 无极限。
+在 $0$ 附近反复 L'Hôpital 不如直接 Taylor；当分子分母都是积分 $\int_0^{x}$ 时它最省事：$\lim\frac{\int_0^{x^2}\sin\sqrt t\dd t}{x^3}=\lim\frac{2x\sin x}{3x^2}=\frac23$。
+\end{结论}
+
+\begin{结论}{复合与反函数的高阶导数}
+\[
+(f\circ g)''=f''(g)g'^2+f'(g)g'',\qquad (f\circ g)'''=f'''(g)g'^3+3f''(g)g'g''+f'(g)g'''.
+\]
+$y=f^{-1}(x)$：\重点{y''=-\frac{f''}{f'^3}},\ $y'''=\frac{3f''^2-f'f'''}{f'^5}$（右边在 $f^{-1}(x)$ 处取值）。参数式 $x(t),y(t)$：$\frac{\dd^2y}{\dd x^2}=\frac{x'y''-y'x''}{x'^3}$。
+\end{结论}
+
+\begin{结论}{由微分方程递推 $f^{(n)}(0)$}
+$y=\arcsin x$ 满足 $(1-x^2)y''-xy'=0$，求导 $n$ 次（Leibniz）后令 $x=0$：
+\[
+\重点{y^{(n+2)}(0)=n^2y^{(n)}(0)}\ \Rightarrow\ y^{(2k+1)}(0)=((2k-1)!!)^2 .
+\]
+$y=\arctan x$：$(1+x^2)y'=1$ 给 $y^{(n+1)}(0)=-n(n-1)y^{(n-1)}(0)$；$y=\ee^{a\arcsin x}$：$(1-x^2)y''-xy'-a^2y=0$ 给 $y^{(n+2)}(0)=(n^2+a^2)y^{(n)}(0)$。
+\end{结论}
+
+\begin{结论}{高阶导数判别极值}
+$f'(a)=\cdots=f^{(k-1)}(a)=0\ne f^{(k)}(a)$：$k$ \textbf{偶}时 $a$ 是极值点（$f^{(k)}(a)>0$ 极小）；$k$ \textbf{奇}时不是极值，是水平拐点。
+\注意 所有导数为零不能判断：$\ee^{-1/x^2}$ 极小，$x\ee^{-1/x^2}$ 不是极值，$\ee^{-1/x^2}\sin\frac1x$ 在 $0$ 附近无穷振荡。
+\end{结论}
+
+\begin{结论}{光滑但不解析：截断函数的构造}
+$\varphi(x)=\ee^{-1/x}\ (x>0)$，$\varphi=0\ (x\le0)$ 是 $C^\infty$ 且各阶导数在 $0$ 为零。
+\[
+\重点{\psi(x)=\frac{\varphi(x)}{\varphi(x)+\varphi(1-x)}}
+\]
+在 $x\le0$ 为 $0$、$x\ge1$ 为 $1$，光滑单调；$\psi(2-|x|)$ 是在 $[-1,1]$ 上为 $1$、$|x|\ge2$ 为 $0$ 的鼓包函数。单位分解、磨光都由它出发。
+\end{结论}
+
+\begin{结论}{积分第二中值定理（Bonnet）}
+$g$ 在 $[a,b]$ 上单调不增且 $\ge0$，$f$ 可积：
+\[
+\重点{\int_a^bf\,g=g(a^+)\int_a^\xi f}\quad\text{对某 }\xi\in[a,b].
+\]
+一般单调 $g$：$\int_a^bfg=g(a)\int_a^\xi f+g(b)\int_\xi^bf$。用于振荡积分估计：$\bigl|\int_A^B\frac{\sin x}{x}\dd x\bigr|\le\frac2A$。
+\end{结论}
+
+\begin{结论}{van der Corput 引理：振荡积分的衰减}
+$\varphi$ 实值光滑，$|\varphi^{(k)}|\ge1$ 于 $(a,b)$：
+\[
+\重点{\Bigl|\int_a^b\ee^{\ii\lambda\varphi(x)}\dd x\Bigr|\le c_k\lambda^{-1/k}},
+\]
+$k=1$ 需 $\varphi'$ 单调，可取 $c_1=3$；$k\ge2$ 不需单调，$c_k=5\cdot2^{k-1}-2$。界与区间长度无关；$k=2$ 对应驻相点的 $\lambda^{-1/2}$。
+\end{结论}
+
+\begin{结论}{单调函数与有界变差}
+单调函数至多可数个间断点（都是跳跃），且几乎处处可导（Lebesgue）；
+有界变差 $=$ 两单调函数之差（Jordan 分解），\重点{\int_a^b|f'|\le V_a^b(f)}，等号当且仅当 $f$ 绝对连续。
+Cantor 函数：连续、单增、$f'=0$ a.e.，但 $f(1)-f(0)=1\ne\int f'$。
+\end{结论}
+
+\begin{结论}{向量值函数没有中值等式}
+$f:[a,b]\to\mathbb R^m$：一般 \textbf{不存在} $\xi$ 使 $f(b)-f(a)=f'(\xi)(b-a)$（如 $(\cos t,\sin t)$ 在 $[0,2\pi]$）。可用的是中值不等式：
+\[
+\重点{\|f(b)-f(a)\|\le(b-a)\sup\|f'\|},\qquad \|F(y)-F(x)\|\le\sup_{z\in[x,y]}\|DF(z)\|\,\|y-x\|.
+\]
+复值函数同样如此；需要等式时对 $\langle f,v\rangle$（固定向量 $v$）用标量中值定理。
+\end{结论}
+
+\begin{结论}{极值点偏移：对称化辅助函数}
+$f'(x_0)=0$，$f(x_1)=f(x_2)$，$x_1<x_0<x_2$，要证 $x_1+x_2>2x_0$：令
+\[
+\重点{F(x)=f(x)-f(2x_0-x)},\quad x<x_0 .
+\]
+证 $F$ 在 $(-\infty,x_0)$ 上同号（常由 $F(x_0)=0$ 与 $F'$ 定号）；如 $F<0$ 则 $f(x_2)=f(x_1)<f(2x_0-x_1)$，再由 $f$ 在 $(x_0,\infty)$ 的单调性得 $x_2$ 与 $2x_0-x_1$ 的大小。$F'(x)=f'(x)+f'(2x_0-x)$ 的符号通常由 $f'''$ 决定。
+\end{结论}
+
+\begin{结论}{可导但导数不连续；导数的介值性}
+$f(x)=x^2\sin\frac1x$（$f(0)=0$）：$f'(0)=0$，但 $f'(x)=2x\sin\frac1x-\cos\frac1x$ 在 $0$ 无极限。
+导函数没有第一类间断点（Darboux），所以 \重点{f'\text{ 若在 }a\text{ 处有极限，则必等于 }f'(a)}（由 Lagrange 中值定理）；分段函数在接点求导数时可直接取两侧导数的极限，只要 $f$ 在接点连续。
+\end{结论}
+
+\begin{结论}{一致连续的判别}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 闭区间上连续 $\Rightarrow$ 一致连续（Cantor）。$[a,\infty)$ 上连续且 $\lim_{x\to\infty}f$ 存在 $\Rightarrow$ 一致连续。
+\item \重点{f'\text{ 有界}\Rightarrow\text{Lipschitz}\Rightarrow\text{一致连续}}；反之不成立：$\sqrt x$ 在 $[0,\infty)$ 一致连续但导数无界。
+\item $x^2$、$\sin x^2$ 在 $\mathbb R$ 上不一致连续：取 $x_n=\sqrt{n\pi}$、$y_n=\sqrt{n\pi+\pi/2}$，距离 $\to0$ 而函数值差不变。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{对数凸与 Bohr--Mollerup}
+$\ln f$ 凸称对数凸；对数凸函数的和、积仍对数凸（和由 Hölder）。
+\重点{\text{满足 }f(1)=1,\ f(x+1)=xf(x)\text{、在 }(0,\infty)\text{ 上对数凸的函数只有 }\Gamma}。用来证明 $\Gamma$ 的各种公式（倍元、乘积表示）：只需验证右边满足这三条。
+\end{结论}
+
+\begin{结论}{Lipschitz 常数的计算与压缩判定}
+$F:\mathbb R^n\to\mathbb R^n$ 在凸集 $D$ 上：\重点{L=\sup_{D}\|DF\|}（所用范数下的算子范数）。
+一维 $\varphi(x)=\cos x$ 在 $[0,1]$：$|\varphi'|\le\sin1<1$，所以 $x=\cos x$ 迭代收敛；二维时 $\|DF\|_\infty$（行和）或 $\|DF\|_1$（列和）比谱范数好算，任一个小于 $1$ 即可。
+\end{结论}
+
+\begin{结论}{函数方程的正则性提升}
+Cauchy 方程 $f(x+y)=f(x)+f(y)$：在某区间有界（或可测、或单调、或一点连续）$\Rightarrow f(x)=cx$。
+同法：$f(x+y)=f(x)f(y)$ 且非零连续 $\Rightarrow f=\ee^{cx}$；$f(xy)=f(x)+f(y)$（$x>0$）连续 $\Rightarrow f=c\ln x$；\重点{f\Bigl(\frac{x+y}2\Bigr)=\frac{f(x)+f(y)}2}（Jensen 方程）连续 $\Rightarrow$ $f$ 仿射。
+\end{结论}
+
+\begin{结论}{反函数与隐函数的二阶检查：拐点与曲率}
+平面曲线 $y=f(x)$ 曲率 \重点{\kappa=\frac{|f''|}{(1+f'^2)^{3/2}}}，参数式 $\kappa=\frac{|x'y''-y'x''|}{(x'^2+y'^2)^{3/2}}$，极坐标 $\kappa=\frac{|r^2+2r'^2-rr''|}{(r^2+r'^2)^{3/2}}$。
+拐点：$f''$ 变号处；隐式 $F(x,y)=0$ 时曲率 $\kappa=\dfrac{|F_y^2F_{xx}-2F_xF_yF_{xy}+F_x^2F_{yy}|}{(F_x^2+F_y^2)^{3/2}}$。
+\end{结论}
+
+\begin{结论}{Taylor 公式估计导数：Kolmogorov 型}
+$f\in C^2(\mathbb R)$，$M_0=\sup|f|$，$M_2=\sup|f''|$：在 $x\pm h$ 展开相减，
+\[
+|f'(x)|\le\frac{M_0}{h}+\frac{hM_2}{2}\ \Rightarrow\ \重点{M_1\le\sqrt{2M_0M_2}}.
+\]
+半直线上常数变为 $2\sqrt{M_0M_2}$。一般 Kolmogorov：$M_k\le C_{n,k}M_0^{1-k/n}M_n^{k/n}$。
+\end{结论}
+
+\begin{结论}{凸函数的离散化：Jensen 的“加权”与“差分”形式}
+$f$ 凸，$x<y$，$0<h<y-x$：\重点{f(x+h)-f(x)\le f(y)-f(y-h)}（增量单调）。
+推论（逐段用 Hermite--Hadamard）：对凸 $f$，
+\[
+\frac{f(1)+f(n)}2+\int_1^nf\ \le\ \sum_{k=1}^n f(k)\ \le\ \int_{1/2}^{n+1/2}f .
+\]
+\end{结论}
+
+\参考{Rudin《数学分析原理》第 5--6 章；Zorich, \emph{Mathematical Analysis I}；Stein--Shakarchi, \emph{Functional Analysis} 第 8 章（振荡积分）；Hardy--Littlewood--Pólya 第 7 章；MIT 18.100B/C。}

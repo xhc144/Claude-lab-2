@@ -1,0 +1,90 @@
+\subsection{静电与静磁进阶}
+
+\begin{结论}{Gauss 定律的对称情形与球形空腔}
+无限长线电荷 $E=\frac{\lambda}{2\pi\varepsilon_0r}$；无限大面 $\frac{\sigma}{2\varepsilon_0}$；均匀带电球内 $\mathbf E=\frac{\rho\mathbf r}{3\varepsilon_0}$。
+均匀带电球中挖去偏心球腔（腔心相对球心 $\mathbf d$）：叠加 $+\rho$ 球与 $-\rho$ 小球，
+\[
+\重点{\mathbf E_{\text{腔内}}=\frac{\rho\,\mathbf d}{3\varepsilon_0}}\quad(\text{均匀}).
+\]
+磁场类比：圆柱导体中偏心圆柱孔内 $\mathbf B=\frac{\mu_0}{2}\mathbf J\times\mathbf d$，同样均匀。
+\end{结论}
+
+\begin{结论}{常见电容}
+孤立球 $4\pi\varepsilon_0R$（地球约 $0.71\,$mF）；同心球 $4\pi\varepsilon_0\frac{ab}{b-a}$；同轴 $\frac{2\pi\varepsilon_0\ell}{\ln(b/a)}$。
+两平行导线（半径 $a$、间距 $d$），单位长度：
+\[
+\重点{C'=\frac{\pi\varepsilon_0}{\cosh^{-1}(d/2a)}}\approx\frac{\pi\varepsilon_0}{\ln(d/a)}\ (d\gg a).
+\]
+电容与电感的对偶：TEM 线上 $L'C'=\mu\varepsilon$，故 $L'\approx\frac{\mu_0}{\pi}\ln\frac da$。
+\end{结论}
+
+\begin{结论}{Ampère 定律的对称情形}
+长螺线管 $B=\mu_0nI$（外部为零）；螺绕环 $B=\frac{\mu_0NI}{2\pi r}$；面电流 $\frac{\mu_0K}{2}$；载流导线内部 $B=\frac{\mu_0Ir}{2\pi R^2}$。
+自感：\重点{L=\mu_0n^2A\ell}；两平行导线单位长度受力 $\frac{\mu_0I_1I_2}{2\pi d}$（同向相吸），这曾是安培的定义（$1\,$A、$1\,$m 时 $2\times10^{-7}\,$N/m）。
+\end{结论}
+
+\begin{结论}{矢势的三个标准形式}
+\[
+\text{均匀场：}\ \重点{\mathbf A=\tfrac12\mathbf B\times\mathbf r};\qquad \text{长螺线管外：}\ A_\phi=\frac{\Phi}{2\pi r};\qquad \text{磁偶极：}\ \mathbf A=\frac{\mu_0}{4\pi}\frac{\mathbf m\times\hat{\mathbf r}}{r^2}.
+\]
+螺线管外 $\mathbf B=0$ 而 $\mathbf A\ne0$（Aharonov--Bohm）；$\oint\mathbf A\cdot\dd\boldsymbol\ell=\Phi$ 常用来直接求 $\mathbf A$。
+\end{结论}
+
+\begin{结论}{磁路：带气隙的铁芯}
+$N$ 匝、铁芯长 $\ell$、相对磁导率 $\mu_r$、气隙 $g$：$\oint\mathbf H\cdot\dd\boldsymbol\ell=NI$，$B$ 连续，
+\[
+\重点{B=\frac{\mu_0NI}{g+\ell/\mu_r}}.
+\]
+$\mu_r\sim10^3$ 时 $1\,$mm 气隙就主导磁阻，使电感线性、不易饱和。磁阻 $\mathcal R=\frac{\ell}{\mu A}$ 串联相加（类比电阻）。
+\end{结论}
+
+\begin{结论}{介质：束缚电荷与 Clausius--Mossotti}
+$\sigma_b=\mathbf P\cdot\hat{\mathbf n}$，$\rho_b=-\nabla\cdot\mathbf P$。由分子极化率 $\alpha$（$\mathbf p=\alpha\mathbf E_{\mathrm{loc}}$，$\mathbf E_{\mathrm{loc}}=\mathbf E+\frac{\mathbf P}{3\varepsilon_0}$）：
+\[
+\重点{\frac{\varepsilon_r-1}{\varepsilon_r+2}=\frac{n\alpha}{3\varepsilon_0}}.
+\]
+光频下 $\varepsilon_r=n_{\mathrm{opt}}^2$，即 Lorentz--Lorenz 公式。平行板电容部分填充：介质层串联（平行于板）或并联（垂直于板）。
+\end{结论}
+
+\begin{结论}{介质半空间前的点电荷}
+电荷 $q$ 在真空中距介质（$\varepsilon_r$）平面 $d$ 处：
+\[
+\text{真空侧镜像：}\ \重点{q'=-\frac{\varepsilon_r-1}{\varepsilon_r+1}q};\qquad \text{介质侧：}\ \phi=\frac{q''}{4\pi\varepsilon R},\ q''=\frac{2\varepsilon_r}{\varepsilon_r+1}q .
+\]
+$\varepsilon_r\to\infty$ 回到导体镜像。电荷总被介质吸引，力 $\frac{qq'}{4\pi\varepsilon_0(2d)^2}$。
+\end{结论}
+
+\begin{结论}{磁压与导体表面受力}
+磁场在导体（超导体）表面的压强 \重点{\frac{B^2}{2\mu_0}}：$1\,$T 约 $4\,$atm，$10\,$T 约 $400\,$atm（强场磁体线圈的结构负荷）。
+电场对导体表面向外的拉力 $\frac{\sigma^2}{2\varepsilon_0}=\frac{\varepsilon_0E^2}{2}$。两者都是 Maxwell 应力张量在表面的取值。
+\end{结论}
+
+\begin{结论}{磁偶极之间的力与 Stern--Gerlach}
+$U=-\mathbf m\cdot\mathbf B$，$\mathbf F=\nabla(\mathbf m\cdot\mathbf B)$，$\boldsymbol\tau=\mathbf m\times\mathbf B$。同轴两偶极（同向）：
+\[
+\重点{F=\frac{3\mu_0m_1m_2}{2\pi r^4}}\ (\text{吸引}).
+\]
+非均匀场 $\partial_zB_z$ 把银原子束按 $m_s=\pm\frac12$ 分成两束：$F_z=\mp\mu_B\partial_zB_z$。
+\end{结论}
+
+\begin{结论}{多极展开的四极项}
+\[
+\Phi=\frac{1}{4\pi\varepsilon_0}\Bigl[\frac Qr+\frac{\mathbf p\cdot\hat{\mathbf r}}{r^2}+\frac{1}{2}\frac{Q_{ij}\hat r_i\hat r_j}{r^3}+\cdots\Bigr],\qquad \重点{Q_{ij}=\int(3x_ix_j-r^2\delta_{ij})\rho\,\dd^3x}.
+\]
+$Q_{ij}$ 无迹对称。偶极矩与原点选择无关 $\iff Q=0$。原子核四极矩 $Q_{zz}\ne0$ 表示非球形（长椭球为正）；轴对称时 $\Phi_{\text{四极}}=\frac{Q_{zz}}{4\pi\varepsilon_0}\frac{P_2(\cos\theta)}{2r^3}$。
+\end{结论}
+
+\begin{结论}{Earnshaw 定理与抗磁悬浮}
+无源区 $\nabla^2\phi=0$，势能无极小：\重点{\text{静电力不能使点电荷稳定平衡}}。
+绕开方式：动态（Paul 阱、Penning 阱加磁场）；反馈；抗磁体（$\chi<0$，能量 $\propto+B^2$，在场极小处稳定）。悬浮条件 $|\chi|B\,\partial_zB/\mu_0\ge\rho g$：水约需 $B\partial_zB\approx1400\,\mathrm{T^2/m}$（$16\,$T 磁体悬浮青蛙）。
+\end{结论}
+
+\begin{结论}{远处共轴两线圈的互感}
+半径 $a,b$ 的共轴圆线圈相距 $d\gg a,b$：线圈 1 在 2 处的场近似为偶极场 $B=\frac{\mu_0Ia^2}{2d^3}$，
+\[
+\重点{M\approx\frac{\mu_0\pi a^2b^2}{2d^3}}.
+\]
+互易 $M_{12}=M_{21}$（Neumann 公式对称），常用“算较容易的一边”。耦合系数 $k=M/\sqrt{L_1L_2}\le1$。
+\end{结论}
+
+\参考{Purcell--Morin 第 2--11 章；Griffiths 第 2--6 章；Jackson 第 1--5 章；Smythe, \emph{Static and Dynamic Electricity}；Zangwill, \emph{Modern Electrodynamics}。}

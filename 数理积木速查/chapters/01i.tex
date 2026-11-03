@@ -1,0 +1,178 @@
+\subsection{多元微积分与场论}
+
+\begin{结论}{可微、偏导与混合偏导的反例}
+$\frac{xy}{x^2+y^2}$：两偏导在原点存在但不连续。\textbf{偏导连续 $\Rightarrow$ 可微 $\Rightarrow$ 方向导数存在}，反向都不成立（$\frac{x^2y}{x^4+y^2}$ 各方向导数存在却不连续）。
+$f=\frac{xy(x^2-y^2)}{x^2+y^2}$：\重点{f_{xy}(0,0)=-1\ne f_{yx}(0,0)=1}。Schwarz 定理：$f_{xy}$、$f_{yx}$ 在该点连续时才相等。
+\end{结论}
+
+\begin{结论}{条件极值的二阶判别：加边 Hessian}
+$\min f(x)$ s.t. $g_j(x)=0$（$m$ 个），$L=f-\sum\lambda_jg_j$。在驻点，只看 $\nabla^2_xL$ 在切空间 $T=\{h:\nabla g_j\cdot h=0\}$ 上的符号：
+\[
+\重点{h^{\mathsf T}\nabla_x^2L\,h>0\ \ \forall h\in T\setminus\{0\}}\Rightarrow\text{严格局部极小}.
+\]
+等价判法：加边矩阵 $\begin{pmatrix}0&J\\J^{\mathsf T}&\nabla^2L\end{pmatrix}$（$J$ 为约束 Jacobi）的后 $n-m$ 个顺序主子式符号都为 $(-1)^m$。\注意 不能只看 $\nabla^2f$。
+\end{结论}
+
+\begin{结论}{Lagrange 乘子 $=$ 最优值对约束的敏感度}
+$V(c)=\max\{f(x):g(x)=c\}$，正则条件下 \重点{V'(c)=\lambda}。
+例：$\max x^{\mathsf T}Ax$ 于单位球，$\lambda=\lambda_{\max}$；$\max x^{\mathsf T}Ax$ 于 $x^{\mathsf T}Bx=1$（$B\succ0$）给广义特征值 $\det(A-\lambda B)=0$ 的最大根。经济学中即影子价格。
+\end{结论}
+
+\begin{结论}{常用坐标的 Jacobi 行列式与 $n$ 维球坐标}
+柱 $r$；球 $r^2\sin\theta$；椭圆 $(x,y)=(ar\cos\theta,br\sin\theta)$：$abr$。$\mathbb R^n$ 中径向函数：
+\[
+\重点{\int_{\mathbb R^n}f(|x|)\dd x=\omega_{n-1}\int_0^\infty f(r)r^{n-1}\dd r},\qquad \omega_{n-1}=|S^{n-1}|=\frac{2\pi^{n/2}}{\Gamma(n/2)}.
+\]
+线性变换 $x=Ay$：$\dd x=|\det A|\dd y$，故椭球 $\{x^{\mathsf T}Mx\le1\}$ 体积 $=\frac{V_n}{\sqrt{\det M}}$（$V_n$ 为单位球体积），三维即 $\frac43\pi abc$。
+\end{结论}
+
+\begin{结论}{Gauss 定理的三种变形}
+\[
+\int_V\nabla\cdot\mathbf F\dd V=\oint\mathbf F\cdot\dd\mathbf S,\qquad \重点{\int_V\nabla f\dd V=\oint f\dd\mathbf S},\qquad \int_V\nabla\times\mathbf F\dd V=\oint\dd\mathbf S\times\mathbf F .
+\]
+Stokes 的对应形式：$\int_S\dd\mathbf S\times\nabla f=\oint_{\partial S}f\dd\mathbf l$。闭曲面 $\oint\dd\mathbf S=0$（取 $f=1$）；$\oint\mathbf r\,\dd S$ 型可由第二式化体积分。
+\end{结论}
+
+\begin{结论}{Green 公式算面积与 Green 恒等式}
+\[
+\重点{A=\frac12\oint(x\dd y-y\dd x)}=\frac12\int_0^{2\pi}r^2\dd\theta .
+\]
+Green 第二恒等式：$\int_V(u\nabla^2v-v\nabla^2u)\dd V=\oint(u\partial_nv-v\partial_nu)\dd S$，是构造 Green 函数、证明 Laplace 算子自伴的出发点。第一恒等式取 $u=v$ 给 $\int|\nabla u|^2=\oint u\partial_nu-\int u\nabla^2u$（能量法唯一性）。
+\end{结论}
+
+\begin{结论}{矢量分析恒等式（常用六条）}
+\[
+\nabla\times(\nabla\times\mathbf A)=\nabla(\nabla\cdot\mathbf A)-\nabla^2\mathbf A,\qquad \nabla\cdot(\mathbf A\times\mathbf B)=\mathbf B\cdot(\nabla\times\mathbf A)-\mathbf A\cdot(\nabla\times\mathbf B),
+\]
+\[
+\nabla\times(\mathbf A\times\mathbf B)=\mathbf A(\nabla\cdot\mathbf B)-\mathbf B(\nabla\cdot\mathbf A)+(\mathbf B\cdot\nabla)\mathbf A-(\mathbf A\cdot\nabla)\mathbf B,
+\]
+\[
+\nabla(\mathbf A\cdot\mathbf B)=(\mathbf A\cdot\nabla)\mathbf B+(\mathbf B\cdot\nabla)\mathbf A+\mathbf A\times(\nabla\times\mathbf B)+\mathbf B\times(\nabla\times\mathbf A),
+\]
+\重点{(\mathbf v\cdot\nabla)\mathbf v=\nabla\tfrac{v^2}2-\mathbf v\times(\nabla\times\mathbf v)}，$\nabla\cdot(f\mathbf A)=f\nabla\cdot\mathbf A+\mathbf A\cdot\nabla f$。用 $\varepsilon_{ijk}\varepsilon_{ilm}=\delta_{jl}\delta_{km}-\delta_{jm}\delta_{kl}$ 一次推出。
+\end{结论}
+
+\begin{结论}{Helmholtz 分解}
+$\mathbf F$ 光滑、在无穷远衰减足够快：$\mathbf F=-\nabla\phi+\nabla\times\mathbf A$，
+\[
+\重点{\phi(\mathbf r)=\frac1{4\pi}\int\frac{\nabla'\cdot\mathbf F}{|\mathbf r-\mathbf r'|}\dd^3r'},\qquad \mathbf A(\mathbf r)=\frac1{4\pi}\int\frac{\nabla'\times\mathbf F}{|\mathbf r-\mathbf r'|}\dd^3r'.
+\]
+即场由散度与旋度（加边界条件）唯一确定。Fourier 空间：纵向分量 $\hat{\mathbf k}(\hat{\mathbf k}\cdot\tilde{\mathbf F})$，横向分量为其余。
+\end{结论}
+
+\begin{结论}{余面积公式与“体积对水平的导数”}
+$f$ 光滑、$\nabla f\ne0$：
+\[
+\重点{\int_{\mathbb R^n}g\,|\nabla f|\dd x=\int_{-\infty}^\infty\Bigl(\int_{\{f=t\}}g\dd S\Bigr)\dd t},\qquad \frac{\dd}{\dd t}\vol\{f\le t\}=\int_{\{f=t\}}\frac{\dd S}{|\nabla f|}.
+\]
+态密度 $g(E)=\int_{E(\mathbf k)=E}\frac{\dd S}{(2\pi)^3|\nabla_{\mathbf k}E|}$ 即后一式；$|\nabla E|=0$ 处出现 van Hove 奇点。
+\end{结论}
+
+\begin{结论}{Fubini 失效的标准反例}
+\[
+\int_0^1\!\!\int_0^1\frac{x^2-y^2}{(x^2+y^2)^2}\dd y\,\dd x=\frac\pi4,\qquad \int_0^1\!\!\int_0^1\frac{x^2-y^2}{(x^2+y^2)^2}\dd x\,\dd y=-\frac\pi4 .
+\]
+原因：$\iint|f|=\infty$。规则：\重点{\text{非负（Tonelli）或绝对可积（Fubini）才能交换}}；级数同理。
+\end{结论}
+
+\begin{结论}{多维 $\delta$ 函数的复合}
+\[
+\delta(g(x))=\sum_{g(x_i)=0}\frac{\delta(x-x_i)}{|g'(x_i)|},\qquad \重点{\int_{\mathbb R^n}f(x)\delta(g(x))\dd^nx=\int_{\{g=0\}}\frac{f}{|\nabla g|}\dd S}.
+\]
+例：$\int\delta(E-\frac{p^2}{2m})\dd^3p=4\pi m\sqrt{2mE}$；$\int\delta(x^2-a^2)f=\frac{f(a)+f(-a)}{2|a|}$。
+\end{结论}
+
+\begin{结论}{Reynolds 输运定理}
+区域 $V(t)$ 以速度场 $\mathbf v$ 运动：
+\[
+\重点{\frac{\dd}{\dd t}\int_{V(t)}f\dd V=\int_{V(t)}\partial_tf\dd V+\oint_{\partial V(t)}f\,\mathbf v\cdot\dd\mathbf S}=\int_{V(t)}\Bigl(\frac{Df}{Dt}+f\nabla\cdot\mathbf v\Bigr)\dd V .
+\]
+一维即 Leibniz 公式；$f=1$ 给 $\frac{\dd V}{\dd t}=\int\nabla\cdot\mathbf v$（不可压 $\Leftrightarrow$ 体积守恒）。
+\end{结论}
+
+\begin{结论}{球面上的矩：$\langle x_ix_j\rangle$ 与 $\langle x_ix_jx_kx_l\rangle$}
+单位球面 $S^{n-1}$ 上均匀平均：
+\[
+\重点{\langle x_ix_j\rangle=\frac{\delta_{ij}}{n}},\qquad \langle x_ix_jx_kx_l\rangle=\frac{\delta_{ij}\delta_{kl}+\delta_{ik}\delta_{jl}+\delta_{il}\delta_{jk}}{n(n+2)},\qquad \text{奇数阶为 }0 .
+\]
+三维：$\langle\cos^2\theta\rangle=\frac13$，$\langle\cos^4\theta\rangle=\frac15$。求法：由对称性写出张量形式，再缩并定常数。
+\end{结论}
+
+\begin{结论}{球壳平均：$1/|\mathbf r-\mathbf r'|$}
+\[
+\重点{\frac{1}{4\pi R^2}\oint_{|\mathbf r'|=R}\frac{\dd S'}{|\mathbf r-\mathbf r'|}=\frac{1}{\max(r,R)}}.
+\]
+即牛顿球壳定理：壳外如质量集中于中心，壳内为常数。更一般地 $\frac1{|\mathbf r-\mathbf r'|}=\sum_l\frac{r_<^l}{r_>^{l+1}}P_l(\cos\gamma)$，球面平均只留 $l=0$ 项。
+\end{结论}
+
+\begin{结论}{偏导数的循环关系与约束下求导}
+$F(x,y,z)=0$：
+\[
+\重点{\Bigl(\frac{\partial x}{\partial y}\Bigr)_z\Bigl(\frac{\partial y}{\partial z}\Bigr)_x\Bigl(\frac{\partial z}{\partial x}\Bigr)_y=-1},\qquad \Bigl(\frac{\partial x}{\partial y}\Bigr)_z=-\frac{F_y}{F_x}.
+\]
+“换固定变量”：$\bigl(\frac{\partial f}{\partial x}\bigr)_z=\bigl(\frac{\partial f}{\partial x}\bigr)_y+\bigl(\frac{\partial f}{\partial y}\bigr)_x\bigl(\frac{\partial y}{\partial x}\bigr)_z$。热力学中 $C_p-C_V$ 等全靠这两条。
+\end{结论}
+
+\begin{结论}{由无旋场重建势函数}
+$\mathbf F$ 在星形区域上 $\nabla\times\mathbf F=0$（一般需单连通）：
+\[
+\重点{\phi(\mathbf x)=\int_0^1\mathbf F(t\mathbf x)\cdot\mathbf x\,\dd t},\qquad \mathbf F=\nabla\phi .
+\]
+无散场的矢势同样有显式式：$\mathbf A(\mathbf x)=\int_0^1\mathbf B(t\mathbf x)\times\mathbf x\,t\,\dd t$（$\nabla\cdot\mathbf B=0$）。均匀场代入得 $\mathbf A=\frac12\mathbf B\times\mathbf r$。
+\end{结论}
+
+\begin{结论}{曲面面积与 Pappus 定理}
+图像 $z=f(x,y)$：$\dd S=\sqrt{1+f_x^2+f_y^2}\,\dd x\dd y$；参数面 $\dd S=|\mathbf r_u\times\mathbf r_v|\dd u\dd v=\sqrt{EG-F^2}\dd u\dd v$。
+平面区域/曲线绕不相交的轴旋转：\重点{V=2\pi\bar\rho\,A},\ \ $S=2\pi\bar\rho\,L$（$\bar\rho$ 为形心到轴距离）。环面 $V=2\pi^2Rr^2$，$S=4\pi^2Rr$；反过来由 $V$ 求形心：半圆盘形心距直径 $\frac{4r}{3\pi}$。
+\end{结论}
+
+\begin{结论}{常见形心}
+半圆弧 $\frac{2R}{\pi}$；半圆盘 $\frac{4R}{3\pi}$；半球面 $\frac R2$；实心半球 $\frac{3R}8$；实心圆锥（离底面）$\frac h4$，圆锥侧面 $\frac h3$；三角形 $\frac h3$；四分之一圆盘 $\bigl(\frac{4R}{3\pi},\frac{4R}{3\pi}\bigr)$。
+半球面的形心恰在半高：\重点{\text{球带面积只与高度有关}}（Archimedes），$dS=2\pi R\,\dd z$。
+\end{结论}
+
+\begin{结论}{多维振荡 Gauss 积分（Fresnel 推广）}
+$A$ 实对称非奇异，$\sigma=\#\text{正特征值}-\#\text{负特征值}$：
+\[
+\重点{\int_{\mathbb R^n}\ee^{\frac\ii2x^{\mathsf T}Ax}\dd^nx=\frac{(2\pi)^{n/2}\ee^{\ii\pi\sigma/4}}{\sqrt{|\det A|}}}.
+\]
+是多维驻相法的基本积分；加线性项 $\ee^{\ii b^{\mathsf T}x}$ 后乘 $\ee^{-\frac\ii2b^{\mathsf T}A^{-1}b}$。
+\end{结论}
+
+\begin{结论}{正交曲线坐标中的散度、旋度与 Laplacian}
+标度因子 $h_i=|\partial\mathbf r/\partial q_i|$：
+\[
+\nabla f=\sum\frac{1}{h_i}\partial_if\,\hat e_i,\quad \重点{\nabla\cdot\mathbf F=\frac1{h_1h_2h_3}\sum_i\partial_i\Bigl(\frac{h_1h_2h_3}{h_i}F_i\Bigr)},\quad \nabla^2f=\frac1{h_1h_2h_3}\sum_i\partial_i\Bigl(\frac{h_1h_2h_3}{h_i^2}\partial_if\Bigr).
+\]
+球坐标 $h=(1,r,r\sin\theta)$：$\nabla^2=\frac1{r^2}\partial_r(r^2\partial_r)+\frac1{r^2\sin\theta}\partial_\theta(\sin\theta\,\partial_\theta)+\frac1{r^2\sin^2\theta}\partial_\varphi^2$。径向部分也写作 $\frac1r\partial_r^2(r\,\cdot)$。
+\end{结论}
+
+\begin{结论}{二元函数极值：判别式与退化情形}
+驻点处 $D=f_{xx}f_{yy}-f_{xy}^2$：$D>0,\ f_{xx}>0$ 极小；$D>0,\ f_{xx}<0$ 极大；$D<0$ 鞍点；$D=0$ 须更高阶。
+退化例：$x^2+y^4$ 极小、$x^2-y^4$ 鞍点、\重点{(y-x^2)(y-2x^2)}：沿每条过原点直线都是极小，但原点不是极小（在两抛物线间为负）。
+\end{结论}
+
+\begin{结论}{多元 Taylor 与 Hessian 的坐标变换}
+\[
+f(\mathbf x+\mathbf h)=f+\nabla f\cdot\mathbf h+\tfrac12\mathbf h^{\mathsf T}H\mathbf h+O(|\mathbf h|^3).
+\]
+线性换元 $\mathbf x=P\mathbf y$：$\nabla_y=P^{\mathsf T}\nabla_x$，\重点{H_y=P^{\mathsf T}H_xP}（合同，惯性不变）。非线性换元下 Hessian 只在驻点处按合同变换（否则多出 $\nabla f\cdot\partial^2\mathbf x$ 项）。
+\end{结论}
+
+\begin{结论}{立体角与通量}
+$\oint_S\frac{\hat{\mathbf r}\cdot\dd\mathbf S}{r^2}=4\pi$（$S$ 包围原点）或 $0$（不包围）。顶角 $2\alpha$ 的圆锥立体角 $\Omega=2\pi(1-\cos\alpha)$；
+矩形 $a\times b$ 在其中心法线距离 $d$ 处张的立体角 \重点{\Omega=4\arctan\frac{ab}{2d\sqrt{4d^2+a^2+b^2}}}。
+\end{结论}
+
+\begin{结论}{线积分与路径无关的判据}
+单连通区域上：$\mathbf F=\nabla\phi\iff\nabla\times\mathbf F=0\iff\oint\mathbf F\cdot\dd\mathbf l=0$（所有闭路）。
+非单连通时只能推出“同伦的路径积分相等”：$\mathbf F=\frac{(-y,x)}{x^2+y^2}$ 无旋，但绕原点一圈积分 $2\pi$。平面上 $P\dd x+Q\dd y$ 恰当的判据 \重点{P_y=Q_x} 同样只在单连通区域上充分。
+\end{结论}
+
+\begin{结论}{二重积分换序与“画出区域”}
+$\int_0^1\!\int_x^1\ee^{-y^2}\dd y\dd x=\int_0^1\!\int_0^y\ee^{-y^2}\dd x\dd y=\int_0^1y\ee^{-y^2}\dd y=\frac{1-\ee^{-1}}{2}$。
+累次积分的 Cauchy 公式：\重点{\int_a^x\!\int_a^{x_1}\!\cdots\int_a^{x_{n-1}}f(t)\dd t\cdots=\frac1{(n-1)!}\int_a^x(x-t)^{n-1}f(t)\dd t}，由此定义分数阶积分 $I^\alpha f=\frac1{\Gamma(\alpha)}\int_a^x(x-t)^{\alpha-1}f$。
+\end{结论}
+
+\参考{Spivak, \emph{Calculus on Manifolds}；Marsden--Tromba, \emph{Vector Calculus}；Griffiths《电动力学》第 1 章；Arfken--Weber 第 1--2 章；MIT 18.02/18.022。}

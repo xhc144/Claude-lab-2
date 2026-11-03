@@ -1,0 +1,100 @@
+\section{综合应用}
+
+\subsection{核心积木}
+
+\begin{结论}{Einstein 关系：扩散 $=$ 涨落 $\times$ 耗散}
+迁移率 $\mu_m=v/F$：\重点{D=\mu_mkT}；球形粒子 Stokes 阻力给 $D=\dfrac{kT}{6\pi\eta a}$（Stokes--Einstein）。
+每维 $\langle x^2\rangle=2Dt$。由 Brown 运动的 $\langle x^2\rangle$、$\eta$、$a$、$T$ 测出 $k$，再由 $R=N_Ak$ 得 Avogadro 数（Perrin）。离子：$D=\frac{\mu_ekT}{q}$（$\mu_e$ 为电迁移率）。
+\end{结论}
+
+\begin{结论}{Green--Kubo：扩散系数是速度相关的积分}
+Langevin $m\dot v=-m\gamma v+\xi(t)$，$\langle\xi(t)\xi(t')\rangle=2m\gamma kT\,\delta(t-t')$：
+\[
+\langle v(0)v(t)\rangle=\frac{kT}{m}\ee^{-\gamma|t|},\qquad \重点{D=\int_0^\infty\langle v(0)v(t)\rangle\,\dd t=\frac{kT}{m\gamma}}.
+\]
+噪声强度由平衡时 $\frac12m\langle v^2\rangle=\frac12kT$ 唯一确定，这是涨落--耗散定理最简单的实例。
+\end{结论}
+
+\begin{结论}{光镊标定：均分定理与 Lorentz 谱}
+过阻尼 $\gamma\dot x=-\kappa x+\xi$。两种独立标定刚度 $\kappa$：
+\[
+\重点{\kappa=\frac{kT}{\langle x^2\rangle}},\qquad S_x(f)=\frac{kT}{\pi^2\gamma\,(f^2+f_c^2)}\ (\text{单边}),\quad \重点{f_c=\frac{\kappa}{2\pi\gamma}}.
+\]
+谱对 $f$ 积分恰好回到 $kT/\kappa$。热噪声极限同样适用于 AFM 悬臂、扭秤：可测力的下限 $\sim\sqrt{4kT\gamma\,\Delta f}$。
+\end{结论}
+
+\begin{结论}{三个 Green 函数与 Born 近似}
+\[
+\nabla^2\frac{1}{4\pi r}=-\delta^3,\qquad (\nabla^2+k^2)\frac{\ee^{\ii kr}}{4\pi r}=-\delta^3,\qquad (\nabla^2-\mu^2)\frac{\ee^{-\mu r}}{4\pi r}=-\delta^3 .
+\]
+一阶 Born：\重点{f(\theta)=-\frac{m}{2\pi\hbar^2}\int\ee^{-\ii\mathbf q\cdot\mathbf r}V(\mathbf r)\,\dd^3r}，$q=2k\sin\frac\theta2$。Yukawa 势 $V=\beta\frac{\ee^{-\mu r}}{r}$ 给 $f=-\frac{2m\beta}{\hbar^2(q^2+\mu^2)}$；$\mu\to0$ 恰好重现 Rutherford 截面。Debye 屏蔽长度 $\lambda_D=\sqrt{\varepsilon_0kT/(ne^2)}$ 就是这里的 $1/\mu$。
+\end{结论}
+
+\begin{结论}{Kramers--Kronig：因果性约束实部与虚部}
+$\chi(t)=0$（$t<0$）且 $\chi(\omega)$ 在上半平面解析、$\to0$：
+\[
+\重点{\chi'(\omega)=\frac2\pi\,\mathrm P\!\int_0^\infty\frac{\omega'\chi''(\omega')}{\omega'^2-\omega^2}\dd\omega'}.
+\]
+推论：$\chi'(0)=\frac2\pi\int_0^\infty\frac{\chi''(\omega')}{\omega'}\dd\omega'$——静态极化率由全部吸收决定；透明区的折射率色散来自别处的吸收线。
+\end{结论}
+
+\begin{结论}{两能级：避免交叉、Rabi 与 Landau--Zener}
+$H=\begin{pmatrix}\Delta/2&V\\V&-\Delta/2\end{pmatrix}$，本征值 $\pm\sqrt{\Delta^2/4+V^2}$，交叉点能隙 $2|V|$。从态 1 出发：
+\[
+P_{1\to2}(t)=\frac{V^2}{V^2+\Delta^2/4}\sin^2\Bigl(\frac{\sqrt{V^2+\Delta^2/4}}{\hbar}t\Bigr),\qquad \重点{P_{\text{非绝热}}=\exp\Bigl(-\frac{2\pi V^2}{\hbar\,|\dot\Delta|}\Bigr)}.
+\]
+同一矩阵描述耦合摆的拍、NMR 的旋转坐标系、中微子振荡（$\Delta\propto\Delta m^2/E$）。
+\end{结论}
+
+\begin{结论}{Drude 模型与 Wiedemann--Franz}
+\[
+\sigma_0=\frac{ne^2\tau}{m},\qquad \sigma(\omega)=\frac{\sigma_0}{1-\ii\omega\tau},\qquad \重点{\frac{\kappa}{\sigma T}=\frac{\pi^2}{3}\Bigl(\frac ke\Bigr)^2=2.44\times10^{-8}\ \mathrm{W}\,\Omega\,\mathrm{K^{-2}}}.
+\]
+Lorenz 数用 Sommerfeld（Fermi--Dirac）比热得到；经典 Drude 的数值恰好接近，是两处因子 100 的误差互相抵消。$\omega\tau\gg1$ 时回到等离子体响应 $\varepsilon=1-\omega_p^2/\omega^2$。
+\end{结论}
+
+\begin{结论}{紧束缚能带：有效质量与 Bloch 振荡}
+一维最近邻跃迁 $t$，晶格常数 $a$：
+\[
+\重点{E(k)=\varepsilon_0-2t\cos ka},\qquad v_g=\frac{2ta}{\hbar}\sin ka,\qquad m^*=\frac{\hbar^2}{2ta^2}\ (\text{带底}).
+\]
+带宽 $4t$；带顶 $m^*<0$（空穴）。恒定电场下 $\hbar\dot k=-eE$，无散射时做 Bloch 振荡，周期 $T_B=\frac{h}{eEa}$。
+\end{结论}
+
+\begin{结论}{Born--Oppenheimer 能标比}
+电子 : 振动 : 转动 $\approx$ \重点{1:\sqrt{m_e/M}:m_e/M}。电子能标 $\sim\frac{\hbar^2}{m_ea_0^2}\sim$ 几 eV，振动 $\sim0.1\,$eV，转动 $\sim10^{-3}$--$10^{-4}\,$eV。
+转动谱 $E_J=\frac{\hbar^2}{2I}J(J+1)$，相邻吸收线间距 $2B$（$B=\hbar^2/2I$）；室温双原子气体振动冻结、转动激发，$C_V\approx\frac52R$。
+\end{结论}
+
+\begin{结论}{最大熵 $=$ Lagrange 乘子}
+在 $\sum p_i=1$、$\sum p_iE_i=U$ 约束下极大化 $-\sum p_i\ln p_i$：
+\[
+\重点{p_i=\frac{\ee^{-\beta E_i}}{Z}},\qquad \beta\ \text{即约束 }U\text{ 的乘子}.
+\]
+连续变量只约束均值与方差得 Gauss 分布；只约束正值均值得指数分布。同一推导给出统计力学正则系综和统计学中的指数族。
+\end{结论}
+
+\begin{结论}{Metropolis 与 Monte Carlo 误差}
+接受率 \重点{\min\bigl(1,\ee^{-\beta\Delta E}\bigr)}（对称提议）满足细致平衡，故平稳分布为 Boltzmann 分布。
+Monte Carlo 积分误差 $\sigma/\sqrt N$，与维数无关；Markov 链样本相关，有效样本数 $N/(2\tau_{\mathrm{int}})$，$\tau_{\mathrm{int}}=\frac12+\sum_{t\ge1}\rho(t)$。重要抽样把方差换成 $\Var_q(f p/q)$，$q\propto|fp|$ 时最小。
+\end{结论}
+
+\begin{结论}{辛积分器：为何长时间模拟用 Verlet}
+谐振子 $\omega$，步长 $h$。前向 Euler 每步把能量乘 \重点{1+\omega^2h^2}，单调发散；
+蛙跳/Verlet $x_{n+1}=2x_n-x_{n-1}-h^2\omega^2x_n$ 保辛，稳定条件 \重点{\omega h<2}，能量误差有界振荡而不漂移（守恒一个修正 Hamilton 量）。分子动力学与天体力学长时间积分的标准选择。
+\end{结论}
+
+\begin{结论}{时间--带宽积}
+Gauss 脉冲（半高全宽）\重点{\Delta t\,\Delta\nu=0.441}；sech$^2$ 脉冲 $0.315$。乘积大于此值说明有啁啾。
+同一 Fourier 关系：$\Delta x\,\Delta k\ge\frac12$（标准差），谱线自然宽度 $\Delta\nu=\frac{1}{2\pi\tau}$，测量时间 $T$ 的频率分辨率 $\sim1/T$。
+\end{结论}
+
+\begin{结论}{理想高分子链：熵弹簧}
+$N$ 段、每段 $b$ 的自由连接链：$\langle R^2\rangle=Nb^2$，端距分布近似 Gauss，自由能 $F=\frac{3kTR^2}{2Nb^2}+\text{常数}$：
+\[
+\重点{f=\frac{3kT}{Nb^2}R}.
+\]
+弹性系数 $\propto T$：橡皮筋受热收缩（熵弹性）。自回避链 $R\sim N^{\nu}$，$\nu\approx0.588$（三维），Flory 估计 $\nu=\frac{3}{d+2}$。
+\end{结论}
+
+\参考{Reif, \emph{Fundamentals of Statistical and Thermal Physics}；Ashcroft--Mermin, \emph{Solid State Physics}；Sakurai, \emph{Modern Quantum Mechanics}；Newman--Barkema, \emph{Monte Carlo Methods in Statistical Physics}；Hairer--Lubich--Wanner, \emph{Geometric Numerical Integration}；Phillips et al., \emph{Physical Biology of the Cell}。}

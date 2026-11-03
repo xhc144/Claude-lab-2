@@ -1,0 +1,172 @@
+\subsection{Fourier 分析、测度与泛函}
+
+\begin{结论}{Fourier 变换对照表（$\omega$ 约定）}
+$\hat f(\omega)=\int f(x)\ee^{-\ii\omega x}\dd x$，$f=\frac1{2\pi}\int\hat f\ee^{\ii\omega x}\dd\omega$：
+\[
+\ee^{-ax^2}\leftrightarrow\sqrt{\tfrac\pi a}\ee^{-\omega^2/4a},\quad \ee^{-a|x|}\leftrightarrow\frac{2a}{a^2+\omega^2},\quad \frac1{x^2+a^2}\leftrightarrow\frac\pi a\ee^{-a|\omega|},\quad \mathbf 1_{|x|<L}\leftrightarrow\frac{2\sin\omega L}{\omega}.
+\]
+\重点{\int|f|^2\dd x=\frac1{2\pi}\int|\hat f|^2\dd\omega}；$\widehat{f*g}=\hat f\hat g$，$\widehat{fg}=\frac1{2\pi}\hat f*\hat g$；$\widehat{f'}=\ii\omega\hat f$，$\widehat{f(x-a)}=\ee^{-\ii\omega a}\hat f$。换约定时只改 $2\pi$ 的位置，先查表头。
+\end{结论}
+
+\begin{结论}{不确定原理}
+$\|f\|_2=1$，$\sigma_x^2=\int(x-\bar x)^2|f|^2$，$\sigma_\omega^2=\frac1{2\pi}\int(\omega-\bar\omega)^2|\hat f|^2$：
+\[
+\重点{\sigma_x\sigma_\omega\ge\frac12},\quad\text{等号仅当 }f\text{ 为（调制、平移的）Gauss 函数}.
+\]
+证：$\int|xf|^2\int|f'|^2\ge\frac14\bigl(\int(x|f|^2)'\bigr)^2$ 的分部积分 $+$ Cauchy--Schwarz。频率用 Hz（$\nu=\omega/2\pi$）时下界为 $\frac1{4\pi}$。
+\end{结论}
+
+\begin{结论}{光滑性 $\leftrightarrow$ 衰减}
+$f\in L^1$ $\Rightarrow$ $\hat f$ 连续且 $\to0$（Riemann--Lebesgue）。$f,f',\dots,f^{(k)}\in L^1$ $\Rightarrow$ \重点{\hat f(\omega)=o(|\omega|^{-k})}；反之 $\int|\omega|^k|\hat f|<\infty\Rightarrow f\in C^k$。
+跳跃间断 $\to$ $1/\omega$ 衰减；导数跳跃 $\to$ $1/\omega^2$；$\hat f$ 紧支 $\Rightarrow$ $f$ 延拓为整函数（Paley--Wiener），故\textbf{非零函数不能同时时间和频率都紧支}。Fourier 级数同理：周期 $C^k$ 函数系数 $o(n^{-k})$。
+\end{结论}
+
+\begin{结论}{Dirichlet 核与 Fejér 核}
+\[
+D_n(x)=\sum_{|k|\le n}\ee^{\ii kx}=\frac{\sin(n+\frac12)x}{\sin\frac x2},\qquad F_n(x)=\frac1{n+1}\sum_{k=0}^nD_k=\frac1{n+1}\Bigl(\frac{\sin\frac{(n+1)x}2}{\sin\frac x2}\Bigr)^2\ge0 .
+\]
+Lebesgue 常数 $\frac1{2\pi}\int|D_n|=\frac4{\pi^2}\ln n+O(1)\to\infty$，所以存在连续函数 Fourier 级数在某点发散；而 \重点{F_n\ge0}，Cesàro 平均对连续周期函数一致收敛（Fejér）。
+\end{结论}
+
+\begin{结论}{采样定理与 sinc 插值}
+$\hat f(\omega)=0$ 对 $|\omega|>\Omega$，取样间隔 \重点{T\le\pi/\Omega}（采样率 $\ge2\times$ 最高频率）：
+\[
+f(t)=\sum_{n\in\mathbb Z}f(nT)\operatorname{sinc}\Bigl(\frac{t-nT}{T}\Bigr),\qquad \operatorname{sinc}u=\frac{\sin\pi u}{\pi u}.
+\]
+采样不足时频率 $\omega$ 混叠到 $\omega-2\pi k/T$。证明：采样 $=$ 乘梳状函数 $\Rightarrow$ 频谱周期延拓，再用理想低通取回。
+\end{结论}
+
+\begin{结论}{三大收敛定理与“质量逃逸”反例}
+单调收敛（$0\le f_n\uparrow f$）、Fatou（$\int\liminf f_n\le\liminf\int f_n$，$f_n\ge0$）、控制收敛（$|f_n|\le g\in L^1$，$f_n\to f$ a.e.$\Rightarrow\int f_n\to\int f$）。
+无控制函数时可失败：$n\mathbf 1_{(0,1/n)}$（质量集中）、$\mathbf 1_{[n,n+1]}$（质量跑到无穷）、$\frac1n\mathbf 1_{[0,n]}$（质量摊平），三者都 $\to0$ 而积分 $=1$。\重点{\text{检查是否存在可积的 }\sup_n|f_n|}。
+\end{结论}
+
+\begin{结论}{收敛方式的关系}
+有限测度：a.e. $\Rightarrow$ 依测度；$L^p\Rightarrow$ 依测度；依测度 $\Rightarrow$ 子列 a.e.（Riesz）。
+“打字机”序列（$[0,1]$ 上依次扫过长度 $2^{-k}$ 区间的示性函数）依 $L^p$ 收敛到 $0$ 但处处不收敛；$n\mathbf 1_{(0,1/n)}$ a.e. 收敛但不依 $L^1$。Egorov：有限测度上 a.e. 收敛 $\Rightarrow$ 去掉任意小测度集后一致收敛。
+\重点{L^1\text{ 收敛}\iff\text{依测度}+\text{一致可积}}（Vitali，有限测度）。
+\end{结论}
+
+\begin{结论}{绝对连续、Lebesgue 微分与 Cantor 函数}
+$f\in L^1$，$F(x)=\int_a^xf$ $\Rightarrow$ $F'=f$ a.e.；$F$ 满足 \重点{F(b)-F(a)=\int_a^bF'} 当且仅当 $F$ 绝对连续。
+Cantor 集：测度 $0$、不可数、完全、无处稠密；Cantor 函数连续单增、导数 a.e. 为 $0$。“胖 Cantor 集”（每步去掉比例递减的中间段）无处稠密而测度为正，其示性函数不 Riemann 可积。
+\end{结论}
+
+\begin{结论}{Hilbert 空间：投影、Riesz 表示、Parseval}
+闭凸集 $K$ 中离 $x$ 最近的点唯一，闭子空间 $M$ 上 \重点{x-Px\perp M}。Riesz：每个有界线性泛函为 $\langle\cdot,y\rangle$，$\|\ell\|=\|y\|$。
+正交规范系 $\{e_n\}$：Bessel $\sum|\langle x,e_n\rangle|^2\le\|x\|^2$；完备 $\iff$ Parseval 等号 $\iff$ 正交补为 $\{0\}$。最佳逼近系数就是 Fourier 系数，与后续项无关。
+\end{结论}
+
+\begin{结论}{首一多项式的最小范数：$L^2$ 选 Legendre，$L^\infty$ 选 Chebyshev}
+在 $[-1,1]$ 上首一 $n$ 次多项式中：
+\[
+\min\|p\|_{L^2}^2=\frac{2}{2n+1}\cdot\frac{4^n(n!)^4}{((2n)!)^2}\ (\text{由首一 Legendre 取到}),\qquad \重点{\min\|p\|_\infty=2^{1-n}}\ (2^{1-n}T_n).
+\]
+$n=2$：$x^2-\frac13$ 的 $L^2$ 范数平方 $\frac8{45}$；$x^2-\frac12$ 的 $\sup$ 范数 $\frac12$。这正是插值节点、Gauss 求积选零点的来源。
+\end{结论}
+
+\begin{结论}{Mercer 定理：$\min(x,y)$ 的谱与 Brown 运动展开}
+连续对称正定核 $K$ 在 $[0,1]^2$：$K(x,y)=\sum\lambda_n\varphi_n(x)\varphi_n(y)$ 一致收敛，\重点{\tr K=\int_0^1K(x,x)\dd x=\sum\lambda_n}。
+$K=\min(x,y)$：$\lambda_n=\frac1{(n-\frac12)^2\pi^2}$，$\varphi_n=\sqrt2\sin(n-\tfrac12)\pi x$（解 $-\varphi''=\lambda^{-1}\varphi$，$\varphi(0)=\varphi'(1)=0$）。迹 $\frac12=\frac4{\pi^2}\sum\frac1{(2n-1)^2}$。Brown 运动 $W_t=\sum\sqrt{\lambda_n}\xi_n\varphi_n(t)$（Karhunen--Loève），$\xi_n$ 独立标准正态。
+\end{结论}
+
+\begin{结论}{Baire 范畴的三个推论}
+完备度量空间不是可数个无处稠密集之并。推论：
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 一致有界原理：Banach 空间上一族有界算子逐点有界 $\Rightarrow$ \重点{\sup\|T_\alpha\|<\infty}。由 Lebesgue 常数无界，存在 Fourier 级数在 $0$ 发散的连续函数。
+\item 开映射 / 逆算子定理：Banach 空间间有界线性满射是开映射；双射则逆有界。闭图像定理。
+\item “典型”连续函数处处不可导（在 $C[0,1]$ 中可导点非空的函数集是第一范畴）。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{弱收敛与强收敛}
+$\ell^2$ 中正交规范基 $e_n\rightharpoonup0$ 但 $\|e_n\|=1$。Hilbert 空间中 \重点{x_n\rightharpoonup x\text{ 且 }\|x_n\|\to\|x\|\Rightarrow x_n\to x}；弱收敛序列有界，且 $\|x\|\le\liminf\|x_n\|$。
+有界序列必有弱收敛子列（自反空间 / Banach--Alaoglu）：变分法证明极小元存在的标准第一步。紧算子把弱收敛变成强收敛。
+\end{结论}
+
+\begin{结论}{Bernstein 多项式与 Voronovskaya 渐近}
+$B_nf(x)=\sum_{k=0}^nf\bigl(\frac kn\bigr)\binom nkx^k(1-x)^{n-k}$：$f\in C[0,1]$ 时一致收敛到 $f$（Weierstrass 定理的概率证明：$\E f(\bar X_n)$，$\bar X_n$ 为二项比例），
+\[
+\重点{B_nf(x)-f(x)=\frac{x(1-x)}{2n}f''(x)+o\Bigl(\frac1n\Bigr)}\quad(f\in C^2),
+\]
+只有 $O(1/n)$ 精度，即使 $f$ 很光滑——适合理论，不适合数值逼近。
+\end{结论}
+
+\begin{结论}{Sobolev 嵌入的 Fourier 证明}
+$H^s(\mathbb R^n)$ 范数 $\|f\|_{H^s}^2=\int(1+|\xi|^2)^s|\hat f|^2$。若 \重点{s>\frac n2}，则
+\[
+\|f\|_\infty\le\frac1{(2\pi)^n}\int|\hat f|\le C\Bigl(\int(1+|\xi|^2)^{-s}\Bigr)^{1/2}\|f\|_{H^s}<\infty,
+\]
+所以 $H^s\subset C_0$。临界 $s=\frac n2$ 不成立（二维 $\ln\ln\frac1{|x|}$ 属于 $H^1$ 但无界）。
+\end{结论}
+
+\begin{结论}{分布的几条运算}
+\[
+|x|'=\sgn x,\quad \sgn'=2\delta,\quad x\delta'(x)=-\delta(x),\quad \delta(ax)=\frac{\delta(x)}{|a|},\quad \frac1{x\mp\ii0}=\mathrm{PV}\frac1x\pm\ii\pi\delta(x),
+\]
+Fourier：$1\leftrightarrow2\pi\delta(\omega)$，$\sgn x\leftrightarrow\mathrm{PV}\frac{2}{\ii\omega}$，\重点{H(x)\leftrightarrow\pi\delta(\omega)+\mathrm{PV}\frac{1}{\ii\omega}}，$\sum_n\delta(x-nT)\leftrightarrow\frac{2\pi}T\sum_k\delta(\omega-\frac{2\pi k}T)$。$\nabla^2\frac1{|\mathbf r|}=-4\pi\delta^3(\mathbf r)$。
+\end{结论}
+
+\begin{结论}{Riesz--Thorin 与 Hausdorff--Young}
+线性算子 $T$ 同时 $L^{p_0}\to L^{q_0}$（范数 $M_0$）、$L^{p_1}\to L^{q_1}$（$M_1$），则对 $\frac1p=\frac{1-\theta}{p_0}+\frac\theta{p_1}$，$\frac1q=\frac{1-\theta}{q_0}+\frac\theta{q_1}$：\重点{\|T\|_{p\to q}\le M_0^{1-\theta}M_1^\theta}。
+应用：Fourier 变换 $L^1\to L^\infty$、$L^2\to L^2$ 插值得 Hausdorff--Young：$1\le p\le2$ 时 $\|\hat f\|_{p'}\le C\|f\|_p$（$\ee^{-2\pi\ii x\xi}$ 约定下 $C=1$，最佳常数 Babenko--Beckner）。$p>2$ 时 $\hat f$ 一般不是函数。
+\end{结论}
+
+\begin{结论}{Hardy--Littlewood 极大函数}
+$Mf(x)=\sup_{r>0}\frac1{|B_r|}\int_{B_r(x)}|f|$：
+\[
+\重点{|\{Mf>\lambda\}|\le\frac{3^n}{\lambda}\|f\|_1},\qquad \|Mf\|_p\le C_{n,p}\|f\|_p\ (p>1).
+\]
+弱 $(1,1)$ 由 Vitali 覆盖引理（选不交球、放大 $3$ 倍覆盖）；推出 Lebesgue 微分定理 $\frac1{|B_r|}\int_{B_r(x)}f\to f(x)$ a.e.。$p=1$ 时强型不成立：$Mf\notin L^1$ 除非 $f=0$。
+\end{结论}
+
+\begin{结论}{三维径向函数的 Fourier 变换}
+$f(\mathbf r)=f(r)$：
+\[
+\重点{\tilde f(k)=\frac{4\pi}{k}\int_0^\infty rf(r)\sin kr\,\dd r}.
+\]
+Yukawa：$\frac{\ee^{-\mu r}}r\leftrightarrow\frac{4\pi}{k^2+\mu^2}$（$\mu\to0$ 给 Coulomb 的 $\frac{4\pi}{k^2}$）；$\ee^{-r/a}\leftrightarrow\frac{8\pi a^3}{(1+k^2a^2)^2}$（氢原子形状因子）。二维径向：$\tilde f(k)=2\pi\int_0^\infty rf(r)J_0(kr)\dd r$，圆盘 $\mathbf 1_{r<a}\leftrightarrow\frac{2\pi aJ_1(ka)}{k}$（Airy 斑）。
+\end{结论}
+
+\begin{结论}{紧算子与谱：有限维直觉何时保留}
+紧自伴算子：特征值实、可数、只能聚于 $0$，特征向量构成正交基（谱定理）。Hilbert--Schmidt 积分算子 $\int K(x,y)u(y)\dd y$（$K\in L^2$）是紧的，\重点{\sum\lambda_n^2=\iint|K|^2}。
+非自伴时可无特征值：Volterra 算子 $Vu=\int_0^xu$ 紧、谱 $=\{0\}$，但 $0$ 不是特征值；$\|V^n\|\le\frac1{n!}$，所以 $(I-\lambda V)^{-1}=\sum\lambda^nV^n$ 对一切 $\lambda$ 收敛。
+\end{结论}
+
+\begin{结论}{$L^2$ 正交多项式系的统一形式}
+权 $w$ 于 $(a,b)$，Gram--Schmidt 于 $1,x,x^2,\dots$：
+\[
+\begin{array}{lll}
+\text{Legendre }P_n & [-1,1],\ 1 & \|P_n\|^2=\frac2{2n+1}\\
+\text{Chebyshev }T_n & [-1,1],\ (1-x^2)^{-1/2} & \pi/2\ (n\ge1)\\
+\text{Laguerre }L_n & [0,\infty),\ \ee^{-x} & 1\\
+\text{Hermite }H_n & \mathbb R,\ \ee^{-x^2} & \sqrt\pi\,2^nn!
+\end{array}
+\]
+共同性质：三项递推 \重点{xp_n=a_np_{n+1}+b_np_n+c_np_{n-1}}；$p_n$ 在 $(a,b)$ 内有 $n$ 个单零点并与 $p_{n+1}$ 交错；Rodrigues 公式 $p_n\propto\frac1w\frac{\dd^n}{\dd x^n}(w\sigma^n)$。
+\end{结论}
+
+\begin{结论}{Fourier 级数的 Parseval 与卷积（周期 $2\pi$）}
+$c_n=\frac1{2\pi}\int_{-\pi}^\pi f\ee^{-\ii nx}$：\重点{\frac1{2\pi}\int|f|^2=\sum|c_n|^2}，$(f*g)_n=c_n(f)c_n(g)$（$f*g=\frac1{2\pi}\int f(y)g(x-y)\dd y$）。
+用途：$\sum\frac1{n^4}$ 由 $f=x^2$ 得到；周期卷积方程 $u-\lambda k*u=f$ 逐模求解 $u_n=\frac{f_n}{1-\lambda k_n}$。
+\end{结论}
+
+\begin{结论}{Lebesgue 可积与 Riemann 可积、广义积分}
+有界函数 Riemann 可积 $\iff$ 不连续点集测度为零（Lebesgue 判据）。$\mathbf 1_{\mathbb Q}$ 不 Riemann 可积但 Lebesgue 积分为 $0$。
+广义 Riemann 积分可以条件收敛而不 Lebesgue 可积：\重点{\int_0^\infty\frac{\sin x}{x}\dd x} 收敛，但 $\int_0^\infty\frac{|\sin x|}{x}=\infty$。对这类积分用 DCT 前要先确认绝对可积，否则用 Abel/Dirichlet 型一致收敛论证。
+\end{结论}
+
+\begin{结论}{Radon--Nikodym 与 Lebesgue 分解}
+$\sigma$ 有限测度 $\nu\ll\mu$（$\mu(A)=0\Rightarrow\nu(A)=0$）$\Rightarrow$ 存在 $\frac{\dd\nu}{\dd\mu}\ge0$ 使 $\nu(A)=\int_A\frac{\dd\nu}{\dd\mu}\dd\mu$。一般 $\nu=\nu_{\mathrm{ac}}+\nu_{\mathrm{s}}$。
+实直线上概率测度 $=$ 绝对连续（有密度）$+$ 离散（原子）$+$ 奇异连续（如 Cantor 分布）。\重点{\text{似然比、条件期望、Girsanov 都是 Radon--Nikodym 导数}}。
+\end{结论}
+
+\begin{结论}{Gibbs 现象的常数}
+跳跃 $J$ 处，部分和的最大过冲趋于
+\[
+\重点{\Bigl(\frac1\pi\int_0^\pi\frac{\sin t}{t}\dd t-\frac12\Bigr)J\approx0.0895\,J},
+\]
+即跳跃的约 $9\%$，位置在距跳跃 $\frac{\pi}{n}$ 处，不随 $n$ 消失（只是变窄）。Fejér（Cesàro）平均或 $\sigma$ 因子 $\operatorname{sinc}(k/n)$ 能消除过冲，代价是边缘变宽。
+\end{结论}
+
+\参考{Stein--Shakarchi, \emph{Fourier Analysis}、\emph{Real Analysis}、\emph{Functional Analysis}；Folland, \emph{Real Analysis}；Reed--Simon I；Katznelson, \emph{An Introduction to Harmonic Analysis}；MIT 18.102、18.103。}

@@ -1,0 +1,98 @@
+\subsection{综合方法}
+
+\begin{结论}{Wigner--Eckart 定理：几何部分与动力学部分分离}
+秩 $k$ 的不可约张量算符 $T^k_q$：
+\[
+\重点{\langle j'm'|T^k_q|jm\rangle=\langle jm;kq|j'm'\rangle\,\frac{\langle j'\|T^k\|j\rangle}{\sqrt{2j'+1}}}.
+\]
+选择定则立即得出：$m'=m+q$，$|j-k|\le j'\le j+k$。同一多重态内所有矩阵元之比由 Clebsch--Gordan 系数决定，只需算一个约化矩阵元。投影定理：$\langle\mathbf V\rangle=\frac{\langle\mathbf V\cdot\mathbf J\rangle}{j(j+1)\hbar^2}\langle\mathbf J\rangle$（Landé 因子的来源）。
+\end{结论}
+
+\begin{结论}{阻尼振子的推迟 Green 函数}
+$m(\ddot x+\gamma\dot x+\omega_0^2x)=F(t)$，$\omega_d=\sqrt{\omega_0^2-\gamma^2/4}$：
+\[
+\重点{G(t)=\frac{\theta(t)}{m\omega_d}\ee^{-\gamma t/2}\sin\omega_dt},\qquad x(t)=\int_{-\infty}^{t}G(t-t')F(t')\,\dd t'.
+\]
+$\theta(t)$ 体现因果性，对应频域响应 $\chi(\omega)=\frac{1}{m(\omega_0^2-\omega^2-\ii\gamma\omega)}$ 的极点都在下半平面。短冲量 $J$：$x=JG(t)$。
+\end{结论}
+
+\begin{结论}{分子振动模的计数与红外/Raman 活性}
+$N$ 原子：非线性分子 $3N-6$ 个振动模，线性分子 \重点{3N-5}。
+CO$_2$：对称伸缩（$1388\,\mathrm{cm^{-1}}$，偶极不变、红外非活性、Raman 活性），弯曲（二重简并 $667$），反对称伸缩（$2349$）。有对称中心的分子满足互斥规则：红外活性与 Raman 活性不同时出现。H$_2$O 三个模全部红外活性。
+\end{结论}
+
+\begin{结论}{半无限体表面温度突变与 Kelvin 的地球年龄}
+$x>0$ 初温 $T_0$，$t>0$ 时表面保持 $T_s$：
+\[
+\重点{T=T_s+(T_0-T_s)\,\mathrm{erf}\frac{x}{2\sqrt{\alpha t}}},\qquad \text{表面热流 }q=\frac{k(T_0-T_s)}{\sqrt{\pi\alpha t}}\propto t^{-1/2}.
+\]
+由地表温度梯度 $G$ 反推 $t=\frac{(T_0-T_s)^2}{\pi\alpha G^2}$，Kelvin 得到约 $10^8$ 年量级；被低估的原因是放射性生热与地幔对流。两物体接触面温度由热惯量 $\sqrt{k\rho c}$ 加权（摸金属比摸木头凉）。
+\end{结论}
+
+\begin{结论}{沉降平衡与离心机}
+粒子有效质量 $m'=m(1-\rho_f/\rho_p)$：\重点{n(z)\propto\ee^{-m'gz/kT}}（Perrin 由此测 $N_A$）。
+离心机中把 $g$ 换成 $\omega^2r$；沉降系数 $s=\frac{v}{\omega^2r}=\frac{m'}{f}$（Svedberg，$f$ 为摩擦系数），配合 Einstein 关系 $D=kT/f$ 得分子量 $M=\frac{sRT}{D(1-\bar v\rho_f)}$。
+\end{结论}
+
+\begin{结论}{Weyl 定律：本征值计数}
+相空间体积数态：\重点{N(E)\approx\frac{1}{(2\pi\hbar)^d}\int_{H<E}\dd^dq\,\dd^dp}。
+$-\Delta$ 的 Dirichlet 本征值 $\lambda$：二维 $N(\lambda)\sim\frac{A}{4\pi}\lambda$，三维 $N\sim\frac{V}{6\pi^2}\lambda^{3/2}$。领头项只依赖面积/体积（“听不出鼓的形状”的领头阶），边界只出现在次项 $\mp\frac{L}{4\pi}\sqrt\lambda$。黑体模式计数、Debye 截止都由此而来。
+\end{结论}
+
+\begin{结论}{随机游走 $\to$ 扩散系数}
+每 $\tau$ 时间走一步、步长 $\ell$、方向随机：
+\[
+\重点{D=\frac{\ell^2}{2d\,\tau}}\ (d\text{ 维}),\qquad \langle r^2\rangle=2dDt .
+\]
+气体分子 $D\approx\frac13\bar v\lambda$；光子在太阳内部随机游走，逃出时间 $t\sim R^2/(\lambda c)$：取 $\lambda=1\,$cm 约 $5\times10^3$ 年（计入内部自由程更短的模型给 $10^4$--$10^5$ 年），而直线只需 2 秒。
+\end{结论}
+
+\begin{结论}{光学--力学类比}
+Fermat $\delta\int n\,\dd s=0$ 与 Maupertuis $\delta\int p\,\dd s=0$ 对应：
+\[
+\重点{n\ \leftrightarrow\ \sqrt{2m(E-V)}}.
+\]
+粒子在势台阶处的“折射” $p_1\sin\theta_1=p_2\sin\theta_2$；电子光学中静电透镜按此设计。de Broglie 波长 $\lambda=h/p$ 让两者在波动层面统一，几何光学 $\leftrightarrow$ 经典力学、波动光学 $\leftrightarrow$ 量子力学。
+\end{结论}
+
+\begin{结论}{扫描隧道显微镜的距离灵敏度}
+功函数 $\phi$，$\kappa=\frac{\sqrt{2m_e\phi}}{\hbar}$：$\phi=4\,$eV 时 $\kappa\approx1\,$\AA$^{-1}$，
+\[
+\重点{I\propto\ee^{-2\kappa d}}:\quad \text{间距每变 }1\,\text{\AA，电流变约 }\ee^2\approx7.4\ \text{倍}.
+\]
+所以电流几乎全部来自针尖最前端的一个原子，横向分辨率可达原子级；恒流模式下针尖高度给出表面形貌（与局域态密度的卷积）。
+\end{结论}
+
+\begin{结论}{Casimir 力}
+两理想导体平板间距 $d$：
+\[
+\重点{\frac FA=-\frac{\pi^2\hbar c}{240\,d^4}}\quad(\text{吸引}).
+\]
+$d=1\,\mu$m 约 $1.3\,$mPa，$d=10\,$nm 约 $1\,$atm——微机电器件中的粘连原因。推导：板间允许模式的零点能之和减去自由空间值（用 $\zeta(-3)=\frac1{120}$ 正规化）。
+\end{结论}
+
+\begin{结论}{平均场磁化率：Curie--Weiss}
+自洽方程 $m=\tanh\bigl[\beta(zJm+h)\bigr]$，$kT_c=zJ$。$T>T_c$ 线性化：
+\[
+\重点{\chi=\frac{C}{T-T_c}}\ (\text{Curie--Weiss}),\qquad T<T_c:\ m\approx\sqrt{3(1-T/T_c)}.
+\]
+反铁磁体为 $\chi=\frac{C}{T+\Theta}$。由高温 $1/\chi$ 对 $T$ 的直线截距读 $T_c$ 或 $\Theta$，斜率读有效磁矩。
+\end{结论}
+
+\begin{结论}{涨落--耗散定理（经典形式）}
+线性响应 $\chi(\omega)=\chi'+\ii\chi''$，平衡涨落谱（双边，$S=\int\langle x(t)x(0)\rangle\ee^{\ii\omega t}\dd t$）：
+\[
+\重点{S_x(\omega)=\frac{2kT}{\omega}\chi''(\omega)}.
+\]
+核对：过阻尼振子 $\chi=\frac{1}{\kappa-\ii\gamma\omega}$ 给 $S=\frac{2\gamma kT}{\kappa^2+\gamma^2\omega^2}$，与 Langevin 计算一致；电阻上即 Johnson 噪声。量子形式把 $\frac{2kT}{\omega}$ 换成 $\hbar\coth\frac{\hbar\omega}{2kT}$。
+\end{结论}
+
+\begin{结论}{电容上的 $kTC$ 噪声}
+能均分 $\frac12C\langle V^2\rangle=\frac12kT$：
+\[
+\重点{V_{\mathrm{rms}}=\sqrt{kT/C}},\qquad q_{\mathrm{rms}}=\sqrt{kTC}.
+\]
+与电阻值无关（$R$ 只决定带宽 $1/4RC$，噪声谱 $4kTR$ 积分后 $R$ 消去）。$1\,$pF、$300\,$K：$64\,\mu$V，约 400 个电子——CCD/CMOS 复位噪声的来源，用相关双采样消除。
+\end{结论}
+
+\参考{Sakurai 第 3 章；Arfken--Weber 第 9--10 章；Carslaw--Jaeger, \emph{Conduction of Heat in Solids}；Kubo, \emph{Rep.\ Prog.\ Phys.}\ \textbf{29}, 255 (1966)；Chen, \emph{Introduction to Scanning Tunneling Microscopy}；Milonni, \emph{The Quantum Vacuum}。}

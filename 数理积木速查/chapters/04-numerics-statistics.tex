@@ -1,0 +1,114 @@
+\section{数值统计}
+
+\subsection{核心积木}
+
+\begin{结论}{Newton 迭代：误差递推与重根修正}
+单根 $r$、$f\in C^2$、初值足够近：
+\[
+\重点{e_{n+1}\approx\frac{f''(r)}{2f'(r)}\,e_n^{2}}\quad(\text{二阶});\qquad \text{割线法阶 }\tfrac{1+\sqrt5}{2}.
+\]
+$m$ 重根时 Newton 只线性收敛，$e_{n+1}\approx\frac{m-1}{m}e_n$；改用 \重点{x_{n+1}=x_n-m\frac{f(x_n)}{f'(x_n)}}，或对 $u=f/f'$（只有单根）做 Newton，恢复二阶。
+\end{结论}
+
+\begin{结论}{复化求积误差与 Euler--Maclaurin}
+步长 $h$：
+\[
+T_h-\int_a^bf=\frac{(b-a)h^2}{12}f''(\xi),\qquad S_h-\int_a^bf=\frac{(b-a)h^4}{180}f^{(4)}(\xi).
+\]
+\[
+\重点{T_h-\int_a^bf=\frac{h^2}{12}\bigl[f'\bigr]_a^b-\frac{h^4}{720}\bigl[f'''\bigr]_a^b+\cdots}
+\]
+只含偶次幂，故 Romberg 每层消去 $h^{2j}$：$R=\frac{4^jT_{h/2}-T_h}{4^j-1}$。周期函数的端点项全消：周期 $2\pi$、在带形 $|\Im z|<a$ 内解析且 $|f|\le M$ 时，$N$ 点梯形误差 $\le\frac{4\pi M}{\ee^{aN}-1}$，\textbf{指数}收敛。
+\end{结论}
+
+\begin{结论}{Gauss 求积：$n$ 点精确到 $2n-1$ 次}
+节点取 $n$ 次正交多项式（区间 $[-1,1]$、权 1 时为 Legendre $P_n$）的零点，权重 $w_i=\int\ell_i^2>0$：
+\[
+\重点{\int_a^bf-\sum_{i=1}^nw_if(x_i)=\frac{(b-a)^{2n+1}(n!)^4}{(2n+1)\,[(2n)!]^3}\,f^{(2n)}(\xi)}.
+\]
+两点：$\int_{-1}^1f\approx f(-\tfrac1{\sqrt3})+f(\tfrac1{\sqrt3})$；权 $\ee^{-x^2}$ 用 Hermite 零点，权 $(1-x^2)^{-1/2}$ 用 Chebyshev 点且权重全等于 $\pi/n$。
+\end{结论}
+
+\begin{结论}{插值误差与 Chebyshev 节点}
+$n$ 个节点、次数 $\le n-1$ 的插值：$f(x)-p(x)=\dfrac{f^{(n)}(\xi)}{n!}\prod_{k=1}^n(x-x_k)$。在 $[-1,1]$ 取 \重点{x_k=\cos\frac{(2k-1)\pi}{2n}}，则 $\prod(x-x_k)=2^{1-n}T_n(x)$，
+\[
+\重点{\max_{[-1,1]}\Bigl|\prod_{k=1}^n(x-x_k)\Bigr|=2^{1-n}},
+\]
+是所有首一 $n$ 次多项式中最小的。等距节点对 $\frac{1}{1+25x^2}$ 发散（Runge 现象）。
+\end{结论}
+
+\begin{结论}{条件数：误差放大与“不要解正规方程”}
+$Ax=b$：\重点{\frac{\|\delta x\|}{\|x\|}\le\kappa(A)\frac{\|\delta b\|}{\|b\|}}，$\kappa_2=\sigma_{\max}/\sigma_{\min}$。后向稳定算法的前向误差 $\approx\kappa\cdot\varepsilon_{\mathrm{mach}}$。
+最小二乘：正规方程 $A^{\mathsf T}Ax=A^{\mathsf T}b$ 的条件数为 \重点{\kappa(A)^2}；QR 或 SVD 只受 $\kappa(A)$（加残差项）影响。
+\end{结论}
+
+\begin{结论}{共轭梯度的收敛率}
+$A$ 对称正定，$\kappa=\lambda_{\max}/\lambda_{\min}$：
+\[
+\重点{\|e_k\|_A\le2\Bigl(\frac{\sqrt\kappa-1}{\sqrt\kappa+1}\Bigr)^{k}\|e_0\|_A}.
+\]
+达到精度 $\varepsilon$ 约需 $\frac{\sqrt\kappa}{2}\ln\frac2\varepsilon$ 步（最速下降需 $\sim\frac\kappa2\ln\frac1\varepsilon$）。$A$ 只有 $m$ 个不同特征值时至多 $m$ 步精确。预条件的目标是让 $M^{-1}A$ 的谱聚集。
+\end{结论}
+
+\begin{结论}{幂法族的收敛速率}
+幂法误差 $\sim|\lambda_2/\lambda_1|^k$；位移逆迭代用 $(A-\sigma I)^{-1}$，速率 \重点{\frac{|\lambda_j-\sigma|}{|\lambda_k-\sigma|}}（$\lambda_j$ 为离 $\sigma$ 最近者，$\lambda_k$ 次近）。
+Rayleigh 商迭代 $\sigma_k=\frac{x_k^{*}Ax_k}{x_k^{*}x_k}$：对 Hermite 矩阵\textbf{三阶}收敛；Rayleigh 商本身误差是特征向量误差的平方。
+\end{结论}
+
+\begin{结论}{ODE 方法的绝对稳定性}
+试验方程 $y'=\lambda y$，$z=h\lambda$：
+\[
+\text{前向 Euler: } \重点{|1+z|\le1};\quad \text{后向 Euler: } \Bigl|\frac{1}{1-z}\Bigr|\le1\ (\text{A-稳定});\quad \text{RK4: } \Bigl|\sum_{k=0}^4\frac{z^k}{k!}\Bigr|\le1 .
+\]
+$y'=-ky$ 用前向 Euler 需 $h<2/k$；RK4 实轴稳定区间约 $[-2.785,0]$。刚性问题（$|\lambda|$ 差几个量级）中步长受最快模式限制，应改用隐式方法。
+\end{结论}
+
+\begin{结论}{von Neumann 分析：热方程与波方程差分}
+代入 $u_j^n=G^n\ee^{\ii jk\Delta x}$。显式 FTCS 热方程，$r=D\Delta t/\Delta x^2$：
+\[
+\重点{G=1-4r\sin^2\tfrac{k\Delta x}{2},\qquad |G|\le1\iff r\le\tfrac12}.
+\]
+Crank--Nicolson 无条件稳定，二阶；波方程中心差分需 CFL 条件 \重点{c\Delta t/\Delta x\le1}；一阶迎风格式对 $u_t+cu_x=0$（$c>0$）稳定条件相同。
+\end{结论}
+
+\begin{结论}{正态样本：$\bar X$ 与 $S^2$ 的分布}
+$X_i$ iid $N(\mu,\sigma^2)$，$S^2=\frac1{n-1}\sum(X_i-\bar X)^2$：
+\[
+\重点{\bar X\perp S^2},\qquad \frac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1},\qquad \frac{\bar X-\mu}{S/\sqrt n}\sim t_{n-1}.
+\]
+$\E S^2=\sigma^2$ 对任意有方差的分布都成立，但独立性与 $\chi^2$ 分布\textbf{只对正态}成立；$\Var S^2=\frac{2\sigma^4}{n-1}$（正态）。
+\end{结论}
+
+\begin{结论}{MLE 的渐近正态与 Cramér--Rao}
+Fisher 信息 $I(\theta)=\E[(\partial_\theta\ln f)^2]=-\E[\partial_\theta^2\ln f]$（正则条件下）：
+\[
+\重点{\sqrt n(\hat\theta_{\mathrm{MLE}}-\theta)\Rightarrow N\bigl(0,I(\theta)^{-1}\bigr)},\qquad \Var\hat\theta\ge\frac{1}{nI(\theta)}\ (\text{无偏}).
+\]
+Poisson$(\lambda)$：$I=1/\lambda$；Exp（速率 $\lambda$）：$I=1/\lambda^2$；$N(\mu,\sigma^2)$ 对 $\mu$：$I=1/\sigma^2$。
+\注意 $U(0,\theta)$ 支撑依赖参数，不满足正则条件，MLE 为 $X_{(n)}$，误差阶 $1/n$ 而非 $1/\sqrt n$。
+\end{结论}
+
+\begin{结论}{Delta 方法与方差稳定}
+$\sqrt n(T_n-\mu)\Rightarrow N(0,\sigma^2)$，$g'(\mu)\ne0$：\重点{\sqrt n\bigl(g(T_n)-g(\mu)\bigr)\Rightarrow N\bigl(0,g'(\mu)^2\sigma^2\bigr)}。
+选 $g'\propto1/\sigma(\mu)$ 使方差与参数无关：Poisson 计数 $\sqrt X$ 方差 $\approx\frac14$；比例 $\arcsin\sqrt{\hat p}$ 方差 $\approx\frac1{4n}$；对数几率 $\ln\frac{\hat p}{1-\hat p}$ 方差 $\approx\frac{1}{np(1-p)}$。
+\end{结论}
+
+\begin{结论}{线性回归的协方差与自由度}
+$y=X\beta+\varepsilon$，$X$ 为 $n\times p$ 满列秩，$\varepsilon\sim N(0,\sigma^2I)$：
+\[
+\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y,\quad \重点{\Cov\hat\beta=\sigma^2(X^{\mathsf T}X)^{-1}},\quad \hat\sigma^2=\frac{\mathrm{RSS}}{n-p}.
+\]
+帽子矩阵 $H=X(X^{\mathsf T}X)^{-1}X^{\mathsf T}$ 有 $\tr H=p$，这就是减 $p$ 的来源。一元情形 $\mathrm{SE}(\hat\beta_1)=\hat\sigma/\sqrt{\sum(x_i-\bar x)^2}$：拉开 $x$ 的取值范围比加样本更省。
+\end{结论}
+
+\begin{结论}{似然比检验与 Pearson $\chi^2$ 的自由度}
+Wilks：$H_0$ 下 \重点{-2\ln\Lambda\Rightarrow\chi^2_{d}}，$d=\dim\Theta-\dim\Theta_0$（真值在内点）。
+Pearson 拟合优度 $\sum\frac{(O_i-E_i)^2}{E_i}$，自由度 \重点{k-1-(\text{估计参数个数})}；$r\times c$ 列联表独立性检验自由度 $(r-1)(c-1)$。期望频数小于约 5 的格应合并。
+\end{结论}
+
+\begin{结论}{共轭先验：后验只是更新参数}
+Beta$(\alpha,\beta)$ 先验 $+$ $n$ 次试验 $k$ 次成功 $\Rightarrow$ \重点{\mathrm{Beta}(\alpha+k,\ \beta+n-k)}。
+正态均值：先验 $N(\mu_0,\tau^2)$，$n$ 个方差 $\sigma^2$ 已知的观测：后验\textbf{精度相加} $\frac1{\tau_n^2}=\frac1{\tau^2}+\frac n{\sigma^2}$，均值 $\mu_n=\tau_n^2\bigl(\frac{\mu_0}{\tau^2}+\frac{n\bar x}{\sigma^2}\bigr)$。Gamma 先验配 Poisson：$\mathrm{Gamma}(\alpha,\beta)\to\mathrm{Gamma}(\alpha+\sum x_i,\beta+n)$（$\beta$ 为速率）。
+\end{结论}
+
+\参考{Trefethen--Bau, \emph{Numerical Linear Algebra}；Süli--Mayers, \emph{An Introduction to Numerical Analysis}（MIT 18.330 / 18.335）；Trefethen--Weideman (2014) \emph{SIAM Review} 梯形法则综述；Casella--Berger, \emph{Statistical Inference}；Wasserman, \emph{All of Statistics}（MIT 18.650）。}

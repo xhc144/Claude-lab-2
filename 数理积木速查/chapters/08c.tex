@@ -1,0 +1,95 @@
+\subsection{感应、电路与电磁波}
+
+\begin{结论}{变化磁场的感生电场与电子感应加速器}
+半径 $R$ 的长螺线管内 $B(t)$ 均匀：
+\[
+\重点{E_\phi=\frac r2\dot B\ (r<R)},\qquad E_\phi=\frac{R^2}{2r}\dot B\ (r>R).
+\]
+感生电场无源有旋，不能写成 $-\nabla\phi$（“电压”依赖路径）。电子感应加速器在半径 $r_0$ 保持圆轨道需 $B(r_0)=\frac12\bar B$（轨道内平均场的一半）。
+\end{结论}
+
+\begin{结论}{涡流阻尼的量级}
+导体（电导率 $\sigma$、体积 $V$）以 $v$ 穿过磁场 $B$：感应电场 $\sim vB$，耗散功率 $\sim\sigma v^2B^2V$，
+\[
+\重点{F\sim\sigma vB^2V}.
+\]
+强磁铁在铜管中缓慢下落：终速 $\propto\frac{mg}{\sigma B^2}$，与管壁厚度、半径有关；换成开缝管或绝缘管则自由落体。
+\end{结论}
+
+\begin{结论}{交流电路：复阻抗与功率}
+$Z_R=R$，$Z_L=\ii\omega L$，$Z_C=\frac{1}{\ii\omega C}$。$v=V_0\cos\omega t$，$i=I_0\cos(\omega t-\phi)$：
+\[
+\重点{\langle P\rangle=\tfrac12V_0I_0\cos\phi=V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi},\qquad V_{\mathrm{rms}}=V_0/\sqrt2 .
+\]
+只有电阻耗能；电感电容只来回交换能量（无功功率）。串联 RLC 半功率带宽 $\Delta\omega=R/L=\omega_0/Q$。
+\end{结论}
+
+\begin{结论}{开关瞬态：哪些量不能突变}
+\重点{\text{电容电压、电感电流连续}}（否则需要无穷大电流/电压）。
+RL 接通：$I=\frac VR(1-\ee^{-tR/L})$；突然断开电感电路，$L\dd I/\dd t$ 产生高压（续流二极管的作用）。RC 放电 $V_0\ee^{-t/RC}$；LC 振荡 $q=Q_0\cos\omega_0t$，能量在 $\frac{q^2}{2C}$ 与 $\frac12LI^2$ 间交换。
+\end{结论}
+
+\begin{结论}{理想变压器与反射阻抗}
+$\frac{V_2}{V_1}=\frac{N_2}{N_1}$，$\frac{I_2}{I_1}=\frac{N_1}{N_2}$，次级接负载 $Z_L$，初级看进去：
+\[
+\重点{Z_{\mathrm{in}}=\Bigl(\frac{N_1}{N_2}\Bigr)^2Z_L}.
+\]
+用于阻抗匹配（音频输出变压器）。输电升压 $k$ 倍，线损 $I^2R$ 降为 $1/k^2$。实际变压器 $M=k\sqrt{L_1L_2}$，$k<1$ 时有漏感。
+\end{结论}
+
+\begin{结论}{传输线输入阻抗}
+特性阻抗 $Z_0$、长 $\ell$、负载 $Z_L$：
+\[
+\重点{Z_{\mathrm{in}}=Z_0\frac{Z_L+\ii Z_0\tan\beta\ell}{Z_0+\ii Z_L\tan\beta\ell}}.
+\]
+$\lambda/4$ 线：$Z_{\mathrm{in}}=Z_0^2/Z_L$（阻抗变换）；$\lambda/2$ 线：$Z_{\mathrm{in}}=Z_L$；短路 $\lambda/4$ 线等效开路。驻波比 $\mathrm{VSWR}=\frac{1+|\Gamma|}{1-|\Gamma|}$。
+\end{结论}
+
+\begin{结论}{平面波的场强与光强}
+真空中 $E=cB$，$\langle u\rangle=\frac12\varepsilon_0E_0^2$，\重点{I=\tfrac12c\varepsilon_0E_0^2}，$\mathbf g=\mathbf S/c^2$。
+太阳常数 $1361\,\mathrm{W/m^2}$：$E_0\approx1.0\,$kV/m，$B_0\approx3.4\,\mu$T；聚焦激光 $10^{18}\,\mathrm{W/cm^2}$ 时电子在一个周期内被加速到相对论速度。
+\end{结论}
+
+\begin{结论}{Lorentz 振子模型的介电函数}
+束缚电荷（固有频率 $\omega_0$、阻尼 $\gamma$、数密度 $n$）：
+\[
+\重点{\varepsilon(\omega)=1+\frac{\omega_p^2}{\omega_0^2-\omega^2-\ii\gamma\omega}},\qquad \omega_p^2=\frac{ne^2}{\varepsilon_0m}.
+\]
+$\omega<\omega_0$ 正常色散（$n$ 随 $\omega$ 增大），共振附近反常色散并强吸收；$\omega_0\to0$ 回到 Drude（金属）。吸收系数 $\alpha=\frac{2\omega\kappa}{c}$（$\tilde n=n+\ii\kappa$）。
+\end{结论}
+
+\begin{结论}{谐振腔模式与模式计数}
+矩形腔 $a\times b\times d$：$\omega_{mnp}=c\pi\sqrt{(m/a)^2+(n/b)^2+(p/d)^2}$。大体积 $V$ 内频率低于 $\omega$ 的模式数（两偏振）：
+\[
+\重点{N(\omega)=\frac{V\omega^3}{3\pi^2c^3}},\qquad \frac{\dd N}{\dd\omega}=\frac{V\omega^2}{\pi^2c^3}.
+\]
+每模式分 $kT$ 得 Rayleigh--Jeans（紫外灾难）；每模式分 $\frac{\hbar\omega}{\ee^{\hbar\omega/kT}-1}$ 得 Planck 公式。腔的 $Q=\omega\frac{\text{储能}}{\text{耗散功率}}\sim\frac{\text{尺寸}}{\delta}$。
+\end{结论}
+
+\begin{结论}{超导的三个常数}
+London 穿透深度 \重点{\lambda_L=\sqrt{\frac{m}{\mu_0n_se^2}}}（$\sim50\,$nm），磁场在超导体内 $\ee^{-x/\lambda_L}$ 衰减（Meissner 效应）。
+磁通量子 $\Phi_0=\frac{h}{2e}=2.07\times10^{-15}\,$Wb（Cooper 对电荷 $2e$）；交流 Josephson 效应 $f=\frac{2eV}{h}=483.6\,$MHz/$\mu$V，是电压基准。
+\end{结论}
+
+\begin{结论}{Thevenin 等效与最大功率传输}
+任何线性两端网络 $=$ 电压源 $V_{\mathrm{th}}$（开路电压）串 $R_{\mathrm{th}}$（独立源置零后的等效电阻），$R_{\mathrm{th}}=V_{\mathrm{oc}}/I_{\mathrm{sc}}$。
+负载功率最大：\重点{R_L=R_{\mathrm{th}}}，$P_{\max}=\frac{V_{\mathrm{th}}^2}{4R_{\mathrm{th}}}$，此时效率只有 $50\%$。交流情形为共轭匹配 $Z_L=Z_{\mathrm{th}}^*$。电力系统追求效率而非最大功率，故 $R_L\gg R_{\mathrm{th}}$。
+\end{结论}
+
+\begin{结论}{Faraday 圆盘（单极发电机）}
+半径 $R$ 的导体圆盘在轴向均匀磁场 $B$ 中以 $\omega$ 转动，轴与边缘之间：
+\[
+\重点{\mathcal E=\int_0^R\omega rB\,\dd r=\tfrac12B\omega R^2}.
+\]
+这是“磁通法则”难以直接套用的例子（回路通量看似不变），须用 $\mathbf v\times\mathbf B$ 计算。反过来通电流即单极电动机。
+\end{结论}
+
+\begin{结论}{位移电流：充电电容板间的磁场}
+半径 $R$ 的圆形平行板以电流 $I$ 充电，板间 $\varepsilon_0\partial_tE$ 均匀：
+\[
+\重点{B(r)=\frac{\mu_0Ir}{2\pi R^2}\ (r<R)},\qquad B=\frac{\mu_0I}{2\pi r}\ (r>R),
+\]
+与导线外的场连续衔接。没有位移电流项，Ampère 定律对“穿过板间”和“穿过导线”的两个曲面给出矛盾。
+\end{结论}
+
+\参考{Purcell--Morin 第 7--9 章；Griffiths 第 7、9 章；Pozar, \emph{Microwave Engineering}；Horowitz--Hill 第 1 章；Tinkham, \emph{Introduction to Superconductivity}。}

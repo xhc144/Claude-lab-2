@@ -1,0 +1,86 @@
+\subsection{分布技巧与组合概率}
+
+\begin{结论}{在卷积下封闭的分布族}
+独立时：
+\[
+\重点{\mathrm{Po}(\lambda)+\mathrm{Po}(\mu)=\mathrm{Po}(\lambda+\mu),\quad \Gamma(\alpha,\beta)+\Gamma(\alpha',\beta)=\Gamma(\alpha+\alpha',\beta)},\quad \chi^2_m+\chi^2_n=\chi^2_{m+n}.
+\]
+同 $p$ 的二项相加、正态相加同理。\注意 Gamma 须\textbf{同一速率} $\beta$；$\sum_{i\le n}\mathrm{Exp}(\lambda)=\Gamma(n,\lambda)$ 即 Poisson 过程第 $n$ 个到达时刻（Erlang）。
+\end{结论}
+
+\begin{结论}{密度变换：多对一与 Box--Muller}
+$Y=g(X)$：\重点{f_Y(y)=\sum_{g(x_i)=y}\frac{f_X(x_i)}{|g'(x_i)|}}；多元乘 $|\det\partial x/\partial y|$。
+例：$Y=X^2$，$X\sim N(0,1)$ 给 $\chi^2_1$ 密度 $\frac{\ee^{-y/2}}{\sqrt{2\pi y}}$。Box--Muller：$U_1,U_2$ iid $U(0,1)$，$R=\sqrt{-2\ln U_1}$，$\Theta=2\pi U_2$，则 $(R\cos\Theta,R\sin\Theta)$ 为两个独立标准正态。
+\end{结论}
+
+\begin{结论}{比值分布：Cauchy 与 Beta--Gamma}
+$X,Y$ iid $N(0,1)$：$X/Y\sim$ 标准 Cauchy。$X\sim\Gamma(a,\beta)$、$Y\sim\Gamma(b,\beta)$ 独立：
+\[
+\重点{\frac{X}{X+Y}\sim\mathrm{Beta}(a,b)\ \text{且与 }X+Y\text{ 独立}}.
+\]
+推论：Dirichlet 分布 $=$ 独立 Gamma 归一化；$F_{m,n}=\frac{\chi^2_m/m}{\chi^2_n/n}$；$t_n=Z/\sqrt{\chi^2_n/n}$。
+\end{结论}
+
+\begin{结论}{Pólya 罐子与可交换性}
+罐中 $a$ 红 $b$ 黑，每次抽出后放回并加一个同色球。任意给定序列的概率只依赖红黑个数（可交换），
+\[
+\重点{\text{红球比例}\to\mathrm{Beta}(a,b)\ \text{a.s.}},\qquad P(\text{第 }n\text{ 次为红})=\frac{a}{a+b}\ \text{对所有 }n .
+\]
+de Finetti：无穷可交换序列 $=$ 先抽参数 $p$ 再 iid，即 Bayes 的 Beta--二项模型。
+\end{结论}
+
+\begin{结论}{累积量：独立和只需相加}
+$K(t)=\ln\E\ee^{tX}=\sum\kappa_n\frac{t^n}{n!}$：$\kappa_1=\mu$，$\kappa_2=\sigma^2$，$\kappa_3=\E(X-\mu)^3$，$\kappa_4=\E(X-\mu)^4-3\sigma^4$。
+\重点{\kappa_n(X+Y)=\kappa_n(X)+\kappa_n(Y)}（独立），$\kappa_n(cX)=c^n\kappa_n$。故 $\bar X_n$ 的偏度 $\propto n^{-1/2}$、超额峰度 $\propto n^{-1}$——CLT 的定量形式。Poisson 全部累积量为 $\lambda$；正态只有 $\kappa_1,\kappa_2$ 非零。
+\end{结论}
+
+\begin{结论}{母函数复合：随机个数之和}
+$S=\sum_{i=1}^NX_i$，$X_i$ iid 取非负整数且与 $N$ 独立：\重点{G_S(s)=G_N\bigl(G_X(s)\bigr)}。
+$N\sim\mathrm{Po}(\lambda)$，$X\sim\mathrm{Bernoulli}(p)$：$G_S=\ee^{\lambda(ps+1-p-1)}$，即 $S\sim\mathrm{Po}(\lambda p)$（Poisson 稀疏化）。分支过程的第 $n$ 代母函数是 $G$ 的 $n$ 次复合，同一机制。
+\end{结论}
+
+\begin{结论}{几何概率三例}
+Buffon 针（针长 $\ell\le d$ 线距）：\重点{P=\frac{2\ell}{\pi d}}。单位棒随机折两次成三段能围成三角形：$\frac14$（每段 $<\frac12$）。
+Bertrand 悖论：“随机弦长 $>\sqrt3R$” 按随机端点、随机半径上的中点、圆内随机中点分别得 $\frac13,\frac12,\frac14$——“随机”必须指明测度。
+\end{结论}
+
+\begin{结论}{用对称性算条件期望}
+$X_i$ 可交换：\重点{\E\Bigl[X_1\Bigm|\sum_{i=1}^nX_i=s\Bigr]=\frac sn}。
+独立 $X\sim\mathrm{Po}(\lambda)$、$Y\sim\mathrm{Po}(\mu)$：$X\mid X+Y=n\sim\mathrm{Bin}\bigl(n,\frac{\lambda}{\lambda+\mu}\bigr)$。iid 指数：给定 $\sum_{i\le n}E_i=s$，$(E_1,\dots,E_n)/s$ 在单纯形上均匀。
+\end{结论}
+
+\begin{结论}{随机置换的圈结构}
+均匀随机置换：圈数期望 $H_n$；元素 1 所在圈长在 $\{1,\dots,n\}$ 上\textbf{均匀}；长为 $k$ 的圈数期望 $1/k$。
+最长圈 $>\frac n2$ 的概率 $=\sum_{k>n/2}\frac1k=H_n-H_{\lfloor n/2\rfloor}\to\ln2$。100 名囚犯问题（各开 50 个盒子、按指针追踪）成功率 \重点{1-(H_{100}-H_{50})\approx0.312}。
+\end{结论}
+
+\begin{结论}{秘书问题：跳过前 $1/e$}
+$n$ 个候选依次面试、当场决定，目标是录到最好者：跳过前 $r$ 个再录第一个比之前都好的人，
+\[
+P(r)=\frac rn\sum_{k=r+1}^{n}\frac{1}{k-1}\ \approx\ x\ln\frac1x\ (x=r/n),\qquad \重点{x^*=\frac1e,\ P^*\to\frac1e\approx0.368}.
+\]
+\end{结论}
+
+\begin{结论}{极值：正态的 $\sqrt{2\ln n}$ 与 Gumbel 极限}
+iid $N(0,1)$：$\E\max_{i\le n}Z_i\sim\sqrt{2\ln n}$，且 $\E\max\le\sqrt{2\ln n}$ 对所有 $n$ 成立（由 $\E\ee^{t\max}\le n\ee^{t^2/2}$）。
+iid $\mathrm{Exp}(1)$：\重点{\max_{i\le n}E_i-\ln n\Rightarrow\text{Gumbel}}，$P(\le x)\to\ee^{-\ee^{-x}}$，均值 $\gamma\approx0.577$；精确地 $\E\max=H_n$（Rényi 表示：间隔为 $E_j/j$）。
+\end{结论}
+
+\begin{结论}{熵、KL 散度与最大熵分布}
+$D(p\|q)=\sum p\ln\frac pq\ge0$（Gibbs 不等式），等号 $\iff p=q$；互信息 $I(X;Y)=D(p_{XY}\|p_Xp_Y)$。
+固定方差的连续分布中正态熵最大，\重点{h=\tfrac12\ln(2\pi e\sigma^2)}；固定均值的正值分布中指数分布最大；有限集上均匀分布最大（$\ln n$）。两正态：$D=\ln\frac{\sigma_2}{\sigma_1}+\frac{\sigma_1^2+(\mu_1-\mu_2)^2}{2\sigma_2^2}-\frac12$。
+\end{结论}
+
+\begin{结论}{单侧 Chebyshev 与二阶矩方法}
+Cantelli：\重点{P(X-\mu\ge t)\le\frac{\sigma^2}{\sigma^2+t^2}}（$t>0$），比 Chebyshev 的 $\sigma^2/t^2$ 好。
+Paley--Zygmund：$X\ge0$，$0\le\theta\le1$，$P(X>\theta\E X)\ge(1-\theta)^2\frac{(\E X)^2}{\E X^2}$；取 $\theta=0$ 得二阶矩方法 $P(X>0)\ge\frac{(\E X)^2}{\E X^2}$——证明随机结构“存在”的标准工具。
+\end{结论}
+
+\begin{结论}{Bayes 的似然比形式}
+\[
+\重点{\frac{P(H\mid D)}{P(\bar H\mid D)}=\frac{P(D\mid H)}{P(D\mid\bar H)}\cdot\frac{P(H)}{P(\bar H)}}\quad(\text{后验几率}=\text{似然比}\times\text{先验几率}).
+\]
+患病率 $1\%$、灵敏度 $99\%$、假阳性 $5\%$：似然比 $19.8$，先验几率 $1/99$，后验几率 $0.2$，阳性者真患病仅约 $17\%$。多次独立检验时似然比相乘（对数相加）。
+\end{结论}
+
+\参考{Ross, \emph{A First Course in Probability}；Feller, \emph{An Introduction to Probability Theory} 第 1--2 卷；Grimmett--Stirzaker, \emph{One Thousand Exercises in Probability}；Cover--Thomas, \emph{Elements of Information Theory}；Blitzstein--Hwang, \emph{Introduction to Probability}。}

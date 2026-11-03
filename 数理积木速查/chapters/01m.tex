@@ -1,0 +1,226 @@
+\subsection{抽象代数与数论补充}
+
+\begin{结论}{对称群：圈型决定一切}
+$\sigma\in S_n$ 的圈型 $1^{m_1}2^{m_2}\cdots$：
+\[
+\ord\sigma=\lcm\{\text{圈长}\},\qquad \sgn\sigma=(-1)^{n-\#\text{圈}},\qquad \重点{|C_{S_n}(\sigma)|=\prod_kk^{m_k}m_k!}.
+\]
+共轭类 $\leftrightarrow$ $n$ 的分拆，类大小 $\frac{n!}{\prod k^{m_k}m_k!}$。$S_n$ 中元素最大阶为 Landau 函数 $g(n)$（$g(10)=30$）。$S_n$ 的共轭类在 $A_n$ 中分裂 $\iff$ 圈长互不相同且全为奇数。
+\end{结论}
+
+\begin{结论}{循环群的子群与自同构}
+$C_n$：每个因子 $d\mid n$ 恰有一个 $d$ 阶子群，$d$ 阶元有 $\varphi(d)$ 个，故 $\sum_{d\mid n}\varphi(d)=n$；\重点{\Aut(C_n)\cong(\mathbb Z/n)^\times}。
+$C_m\times C_n\cong C_{mn}\iff\gcd(m,n)=1$。有限群中“对每个 $d$，$x^d=1$ 的解不超过 $d$ 个”$\Rightarrow$ 循环；故有限域的乘法群循环。
+\end{结论}
+
+\begin{结论}{小阶群的个数}
+\[
+\begin{array}{c|cccccccccccccccc}
+n&1&2&3&4&5&6&7&8&9&10&11&12&13&14&15&16\\\hline
+\#&1&1&1&2&1&2&1&5&2&2&1&5&1&2&1&14
+\end{array}
+\]
+$8$ 阶：$C_8,\ C_4\times C_2,\ C_2^3,\ D_4,\ Q_8$；$12$ 阶：$C_{12},\ C_6\times C_2,\ A_4,\ D_6,\ C_3\rtimes C_4$。\重点{p^2\text{ 阶群交换}}；$pq$ 阶（$p<q$）非交换群存在 $\iff p\mid q-1$，且唯一。
+\end{结论}
+
+\begin{结论}{陪集作用：找正规子群的标准动作}
+$H\le G$，$[G:H]=n$：$G$ 左乘作用于陪集给出同态 $G\to S_n$，核 $\subseteq H$ 且正规。
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item \重点{|G|\nmid n!} $\Rightarrow$ $G$ 有非平凡正规子群，不单。如 $|G|=36$ 时 $n_3=4$ 给 $G\to S_4$，$36\nmid24$。
+\item 指数为 $|G|$ 的最小素因子的子群必正规；指数 $2$ 子群正规。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{$A_5$ 单：类方程一步}
+$A_5$ 共轭类大小 $1,15,20,12,12$。正规子群是若干类之并（含 $\{e\}$），阶整除 $60$：$1+$ 若干个 $\{15,20,12,12\}$ 之和只有 $1$ 和 $60$ 整除 $60$。故 \重点{A_5\text{ 单}}，也是最小非交换单群。
+$A_n$（$n\ge5$）单 $\Rightarrow$ $S_n$ 的正规子群只有 $1,A_n,S_n$，$S_n$ 不可解 $\Rightarrow$ 一般五次方程无根式解。
+\end{结论}
+
+\begin{结论}{Lagrange 逆命题的反例与 Cauchy 定理}
+$A_4$（$12$ 阶）无 $6$ 阶子群：若 $H$ 指数 $2$ 则正规且包含所有 $3$ 阶元的平方，即全部 $8$ 个 $3$ 阶元，超过 $6$。
+Cauchy：$p\mid|G|\Rightarrow$ 存在 $p$ 阶元（证明：$\{(x_1,\dots,x_p):x_1\cdots x_p=e\}$ 有 $|G|^{p-1}$ 个，$C_p$ 循环移位作用，不动点个数 $\equiv0\pmod p$）。\重点{\text{交换群与 }p\text{ 群满足 Lagrange 逆命题}}。
+\end{结论}
+
+\begin{结论}{Gauss 整数与两平方和}
+$\mathbb Z[\ii]$ 是 Euclid 整环（范数 $N(a+b\ii)=a^2+b^2$）。素数 $p$：$p=2$ 分歧；\重点{p\equiv1\pmod4\Rightarrow p=\pi\bar\pi\text{ 分裂},\ p=a^2+b^2}；$p\equiv3\pmod4$ 惰性。
+$n$ 是两平方和 $\iff$ $n$ 中 $\equiv3\pmod4$ 的素因子次数全为偶数；表示数 $r_2(n)=4\bigl(d_1(n)-d_3(n)\bigr)$（$d_i$ 为 $\equiv i\pmod 4$ 的因子个数）。
+\end{结论}
+
+\begin{结论}{UFD、PID 与 Euclid 整环的反例}
+Euclid $\Rightarrow$ PID $\Rightarrow$ UFD，两个箭头都不可逆：$\mathbb Z[\frac{1+\sqrt{-19}}2]$ 是 PID 非 Euclid；$\mathbb Z[x]$、$k[x,y]$ 是 UFD 非 PID（$(2,x)$、$(x,y)$ 非主）。
+非 UFD：$\mathbb Z[\sqrt{-5}]$ 中 \重点{6=2\cdot3=(1+\sqrt{-5})(1-\sqrt{-5})}，四个因子不可约且两两不相伴（比较范数 $4,9,6,6$）。$R$ 是 UFD $\Rightarrow R[x]$ 是 UFD（Gauss）。
+\end{结论}
+
+\begin{结论}{商环何时是域：理想的对应}
+$R/I$ 是域 $\iff I$ 极大；整环 $\iff I$ 素。PID 中非零素理想都极大。
+\重点{F[x]/(f)\text{ 是域}\iff f\text{ 在 }F\text{ 上不可约}}，此时为 $\deg f$ 次扩张。例：$\mathbb Z[x]/(x^2+1)\cong\mathbb Z[\ii]$；$\mathbb F_2[x]/(x^2+x+1)\cong\mathbb F_4$；$\mathbb R[x]/(x^2)$ 是对偶数（含幂零元，非域）。
+中国剩余：$I+J=R\Rightarrow R/(I\cap J)\cong R/I\times R/J$。
+\end{结论}
+
+\begin{结论}{原根：$(\mathbb Z/n)^\times$ 何时循环}
+$(\mathbb Z/n)^\times$ 循环 $\iff$ \重点{n=1,2,4,p^k,2p^k}（$p$ 奇素数）。$g$ 是模 $p$ 原根 $\iff$ 对 $p-1$ 的每个素因子 $q$，$g^{(p-1)/q}\not\equiv1$。
+$g$ 是模 $p$ 原根且 $g^{p-1}\not\equiv1\pmod{p^2}$ $\Rightarrow$ $g$ 是所有 $p^k$ 的原根。一般 $(\mathbb Z/n)^\times$ 的指数是 Carmichael 函数 $\lambda(n)$，$\lambda(2^k)=2^{k-2}$（$k\ge3$）。
+\end{结论}
+
+\begin{结论}{代数数的次数与极小多项式}
+塔式定理 $[L:K]=[L:M][M:K]$。$\sqrt2+\sqrt3$ 的极小多项式：平方两次消根号，
+\[
+\重点{x^4-10x^2+1},\qquad \mathbb Q(\sqrt2+\sqrt3)=\mathbb Q(\sqrt2,\sqrt3).
+\]
+$[\mathbb Q(\sqrt[3]2,\omega):\mathbb Q]=6$；$\cos\frac{2\pi}7$ 的次数 $3$（$\frac{\varphi(7)}2$），$\cos\frac{2\pi}{n}$ 的次数 $\frac{\varphi(n)}{2}$（$n\ge3$）。
+\end{结论}
+
+\begin{结论}{三次、四次多项式的 Galois 群}
+不可约三次 $f$：$\Gal\cong A_3$ 若判别式是有理平方，否则 $S_3$。$x^3+px+q$ 的判别式 \重点{\Delta=-4p^3-27q^2}；$\Delta>0$ 三实根，$\Delta<0$ 一实根。
+$x^3-2$：$\Delta=-108$，$\Gal=S_3$；$x^3-3x+1$：$\Delta=81$，$\Gal=A_3$（根 $2\cos\frac{2\pi k}{9}$）。$x^4-2$：$\Gal\cong D_4$（$8$ 阶），分裂域 $\mathbb Q(\sqrt[4]2,\ii)$。
+\end{结论}
+
+\begin{结论}{有限域}
+$\mathbb F_{p^n}$ 存在且唯一，为 $x^{p^n}-x$ 的分裂域；子域恰为 $\mathbb F_{p^d}$（$d\mid n$）；\重点{\Gal(\mathbb F_{p^n}/\mathbb F_p)=\langle\phi\rangle\cong C_n},\ $\phi(x)=x^p$。
+\[
+x^{p^n}-x=\prod_{d\mid n}\ \prod_{\deg f=d,\ f\text{ 首一不可约}}f(x).
+\]
+乘法群循环；$\mathbb F_q$ 中每个元素都是平方和（甚至两个平方之和）；$(a+b)^p=a^p+b^p$。
+\end{结论}
+
+\begin{结论}{尺规作图}
+可作点的坐标在 $\mathbb Q$ 的 $2$-幂次塔中，故次数为 $2^k$。\重点{\text{正 }n\text{ 边形可作}\iff n=2^k\,p_1\cdots p_r}，$p_i$ 为互异 Fermat 素数（$3,5,17,257,65537$）。
+倍立方（$\sqrt[3]2$ 次数 $3$）、三等分 $60^\circ$（$\cos20^\circ$ 满足 $8x^3-6x-1=0$，不可约）不可能；正 $7$、$9$ 边形不可作，正 $17$ 边形可作。
+\end{结论}
+
+\begin{结论}{无根式解的具体五次方程}
+$f=x^5-4x+2$：Eisenstein（$p=2$）不可约 $\Rightarrow$ $\Gal$ 含 $5$-循环；$f$ 恰有 $3$ 个实根（看 $f'$ 的零点处符号）$\Rightarrow$ 复共轭是一个对换。
+\重点{S_p\text{ 由一个 }p\text{-循环与一个对换生成}}（$p$ 素），故 $\Gal=S_5$，不可解。一般：$p$ 次不可约且恰有两个非实根 $\Rightarrow\Gal=S_p$。
+\end{结论}
+
+\begin{结论}{结式与判别式}
+$f=a\prod(x-\alpha_i)$（$m$ 次），$g=b\prod(x-\beta_j)$（$n$ 次）：
+\[
+\重点{\operatorname{Res}(f,g)=a^nb^m\prod_{i,j}(\alpha_i-\beta_j)}=a^n\prod_ig(\alpha_i),
+\]
+可用 $(m+n)$ 阶 Sylvester 矩阵行列式计算，不需求根。$f,g$ 有公共根 $\iff\operatorname{Res}=0$。判别式 $\operatorname{disc}f=\frac{(-1)^{m(m-1)/2}}{a}\operatorname{Res}(f,f')$；消元：两条代数曲线的交点 $x$ 坐标是关于 $y$ 的结式的根。
+\end{结论}
+
+\begin{结论}{整系数多项式：有理根、Gauss 引理与模 $p$ 约化}
+有理根 $\frac pq$（既约）满足 $p\mid a_0$、$q\mid a_n$。Gauss 引理：本原多项式之积本原，故\重点{\text{在 }\mathbb Q\text{ 上可约}\iff\text{在 }\mathbb Z\text{ 上可约}}。
+约化：首项系数不被 $p$ 整除且模 $p$ 不可约 $\Rightarrow$ 在 $\mathbb Q$ 上不可约（如 $x^3+x+1$ 模 $2$ 无根 $\Rightarrow$ 不可约）。\注意 反向不成立：$x^4+1$ 在 $\mathbb Q$ 上不可约但模每个素数可约。
+\end{结论}
+
+\begin{结论}{Legendre 公式与 Kummer 定理}
+\[
+\重点{v_p(n!)=\sum_{k\ge1}\Bigl\lfloor\frac n{p^k}\Bigr\rfloor=\frac{n-s_p(n)}{p-1}},
+\]
+$s_p$ 为 $p$ 进制数字和。Kummer：$v_p\binom{m+n}{m}$ $=$ $m+n$ 在 $p$ 进制下的进位次数。推论：$\binom{2n}{n}$ 是偶数（$n\ge1$），$v_2\binom{2n}{n}=s_2(n)$；$100!$ 末尾 $24$ 个零。
+\end{结论}
+
+\begin{结论}{Lucas 定理}
+$p$ 素，$m=\sum m_ip^i$，$n=\sum n_ip^i$：
+\[
+\重点{\binom mn\equiv\prod_i\binom{m_i}{n_i}\pmod p}.
+\]
+推论：$\binom mn$ 为奇数 $\iff$ $n$ 的二进制 $1$ 位是 $m$ 的子集（Pascal 三角模 $2$ 为 Sierpiński 三角形）；第 $m$ 行奇数个数 $2^{s_2(m)}$。
+\end{结论}
+
+\begin{结论}{升幂引理（LTE）}
+$p$ 奇素数，$p\mid a-b$，$p\nmid ab$：
+\[
+\重点{v_p(a^n-b^n)=v_p(a-b)+v_p(n)}.
+\]
+$p=2$，$a,b$ 奇：$n$ 奇时 $v_2(a^n-b^n)=v_2(a-b)$；$n$ 偶时 $v_2(a^n-b^n)=v_2(a-b)+v_2(a+b)+v_2(n)-1$。例：$v_2(3^{2^k}-1)=k+2$；$v_3(2^{3^k}+1)=k+1$。
+\end{结论}
+
+\begin{结论}{二次互反律与补充律}
+$p,q$ 奇素数：\重点{\Bigl(\frac pq\Bigr)\Bigl(\frac qp\Bigr)=(-1)^{\frac{p-1}2\frac{q-1}2}}；$\bigl(\frac{-1}p\bigr)=(-1)^{\frac{p-1}2}$，$\bigl(\frac2p\bigr)=(-1)^{\frac{p^2-1}8}$。
+Euler 判别 $\bigl(\frac ap\bigr)\equiv a^{\frac{p-1}2}$。例：$\bigl(\frac{3}{p}\bigr)=1\iff p\equiv\pm1\pmod{12}$；$\bigl(\frac{-3}p\bigr)=1\iff p\equiv1\pmod3$。Jacobi 符号可不分解因数快速计算。
+\end{结论}
+
+\begin{结论}{Wilson 定理及其半阶乘版}
+$p$ 素 $\iff(p-1)!\equiv-1\pmod p$。配对 $k$ 与 $p-k$：
+\[
+\重点{\Bigl(\Bigl(\frac{p-1}2\Bigr)!\Bigr)^2\equiv(-1)^{\frac{p+1}2}\pmod p}.
+\]
+$p\equiv1\pmod4$ 时 $x=(\frac{p-1}2)!$ 满足 $x^2\equiv-1$，给出 $-1$ 的平方根（进而构造 $p=a^2+b^2$）。
+\end{结论}
+
+\begin{结论}{Hensel 提升}
+$f\in\mathbb Z[x]$，$f(a)\equiv0\pmod p$，\重点{f'(a)\not\equiv0\pmod p}：存在唯一 $a_k\equiv a\pmod p$ 使 $f(a_k)\equiv0\pmod{p^k}$，迭代 $a_{k+1}=a_k-f(a_k)\,\overline{f'(a)}$（$p$ 进 Newton 法，精度翻倍可用 $a_{2k}$）。
+$f'(a)\equiv0$ 时可能无解或多解：$x^2\equiv1\pmod{2^k}$ 有 $4$ 解（$k\ge3$）。
+\end{结论}
+
+\begin{结论}{积性函数与 Möbius 反演}
+$d(n)=\prod(e_i+1)$，$\sigma(n)=\prod\frac{p^{e+1}-1}{p-1}$，$\varphi(n)=n\prod(1-\frac1p)$。Dirichlet 卷积 $(f*g)(n)=\sum_{d\mid n}f(d)g(\frac nd)$：
+\[
+\重点{g=f*1\iff f=g*\mu},\qquad \varphi*1=\mathrm{id},\quad \mu*1=\varepsilon,\quad \mathrm{id}*\mu=\varphi .
+\]
+Dirichlet 级数：$\sum\frac{d(n)}{n^s}=\zeta(s)^2$，$\sum\frac{\mu(n)}{n^s}=\frac1{\zeta(s)}$，$\sum\frac{\varphi(n)}{n^s}=\frac{\zeta(s-1)}{\zeta(s)}$，$\sum\frac{|\mu(n)|}{n^s}=\frac{\zeta(s)}{\zeta(2s)}$。
+\end{结论}
+
+\begin{结论}{平均阶与“互素概率”}
+\[
+\sum_{n\le x}d(n)=x\ln x+(2\gamma-1)x+O(\sqrt x),\qquad \sum_{n\le x}\varphi(n)=\frac{3x^2}{\pi^2}+O(x\ln x),
+\]
+\[
+\sum_{n\le x}\sigma(n)=\frac{\pi^2x^2}{12}+O(x\ln x).
+\]
+\重点{\text{两个随机正整数互素的概率}=\frac6{\pi^2}=\frac1{\zeta(2)}}；无平方因子数的密度也是 $\frac6{\pi^2}$。第一式用 Dirichlet 双曲线法：数 $xy\le N$ 的格点。
+\end{结论}
+
+\begin{结论}{Pell 方程}
+$D>0$ 非平方：$x^2-Dy^2=1$ 有无穷多正整数解，全部为 \重点{x_k+y_k\sqrt D=(x_1+y_1\sqrt D)^k}，基本解来自 $\sqrt D$ 的连分数（周期末前的渐近分数）。
+$D=2$：$(3,2)$；$D=3$：$(2,1)$；$D=13$：$(649,180)$；$D=61$：$(1766319049,\ 226153980)$。递推 $x_{k+1}=x_1x_k+Dy_1y_k$，$y_{k+1}=x_1y_k+y_1x_k$。
+\end{结论}
+
+\begin{结论}{连分数与最佳逼近}
+$\alpha=[a_0;a_1,a_2,\dots]$，$p_n=a_np_{n-1}+p_{n-2}$，$q_n=a_nq_{n-1}+q_{n-2}$，$p_nq_{n-1}-p_{n-1}q_n=(-1)^{n-1}$：
+\[
+\frac1{q_n(q_n+q_{n+1})}<\Bigl|\alpha-\frac{p_n}{q_n}\Bigr|<\frac1{q_nq_{n+1}}.
+\]
+渐近分数是最佳逼近；$|\alpha-\frac pq|<\frac1{2q^2}\Rightarrow\frac pq$ 是渐近分数。Hurwitz：$|\alpha-\frac pq|<\frac{1}{\sqrt5q^2}$ 有无穷多解，\重点{\sqrt5\text{ 对黄金比最优}}。$\pi=[3;7,15,1,292,\dots]$ 给 $\frac{355}{113}$。
+\end{结论}
+
+\begin{结论}{素数分布的可用事实}
+$\pi(x)\sim\frac{x}{\ln x}$，更准的是 $\operatorname{li}(x)$；$p_n\sim n\ln n$；Chebyshev 界 $\frac{x}{2\ln x}<\pi(x)<\frac{2x}{\ln x}$（$x$ 充分大）。
+Bertrand：$n<p\le2n$ 总有素数。Dirichlet：$\gcd(a,q)=1$ 时 $\{a+kq\}$ 含无穷多素数，且在 $\varphi(q)$ 个剩余类中\重点文{均匀分布}。证 $\pi(x)\gg\frac{x}{\ln x}$ 的简洁方法：$\binom{2n}{n}\mid\prod_{p\le2n}p^{\lfloor\log_p2n\rfloor}$。
+\end{结论}
+
+\begin{结论}{线性不定方程与 Frobenius 数}
+$ax+by=c$ 有整数解 $\iff\gcd(a,b)\mid c$；通解 $x=x_0+\frac{b}{d}t$，$y=y_0-\frac adt$（扩展 Euclid 求 $x_0,y_0$）。
+$\gcd(a,b)=1$：不能表示为 $ax+by$（$x,y\ge0$）的最大整数 \重点{ab-a-b}，不能表示的正整数共 $\frac{(a-1)(b-1)}2$ 个。非负解个数 $\frac{c}{ab}+O(1)$。
+\end{结论}
+
+\begin{结论}{平方和定理}
+Lagrange：每个正整数是四个平方和；$r_4(n)=8\sum_{d\mid n,\ 4\nmid d}d$。Legendre 三平方：\重点{n=x^2+y^2+z^2\iff n\ne4^a(8b+7)}。
+本原勾股数 $(m^2-n^2,\ 2mn,\ m^2+n^2)$，$m>n>0$ 互素、一奇一偶；$x^4+y^4=z^2$ 无正整数解（无穷递降）。
+\end{结论}
+
+\begin{结论}{Fermat 数与 Mersenne 数的素因子}
+$F_n=2^{2^n}+1$ 的素因子 $p$：$2$ 模 $p$ 的阶为 $2^{n+1}$，故 $p\equiv1\pmod{2^{n+1}}$；$n\ge2$ 时更强 \重点{p\equiv1\pmod{2^{n+2}}}。由此 Euler 找到 $641\mid F_5$。
+$M_q=2^q-1$（$q$ 素）的素因子 $p\equiv1\pmod{2q}$ 且 $p\equiv\pm1\pmod8$。$F_m,F_n$ 两两互素（$F_n-2=\prod_{k<n}F_k$），又一个素数无穷的证明。
+\end{结论}
+
+\begin{结论}{群作用的计数：同余技巧}
+$p$-群 $P$ 作用于有限集 $X$：\重点{|X|\equiv|X^P|\pmod p}（非平凡轨道长被 $p$ 整除）。
+应用：Fermat 小定理（$C_p$ 作用于长为 $p$ 的 $a$ 色项链，非常值项链轨道长 $p$：$a^p-a\equiv0$）；$p$-群中心非平凡；Sylow 定理中 $n_p\equiv1$；Cauchy 定理。
+\end{结论}
+
+\begin{结论}{可解群与换位子群}
+$G$ 可解 $\iff$ 导出列 $G\supseteq G'\supseteq G''\supseteq\cdots$ 到达 $1$。$S_4'=A_4$，$A_4'=V_4$，$V_4'=1$，故 $S_4$ 可解（对应四次方程有根式解）；$S_n'=A_n$，$A_n'=A_n$（$n\ge5$）。
+\重点{|G|=p^aq^b\Rightarrow G\text{ 可解}}（Burnside）；奇数阶群可解（Feit--Thompson）。交换化 $G/G'$ 是 $G$ 到交换群同态的“万有”像。
+\end{结论}
+
+\begin{结论}{半直积的构造与识别}
+$N\trianglelefteq G$，$H\le G$，$N\cap H=1$，$NH=G$ $\Rightarrow$ $G\cong N\rtimes_\phi H$，$\phi:H\to\Aut N$ 为共轭作用。
+$C_n\rtimes C_2$（逆元作用）$=D_n$；\重点{C_q\rtimes C_p\text{ 非平凡}\iff p\mid q-1}；$\Aut(C_2^2)\cong S_3$ 给 $A_4\cong C_2^2\rtimes C_3$、$S_4\cong C_2^2\rtimes S_3$。$Q_8$ 不是任何非平凡半直积。
+\end{结论}
+
+\begin{结论}{对称多项式基本定理与判别式}
+对称多项式是初等对称多项式 $e_k$ 的多项式（唯一）。降次方法：按字典序首项 $x_1^{a_1}x_2^{a_2}\cdots$ 减去 $e_1^{a_1-a_2}e_2^{a_2-a_3}\cdots$。
+二次 $ax^2+bx+c$：$\Delta=b^2-4ac$；三根 $\alpha,\beta,\gamma$ 的 $\sum\alpha^2=e_1^2-2e_2$，\重点{\sum\alpha^3=e_1^3-3e_1e_2+3e_3}，$\prod(\alpha-\beta)^2$ 对 $x^3+bx^2+cx+d$ 为 $b^2c^2-4c^3-4b^3d-27d^2+18bcd$。
+\end{结论}
+
+\begin{结论}{Chevalley--Warning 与多项式方法}
+$\mathbb F_q$ 上多项式组 $f_1,\dots,f_m$（$n$ 元），\重点{\sum\deg f_i<n} $\Rightarrow$ 公共零点个数被 $p$ 整除；故有平凡零点时必有非平凡零点。
+用法：Erdős--Ginzburg--Ziv（任意 $2n-1$ 个整数中有 $n$ 个之和被 $n$ 整除）对素数 $n=p$ 由它得到（取 $\sum a_ix_i^{p-1}$ 与 $\sum x_i^{p-1}$ 两个方程，$2p-1$ 个变量），再对 $n$ 的素因子分解做乘法归纳。证明核心：$\sum_{x\in\mathbb F_q^n}x^a=0$ 除非每个 $a_i$ 是 $q-1$ 的正倍数。
+\end{结论}
+
+\参考{Artin, \emph{Algebra}；Dummit--Foote, \emph{Abstract Algebra}；Ireland--Rosen, \emph{A Classical Introduction to Modern Number Theory}；Niven--Zuckerman--Montgomery；Hardy--Wright；MIT 18.701/18.702/18.781。}

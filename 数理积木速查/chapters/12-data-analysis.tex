@@ -1,0 +1,93 @@
+\section{数据分析}
+
+\subsection{核心积木}
+
+\begin{结论}{误差传递：线性化与幂律速算}
+\[
+\sigma_f^2=\sum_i\Bigl(\frac{\partial f}{\partial x_i}\Bigr)^2\sigma_i^2+2\sum_{i<j}\frac{\partial f}{\partial x_i}\frac{\partial f}{\partial x_j}\Cov(x_i,x_j).
+\]
+\重点{f=\prod x_i^{a_i}\Rightarrow\Bigl(\frac{\sigma_f}{f}\Bigr)^2=\sum a_i^2\Bigl(\frac{\sigma_i}{x_i}\Bigr)^2}（独立）。只需改进 $|a_i|\sigma_i/x_i$ 最大的那一项；$1/3$ 以下的项平方后不足十分之一。$f$ 在误差范围内明显非线性时（如 $\sigma_x/x\gtrsim0.3$ 的 $1/x$），改用 Monte Carlo 抽样传递。
+\end{结论}
+
+\begin{结论}{加权平均与一致性检验}
+\[
+\重点{\bar x=\frac{\sum x_i/\sigma_i^2}{\sum1/\sigma_i^2},\qquad \sigma_{\bar x}^2=\frac{1}{\sum1/\sigma_i^2}},\qquad \chi^2=\sum\frac{(x_i-\bar x)^2}{\sigma_i^2}\sim\chi^2_{N-1}.
+\]
+$\chi^2/(N-1)$ 明显大于 1：误差被低估或有未知系统误差；PDG 做法是把 $\sigma_{\bar x}$ 乘 $S=\sqrt{\chi^2/(N-1)}$。\注意 共同的系统误差不会随 $N$ 减小，须在平均后单独加上。
+\end{结论}
+
+\begin{结论}{带误差的直线拟合：闭式解}
+$y=a+bx$，权 $w_i=1/\sigma_i^2$；$S=\sum w$，$S_x=\sum wx$，$S_{xx}=\sum wx^2$，$S_y,S_{xy}$ 同理，$\Delta=SS_{xx}-S_x^2$：
+\[
+b=\frac{SS_{xy}-S_xS_y}{\Delta},\quad a=\frac{S_{xx}S_y-S_xS_{xy}}{\Delta},\quad \重点{\sigma_b^2=\frac{S}{\Delta},\ \sigma_a^2=\frac{S_{xx}}{\Delta},\ \Cov(a,b)=-\frac{S_x}{\Delta}}.
+\]
+以加权平均 $\bar x=S_x/S$ 为原点重写 $y=a'+b(x-\bar x)$，则 $a',b$ 不相关；外推到远离数据的 $x$ 时必须计入协方差项。
+\end{结论}
+
+\begin{结论}{两个变量都有误差：有效方差}
+$y=f(x)$，$x$、$y$ 误差独立：把权换成
+\[
+\重点{\sigma_{\mathrm{eff},i}^2=\sigma_{y,i}^2+\bigl(f'(x_i)\bigr)^2\sigma_{x,i}^2},
+\]
+直线时为 $\sigma_y^2+b^2\sigma_x^2$，需对 $b$ 迭代一两次。不能简单交换 $x,y$ 的角色做普通回归，两者斜率估计不互为倒数。
+\end{结论}
+
+\begin{结论}{$\chi^2$ 的读法与 $\Delta\chi^2$ 置信域}
+拟合优度：$\chi^2_{\min}/\nu\approx1\pm\sqrt{2/\nu}$（$\nu=N-p$）。过大：模型或误差有问题；过小：误差被高估或数据相关。
+参数误差：\重点{\Delta\chi^2=1}（单参数，$68.3\%$，对其余参数取极小）；联合 2 参数 $68.3\%$ 区域为 $\Delta\chi^2=2.30$，$95.4\%$ 为 $6.18$（$95.0\%$ 为 $5.99$）。在极小点附近 \重点{C=2\,H^{-1}}，$H_{jk}=\partial_j\partial_k\chi^2$。
+\end{结论}
+
+\begin{结论}{计数实验：扣本底与最优时间分配}
+Poisson：$\sigma_N=\sqrt N$。信号$+$本底计 $t_s$ 得 $N_s$，纯本底计 $t_b$ 得 $N_b$：
+\[
+r=\frac{N_s}{t_s}-\frac{N_b}{t_b},\qquad \sigma_r^2=\frac{N_s}{t_s^2}+\frac{N_b}{t_b^2},\qquad \重点{\frac{t_s}{t_b}=\sqrt{\frac{R_{s+b}}{R_b}}}\ (\text{总时间固定时最优}).
+\]
+计数少（$\lesssim10$）时不要用 $\sigma=\sqrt{N_i}$ 加权的 $\chi^2$（偏向低计数）；用 Poisson 似然 $-2\ln L=2\sum(\mu_i-N_i\ln\mu_i)+\text{常数}$。
+\end{结论}
+
+\begin{结论}{死时间修正}
+真实率 $n$，观测率 $m$，死时间 $\tau$：
+\[
+\text{不可扩展型：}\ \重点{n=\frac{m}{1-m\tau}};\qquad \text{可扩展型：}\ m=n\,\ee^{-n\tau}\ (m\le\tfrac{1}{\ee\tau}).
+\]
+双源法测 $\tau$：$m_{12}<m_1+m_2-m_b$，不可扩展型、本底很小时一阶近似 $\tau\approx\frac{m_1+m_2-m_{12}-m_b}{2m_1m_2}$。可扩展型高计数时观测率反而下降，一个 $m$ 对应两个 $n$。
+\end{结论}
+
+\begin{结论}{线性化变换要连同权重一起变}
+$y=Ax^k$ 取对数，$y=A\ee^{-E/kT}$ 作 $\ln y$ 对 $1/T$：变换后
+\[
+\重点{\sigma_{\ln y}=\frac{\sigma_y}{y}},\qquad \text{权}\ w_i=\frac{y_i^2}{\sigma_{y,i}^2}.
+\]
+等权拟合 $\ln y$ 会让小 $y$ 的点权重过大。截距 $\ln A$ 的误差换回 $A$ 时分布不对称：报 $A\,\ee^{\pm\sigma_{\ln A}}$。
+\end{结论}
+
+\begin{结论}{指数寿命的极大似然}
+观测窗 $[0,\infty)$ 内 $n$ 个衰变时间：\重点{\hat\tau=\bar t}，$\sigma_{\hat\tau}=\hat\tau/\sqrt n$。只能测到 $[0,T]$ 时似然改为 $\prod\frac{\ee^{-t_i/\tau}}{\tau(1-\ee^{-T/\tau})}$，$\bar t$ 会低估 $\tau$。
+直方图拟合（等宽 bin、各 bin 计数为 Poisson）用 Poisson 似然；若对 $\ln N$ 作直线拟合，空 bin 与小计数 bin 会产生偏差。
+\end{结论}
+
+\begin{结论}{小样本：$t$ 分布与“误差的误差”}
+$n$ 次测量：$\bar x\pm t_{n-1}\frac{s}{\sqrt n}$，$95\%$ 时 $t_4=2.78$，$t_9=2.26$，$t_\infty=1.96$。
+\[
+\重点{\frac{\sigma_s}{\sigma}\approx\frac{1}{\sqrt{2(n-1)}}}:\quad n=10\ \text{时误差本身约有 }24\%\text{ 的不确定度}.
+\]
+故误差一般只报 1--2 位有效数字，中心值保留到与误差相同的数位。
+\end{结论}
+
+\begin{结论}{Jackknife 与 Bootstrap}
+复杂统计量 $\hat\theta$（比值、拟合参数等）没有解析误差时：
+\[
+\重点{\widehat{\Var}_{\mathrm{jack}}=\frac{n-1}{n}\sum_{i=1}^n\bigl(\hat\theta_{(i)}-\bar\theta_{(\cdot)}\bigr)^2},\qquad \text{偏差修正 }\hat\theta-(n-1)(\bar\theta_{(\cdot)}-\hat\theta).
+\]
+$\hat\theta_{(i)}$ 为删去第 $i$ 个点后的估计。Bootstrap：有放回重抽 $n$ 个点重复 $B\sim10^3$ 次，用 $\hat\theta^*$ 的标准差或分位数。数据有时间相关时须按块重抽。
+\end{结论}
+
+\begin{结论}{采样与频谱：分辨率、Nyquist 与混叠}
+采样率 $f_s$，总时长 $T=N/f_s$：频率分辨率 \重点{\Delta f=1/T}，最高可辨频率 $f_s/2$。频率 $f$ 的信号被记录为
+\[
+\重点{f_{\mathrm{alias}}=|f-kf_s|}\quad(\text{取 }k\text{ 使结果落在 }[0,f_s/2]).
+\]
+补零只是插值，不提高分辨率；非整周期截断产生泄漏，加 Hann 窗以主瓣加宽换旁瓣压低。采样前必须模拟低通滤去 $f_s/2$ 以上分量。
+\end{结论}
+
+\参考{Bevington--Robinson, \emph{Data Reduction and Error Analysis for the Physical Sciences}；Taylor, \emph{An Introduction to Error Analysis}；Hughes--Hase, \emph{Measurements and their Uncertainties}；Press et al., \emph{Numerical Recipes} 第 15 章；PDG 统计综述。}

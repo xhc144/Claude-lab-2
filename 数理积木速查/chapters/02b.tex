@@ -1,0 +1,99 @@
+\subsection{微分几何进阶}
+
+\begin{结论}{Frenet--Serret 与 Darboux 向量}
+弧长参数：
+\[
+\重点{T'=\kappa N,\qquad N'=-\kappa T+\tau B,\qquad B'=-\tau N}.
+\]
+三式合为 $X'=\boldsymbol\omega\times X$，Darboux 向量 $\boldsymbol\omega=\tau T+\kappa B$：标架以角速度 $|\boldsymbol\omega|=\sqrt{\kappa^2+\tau^2}$ 转动。平面曲线 $\tau\equiv0$；$\tau/\kappa$ 为常数 $\iff$ 一般螺线（切向与固定方向夹角恒定）。
+\end{结论}
+
+\begin{结论}{形状算子：主曲率是 $I^{-1}II$ 的特征值}
+第一基本形式 $I=\begin{pmatrix}E&F\\F&G\end{pmatrix}$，第二基本形式 $II=\begin{pmatrix}L&M\\M&N\end{pmatrix}$：
+\[
+\重点{K=\frac{LN-M^2}{EG-F^2}},\qquad H=\frac{EN-2FM+GL}{2(EG-F^2)},\qquad \kappa_{1,2}=H\pm\sqrt{H^2-K}.
+\]
+方向 $\dd\mathbf r$ 的法曲率 $\kappa_n=\frac{II(\dd\mathbf r)}{I(\dd\mathbf r)}$；主方向为 $\det(II-\kappa I)=0$ 的特征方向。
+\end{结论}
+
+\begin{结论}{Euler 公式与 Meusnier 定理}
+与第一主方向夹角 $\theta$ 的法截线：\重点{\kappa_n(\theta)=\kappa_1\cos^2\theta+\kappa_2\sin^2\theta}。
+同一切方向上任意斜截线的曲率 $\kappa$ 与法曲率满足 $\kappa_n=\kappa\cos\phi$（$\phi$ 为曲线主法向与曲面法向的夹角）。渐近方向 $\kappa_n=0$ 只在 $K\le0$ 处存在。
+\end{结论}
+
+\begin{结论}{旋转面的 Gauss 曲率}
+母线为弧长参数 $(f(u),g(u))$，$f'^2+g'^2=1$，曲面 $(f\cos v,f\sin v,g)$：
+\[
+\重点{K=-\frac{f''(u)}{f(u)}}.
+\]
+环面 $R+r\cos\theta$：$K=\frac{\cos\theta}{r(R+r\cos\theta)}$，外侧正、内侧负，$\int K\,\dd A=0$。$f=\ee^{u}$ 型的伪球面（曳物线旋转）$K\equiv-1$。
+\end{结论}
+
+\begin{结论}{测地线方程：从 Lagrange 量读出 Christoffel 记号}
+\[
+\ddot x^k+\Gamma^k_{ij}\dot x^i\dot x^j=0,\qquad \Gamma^k_{ij}=\tfrac12g^{kl}(\partial_ig_{jl}+\partial_jg_{il}-\partial_lg_{ij}).
+\]
+捷径：对 \重点{\mathcal L=g_{ij}\dot x^i\dot x^j} 写 Euler--Lagrange 方程，再比较系数。极坐标 $\mathcal L=\dot r^2+r^2\dot\theta^2$：$\ddot r-r\dot\theta^2=0$，$\ddot\theta+\frac2r\dot r\dot\theta=0$，故 $\Gamma^r_{\theta\theta}=-r$，$\Gamma^\theta_{r\theta}=\frac1r$。
+\end{结论}
+
+\begin{结论}{常曲率空间的曲率张量}
+截面曲率恒为 $K$：
+\[
+\重点{R_{ijkl}=K\,(g_{ik}g_{jl}-g_{il}g_{jk})},\qquad R_{ij}=(n-1)Kg_{ij},\qquad R=n(n-1)K .
+\]
+二维只有一个独立分量 $R_{1212}=K\det g$，即 Gauss 曲率。半径 $a$ 的球面 $S^n$：$K=1/a^2$，$R=n(n-1)/a^2$。
+\end{结论}
+
+\begin{结论}{锥面上的平行移动：亏角}
+半顶角 $\alpha$ 的圆锥沿母线剪开展平为扇形，圆心角 \重点{2\pi\sin\alpha}。绕顶点一周平行移动，向量转过亏角
+\[
+\delta=2\pi(1-\sin\alpha),
+\]
+它等于顶点处集中的总曲率（Gauss--Bonnet）。宇宙弦、晶体位错中的锥奇点都按此计算。
+\end{结论}
+
+\begin{结论}{悬链面肥皂膜的存在条件}
+两同轴等半径 $R$ 圆环相距 $d$，极小曲面为悬链面 $\rho=c\cosh\frac zc$，需 $R=c\cosh\frac{d}{2c}$ 有解。令 $x=\frac{d}{2c}$，$\frac{d}{2R}=\frac{x}{\cosh x}$ 的最大值在 $x\tanh x=1$：
+\[
+\重点{\frac dR\le1.3255}.
+\]
+超过此值肥皂膜断开成两个圆盘（Goldschmidt 解）；低于此值有两个悬链面解，只有较“胖”的一个稳定。
+\end{结论}
+
+\begin{结论}{$\mathbb R^3$ 中外微分与矢量运算的对应}
+0-形式 $f$ $\xrightarrow{\dd}$ $\nabla f$；1-形式 $\mathbf A\cdot\dd\mathbf r$ $\xrightarrow{\dd}$ $(\nabla\times\mathbf A)\cdot\dd\mathbf S$；2-形式 $\mathbf B\cdot\dd\mathbf S$ $\xrightarrow{\dd}$ $(\nabla\cdot\mathbf B)\dd V$。
+\[
+\重点{\dd^2=0\iff\nabla\times\nabla f=0,\ \nabla\cdot(\nabla\times\mathbf A)=0}.
+\]
+星形区域上闭形式恰当（Poincaré 引理）：无旋场有势、无散场有矢势；区域有洞时由 de Rham 上同调计算阻碍。
+\end{结论}
+
+\begin{结论}{Laplace--Beltrami 算子}
+\[
+\重点{\Delta f=\frac{1}{\sqrt{g}}\,\partial_i\bigl(\sqrt g\,g^{ij}\partial_jf\bigr)},\qquad \dd V=\sqrt g\,\dd^nx .
+\]
+球坐标 $g=\mathrm{diag}(1,r^2,r^2\sin^2\theta)$，$\sqrt g=r^2\sin\theta$，立即得到标准的球坐标 Laplace 算子。单位球面上球谐函数 $Y_{lm}$ 的特征值为 $-l(l+1)$。
+\end{结论}
+
+\begin{结论}{Lie 括号与 Frobenius 可积性}
+$[X,Y]^i=X^j\partial_jY^i-Y^j\partial_jX^i$；两个流可交换 $\iff[X,Y]=0$。
+分布 $\mathrm{span}\{X,Y\}$ 可积（存在积分曲面）$\iff$ \重点{[X,Y]\in\mathrm{span}\{X,Y\}}。例：$X=\partial_x$，$Y=\partial_y+x\partial_z$，$[X,Y]=\partial_z$，不可积——沿 $X,Y,-X,-Y$ 走一圈在 $z$ 方向净位移（平行泊车、Heisenberg 群）。
+\end{结论}
+
+\begin{结论}{旋转的 Rodrigues 公式与 $SU(2)\to SO(3)$}
+单位轴 $\hat{\mathbf n}$，叉乘矩阵 $K$（$Kv=\hat{\mathbf n}\times v$）：
+\[
+\重点{R=\ee^{\theta K}=I+\sin\theta\,K+(1-\cos\theta)K^2}.
+\]
+$\mathfrak{so}(n)$ 为反对称矩阵，维数 $\frac{n(n-1)}2$。$U=\ee^{-\ii\theta\,\hat{\mathbf n}\cdot\boldsymbol\sigma/2}$ 与 $-U$ 对应同一转动：$SU(2)$ 二重覆盖 $SO(3)$，$\theta=2\pi$ 时自旋态变号。
+\end{结论}
+
+\begin{结论}{全曲率的整体约束}
+闭曲面 $\int K\,\dd A=2\pi\chi$（Gauss 映射度为 $\chi/2$）。空间闭曲线：
+\[
+\重点{\oint\kappa\,\dd s\ge2\pi}\ (\text{Fenchel，等号}\iff\text{平面凸曲线}),\qquad \text{打结曲线 }\oint\kappa\,\dd s>4\pi\ (\text{Fáry--Milnor}).
+\]
+平面闭曲线的旋转指数 $\frac{1}{2\pi}\oint\kappa_s\dd s\in\mathbb Z$（简单闭曲线为 $\pm1$）。
+\end{结论}
+
+\参考{do Carmo, \emph{Differential Geometry of Curves and Surfaces} / \emph{Riemannian Geometry}；Lee, \emph{Introduction to Smooth Manifolds}（MIT 18.950 / 18.965）；Frankel, \emph{The Geometry of Physics}；Carroll, \emph{Spacetime and Geometry} 第 3 章。}

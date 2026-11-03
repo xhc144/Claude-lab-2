@@ -1,0 +1,9 @@
+*.aux
+*.log
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.xdv
+main.pdf
+核验/__pycache__/

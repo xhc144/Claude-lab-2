@@ -1,0 +1,76 @@
+\subsection{拟合与不确定度进阶}
+
+\begin{结论}{非线性最小二乘：参数协方差}
+Levenberg--Marquardt 收敛后，Jacobi 矩阵 $J_{ij}=\partial f(x_i;\theta)/\partial\theta_j$，权 $W=\mathrm{diag}(1/\sigma_i^2)$：
+\[
+\重点{C_\theta\approx(J^{\mathsf T}WJ)^{-1}}.
+\]
+误差 $\sigma_i$ 未知、只给相对权时，用 $C\times\frac{\chi^2_{\min}}{\nu}$。参数强相关（$|\rho|\to1$）说明模型过参数化或数据范围不足；重参数化（如以数据中心为原点）可去相关。初值差时可能收敛到局部极小。
+\end{结论}
+
+\begin{结论}{相关误差的 $\chi^2$ 与共同归一化误差}
+数据有协方差矩阵 $V$：\重点{\chi^2=\mathbf r^{\mathsf T}V^{-1}\mathbf r}，$\mathbf r=\mathbf y-\mathbf f(\theta)$。
+所有点共享相对归一化误差 $\epsilon$ 时，直接把 $\epsilon^2y_iy_j$ 加进 $V$ 会使拟合值系统性偏低（Peelle 疑难）；应引入归一化因子 $\lambda$ 作为冗余参数：$\chi^2=\sum\frac{(y_i-\lambda f_i)^2}{\sigma_i^2}+\frac{(\lambda-1)^2}{\epsilon^2}$。
+\end{结论}
+
+\begin{结论}{系统误差的评估与合成}
+做法：把每个假设（标定、模型、截断、本底形状）在合理范围内改变 $\pm1\sigma$，记录结果的偏移 $\delta_k$；彼此独立时 \重点{\sigma_{\mathrm{sys}}=\sqrt{\sum_k\delta_k^2}}，报告 $x\pm\sigma_{\mathrm{stat}}\pm\sigma_{\mathrm{sys}}$。
+\注意 系统误差不随重复次数减小；两个结果共享同一系统误差时，相减可消去、相加则线性叠加。“检查”（统计上相容的变动）不应计入系统误差。
+\end{结论}
+
+\begin{结论}{零事件与小计数的上限}
+无本底、观测 0 个事件：$P(0\mid\mu)=\ee^{-\mu}$，
+\[
+\重点{\mu_{\mathrm{up}}=-\ln(1-\mathrm{CL})}:\ 90\%\ \text{为 }2.30,\quad 95\%\ \text{为 }3.00 .
+\]
+有本底 $b$ 时经典上限可能为负或为空，Feldman--Cousins 统一方法（似然比排序）自动在上限与双侧区间之间过渡。观测 $n$ 个、无本底的 $90\%$ 上限：$n=1$ 为 $3.89$，$n=2$ 为 $5.32$。
+\end{结论}
+
+\begin{结论}{发现显著性}
+期望信号 $s$、本底 $b$（已知）：粗略 $Z=s/\sqrt b$；更准的 Asimov 形式
+\[
+\重点{Z=\sqrt{2\bigl[(s+b)\ln(1+s/b)-s\bigr]}},
+\]
+$s\ll b$ 时回到 $s/\sqrt b$。$5\sigma$ 单侧 $p=2.87\times10^{-7}$，$3\sigma$ 为 $1.35\times10^{-3}$。在许多位置搜索时需计入“别处效应”（全局显著性低于局部）。
+\end{结论}
+
+\begin{结论}{直方图分箱}
+Freedman--Diaconis：\重点{h=2\,\mathrm{IQR}\,n^{-1/3}}（对离群点稳健）；Scott：$h=3.49\,s\,n^{-1/3}$；Sturges：$k=1+\log_2n$（只适合近正态、小样本）。
+每箱计数 Poisson 误差 $\sqrt{N_i}$，空箱不能简单丢弃。拟合时箱宽应小于分布特征宽度的约 $1/3$，否则引入偏差；能用非分箱极大似然时优先用它。
+\end{结论}
+
+\begin{结论}{Allan 方差：判断该平均多久}
+采样间隔 $\tau$ 的相邻平均值差：$\sigma_y^2(\tau)=\frac12\bigl\langle(\bar y_{k+1}-\bar y_k)^2\bigr\rangle$。双对数图斜率识别噪声类型：
+\[
+\text{白噪声 }\重点{\propto\tau^{-1/2}},\qquad \text{闪烁噪声 }\tau^0\ (\text{平台}),\qquad \text{随机游走/漂移 }\tau^{+1/2}\ \text{或 }\tau^{+1}.
+\]
+曲线最低点对应最佳平均时间；继续平均只会被漂移拖累。普通标准差对漂移数据随样本数发散，Allan 方差收敛。
+\end{结论}
+
+\begin{结论}{两个相关测量的最优合并（BLUE）}
+$x_1,x_2$ 测同一量，误差 $\sigma_1,\sigma_2$，相关系数 $\rho$：$\hat x=wx_1+(1-w)x_2$，
+\[
+\重点{w=\frac{\sigma_2^2-\rho\sigma_1\sigma_2}{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}},\qquad \sigma_{\hat x}^2=\frac{\sigma_1^2\sigma_2^2(1-\rho^2)}{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}.
+\]
+$\rho>\sigma_1/\sigma_2$（$\sigma_1<\sigma_2$）时 $w>1$，较差的测量获得负权重，合并值可落在两测量之外——正确但需检查相关系数是否可靠。
+\end{结论}
+
+\begin{结论}{校准曲线的反向预测}
+$n$ 个标定点拟合 $y=a+bx$，对未知样品测 $m$ 次得 $\bar y_0$：$\hat x_0=\frac{\bar y_0-a}{b}$，
+\[
+\重点{\sigma_{x_0}\approx\frac{\hat\sigma}{|b|}\sqrt{\frac1m+\frac1n+\frac{(\bar y_0-\bar y)^2}{b^2\sum(x_i-\bar x)^2}}}.
+\]
+未知样品落在标定范围中部时误差最小；外推到范围之外误差迅速增大。检测限常取空白信号 $+3\sigma_{\text{空白}}$ 对应的浓度。
+\end{结论}
+
+\begin{结论}{稳健估计与离群点}
+中位数、MAD：对正态数据 \重点{\hat\sigma=1.4826\times\mathrm{MAD}}，单个离群点几乎不影响（崩溃点 $50\%$）；均值与标准差的崩溃点为 0。
+Chauvenet 判据：若 $N\cdot P(|Z|>|z_i|)<\frac12$ 则剔除——只可用一次，且必须报告；更好的做法是用 Huber 损失或 Student-$t$ 似然拟合，并查明离群原因。
+\end{结论}
+
+\begin{结论}{峰位精度：分辨率 $\ne$ 精度}
+宽度 $\sigma$ 的 Gauss 峰含 $N$ 个计数：峰位（质心）不确定度 \重点{\sigma/\sqrt N}，远小于峰宽。
+有本底时误差增大，增大多少取决于峰下本底与信号之比，以拟合的 $(J^{\mathsf T}WJ)^{-1}$ 为准；简单质心法在有本底时有偏，应先扣本底。两峰能否分开看间距与宽度之比（分辨率），而各自的位置精度看计数。
+\end{结论}
+
+\参考{Barlow, \emph{Statistics: A Guide to the Use of Statistical Methods in the Physical Sciences}；Cowan, \emph{Statistical Data Analysis}；PDG《统计》综述；Feldman--Cousins, \emph{Phys.\ Rev.\ D} \textbf{57}, 3873 (1998)；Riley, \emph{Handbook of Frequency Stability Analysis}（NIST SP 1065）。}

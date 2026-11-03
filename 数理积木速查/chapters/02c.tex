@@ -1,0 +1,83 @@
+\subsection{拓扑进阶}
+
+\begin{结论}{胞腔同调：由粘贴次数读边缘映射}
+胞腔链复形中 $\partial_n$ 的矩阵元 $=$ $n$ 胞腔边界绕 $(n-1)$ 胞腔的度数。常用结果：
+\[
+\重点{H_*(T^2)=(\mathbb Z,\mathbb Z^2,\mathbb Z),\quad H_*(K)=(\mathbb Z,\ \mathbb Z\oplus\mathbb Z/2,\ 0),\quad H_*(\mathbb{RP}^2)=(\mathbb Z,\mathbb Z/2,0)}.
+\]
+Klein 瓶的字 $aba^{-1}b$：$\partial_2 e=2b$，故 $H_1=\langle a,b\rangle/\langle2b\rangle$。$\mathbb{RP}^n$ 的 $\partial_k$ 交替为 $0$ 与 $\times2$：$H_k=\mathbb Z/2$（$k$ 奇，$0<k<n$），$H_n=\mathbb Z$ 仅当 $n$ 奇。$\mathbb{CP}^n$ 只有偶数维胞腔，$H_{2k}=\mathbb Z$（$0\le k\le n$）。
+\end{结论}
+
+\begin{结论}{Mayer--Vietoris}
+$X=A\cup B$（内部覆盖）：
+\[
+\重点{\cdots\to H_n(A\cap B)\to H_n(A)\oplus H_n(B)\to H_n(X)\to H_{n-1}(A\cap B)\to\cdots}
+\]
+$S^n=$ 两个圆盘、交为 $S^{n-1}\times(-\varepsilon,\varepsilon)$，归纳得 $\tilde H_k(S^n)=\mathbb Z\,\delta_{kn}$。附带 $\chi(A\cup B)=\chi(A)+\chi(B)-\chi(A\cap B)$。
+\end{结论}
+
+\begin{结论}{Betti 数、Künneth 与 Poincaré 多项式}
+$\chi=\sum(-1)^kb_k$；Poincaré 多项式 $P_X(t)=\sum b_kt^k$ 满足 \重点{P_{X\times Y}=P_X\,P_Y}（域系数），故 $\chi(X\times Y)=\chi(X)\chi(Y)$。
+$T^n=(S^1)^n$：$P=(1+t)^n$，$b_k=\binom nk$；$S^2\times S^2$：$1+2t^2+t^4$。闭可定向 $n$ 维流形 $b_k=b_{n-k}$（Poincaré 对偶），故奇数维闭流形 $\chi=0$。
+\end{结论}
+
+\begin{结论}{Borsuk--Ulam}
+连续 $f:S^n\to\mathbb R^n$ $\Rightarrow$ \重点{\exists x:\ f(x)=f(-x)}。
+地球上存在一对对径点温度与气压都相同；火腿三明治定理：$\mathbb R^n$ 中 $n$ 个有限测度集可被一个超平面同时平分。证明骨架：$g(x)=f(x)-f(-x)$ 若无零点，则 $g/|g|$ 是奇映射 $S^n\to S^{n-1}$，与度数/同调矛盾。
+\end{结论}
+
+\begin{结论}{去掉一点：区分维数}
+$\mathbb R\not\cong\mathbb R^2$：$\mathbb R$ 去一点不连通，$\mathbb R^2$ 去一点仍连通（甚至去掉可数个点仍道路连通）。
+一般维数不变性：$\mathbb R^m\setminus\{0\}\simeq S^{m-1}$，\重点{H_{m-1}(\mathbb R^m\setminus0)=\mathbb Z} 区分了 $m$，故 $\mathbb R^m\cong\mathbb R^n\Rightarrow m=n$。同法：$S^1$ 不同胚于 $[0,1]$、字母 $T$ 与 $O$ 不同胚（数割点）。
+\end{结论}
+
+\begin{结论}{覆叠空间与甲板变换}
+万有覆叠 $\tilde X$ 单连通，$\pi_1(X)$ 作用为甲板变换群；正则覆叠 \重点{\mathrm{Deck}\cong\pi_1(X)/p_*\pi_1(\tilde X)}。
+$\pi_1(S^1)=\mathbb Z$（$\mathbb R\to S^1$），$\pi_1(T^n)=\mathbb Z^n$，$\pi_1(\mathbb{RP}^n)=\mathbb Z/2$（$n\ge2$，$S^n\to\mathbb{RP}^n$），透镜空间 $\pi_1(L(p,q))=\mathbb Z/p$。指标 $d$ 子群 $\leftrightarrow$ $d$ 叶连通覆叠。
+\end{结论}
+
+\begin{结论}{同伦群与 Hopf 纤维化}
+$\pi_k(S^n)=0$（$k<n$），$\pi_n(S^n)=\mathbb Z$（由度数给出）。纤维化 $F\to E\to B$ 有长正合列
+\[
+\cdots\to\pi_k(F)\to\pi_k(E)\to\pi_k(B)\to\pi_{k-1}(F)\to\cdots
+\]
+Hopf 纤维化 $S^1\to S^3\to S^2$ 给 \重点{\pi_3(S^2)\cong\pi_3(S^3)=\mathbb Z}，生成元的 Hopf 不变量 1：任意两条纤维的环绕数为 1。$\pi_k(S^1)=0$（$k\ge2$）因为万有覆叠 $\mathbb R$ 可缩。
+\end{结论}
+
+\begin{结论}{曲面分类：三个不变量定型}
+紧连通曲面由 \重点{(\text{可定向性},\ \chi,\ \text{边界分支数})} 完全确定。多边形字化简：相邻 $aa^{-1}$ 消去；出现 $\cdots a\cdots a\cdots$（同向两次）即不可定向。
+关系 $T^2\#\mathbb{RP}^2\cong\mathbb{RP}^2\#\mathbb{RP}^2\#\mathbb{RP}^2$；Möbius 带 $=\mathbb{RP}^2$ 去一个圆盘；Klein 瓶 $=\mathbb{RP}^2\#\mathbb{RP}^2$（$\chi=0$，不可定向）。
+\end{结论}
+
+\begin{结论}{紧性的三条常用推论}
+(i) 紧集的连续像紧，故实值连续函数在紧集上取到最值；(ii) \重点{\text{紧空间到 Hausdorff 空间的连续双射是同胚}}；(iii) Lebesgue 数引理：紧度量空间的开覆盖存在 $\delta>0$，直径 $<\delta$ 的集合必落在某个开集内。
+(ii) 常用于证明商空间同胚，如 $[0,1]/\{0\sim1\}\cong S^1$；(iii) 用于同伦提升与单纯逼近。
+\end{结论}
+
+\begin{结论}{图的基本群与树}
+连通有限图：树满足 $V-E=1$；收缩一棵极大树后得到圆的楔和，
+\[
+\重点{\pi_1(\Gamma)\cong F_{E-V+1}}\quad(\text{秩为 }1-\chi\text{ 的自由群}).
+\]
+推论（Nielsen--Schreier）：自由群的子群仍自由，指标 $d$ 子群的秩为 $1+d(n-1)$（$F_n$ 中）。电路中独立回路数 $E-V+1$ 即 Kirchhoff 回路方程个数。
+\end{结论}
+
+\begin{结论}{纽结：3-着色与纽结群}
+Fox 3-着色：每段弧着三色之一，每个交叉处三弧颜色全同或全异，且至少用两色。\重点{\text{三叶结可 3-着色，平凡结不可}}，故二者不同。
+纽结群：平凡结 $\mathbb Z$；三叶结 $\langle x,y\mid x^2=y^3\rangle$，非交换（映满 $S_3$），从而三叶结不平凡。环绕数与纽结群的交换化 $H_1=\mathbb Z$ 都无法区分它们。
+\end{结论}
+
+\begin{结论}{正则值定理：用秩数维数}
+$f:M^n\to N^k$ 光滑，$c$ 为正则值（$\dd f$ 在 $f^{-1}(c)$ 上满秩）$\Rightarrow$ \重点{f^{-1}(c)\text{ 是 }n-k\text{ 维子流形}}，切空间 $=\ker\dd f$。
+$O(n)=\{A^{\mathsf T}A=I\}$：$f(A)=A^{\mathsf T}A$ 映到对称矩阵（维数 $\frac{n(n+1)}2$），$\dim O(n)=n^2-\frac{n(n+1)}{2}=\frac{n(n-1)}2$。Sard：临界值集测度为零，故正则值稠密。
+\end{结论}
+
+\begin{结论}{用原像计数算映射度}
+紧定向流形间 $f:M^n\to N^n$，$y$ 为正则值：
+\[
+\重点{\deg f=\sum_{x\in f^{-1}(y)}\operatorname{sign}\det\dd f_x}.
+\]
+$z\mapsto z^n$ 在 $S^1$ 上度数 $n$；$n$ 次复多项式延拓为 $S^2\to S^2$ 度数 $n$（全纯映射每个原像都计 $+1$）。度数为同伦不变量，与所取正则值无关。
+\end{结论}
+
+\参考{Hatcher, \emph{Algebraic Topology}；Munkres, \emph{Topology}（MIT 18.901 / 18.905）；Milnor, \emph{Topology from the Differentiable Viewpoint}；Rolfsen, \emph{Knots and Links}；Massey, \emph{A Basic Course in Algebraic Topology}。}

@@ -1,0 +1,112 @@
+\section{应用数学}
+
+\subsection{核心积木}
+
+\begin{结论}{Laplace 方法与 Stirling}
+$f$ 在内点 $x_0$ 取唯一最大值，$f''(x_0)<0$，$g(x_0)\ne0$，$\lambda\to\infty$：
+\[
+\重点{\int_a^b g(x)\ee^{\lambda f(x)}\dd x\sim g(x_0)\,\ee^{\lambda f(x_0)}\sqrt{\frac{2\pi}{\lambda|f''(x_0)|}}}.
+\]
+$n!=n^{n+1}\int_0^\infty\ee^{n(\ln t-t)}\dd t$，$t_0=1$，$f''=-1$：$n!\sim\sqrt{2\pi n}\,(n/e)^n$。极值在端点且 $f'(x_0)\ne0$ 时改为 $\frac{g(x_0)\ee^{\lambda f(x_0)}}{\lambda|f'(x_0)|}$。
+\end{结论}
+
+\begin{结论}{驻相法}
+$f'(x_0)=0$，$f''(x_0)\ne0$，其余处 $f'\ne0$：
+\[
+\重点{\int g(x)\ee^{\ii\lambda f(x)}\dd x\sim g(x_0)\sqrt{\frac{2\pi}{\lambda|f''(x_0)|}}\;\ee^{\ii\lambda f(x_0)+\ii\frac\pi4\operatorname{sgn}f''(x_0)}}.
+\]
+无驻点时由分部积分只剩端点贡献 $O(1/\lambda)$。物理中给出群速度：波包 $\int A(k)\ee^{\ii(kx-\omega t)}$ 在 $x/t=\omega'(k)$ 处振幅 $\propto t^{-1/2}$。
+\end{结论}
+
+\begin{结论}{留数算实积分的两种闭合方式}
+有理函数 $R$，分母次数至少高 1，$k>0$（Jordan 引理）：
+\[
+\重点{\int_{-\infty}^{\infty}R(x)\ee^{\ii kx}\dd x=2\pi\ii\sum_{\Im z_j>0}\Res_{z_j}\bigl(R(z)\ee^{\ii kz}\bigr)},\qquad \int_{-\infty}^{\infty}\frac{\cos kx}{x^2+a^2}\dd x=\frac{\pi}{a}\ee^{-ka}.
+\]
+三角有理式：$z=\ee^{\ii\theta}$，$\cos\theta=\frac{z+z^{-1}}2$，$\dd\theta=\frac{\dd z}{\ii z}$，得 $\int_0^{2\pi}\frac{\dd\theta}{a+b\cos\theta}=\frac{2\pi}{\sqrt{a^2-b^2}}$（$a>|b|$）。
+\end{结论}
+
+\begin{结论}{用 $\pi\cot\pi z$ 求级数和}
+$f$ 有理、在整数点无极点、$|zf(z)|\to0$：
+\[
+\重点{\sum_{n\in\mathbb Z}f(n)=-\sum_{f\text{ 的极点 }z_j}\Res_{z_j}\bigl(\pi\cot(\pi z)\,f(z)\bigr)}.
+\]
+例：$\sum_{n\in\mathbb Z}\frac{1}{n^2+a^2}=\frac\pi a\coth\pi a$；令 $a\to0$ 并减去 $n=0$ 项再得 $\zeta(2)$。交错和把 $\cot$ 换成 $\csc$。
+\end{结论}
+
+\begin{结论}{两点边值问题的 Green 函数}
+$Lu=-(pu')'+qu=f$，$u_1$ 满足左边界条件，$u_2$ 满足右边界条件，$p\,(u_1'u_2-u_1u_2')\equiv C\ne0$：
+\[
+\重点{G(x,s)=\frac{u_1(x_<)\,u_2(x_>)}{C}},\qquad u(x)=\int G(x,s)f(s)\,\dd s .
+\]
+$-u''=f$，$u(0)=u(1)=0$：$G=x_<(1-x_>)$。若齐次问题有非零解（$C=0$），须先满足可解性条件 $\int fu_0=0$。
+\end{结论}
+
+\begin{结论}{热方程：分离变量与最慢模}
+$u_t=Du_{xx}$，$u(0,t)=u(L,t)=0$：
+\[
+u=\sum_{n\ge1}b_n\ee^{-D(n\pi/L)^2t}\sin\frac{n\pi x}{L},\qquad b_n=\frac2L\int_0^Lu_0\sin\frac{n\pi x}{L}\dd x .
+\]
+长时间由第一模主导，弛豫时间 \重点{\tau=\frac{L^2}{\pi^2D}}；Neumann 边界换成 $\cos$ 级数，均值 $\frac1L\int u_0$ 守恒。
+\end{结论}
+
+\begin{结论}{热核与镜像法}
+全直线：$u(x,t)=\int\dfrac{\ee^{-(x-y)^2/4Dt}}{\sqrt{4\pi Dt}}u_0(y)\dd y$。半直线 $x>0$：
+\[
+\重点{\text{Dirichlet }u(0,t)=0:\ \text{奇延拓}};\qquad \text{Neumann }u_x(0,t)=0:\ \text{偶延拓}.
+\]
+源项用 Duhamel：$u=\int_0^t\!\int K(x-y,t-s)F(y,s)\dd y\,\dd s$。扩散距离 $\sim\sqrt{2Dt}$（每维方差 $2Dt$）。
+\end{结论}
+
+\begin{结论}{d'Alembert 公式与依赖域}
+$u_{tt}=c^2u_{xx}$，$u(x,0)=f$，$u_t(x,0)=g$：
+\[
+\重点{u(x,t)=\frac{f(x-ct)+f(x+ct)}{2}+\frac1{2c}\int_{x-ct}^{x+ct}g(s)\,\dd s}.
+\]
+半无界弦固定端 $u(0,t)=0$：奇延拓（反射波反相）；自由端偶延拓。三维的 Kirchhoff 公式只依赖球面 $|y-x|=ct$（Huygens 原理），二维则依赖整个圆盘（有尾迹）。
+\end{结论}
+
+\begin{结论}{Laplace 方程：Poisson 核}
+圆盘 $r<R$，边值 $f(\phi)$：
+\[
+\重点{u(r,\theta)=\frac{1}{2\pi}\int_0^{2\pi}\frac{R^2-r^2}{R^2-2Rr\cos(\theta-\phi)+r^2}f(\phi)\,\dd\phi}.
+\]
+$r=0$ 给均值性质；由此得最大值原理与 Dirichlet 问题解的唯一性。等价的级数形式 $u=\frac{a_0}{2}+\sum(r/R)^n(a_n\cos n\theta+b_n\sin n\theta)$。
+\end{结论}
+
+\begin{结论}{量纲分析：$\Pi$ 定理}
+$n$ 个物理量、量纲矩阵秩 $r$ $\Rightarrow$ 关系只依赖 \重点{n-r} 个无量纲组。
+点爆炸（G.\,I.\,Taylor）：$R,E,t,\rho$，秩 3，唯一无量纲组 $\frac{R^5\rho}{Et^2}$，故 \重点{R=C\,(Et^2/\rho)^{1/5}}。单摆：$T=\sqrt{\ell/g}\,\Phi(\theta_0)$，量纲分析不能确定 $\Phi$ 但能排除质量。
+\end{结论}
+
+\begin{结论}{边界层：匹配渐近展开}
+$\varepsilon y''+y'+y=0$，$y(0)=0$，$y(1)=1$。$y'$ 系数为正 $\Rightarrow$ 层在\textbf{左端}，内变量 $X=x/\varepsilon$：
+\[
+y_{\mathrm{out}}=\ee^{1-x},\quad y_{\mathrm{in}}=\ee\,(1-\ee^{-X}),\quad
+\重点{y\approx \ee^{1-x}-\ee^{1-x/\varepsilon}}.
+\]
+匹配条件 $\lim_{X\to\infty}y_{\mathrm{in}}=\lim_{x\to0}y_{\mathrm{out}}$；复合解 $=$ 外解 $+$ 内解 $-$ 公共部分。层厚 $\sim\varepsilon$；若方程为 $\varepsilon y''-y'+\dots$，层移到右端。
+\end{结论}
+
+\begin{结论}{平面不动点：迹--行列式分类}
+Jacobi 矩阵 $J$，$\tau=\tr J$，$\Delta=\det J$：
+\[
+\重点{\Delta<0\Rightarrow\text{鞍点}};\quad \Delta>0:\ \tau^2<4\Delta\ \text{焦点},\ \tau^2>4\Delta\ \text{结点};\quad \text{稳定}\iff\tau<0<\Delta .
+\]
+$\tau=0<\Delta$ 时线性化只给中心，非线性项决定实际行为。参数穿过 $\tau=0$（$\Delta>0$）时一对特征值穿过虚轴：Hopf 分岔，产生极限环。
+\end{结论}
+
+\begin{结论}{变分法：Beltrami 首次积分}
+$J=\int F(y,y')\dd x$ 中 \重点{F\text{ 不显含 }x} 时，Euler--Lagrange 方程化为
+\[
+\重点{F-y'F_{y'}=C}.
+\]
+最速降线 $F=\sqrt{(1+y'^2)/y}$（$y$ 向下）：$y(1+y'^2)=2a$，即摆线 $x=a(\theta-\sin\theta)$，$y=a(1-\cos\theta)$。约束 $\int G=\ell$ 时对 $F+\lambda G$ 用同一公式。
+\end{结论}
+
+\begin{结论}{特征线、激波与 Rankine--Hugoniot}
+$u_t+f(u)_x=0$：沿 $\dot x=f'(u)$ 时 $u$ 为常数。Burgers（$f=\frac{u^2}{2}$）的破碎时间 \重点{t_b=-\frac{1}{\min_xu_0'(x)}}。
+激波速度 \重点{s=\frac{f(u_L)-f(u_R)}{u_L-u_R}}，Burgers 为 $\frac{u_L+u_R}2$；熵条件 $f'(u_L)>s>f'(u_R)$，否则形成稀疏波 $u=x/t$。
+\end{结论}
+
+\参考{Bender--Orszag, \emph{Advanced Mathematical Methods for Scientists and Engineers}（MIT 18.305）；Strang, \emph{Computational Science and Engineering}（18.085）；Strauss, \emph{Partial Differential Equations}；Strogatz, \emph{Nonlinear Dynamics and Chaos}；Ablowitz--Fokas, \emph{Complex Variables}。}

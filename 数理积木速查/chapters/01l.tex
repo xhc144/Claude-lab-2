@@ -1,0 +1,198 @@
+\subsection{线性代数补充}
+
+\begin{结论}{Vandermonde、Cauchy 与 Hilbert 行列式}
+\[
+\det[x_i^{j-1}]=\prod_{i<j}(x_j-x_i),\qquad \重点{\det\Bigl[\frac1{x_i+y_j}\Bigr]=\frac{\prod_{i<j}(x_j-x_i)(y_j-y_i)}{\prod_{i,j}(x_i+y_j)}}.
+\]
+Hilbert 矩阵 $H_{ij}=\frac1{i+j-1}$ 是 Cauchy 型（$x_i=i,\ y_j=j-1$），$\det H_n\approx 4^{-n^2}$ 量级，逆矩阵元素为整数，$\kappa_2(H_n)\sim\ee^{3.5n}$。Cauchy 矩阵在 $x_i,y_j>0$ 时正定。
+\end{结论}
+
+\begin{结论}{Cauchy--Binet 与 Gram 行列式}
+$A\in M_{m\times n}$，$B\in M_{n\times m}$，$m\le n$：\重点{\det(AB)=\sum_{|S|=m}\det A_{:,S}\det B_{S,:}}。
+取 $B=A^{\mathsf T}$：$\det(AA^{\mathsf T})=\sum_S(\det A_{:,S})^2$，即 $k$ 个向量张成的平行体 $k$ 维体积平方 $=$ Gram 行列式 $=$ 各坐标面投影体积平方和。$m=2$ 即 Lagrange 恒等式 $|a|^2|b|^2-(a\cdot b)^2=|a\times b|^2$。
+\end{结论}
+
+\begin{结论}{秩不等式}
+\[
+\rank A+\rank B-n\le\rank(AB)\le\min(\rank A,\rank B)\quad(\text{Sylvester},\ A\in M_{m\times n}),
+\]
+\[
+\重点{\rank(AB)+\rank(BC)\le\rank B+\rank(ABC)}\ (\text{Frobenius}),\qquad \rank(A+B)\le\rank A+\rank B .
+\]
+推论：$\dim\ker(AB)\le\dim\ker A+\dim\ker B$；$A^2=0\Rightarrow\rank A\le\frac n2$；$\rank(A^k)$ 单调不增，增量 $\rank A^k-\rank A^{k+1}$ 也不增。
+\end{结论}
+
+\begin{结论}{幂等与对合：迹即秩}
+$P^2=P$ $\Rightarrow$ $P$ 可对角化、特征值 $\in\{0,1\}$，\重点{\tr P=\rank P}，$\rank P+\rank(I-P)=n$，$\mathbb F^n=\Img P\oplus\ker P$。
+$A^2=I$（特征不为 $2$）$\Rightarrow$ $\rank(I+A)+\rank(I-A)=n$，$P=\frac{I+A}2$ 幂等。反之，$\rank A+\rank(I-A)=n$ $\Rightarrow$ $A^2=A$。
+\end{结论}
+
+\begin{结论}{幂零的迹判据}
+特征 $0$ 的域上：\重点{\tr(A^k)=0\ (k=1,\dots,n)\iff A\text{ 幂零}}（Newton 恒等式把幂和变为初等对称多项式）。
+推论：$[A,B]$ 与 $A$ 可交换 $\Rightarrow$ $[A,B]$ 幂零（$\tr([A,B]^k)=\tr([A,B]^{k-1}(AB-BA))=0$）。幂零 $N$：$I+N$ 可逆，$(I+N)^{-1}=\sum_{k<n}(-N)^k$。
+\end{结论}
+
+\begin{结论}{可对角化的判定}
+$A$ 可对角化 $\iff$ \重点{\text{极小多项式无重根}} $\iff$ 每个特征值几何重数 $=$ 代数重数。
+推论：$A^k=I$（复数域）$\Rightarrow$ 可对角化（$x^k-1$ 无重根）；$A^2=A$、$A^3=A$ 同理；可对角化矩阵限制到不变子空间仍可对角化。实矩阵在 $\mathbb R$ 上可对角化还需特征值全实。
+\end{结论}
+
+\begin{结论}{可交换矩阵：同时对角化与同时三角化}
+$AB=BA$：$A$ 的每个特征子空间是 $B$ 不变的，故\重点{\text{存在公共特征向量}}；复数域上一族两两可交换矩阵可同时上三角化（Schur 形式可用同一酉矩阵）。若都可对角化，则可同时对角化。
+推论：$AB=BA$ 时 $\sigma(A+B)\subseteq\sigma(A)+\sigma(B)$，$\ee^{A+B}=\ee^A\ee^B$。
+\end{结论}
+
+\begin{结论}{正规矩阵与 Schur 不等式}
+$A$ 正规（$AA^*=A^*A$）$\iff$ 酉对角化 $\iff$ \重点{\sum|\lambda_i|^2=\|A\|_F^2} $\iff$ $\|Ax\|=\|A^*x\|\ \forall x$。
+一般矩阵：$\sum|\lambda_i|^2\le\|A\|_F^2$（Schur），差值 $=$ Schur 形式严格上三角部分的 $\|N\|_F^2$，可作“非正规程度”的度量。正规矩阵 $\|A\|_2=\rho(A)$，奇异值 $=|\lambda_i|$。
+\end{结论}
+
+\begin{结论}{Sylvester 惯性定律与合同对角化}
+实对称 $A$ 与 $P^{\mathsf T}AP$（$P$ 可逆）的正、负、零特征值个数相同。
+求惯性：对称地做行列初等变换（配方），或数 LDL$^{\mathsf T}$ 中 $D$ 的符号；\重点{\text{顺序主子式全非零时，正/负特征值个数}=\text{序列 }1,D_1,D_2,\dots,D_n\text{ 的保号/变号次数}}（Jacobi）。
+\end{结论}
+
+\begin{结论}{极分解}
+任意方阵 $A=UP$，$P=\sqrt{A^*A}\succeq0$ 唯一，$U$ 酉（$A$ 可逆时唯一，$U=A(A^*A)^{-1/2}$）。由 SVD $A=W\Sigma V^*$：$U=WV^*$，$P=V\Sigma V^*$。
+\重点{U\text{ 是离 }A\text{ 最近的酉矩阵}}（Frobenius 范数），用于把有噪声的旋转矩阵“正交化”；连续介质力学中变形梯度 $F=RU$。
+\end{结论}
+
+\begin{结论}{正交投影与 Moore--Penrose 逆}
+列满秩 $A$：投影到列空间 \重点{P=A(A^{\mathsf T}A)^{-1}A^{\mathsf T}}，最小二乘解 $\hat x=(A^{\mathsf T}A)^{-1}A^{\mathsf T}b$。$P$ 是正交投影 $\iff P^2=P=P^{\mathsf T}$。
+一般 $A^+=V\Sigma^+U^{\mathsf T}$（非零奇异值取倒数），唯一满足 $AA^+A=A$，$A^+AA^+=A^+$，$AA^+$、$A^+A$ 对称；$A^+b$ 是最小范数最小二乘解。
+\end{结论}
+
+\begin{结论}{谱半径、Gelfand 公式与 Neumann 级数}
+$\|A\|_1=\max$ 列和，$\|A\|_\infty=\max$ 行和，$\|A\|_2=\sigma_{\max}$；任意诱导范数 $\rho(A)\le\|A\|$，且 \重点{\rho(A)=\lim_k\|A^k\|^{1/k}}。
+$\rho(A)<1\iff A^k\to0\iff\sum A^k=(I-A)^{-1}$ 收敛；$\|A\|<1$ 时 $\|(I-A)^{-1}\|\le\frac1{1-\|A\|}$。扰动：$A$ 可逆、$\|A^{-1}E\|<1$ $\Rightarrow$ $A+E$ 可逆。
+\end{结论}
+
+\begin{结论}{Hadamard 积：Schur 乘积定理}
+$A,B\succeq0$ $\Rightarrow$ \重点{A\circ B\succeq0}（$(A\circ B)_{ij}=a_{ij}b_{ij}$）；$A\succ0,B\succ0\Rightarrow A\circ B\succ0$。
+推论：$A\succeq0\Rightarrow[\ee^{a_{ij}}]\succeq0$、$[a_{ij}^k]\succeq0$；Oppenheim：$\det(A\circ B)\ge\det A\prod b_{ii}$。核方法中“核的积仍是核”即此。
+\end{结论}
+
+\begin{结论}{伴随矩阵的秩与迭代}
+$n\ge2$：
+\[
+\rank\adj A=\begin{cases}n,&\rank A=n\\1,&\rank A=n-1\\0,&\rank A\le n-2\end{cases},\qquad \det\adj A=(\det A)^{n-1},\qquad \重点{\adj(\adj A)=(\det A)^{n-2}A}.
+\]
+$\rank A=n-1$ 时 $\adj A=c\,xy^{\mathsf T}$，$x$ 张成 $\ker A$，$y$ 张成 $\ker A^{\mathsf T}$——由此一行余子式给出零空间向量。
+\end{结论}
+
+\begin{结论}{特征多项式系数 $=$ 主子式之和；Newton 恒等式}
+\[
+\det(\lambda I-A)=\sum_{k=0}^n(-1)^kE_k\lambda^{n-k},\qquad \重点{E_k=\sum_{|S|=k}\det A_{S,S}=e_k(\lambda_1,\dots,\lambda_n)}.
+\]
+幂和 $p_k=\tr A^k$：$ke_k=\sum_{i=1}^k(-1)^{i-1}e_{k-i}p_i$，如 $e_2=\frac{p_1^2-p_2}2$，$e_3=\frac{p_1^3-3p_1p_2+2p_3}6$。用于由 $\tr A,\tr A^2,\tr A^3$ 求 $3\times3$ 矩阵的行列式。
+\end{结论}
+
+\begin{结论}{循环向量与有理标准形}
+存在 $v$ 使 $v,Av,\dots,A^{n-1}v$ 线性无关 $\iff$ \重点{\text{极小多项式}=\text{特征多项式}} $\iff$ 每个特征值只有一个 Jordan 块 $\iff$ 中心化子 $=\{p(A)\}$（维数 $n$）。
+此时 $A$ 相似于其特征多项式的友矩阵。一般矩阵相似于不变因子友矩阵的直和（有理标准形），在任意域上不需扩域。
+\end{结论}
+
+\begin{结论}{相似的几条不变事实}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item $A\sim A^{\mathsf T}$（同一 Jordan 形）。$A$ 或 $B$ 可逆时 $AB\sim BA$；否则只保证非零特征值的 Jordan 结构相同。
+\item 两个实矩阵在 $\mathbb C$ 上相似 $\Rightarrow$ 在 $\mathbb R$ 上相似（一般：域扩张不改变相似性，因不变因子在原域计算）。
+\item \重点{A\sim B\iff\rank(A-\lambda I)^k=\rank(B-\lambda I)^k\ \forall\lambda,k}。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{中心化子维数}
+$A\in M_n(\mathbb C)$，$C(A)=\{X:AX=XA\}$。令 $c_{\lambda,k}$ 为特征值 $\lambda$ 的 Jordan 块中\textbf{大小至少 $k$ 的块数}：
+\[
+\重点{\dim C(A)=\sum_{\lambda\in\sigma(A)}\sum_{k\ge1}c_{\lambda,k}^{\,2}}.
+\]
+外层对不同特征值求和。等价写法：同一特征值的块大小 $n_1,n_2,\dots$ 贡献 $\sum_{i,j}\min(n_i,n_j)$。最小值 $n$（循环），最大值 $n^2$（标量矩阵）。
+\end{结论}
+
+\begin{结论}{像与核的交维数}
+有限维空间上线性算子 $N$，$a,b\ge0$：
+\[
+\重点{\dim(\Img N^a\cap\ker N^b)=\dim\ker N^{a+b}-\dim\ker N^a}.
+\]
+证：$N^a:\ker N^{a+b}\to\Img N^a\cap\ker N^b$ 满射（$y=N^ax$，$N^by=0\Rightarrow N^{a+b}x=0$），核为 $\ker N^a$。不需要 $N$ 幂零，也不必先求 Jordan 形。
+\end{结论}
+
+\begin{结论}{$2\times2$ 矩阵指数的闭式}
+$\tau=\frac{\tr A}2$，$\Delta=\sqrt{\tau^2-\det A}$（可为虚数或零）：
+\[
+\重点{\ee^{tA}=\ee^{\tau t}\Bigl[\cosh(\Delta t)\,I+\frac{\sinh(\Delta t)}{\Delta}(A-\tau I)\Bigr]}.
+\]
+$\Delta=\ii\omega$ 时 $\cosh\to\cos\omega t$、$\frac{\sinh\Delta t}{\Delta}\to\frac{\sin\omega t}{\omega}$；$\Delta=0$ 时第二项为 $t(A-\tau I)$。原理：$(A-\tau I)^2=\Delta^2I$（Cayley--Hamilton）。
+\end{结论}
+
+\begin{结论}{Householder 反射与 Cartan--Dieudonné}
+$H=I-\frac{2vv^{\mathsf T}}{v^{\mathsf T}v}$：对称、正交、$H^2=I$、$\det H=-1$。把 $x$ 反射到 $\|x\|e_1$：取 \重点{v=x-\|x\|e_1}（数值上取 $v=x+\sgn(x_1)\|x\|e_1$ 避免相消，像为 $-\sgn(x_1)\|x\|e_1$）。
+$n$ 维正交变换都是至多 $n$ 个反射之积；两个反射之积是旋转，转角为两镜面夹角的两倍。
+\end{结论}
+
+\begin{结论}{两个二次型同时对角化}
+$A$ 实对称、$B\succ0$：存在可逆 $P$ 使 \重点{P^{\mathsf T}BP=I,\ P^{\mathsf T}AP=\diag(\lambda_i)}，$\lambda_i$ 为 $\det(A-\lambda B)=0$ 的根（广义特征值）。
+做法：$B=LL^{\mathsf T}$，对 $L^{-1}AL^{-\mathsf T}$ 做正交对角化。振动问题 $M\ddot x+Kx=0$、Rayleigh 商 $\frac{x^{\mathsf T}Ax}{x^{\mathsf T}Bx}$ 的极值都归于此。
+\end{结论}
+
+\begin{结论}{外幂与 $\det(I+tA)$ 展开}
+$\Lambda^kA$ 作用于 $\Lambda^k\mathbb F^n$（维数 $\binom nk$），特征值为 $\lambda_{i_1}\cdots\lambda_{i_k}$（$i_1<\dots<i_k$），矩阵元为 $k\times k$ 子式。
+\[
+\重点{\det(I+tA)=\sum_{k=0}^nt^k\tr\Lambda^kA},\qquad \det(I+tA)=\exp\Bigl(\sum_{m\ge1}\frac{(-1)^{m-1}t^m}{m}\tr A^m\Bigr).
+\]
+后者对小 $t$ 成立，展开即 Newton 恒等式；无穷维时给 Fredholm 行列式。
+\end{结论}
+
+\begin{结论}{逆矩阵的子式（Jacobi 互补子式定理）}
+$A$ 可逆，$|I|=|J|=k$：
+\[
+\重点{\det\bigl(A^{-1}\bigr)_{I,J}=(-1)^{\sum I+\sum J}\frac{\det A_{J^c,I^c}}{\det A}}.
+\]
+$k=1$ 就是伴随矩阵公式 $(A^{-1})_{ij}=\frac{(-1)^{i+j}M_{ji}}{\det A}$。用于三对角矩阵逆的元素、Schur 补的行列式。
+\end{结论}
+
+\begin{结论}{Löwner 序下哪些函数单调}
+$A\succeq B\succ0$ $\Rightarrow$ \重点{B^{-1}\succeq A^{-1}}，$A^{1/2}\succeq B^{1/2}$，$\ln A\succeq\ln B$；但 $A^2\succeq B^2$ \textbf{一般不成立}。
+算子单调函数（Löwner 定理）：$t^p$（$0\le p\le1$）、$\ln t$、$-\frac1t$、$\frac{t}{t+c}$。$\tr f(A)$ 的单调性要求弱得多：$f$ 单增即 $\tr f(A)\ge\tr f(B)$。
+\end{结论}
+
+\begin{结论}{秩一修正的特征值：久期方程与交错}
+$A=\diag(d_i)$ 实对称，$\rho>0$，$v$ 各分量非零：$A+\rho vv^{\mathsf T}$ 的特征值是
+\[
+\重点{1+\rho\sum_i\frac{v_i^2}{d_i-\lambda}=0}
+\]
+的根，与 $d_i$ 严格交错：$d_1<\lambda_1<d_2<\cdots<d_n<\lambda_n<d_n+\rho\|v\|^2$。分治法求对称三对角特征值、更新协方差矩阵时使用。
+\end{结论}
+
+\begin{结论}{双随机矩阵：Birkhoff--von Neumann}
+非负、行和列和均为 $1$ 的矩阵集合 $=$ 置换矩阵的凸包。推论：
+\重点{\text{线性函数在双随机矩阵上的最大值在某个置换矩阵取到}}——指派问题的 LP 松弛自动给整数解；$x=Dy$（$D$ 双随机）$\iff$ $y\succ x$（控制）。
+\end{结论}
+
+\begin{结论}{由多项式关系读矩阵信息}
+$A$ 为 $n$ 阶实矩阵：
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item $A^2=-I$ $\Rightarrow$ $(\det A)^2=(-1)^n$，故 \重点{n\text{ 为偶数}}；特征值 $\pm\ii$ 各 $\frac n2$ 个，$\tr A=0$。
+\item $A^3=A$，$\tr A=\rank A$ 之类问题：特征值在多项式的根中，可对角化，于是迹 $=$ 各根乘重数之和。
+\item $p(A)=0$ 且 $p(0)\ne0$ $\Rightarrow$ $A$ 可逆，$A^{-1}$ 是 $A$ 的多项式。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{置换矩阵与“轮换”矩阵的特征值}
+置换 $\sigma$ 的矩阵 $P_\sigma$：对 $\sigma$ 的每个长为 $\ell$ 的圈贡献全部 $\ell$ 次单位根。
+\[
+\重点{\det(\lambda I-P_\sigma)=\prod_{\text{圈}}(\lambda^{\ell}-1)},\qquad \tr P_\sigma=\#\text{不动点}.
+\]
+推论：$\det P_\sigma=\sgn\sigma$；$\frac1{n!}\sum_\sigma\tr P_\sigma^k=$ 满足 $\sigma^k$ 的不动点期望 $=$ $k$ 的不超过 $n$ 的因子个数。
+\end{结论}
+
+\begin{结论}{实矩阵的实对数与实平方根}
+可逆实矩阵 $A$ 有实对数 $\iff$ \重点{\text{每个负特征值的每种大小的 Jordan 块出现偶数次}}（Culver）。例：$\diag(-1,-1)$ 是转角 $\pi$ 的旋转，有实对数；$\diag(-1,1)$ 没有。
+$\det A>0$ 是必要条件（$\det\ee^X=\ee^{\tr X}>0$）但不充分。$A$ 无负实特征值时存在唯一主对数，谱在 $\{|\operatorname{Im}z|<\pi\}$ 中。
+\end{结论}
+
+\begin{结论}{半正定的主子式判据：不能只看顺序主子式}
+$A\succ0\iff$ 顺序主子式全正（Sylvester）。但 \重点{A\succeq0\iff\text{所有主子式}\ge0}，只看顺序主子式会出错：$\begin{pmatrix}0&0\\0&-1\end{pmatrix}$ 顺序主子式 $0,0$，却不半正定。
+另一实用判据：$A\succeq0\iff A=B^{\mathsf T}B$；$\iff$ 对称且对角占优、对角非负（充分不必要）。
+\end{结论}
+
+\参考{Horn--Johnson, \emph{Matrix Analysis}；Bhatia, \emph{Matrix Analysis}；Axler, \emph{Linear Algebra Done Right}；Hoffman--Kunze, \emph{Linear Algebra}；Higham, \emph{Functions of Matrices}；MIT 18.06、18.700。}

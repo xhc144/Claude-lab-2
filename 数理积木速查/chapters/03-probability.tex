@@ -1,0 +1,101 @@
+\section{概率论}
+
+\subsection{核心积木}
+
+\begin{结论}{示性变量拆期望与方差}
+把计数写成 $X=\sum_i\mathbf 1_{A_i}$，不需要独立：
+\[
+\E X=\sum_i P(A_i),\qquad \重点{\Var X=\sum_iP(A_i)\bigl(1-P(A_i)\bigr)+\sum_{i\ne j}\bigl(P(A_iA_j)-P(A_i)P(A_j)\bigr)}.
+\]
+随机置换不动点数：$P(A_i)=\frac1n$，$P(A_iA_j)=\frac1{n(n-1)}$，得 $\E X=\Var X=1$；$n$ 个连续 iid 中“破纪录”次数期望 $H_n=\sum_{k\le n}\frac1k$。
+\end{结论}
+
+\begin{结论}{集卡问题：分段几何变量}
+已集 $i-1$ 种后，下一新种的等待时间 $\sim\mathrm{Geom}(p_i)$，$p_i=\frac{n-i+1}{n}$，各段独立：
+\[
+\重点{\E T=nH_n=n\ln n+\gamma n+\tfrac12+o(1)},\qquad \Var T=\sum_{i=1}^n\frac{1-p_i}{p_i^2}<\frac{\pi^2}{6}n^2 .
+\]
+Chebyshev 给出 $T/(n\ln n)\to1$（依概率）。
+\end{结论}
+
+\begin{结论}{全方差公式与随机和}
+\[
+\重点{\Var X=\E[\Var(X\mid Y)]+\Var(\E[X\mid Y])}.
+\]
+$S=\sum_{i=1}^N X_i$，$X_i$ iid 且与 $N$ 独立：$\E S=\E N\cdot\E X$，\重点{\Var S=\E N\cdot\Var X+\Var N\cdot(\E X)^2}。例：$N\sim\mathrm{Poisson}(\lambda)$ 时 $\Var S=\lambda\,\E X^2$（复合 Poisson）。
+\end{结论}
+
+\begin{结论}{分支过程灭绝概率}
+每个体后代数母函数 $G(s)=\sum p_ks^k$，均值 $\mu=G'(1)$，$p_1\ne1$。灭绝概率 $q$ 是
+\[
+\重点{s=G(s)\text{ 在 }[0,1]\text{ 上的最小根}},\qquad q=1\iff\mu\le1 .
+\]
+$Z_n$ 的母函数为 $G$ 的 $n$ 次复合 $G_n$；$P(Z_n=0)=G_n(0)\uparrow q$。Poisson$(\lambda)$ 后代：$q=\ee^{\lambda(q-1)}$。
+\end{结论}
+
+\begin{结论}{赌徒破产：用两条鞅直接读答案}
+从 $k$ 出发，每步 $+1$ 概率 $p$、$-1$ 概率 $q=1-p$，在 $0$ 或 $N$ 停止（$\tau$）。$r=q/p\ne1$ 时 $r^{S_n}$ 与 $S_n-(p-q)n$ 是鞅，可选停时成立（$\E\tau<\infty$，增量有界）：
+\[
+\重点{P_k(\text{先到 }N)=\frac{1-r^{k}}{1-r^{N}}},\qquad \E_k\tau=\frac{k}{q-p}-\frac{N}{q-p}\cdot\frac{1-r^k}{1-r^N}.
+\]
+$p=q$ 时用 $S_n$ 与 $S_n^2-n$：概率 $k/N$，\重点{\E_k\tau=k(N-k)}。
+\end{结论}
+
+\begin{结论}{可选停时定理：哪些条件够用}
+$M_n$ 鞅，$\tau$ 停时。下列之一成立则 \重点{\E M_\tau=\E M_0}：(i) $\tau\le C$；(ii) $|M_{n\wedge\tau}|\le C$；(iii) $\E\tau<\infty$ 且 $\E[|M_{n+1}-M_n|\mid\mathcal F_n]\le C$。
+\注意 对称随机游走 $\tau=\inf\{n:S_n=1\}$ 几乎必然有限但 $\E S_\tau=1\ne0$，因为 $\E\tau=\infty$。
+\end{结论}
+
+\begin{结论}{Markov 链：平均返回时间 $=1/\pi_i$}
+不可约正常返链：\重点{\E_i[T_i^+]=1/\pi_i}。图上简单随机游走满足细致平衡，\重点{\pi_v=\frac{\deg v}{2|E|}}。
+例：国际象棋马从角格出发，棋盘马步图度数和 $336$，角格度 $2$，期望 $168$ 步回到原角。一般可逆链：$\pi_iP_{ij}=\pi_jP_{ji}$ 只需一个方程组即可求 $\pi$。
+\end{结论}
+
+\begin{结论}{集中不等式：Hoeffding 与 Chernoff}
+$X_i\in[a_i,b_i]$ 独立，$S=\sum X_i$：
+\[
+\重点{P(S-\E S\ge t)\le\exp\Bigl(-\frac{2t^2}{\sum(b_i-a_i)^2}\Bigr)}.
+\]
+$X$ 为独立 Bernoulli 之和，$\mu=\E X$，$0<\delta\le1$：$P(X\ge(1+\delta)\mu)\le\ee^{-\delta^2\mu/3}$，$P(X\le(1-\delta)\mu)\le\ee^{-\delta^2\mu/2}$。推导统一为：$P(X\ge a)\le\inf_{s>0}\ee^{-sa}\E\ee^{sX}$。
+\end{结论}
+
+\begin{结论}{反射原理与选票定理}
+简单随机游走，整数 $a\ge1$：\重点{P\bigl(\max_{k\le n}S_k\ge a\bigr)=2P(S_n>a)+P(S_n=a)}。Brown 运动：$P(\max_{s\le t}B_s\ge a)=2P(B_t\ge a)$，故 $\max_{s\le t}B_s\overset{d}{=}|B_t|$。
+选票：$A$ 得 $a$ 票、$B$ 得 $b$ 票（$a>b$），随机计票时 $A$ 始终严格领先的概率 \重点{\frac{a-b}{a+b}}。
+\end{结论}
+
+\begin{结论}{Pólya 常返判据}
+$\mathbb Z^d$ 简单随机游走：$P(S_{2n}=0)\sim c_d\,n^{-d/2}$，常返 $\iff\sum_nP(S_{2n}=0)=\infty$：
+\[
+\重点{d=1,2\ \text{常返};\qquad d\ge3\ \text{暂留}}.
+\]
+返回概率 $=1-1/\sum_{n\ge0}P(S_{2n}=0)$（$d=3$ 约 $0.34$）。
+\end{结论}
+
+\begin{结论}{指数分布的竞争与无记忆}
+$X_i\sim\mathrm{Exp}(\lambda_i)$ 独立：\重点{\min_iX_i\sim\mathrm{Exp}\bigl(\sum\lambda_i\bigr)}，$P(X_j\text{ 最小})=\frac{\lambda_j}{\sum_i\lambda_i}$，且最小值与“谁最小”独立。
+Poisson 过程：给定 $N(t)=n$，到达时刻与 $n$ 个 $U(0,t)$ 的次序统计量同分布；按概率 $p$ 独立着色得到速率 $p\lambda$、$(1-p)\lambda$ 的\textbf{独立} Poisson 过程。
+\end{结论}
+
+\begin{结论}{均匀次序统计量}
+$U_1,\dots,U_n$ iid $U(0,1)$：
+\[
+\重点{U_{(k)}\sim\mathrm{Beta}(k,\,n-k+1)},\qquad \E U_{(k)}=\frac{k}{n+1},\quad \Var U_{(k)}=\frac{k(n-k+1)}{(n+1)^2(n+2)} .
+\]
+$n+1$ 段间隔（含两端）可交换，联合分布与 $(E_1,\dots,E_{n+1})/\sum E_j$ 相同（$E_j$ iid Exp）。
+\end{结论}
+
+\begin{结论}{二元正态：条件分布与象限概率}
+$(X,Y)$ 二元正态，相关系数 $\rho$：
+\[
+\重点{X\mid Y=y\sim N\Bigl(\mu_X+\rho\frac{\sigma_X}{\sigma_Y}(y-\mu_Y),\ (1-\rho^2)\sigma_X^2\Bigr)}.
+\]
+多元：条件协方差为 Schur 补 $\Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}$。标准情形 \重点{P(X>0,Y>0)=\frac14+\frac{\arcsin\rho}{2\pi}}（化为极坐标下的扇形角）。
+\end{结论}
+
+\begin{结论}{Borel--Cantelli 定 $\limsup$}
+$\sum P(A_n)<\infty\Rightarrow P(A_n\text{ i.o.})=0$；$A_n$ 独立且 $\sum P(A_n)=\infty\Rightarrow P(A_n\text{ i.o.})=1$。
+例：$X_n$ iid $\mathrm{Exp}(1)$，取 $A_n=\{X_n>c\ln n\}$，$P(A_n)=n^{-c}$，得 \重点{\limsup_n\frac{X_n}{\ln n}=1\ \text{a.s.}}。
+\end{结论}
+
+\参考{Ross, \emph{A First Course in Probability}；Grimmett--Stirzaker, \emph{Probability and Random Processes}；Durrett, \emph{Probability: Theory and Examples}（MIT 18.600 / 18.175）；Levin--Peres, \emph{Markov Chains and Mixing Times}。}

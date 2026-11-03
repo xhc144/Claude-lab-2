@@ -1,0 +1,137 @@
+\section{分析代数}
+
+\subsection{核心积木}
+
+\begin{结论}{Abel 分部求和：单调因子乘有界部分和}
+$B_k=\sum_{j\le k}b_j$，$|B_k|\le M$，$a_k\ge0$ 单调递减，则
+\[
+\sum_{k=m}^n a_kb_k=a_nB_n-a_mB_{m-1}-\sum_{k=m}^{n-1}(a_{k+1}-a_k)B_k,
+\qquad \重点{\Bigl|\sum_{k=m}^n a_kb_k\Bigr|\le 2Ma_m}.
+\]
+配合 $\displaystyle\Bigl|\sum_{k=1}^n\sin kx\Bigr|=\Bigl|\frac{\sin\frac{nx}{2}\sin\frac{(n+1)x}{2}}{\sin\frac x2}\Bigr|\le\frac{1}{|\sin\frac x2|}$（$\cos$ 同理），得 $\sum\frac{\sin kx}{k}$ 在 $[\delta,2\pi-\delta]$ 上\textbf{一致}收敛，尾项 $\le \dfrac{2}{m\sin(\delta/2)}$。
+\end{结论}
+
+\begin{结论}{Stolz 定理求递推数列的渐近阶}
+若 $x_n\to0^+$ 且 \重点{x_{n+1}=x_n-c\,x_n^{p+1}+o(x_n^{p+1})}（$c,p>0$），则 $x_{n+1}^{-p}-x_n^{-p}\to pc$，由 Stolz（$b_n=n$）
+\[
+\重点{x_n\sim (pcn)^{-1/p}}.
+\]
+例：$x_{n+1}=\sin x_n$ 有 $p=2,\ c=\tfrac16$，故 $x_n\sim\sqrt{3/n}$；$x_{n+1}=\ln(1+x_n)$ 有 $p=1,\ c=\tfrac12$，故 $x_n\sim 2/n$。
+\end{结论}
+
+\begin{结论}{Frullani 积分}
+$f\in C[0,\infty)$，$f(\infty)=\lim_{x\to\infty}f(x)$ 存在，$a,b>0$：
+\[
+\重点{\int_0^\infty\frac{f(ax)-f(bx)}{x}\,\dd x=\bigl(f(0)-f(\infty)\bigr)\ln\frac ba}.
+\]
+看到“同一函数两种伸缩之差除以 $x$”即用；如 $\int_0^\infty\frac{\ee^{-ax}-\ee^{-bx}}{x}\dd x=\ln\frac ba$。
+\end{结论}
+
+\begin{结论}{插入收敛因子再对参数求导}
+分母 $x$ 阻碍直接积分时，令 $I(a)=\int_0^\infty \ee^{-ax}\frac{\sin x}{x}\dd x$。对 $a\ge a_0>0$ 有控制 $\ee^{-a_0x}$，可求导：
+\[
+\重点{I'(a)=-\int_0^\infty \ee^{-ax}\sin x\,\dd x=-\frac{1}{1+a^2}},\qquad I(+\infty)=0\ \Rightarrow\ I(a)=\frac\pi2-\arctan a .
+\]
+\注意 $a\to0^+$ 的极限交换须另证：$\ee^{-ax}$ 关于 $x$ 单调且一致有界，Abel 判别给出 $[0,\infty)$ 上一致收敛，故 $\int_0^\infty\frac{\sin x}{x}\dd x=\frac\pi2$。
+\end{结论}
+
+\begin{结论}{多元 Gauss 积分（带线性项）}
+$A$ 为 $n$ 阶实对称正定，$b\in\mathbb C^n$：
+\[
+\重点{\int_{\mathbb R^n}\exp\Bigl(-\tfrac12x^{\mathsf T}Ax+b^{\mathsf T}x\Bigr)\dd^nx=\sqrt{\frac{(2\pi)^n}{\det A}}\;\exp\Bigl(\tfrac12 b^{\mathsf T}A^{-1}b\Bigr)}.
+\]
+对 $b$ 求导再令 $b=0$：$\langle x_ix_j\rangle=(A^{-1})_{ij}$；高阶矩按 Wick 配对求和，$\langle x_ix_jx_kx_l\rangle=A^{-1}_{ij}A^{-1}_{kl}+A^{-1}_{ik}A^{-1}_{jl}+A^{-1}_{il}A^{-1}_{jk}$。
+\end{结论}
+
+\begin{结论}{Parseval 求 $\zeta(2k)$：注意归一化}
+$f\in L^2(-\pi,\pi)$，$f\sim\frac{a_0}{2}+\sum_{n\ge1}(a_n\cos nx+b_n\sin nx)$，则
+\[
+\重点{\frac1\pi\int_{-\pi}^{\pi}|f|^2\dd x=\frac{a_0^2}{2}+\sum_{n\ge1}(a_n^2+b_n^2)}.
+\]
+$f=x$：$b_n=\frac{2(-1)^{n+1}}{n}$ 给 $\zeta(2)=\frac{\pi^2}{6}$；$f=x^2$：$a_0=\frac{2\pi^2}{3}$，$a_n=\frac{4(-1)^n}{n^2}$ 给 $\zeta(4)=\frac{\pi^4}{90}$。
+\end{结论}
+
+\begin{结论}{Dini 定理：单调逐点收敛升级为一致收敛}
+$K$ \textbf{紧}，$f_n,f\in C(K)$，对每个 $x$，$f_n(x)$ \textbf{单调}趋于 $f(x)$ $\Rightarrow$ \重点{f_n\rightrightarrows f}。
+三个条件缺一不可：$x^n$ 在 $[0,1]$ 上极限不连续；$K=[0,1)$ 时同样失败。常用来交换极限与积分，或证明 $\sum$ 非负连续项级数在紧集上一致收敛。
+\end{结论}
+
+\begin{结论}{秩一扰动：行列式引理与 Sherman–Morrison}
+$A$ 可逆，$u,v\in\mathbb C^n$：
+\[
+\重点{\det(A+uv^{\mathsf T})=\det A\,(1+v^{\mathsf T}A^{-1}u)},\qquad
+(A+uv^{\mathsf T})^{-1}=A^{-1}-\frac{A^{-1}uv^{\mathsf T}A^{-1}}{1+v^{\mathsf T}A^{-1}u}.
+\]
+取 $A=aI,\ u=b\mathbf 1,\ v=\mathbf 1$（$J=\mathbf 1\mathbf 1^{\mathsf T}$）：$aI+bJ$ 特征值为 $a$（$n-1$ 重）与 $a+nb$，$\det=a^{n-1}(a+nb)$，逆为 $\frac1a\bigl(I-\frac{b}{a+nb}J\bigr)$。
+\end{结论}
+
+\begin{结论}{分块行列式：Schur 补}
+$M=\begin{pmatrix}A&B\\C&D\end{pmatrix}$，$A$ 可逆：$\重点{\det M=\det A\cdot\det(D-CA^{-1}B)}$，
+\[
+M^{-1}=\begin{pmatrix}A^{-1}+A^{-1}BS^{-1}CA^{-1}&-A^{-1}BS^{-1}\\-S^{-1}CA^{-1}&S^{-1}\end{pmatrix},\quad S=D-CA^{-1}B.
+\]
+四块同阶且 \重点{AC=CA} 时 $\det M=\det(AD-CB)$（不需 $A$ 可逆，取 $A+\varepsilon I$ 后令 $\varepsilon\to0$）。
+\end{结论}
+
+\begin{结论}{$AB$ 与 $BA$ 的特征多项式}
+$A\in M_{m\times n}$，$B\in M_{n\times m}$：
+\[
+\重点{\lambda^{n}\det(\lambda I_m-AB)=\lambda^{m}\det(\lambda I_n-BA)},\qquad \det(I_m+AB)=\det(I_n+BA).
+\]
+故 $AB$、$BA$ 非零特征值连同代数重数相同。把 $n\times n$ 大矩阵的行列式降为 $m\times m$（$m\ll n$）时直接用。
+\end{结论}
+
+\begin{结论}{由秩序列读出 Jordan 结构}
+对特征值 $\lambda$，令 \重点{r_k=\rank(A-\lambda I)^k}，$r_0=n$。则
+\[
+\#\{\text{大小}\ge k\text{ 的 }\lambda\text{ 块}\}=r_{k-1}-r_k,\qquad
+\重点{\#\{\text{大小}=k\}=r_{k-1}-2r_k+r_{k+1}}.
+\]
+块总数 $=n-r_1=\dim\ker(A-\lambda I)$；最大块大小 $=$ 最小的 $k$ 使 $r_k=r_{k+1}$。
+\end{结论}
+
+\begin{结论}{Hermite 矩阵特征值扰动：Weyl 与交错}
+特征值\textbf{降序} $\lambda_1\ge\dots\ge\lambda_n$。$A,B$ Hermite，$i+j-1\le n$：
+\[
+\重点{\lambda_{i+j-1}(A+B)\le\lambda_i(A)+\lambda_j(B)},\qquad |\lambda_k(A+E)-\lambda_k(A)|\le\|E\|_2 .
+\]
+删去一行一列得主子阵 $B$：$\lambda_k(A)\ge\lambda_k(B)\ge\lambda_{k+1}(A)$。均由 Courant–Fischer $\lambda_k=\max_{\dim V=k}\min_{x\in V}\frac{x^*Ax}{x^*x}$ 得到。
+\end{结论}
+
+\begin{结论}{Burnside 计数：项链}
+有限群 $G$ 作用于 $X$：\重点{|X/G|=\frac1{|G|}\sum_{g\in G}|X^g|}。$n$ 珠 $k$ 色、只计旋转：旋转 $j$ 格的不动着色数为 $k^{\gcd(j,n)}$，
+\[
+\重点{N=\frac1n\sum_{d\mid n}\varphi(d)\,k^{n/d}}.
+\]
+再允许翻转（二面体群 $D_n$）：在旋转部分 $\sum_{d\mid n}\varphi(d)k^{n/d}$ 上，$n$ 奇时加 $n\,k^{(n+1)/2}$，$n$ 偶时加 $\frac n2(k^{n/2+1}+k^{n/2})$，再除以 $2n$。
+\end{结论}
+
+\begin{结论}{Sylow 计数与元素计数}
+$|G|=p^am$，$p\nmid m$：\重点{n_p\equiv1\pmod p,\ n_p\mid m}；$n_p=1\Leftrightarrow$ Sylow $p$ 子群正规。
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item $|G|=pq$，$p<q$，$p\nmid q-1$ $\Rightarrow$ $n_p=n_q=1$，$G\cong C_{pq}$（如 15，33，35）。
+\item Sylow 子群阶为素数 $p$ 时，它们两两交平凡，贡献 \重点{n_p(p-1)} 个 $p$ 阶元。$|G|=30$：若 $n_3=10,\ n_5=6$，则已有 $20+24>30$ 个元素，矛盾，故必有正规 Sylow 子群。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{类方程 $\Rightarrow$ $p^2$ 阶群交换}
+$|G|=|Z(G)|+\sum_i[G:C_G(x_i)]$（$x_i$ 取非中心共轭类代表）。$p$ 群中每个指标被 $p$ 整除 $\Rightarrow$ \重点{Z(G)\ne1}。
+配合 \重点{G/Z(G)\text{ 循环}\Rightarrow G\text{ 交换}}：$|G|=p^2$ 时 $|Z|=p$ 会使 $G/Z$ 循环而矛盾，故 $G$ 交换，$G\cong C_{p^2}$ 或 $C_p\times C_p$。
+\end{结论}
+
+\begin{结论}{平移后用 Eisenstein：分圆多项式不可约}
+$\Phi_p(x)=\frac{x^p-1}{x-1}$，$p$ 素数。代入 $x\mapsto x+1$：
+\[
+\重点{\Phi_p(x+1)=\sum_{k=1}^{p}\binom pk x^{k-1}},
+\]
+首项系数 1，其余系数被 $p$ 整除，常数项 $p$ 不被 $p^2$ 整除，Eisenstein 给出不可约，$[\mathbb Q(\zeta_p):\mathbb Q]=p-1$。一般 $[\mathbb Q(\zeta_n):\mathbb Q]=\varphi(n)$。
+\end{结论}
+
+\begin{结论}{矩阵指数的三条可用恒等式}
+\[
+\重点{\det\ee^{A}=\ee^{\tr A}},\qquad \ee^{A}B\,\ee^{-A}=\sum_{k\ge0}\frac{1}{k!}[A,[A,\cdots[A,B]]],
+\]
+若 \重点{[A,B]\text{ 与 }A,B\text{ 都对易}}，则 $\ee^A\ee^B=\ee^{A+B+\frac12[A,B]}$（量子力学中位移算符、相干态计算直接用）。
+\end{结论}
+
+\参考{Rudin《数学分析原理》；Axler, \emph{Linear Algebra Done Right}；Horn--Johnson, \emph{Matrix Analysis} 第 4 章；Artin, \emph{Algebra}（MIT 18.701）；Dummit--Foote 第 4 章。}

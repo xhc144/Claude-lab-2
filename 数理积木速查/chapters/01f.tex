@@ -1,0 +1,225 @@
+\subsection{不等式}
+
+\begin{结论}{加权 AM--GM 与 Young}
+$x_i\ge0$，权 $w_i>0$，$\sum w_i=1$：\重点{\prod x_i^{w_i}\le\sum w_ix_i}，等号当且仅当 $x_i$ 全等。两项特例即 Young：
+\[
+\重点{ab\le\frac{a^p}{p}+\frac{b^q}{q}},\qquad a,b\ge0,\ \tfrac1p+\tfrac1q=1,\ p>1 .
+\]
+带参数版 $ab\le\frac{\varepsilon a^p}{p}+\frac{\varepsilon^{-q/p}b^q}{q}$：把乘积项吸收到左边时用（PDE 能量估计的标准动作）。
+\end{结论}
+
+\begin{结论}{Hölder 与三指标推广}
+$\frac1p+\frac1q=1$：$\sum|a_ib_i|\le\|a\|_p\|b\|_q$；$\frac1p+\frac1q+\frac1r=1$：
+\[
+\重点{\sum|a_ib_ic_i|\le\|a\|_p\|b\|_q\|c\|_r}.
+\]
+常用特例：$\bigl(\sum a_ib_ic_i\bigr)^3\le\sum a_i^3\sum b_i^3\sum c_i^3$；$\bigl(\sum x_i\bigr)^3\le\bigl(\sum\frac{x_i^3}{y_i^2}\bigr)\bigl(\sum y_i\bigr)^2$（$x,y>0$）。
+\end{结论}
+
+\begin{结论}{Cauchy--Schwarz 的 Engel 形式}
+$b_i>0$：
+\[
+\重点{\sum\frac{a_i^2}{b_i}\ge\frac{(\sum a_i)^2}{\sum b_i}},\quad\text{等号当 }a_i/b_i\text{ 为常数}.
+\]
+技巧：分子不是平方时先乘上去。Nesbitt：$\sum\frac{a}{b+c}=\sum\frac{a^2}{ab+ac}\ge\frac{(a+b+c)^2}{2(ab+bc+ca)}\ge\frac32$。
+\end{结论}
+
+\begin{结论}{幂平均链与“最大”“最小”两端}
+$x_i>0$：
+\[
+\min x_i\le\frac{n}{\sum 1/x_i}\le\sqrt[n]{\prod x_i}\le\frac{\sum x_i}{n}\le\sqrt{\frac{\sum x_i^2}{n}}\le\max x_i .
+\]
+一般 \重点{p<q\Rightarrow M_p\le M_q}（由 Jensen 用于 $t\mapsto t^{q/p}$）。
+\end{结论}
+
+\begin{结论}{Chebyshev 和不等式与排序不等式}
+$a_i,b_i$ \textbf{同序}：$\frac1n\sum a_ib_i\ge\bigl(\frac1n\sum a_i\bigr)\bigl(\frac1n\sum b_i\bigr)$；反序时反向。积分版：$f,g$ 同单调，$\int_0^1fg\ge\int_0^1f\int_0^1g$。
+排序：\重点{\text{同序和}\ge\text{乱序和}\ge\text{反序和}}。用法：先 WLOG 排序变量，再选同序/反序配对。
+\end{结论}
+
+\begin{结论}{Karamata：控制关系 + 凸函数}
+$x,y\in\mathbb R^n$ 降序排列，$x\succ y$ 指 \重点{\sum_{i\le k}x_i\ge\sum_{i\le k}y_i\ (k<n),\ \sum x_i=\sum y_i}。$f$ 凸 $\Rightarrow\sum f(x_i)\ge\sum f(y_i)$。
+常用：$(x_1,\dots,x_n)\succ(\bar x,\dots,\bar x)$ 即 Jensen；$(1,0,\dots,0)\succ$ 任何概率向量 $\Rightarrow$ 熵在均匀分布最大。Schur 凸函数：在 $\succ$ 下单调。
+\end{结论}
+
+\begin{结论}{Bernoulli 不等式的两个方向}
+$x>-1$：
+\[
+\重点{(1+x)^r\ge1+rx\ (r\ge1\text{ 或 }r\le0)},\qquad (1+x)^r\le1+rx\ (0\le r\le1).
+\]
+连乘版：$x_i>-1$ 同号 $\Rightarrow\prod(1+x_i)\ge1+\sum x_i$；常与 $1-x\le\ee^{-x}$ 一起给 $\prod(1-p_i)$ 的上下界。
+\end{结论}
+
+\begin{结论}{Schur 不等式}
+$x,y,z\ge0$，$t>0$：\重点{x^t(x-y)(x-z)+y^t(y-z)(y-x)+z^t(z-x)(z-y)\ge0}。$t=1$ 展开：
+\[
+x^3+y^3+z^3+3xyz\ge xy(x+y)+yz(y+z)+zx(z+x).
+\]
+证明：设 $x\ge y\ge z$，第一、二项合并 $(x-y)[x^t(x-z)-y^t(y-z)]\ge0$，第三项 $\ge0$。三元齐次对称不等式在 AM--GM 不够时常补这一条。
+\end{结论}
+
+\begin{结论}{Muirhead：对称和的指数控制}
+$x_i>0$，$[a]=\frac1{n!}\sum_{\sigma}x_{\sigma(1)}^{a_1}\cdots x_{\sigma(n)}^{a_n}$。则 \重点{a\succ b\Rightarrow[a]\ge[b]}。
+如 $(2,0,0)\succ(1,1,0)$ 给 $x^2+y^2+z^2\ge xy+yz+zx$；$(3,0,0)\succ(2,1,0)\succ(1,1,1)$。\注意 只对对称和成立；轮换和不能直接用。
+\end{结论}
+
+\begin{结论}{Newton 与 Maclaurin 不等式}
+$x_i>0$，$S_k=e_k/\binom nk$（$e_k$ 为初等对称多项式）：
+\[
+\重点{S_k^2\ge S_{k-1}S_{k+1}},\qquad S_1\ge S_2^{1/2}\ge S_3^{1/3}\ge\cdots\ge S_n^{1/n}.
+\]
+Newton 不等式对任意实数（只要多项式根全实）成立；推论：实系数多项式 $\sum\binom nkS_k x^{n-k}$ 根全实时系数对数凹。
+\end{结论}
+
+\begin{结论}{Hardy 不等式（常数最优）}
+$p>1$，$a_n\ge0$，$A_n=a_1+\cdots+a_n$：
+\[
+\重点{\sum_{n\ge1}\Bigl(\frac{A_n}{n}\Bigr)^p\le\Bigl(\frac{p}{p-1}\Bigr)^p\sum a_n^p},\qquad
+\int_0^\infty\Bigl(\frac1x\int_0^xf\Bigr)^p\dd x\le\Bigl(\frac p{p-1}\Bigr)^p\int_0^\infty f^p .
+\]
+$p=2$ 常数为 $4$；在 $a_n=n^{-1/p}$（截断）附近趋于等号，不可达。
+\end{结论}
+
+\begin{结论}{Carleman 与 Hilbert 不等式}
+$a_n\ge0$，不全为零：
+\[
+\重点{\sum_{n\ge1}(a_1\cdots a_n)^{1/n}<\ee\sum a_n},\qquad
+\sum_{m,n\ge1}\frac{a_mb_n}{m+n}<\pi\Bigl(\sum a_m^2\Bigr)^{1/2}\Bigl(\sum b_n^2\Bigr)^{1/2}.
+\]
+常数 $\ee$、$\pi$ 都最优。Carleman 是 Hardy 中 $p\to\infty$ 的极限（对 $a_n^{1/p}$ 用 Hardy）。
+\end{结论}
+
+\begin{结论}{Kantorovich 不等式}
+$A$ 对称正定，特征值在 $[m,M]$，$\|x\|=1$：
+\[
+\重点{(x^{\mathsf T}Ax)(x^{\mathsf T}A^{-1}x)\le\frac{(M+m)^2}{4Mm}}.
+\]
+用途：最速下降法每步误差（$A$-范数）缩小因子 $\le\frac{\kappa-1}{\kappa+1}$，$\kappa=M/m$；标量形式 $\sum w_ix_i\sum\frac{w_i}{x_i}\le\frac{(M+m)^2}{4Mm}$。
+\end{结论}
+
+\begin{结论}{Hermite--Hadamard：凸函数的积分均值被夹住}
+$f$ 在 $[a,b]$ 凸：
+\[
+\重点{f\Bigl(\frac{a+b}2\Bigr)\le\frac1{b-a}\int_a^bf\le\frac{f(a)+f(b)}2}.
+\]
+推论：凸函数用梯形公式高估、中点公式低估；对 $1/x$ 得 $\frac{2}{a+b}<\frac{\ln b-\ln a}{b-a}<\frac{a+b}{2ab}$。
+\end{结论}
+
+\begin{结论}{Grönwall 不等式}
+$u,\beta\ge0$ 连续，$\alpha$ 不减：
+\[
+u(t)\le\alpha(t)+\int_a^t\beta(s)u(s)\dd s\ \Rightarrow\ \重点{u(t)\le\alpha(t)\exp\Bigl(\int_a^t\beta\Bigr)}.
+\]
+离散版：$u_{n+1}\le(1+h\beta)u_n+h\gamma$ $\Rightarrow$ $u_n\le \ee^{nh\beta}u_0+\frac{\gamma}{\beta}(\ee^{nh\beta}-1)$。用于 ODE 解对初值的连续依赖（$\|x-y\|\le\|x_0-y_0\|\ee^{Lt}$）和数值方法整体误差。
+\end{结论}
+
+\begin{结论}{Agmon（一维 Sobolev）不等式}
+$f\in H^1(\mathbb R)$：
+\[
+\重点{\|f\|_\infty^2\le\|f\|_2\,\|f'\|_2}.
+\]
+证：$f(x)^2=\int_{-\infty}^x(f^2)'=-\int_x^\infty(f^2)'$，相加得 $2f(x)^2\le\int|2ff'|$，再用 Cauchy--Schwarz。区间版：$f(0)=0\Rightarrow|f(x)|\le\sqrt x\|f'\|_{L^2(0,x)}$。
+\end{结论}
+
+\begin{结论}{Young 卷积不等式}
+$1\le p,q,r\le\infty$，\重点{\frac1p+\frac1q=1+\frac1r}：$\|f*g\|_r\le\|f\|_p\|g\|_q$。
+常用：$\|f*g\|_p\le\|f\|_1\|g\|_p$（用 $L^1$ 核磨光不增大范数）；$\|f*g\|_\infty\le\|f\|_p\|g\|_{p'}$，且此时 $f*g$ 一致连续（$1<p<\infty$ 时还趋于 $0$）。
+\end{结论}
+
+\begin{结论}{对数和不等式与 Gibbs 不等式}
+$a_i,b_i>0$：
+\[
+\重点{\sum a_i\ln\frac{a_i}{b_i}\ge\Bigl(\sum a_i\Bigr)\ln\frac{\sum a_i}{\sum b_i}}.
+\]
+取 $\sum a_i=\sum b_i=1$ 得 $D(a\|b)\ge0$；取 $b_i=1/n$ 得 $H(a)\le\ln n$。证：对凸函数 $t\ln t$ 用加权 Jensen，权 $b_i/\sum b$。
+\end{结论}
+
+\begin{结论}{切线法（SOS 前的一步）}
+条件 $\sum x_i=n c$，目标 $\sum f(x_i)\ge nf(c)$ 而 $f$ 不凸：只需证
+\[
+\重点{f(x)\ge f(c)+f'(c)(x-c)}\quad\text{在变量实际取值范围内}.
+\]
+例：$a+b+c=3$，$a,b,c>0$，证 $\sum\frac{(3-2a)^2}{(3-a)^2+a^2}\ge\frac35$。作差 $f(a)-\frac15+\frac{18}{25}(a-1)=\frac{18(a-1)^2(2a+1)}{25(2a^2-6a+9)}\ge0$，求和即得。
+\end{结论}
+
+\begin{结论}{对数平均夹在几何与算术平均之间}
+$a\ne b$，$a,b>0$：
+\[
+\重点{\sqrt{ab}<\frac{a-b}{\ln a-\ln b}<\frac{a+b}2}.
+\]
+等价于 $t>1$ 时 $\frac{2(t-1)}{t+1}<\ln t<\frac{t-1}{\sqrt t}$。“极值点偏移”题：$f(x_1)=f(x_2)$ 化成 $\ln x_1-\ln x_2$ 与 $x_1-x_2$ 的关系后直接套用。
+\end{结论}
+
+\begin{结论}{矩阵形式的 Cauchy--Schwarz 与 von Neumann 迹不等式}
+$A\succeq0$：$|x^*Ay|^2\le(x^*Ax)(y^*Ay)$。任意方阵：
+\[
+\重点{|\tr(AB)|\le\sum_i\sigma_i(A)\sigma_i(B)}\quad(\sigma\text{ 降序}),\qquad |\tr(A^*B)|\le\|A\|_F\|B\|_F .
+\]
+$B\succeq0$ 时 $\tr(AB)\le\|A\|_2\tr B$。用于矩阵优化：$\max_{U\text{ 酉}}\operatorname{Re}\tr(UA)=\sum\sigma_i(A)$（Procrustes）。
+\end{结论}
+
+\begin{结论}{Hadamard 不等式与 Minkowski 行列式不等式}
+\[
+\重点{|\det A|\le\prod_j\|a_j\|_2}\ (a_j\text{ 为列}),\qquad A\succ0:\ \det A\le\prod_i a_{ii}.
+\]
+$A,B\succeq0$（$n$ 阶）：$\det(A+B)^{1/n}\ge(\det A)^{1/n}+(\det B)^{1/n}$，即 $\det^{1/n}$ 在正定锥上凹；$\ln\det$ 也凹。
+\end{结论}
+
+\begin{结论}{Markov 与 Bernstein：多项式导数被自身控制}
+$p$ 为 $n$ 次实多项式：
+\[
+\重点{\max_{[-1,1]}|p'|\le n^2\max_{[-1,1]}|p|}\quad(\text{Markov，Chebyshev 多项式取等}),
+\]
+单位圆上 $\max_{|z|=1}|p'(z)|\le n\max_{|z|=1}|p(z)|$（Bernstein，$z^n$ 取等）。等价于三角多项式 $|t'|\le n\|t\|_\infty$。
+\end{结论}
+
+\begin{结论}{$L^p$ 范数的单调性与插值}
+概率空间：\重点{p<q\Rightarrow\|f\|_p\le\|f\|_q}；计数测度（序列）方向相反：$\|a\|_q\le\|a\|_p$。
+对数凸性（Lyapunov）：$\frac1r=\frac\theta p+\frac{1-\theta}q$ $\Rightarrow$ $\|f\|_r\le\|f\|_p^\theta\|f\|_q^{1-\theta}$。有限测度一般地 $\|f\|_p\le\mu(X)^{1/p-1/q}\|f\|_q$。
+\end{结论}
+
+\begin{结论}{常用初等界（作比较用）}
+\[
+\frac{2x}{\pi}\le\sin x\le x\ (0\le x\le\tfrac\pi2),\qquad 1-\frac{x^2}2\le\cos x\le1-\frac{x^2}{2}+\frac{x^4}{24},
+\]
+\[
+\frac{x}{1+x}\le\frac{2x}{2+x}\le\ln(1+x)\le\frac{x(6+x)}{6+4x}\le x\ (x\ge0),\qquad \ee^x\ge1+x,\ \ \tan x\ge x+\tfrac{x^3}3\ (0\le x<\tfrac\pi2).
+\]
+第一式（Jordan）给 Jordan 引理与 $\int_0^{\pi/2}\ee^{-R\sin\theta}\dd\theta\le\frac{\pi}{2R}$。
+\end{结论}
+
+\begin{结论}{二次型的最小化与 Cauchy--Schwarz 等号}
+$\min\{x^{\mathsf T}Ax: c^{\mathsf T}x=1\}=\dfrac1{c^{\mathsf T}A^{-1}c}$，在 $x=\dfrac{A^{-1}c}{c^{\mathsf T}A^{-1}c}$ 取到（$A\succ0$）。
+即 \重点{(c^{\mathsf T}x)^2\le(x^{\mathsf T}Ax)(c^{\mathsf T}A^{-1}c)}。统计中“逆方差加权最优”、最小方差组合、BLUE 都是这一式。
+\end{结论}
+
+\begin{结论}{积分形式的 Cauchy--Schwarz 两个常见组合}
+$f>0$ 于 $[a,b]$：
+\[
+\int_a^bf\int_a^b\frac1f\ge(b-a)^2,\qquad \Bigl(\int_a^bf\Bigr)^2\le(b-a)\int_a^bf^2 .
+\]
+$0<m\le f\le M$ 时前者有反向界 $\int f\int\frac1f\le\frac{(M+m)^2}{4Mm}(b-a)^2$（连续版 Kantorovich）。
+\end{结论}
+
+\begin{结论}{AM--GM 的“拆项凑等号”}
+求 $\prod x_i^{a_i}$ 在 $\sum c_ix_i=S$ 下的最大值：把 $c_ix_i$ 拆成 $a_i$ 份相等的 $\frac{c_ix_i}{a_i}$，
+\[
+\重点{x_i^*=\frac{a_i}{c_i}\cdot\frac{S}{\sum a_j}},\qquad \max\prod x_i^{a_i}=\prod\Bigl(\frac{a_iS}{c_i\sum a_j}\Bigr)^{a_i}.
+\]
+例：体积固定的无盖长方体表面积最小时，高为底边的一半。
+\end{结论}
+
+\begin{结论}{Jensen 的“反向”：凹函数与有界区间}
+$f$ 在 $[m,M]$ 凸，$X\in[m,M]$：
+\[
+\重点{\E f(X)\le\frac{M-\E X}{M-m}f(m)+\frac{\E X-m}{M-m}f(M)}.
+\]
+（凸函数在弦下方。）由此 Hoeffding 引理 $\E\ee^{s(X-\E X)}\le\ee^{s^2(M-m)^2/8}$ 的第一步就是用这条界替换 $\ee^{sX}$。
+\end{结论}
+
+\begin{结论}{Popoviciu 与方差界}
+$X\in[m,M]$：\重点{\Var X\le\frac{(M-m)^2}{4}}，取等于两端各一半；更精细 $\Var X\le(M-\E X)(\E X-m)$（Bhatia--Davis）。
+离散版：$n$ 个数在 $[m,M]$ 内，样本方差（除以 $n$）$\le\frac{(M-m)^2}4$。
+\end{结论}
+
+\参考{Hardy--Littlewood--Pólya, \emph{Inequalities}；Steele, \emph{The Cauchy--Schwarz Master Class}；Marshall--Olkin, \emph{Inequalities: Theory of Majorization}；Horn--Johnson 第 7 章；Borwein--Erdélyi, \emph{Polynomials and Polynomial Inequalities}。}

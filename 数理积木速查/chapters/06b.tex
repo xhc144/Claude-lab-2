@@ -1,0 +1,90 @@
+\subsection{质点与刚体动力学进阶}
+
+\begin{结论}{惯量张量：平行轴的张量形式与常用值}
+\[
+\重点{I_{ij}=I^{\mathrm{cm}}_{ij}+M\bigl(d^2\delta_{ij}-d_id_j\bigr)}.
+\]
+细棒（过中点）$\frac1{12}ML^2$，薄圆盘轴向 $\frac12MR^2$、直径 $\frac14MR^2$，球壳 $\frac23MR^2$，实心球 $\frac25MR^2$。立方体关于过中心任意轴都是 $\frac16Ma^2$（三主惯量相等，张量各向同性）。垂直轴定理 $I_z=I_x+I_y$ 只对薄平板成立。
+\end{结论}
+
+\begin{结论}{无力矩对称陀螺：空间系进动与 Chandler 摆动}
+$\mathbf L=I\boldsymbol\omega$ 一般不平行于 $\boldsymbol\omega$。对称陀螺（$I_1=I_2$）无外力矩：对称轴绕固定的 $\mathbf L$ 以
+\[
+\重点{\Omega_{\text{空间}}=\frac{L}{I_1}}
+\]
+进动；体坐标中 $\boldsymbol\omega$ 绕对称轴以 $\frac{I_3-I_1}{I_1}\omega_3$ 转。地球 $\frac{I_3-I_1}{I_1}\approx\frac1{305}$，刚体预言周期 305 天，实测 Chandler 周期约 433 天（地球弹性所致）。
+\end{结论}
+
+\begin{结论}{冲量打击与打击中心}
+质量 $M$、对质心转动惯量 $I$ 的物体，在距质心 $b$ 处受垂直冲量 $J$：$v_{\mathrm{cm}}=J/M$，$\omega=Jb/I$。距质心另一侧
+\[
+\重点{s=\frac{I}{Mb}}
+\]
+处的点瞬时速度为零。均匀棒手握一端，打击点在距握点 $\frac23L$ 处时手不受冲击（球棒“甜点”）。
+\end{结论}
+
+\begin{结论}{滑梯子：离开墙面的高度}
+均匀梯子在光滑墙与光滑地面间从静止滑下，墙的支持力在
+\[
+\重点{\text{质心高度降到初始的 }\tfrac23}
+\]
+时变为零，此后梯子离墙。推导：质心在以墙角为心、半径 $L/2$ 的圆上运动，水平速度达到最大时水平力为零。
+\end{结论}
+
+\begin{结论}{链条两例：变质量的正确处理}
+光滑桌面上总长 $L$ 的链条，悬垂 $x$：$L\ddot x=gx$，$\dot x^2=\frac gL(x^2-x_0^2)$。
+自由下落的链条落到秤上：秤读数 \重点{=3\times\text{已落在秤上部分的重量}}（重量 $\lambda gx$ 加上动量流 $\lambda v^2=2\lambda gx$）。两题都要对“正在改变状态的那段”单独写动量变化。
+\end{结论}
+
+\begin{结论}{阻力：线性与二次}
+线性（Stokes，小 Re）$F=-bv$，$b=6\pi\eta a$：$v_t=\frac{mg}{b}$，$v=v_t(1-\ee^{-t/\tau})$，$\tau=m/b$；球的沉降速度 $\frac29\frac{(\rho_s-\rho_f)ga^2}{\eta}$。
+二次（大 Re）$F=-cv^2$，$c=\frac12C_D\rho A$：\重点{v_t=\sqrt{mg/c}}，$v=v_t\tanh(gt/v_t)$，到达 $v_t$ 的特征距离 $v_t^2/g$。
+\end{结论}
+
+\begin{结论}{抛体的两个最大射程}
+沿倾角 $\alpha$ 的斜面向上：\重点{R_{\max}=\frac{v^2}{g(1+\sin\alpha)}}，最优发射方向平分斜面与竖直方向的夹角。
+从高 $h$ 处水平地面上：$R_{\max}=\frac vg\sqrt{v^2+2gh}$，最优仰角 $\tan\theta=\frac{v}{\sqrt{v^2+2gh}}<45^\circ$。包络（安全抛物线）$y=\frac{v^2}{2g}-\frac{gx^2}{2v^2}$。
+\end{结论}
+
+\begin{结论}{引力弹弓}
+在行星系中探测器做弹性散射，速度大小不变、方向转过 $\chi$。换回日心系（行星速度 $\mathbf U$）：
+\[
+\重点{|\Delta\mathbf v|=2v_\infty\sin\frac\chi2},\qquad \text{对头且完全折返时增速可达 }2U .
+\]
+能量来自行星轨道动能（行星减速可忽略）。偏转角由双曲线离心率定：$\sin\frac\chi2=\frac1e$。
+\end{结论}
+
+\begin{结论}{经典散射：偏转角积分与硬球}
+\[
+\theta(b)=\pi-2\int_{r_{\min}}^{\infty}\frac{b\,\dd r}{r^2\sqrt{1-\frac{b^2}{r^2}-\frac{V(r)}{E}}},\qquad \frac{\dd\sigma}{\dd\Omega}=\frac{b}{\sin\theta}\Bigl|\frac{\dd b}{\dd\theta}\Bigr|.
+\]
+硬球（半径和 $R$）：$b=R\cos\frac\theta2$，\重点{\frac{\dd\sigma}{\dd\Omega}=\frac{R^2}{4}}（各向同性），总截面 $\pi R^2$。
+\end{结论}
+
+\begin{结论}{Runge--Lenz 矢量与 Kepler 方程}
+$V=-k/r$：\重点{\mathbf A=\mathbf p\times\mathbf L-mk\hat{\mathbf r}} 守恒，指向近日点，$|\mathbf A|=mke$。小扰动下 $\mathbf A$ 的缓慢转动就是近日点进动。
+时间与位置：平近点角 $M=\frac{2\pi}{T}(t-t_p)$，偏近点角 $E$：$M=E-e\sin E$（Newton 迭代 $E\leftarrow E-\frac{E-e\sin E-M}{1-e\cos E}$），$r=a(1-e\cos E)$。
+\end{结论}
+
+\begin{结论}{圆轨道上的切向小冲量}
+半径 $r$、速度 $v$ 的圆轨道切向加速 $\Delta v\ll v$：此点成为近地点，
+\[
+\重点{e\approx\frac{2\Delta v}{v}},\qquad \frac{\Delta a}{a}\approx\frac{2\Delta v}{v},\qquad \frac{\Delta T}{T}\approx\frac{3\Delta v}{v}.
+\]
+追赶悖论：要追上前方同轨道的飞船应先\textbf{减速}——降到更低、更快的轨道，周期变短，过一圈再加速回来。
+\end{结论}
+
+\begin{结论}{Atwood 机与弹簧的等效质量}
+滑轮转动惯量 $I$、半径 $R$：\重点{a=\frac{(m_1-m_2)g}{m_1+m_2+I/R^2}}，两侧张力不等，差值 $Ia/R^2$。
+弹簧质量 $m_s$ 不可忽略时（速度沿弹簧线性分布）：$\omega=\sqrt{\frac{k}{m+m_s/3}}$。
+\end{结论}
+
+\begin{结论}{浮体稳定：稳心高度}
+浮体倾侧小角度，浮心移动；稳心高度
+\[
+\重点{\overline{GM}=\frac{I_{\mathrm{wl}}}{V}-\overline{BG}}>0\ \text{时稳定},
+\]
+$I_{\mathrm{wl}}$ 为水线面对倾侧轴的面积二阶矩，$V$ 为排水体积，$\overline{BG}$ 为重心高出浮心的距离。横摇周期 $T\approx2\pi k/\sqrt{g\,\overline{GM}}$（$k$ 为回转半径）。宽而浅的船稳，细长圆木会滚向“平躺”。
+\end{结论}
+
+\参考{Kleppner--Kolenkow；Morin, \emph{Introduction to Classical Mechanics}（大量变质量与刚体例题）；Goldstein 第 3、5 章；Taylor, \emph{Classical Mechanics} 第 2、10、14 章；Curtis, \emph{Orbital Mechanics for Engineering Students}。}

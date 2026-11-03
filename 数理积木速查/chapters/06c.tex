@@ -1,0 +1,91 @@
+\subsection{流体、弹性与振动}
+
+\begin{结论}{Bernoulli、Torricelli 与排空时间}
+定常、无粘、不可压、沿流线：$p+\frac12\rho v^2+\rho gz=$ 常数。小孔出流 $v=\sqrt{2gh}$。横截面 $A$ 的容器经面积 $a$ 的小孔排空：
+\[
+A\dot h=-a\sqrt{2gh}\ \Rightarrow\ \重点{T=\frac Aa\sqrt{\frac{2H}{g}}}.
+\]
+实际出流乘收缩系数 $\approx0.61$（锐缘孔）。Venturi 管：$\Delta p=\frac12\rho(v_2^2-v_1^2)$ 测流量。
+\end{结论}
+
+\begin{结论}{Poiseuille 流与 Reynolds 数}
+圆管层流：抛物线速度剖面，
+\[
+\重点{Q=\frac{\pi R^4\Delta p}{8\eta L}},\qquad \text{流阻 }\frac{8\eta L}{\pi R^4}.
+\]
+$R^4$ 依赖：血管半径减小 $16\%$，流阻翻倍。$\mathrm{Re}=\frac{\rho vD}{\eta}$：圆管约 $2300$ 以下层流。其他无量纲数：Froude $v/\sqrt{gL}$（波浪、船模），Mach $v/c_s$（可压缩性）。
+\end{结论}
+
+\begin{结论}{表面张力：Laplace 压强与毛细长度}
+\[
+\重点{\Delta p=\gamma\Bigl(\frac1{R_1}+\frac1{R_2}\Bigr)},\quad \text{液滴 }\frac{2\gamma}{R},\quad \text{肥皂泡 }\frac{4\gamma}{R}\ (\text{两个表面}).
+\]
+毛细上升 $h=\frac{2\gamma\cos\theta}{\rho gr}$（Jurin）；毛细长度 $\ell_c=\sqrt{\gamma/(\rho g)}$，水约 $2.7\,$mm：尺度小于 $\ell_c$ 时表面张力胜过重力。
+\end{结论}
+
+\begin{结论}{水波色散}
+深度 $h$，含表面张力：
+\[
+\重点{\omega^2=\Bigl(gk+\frac{\gamma k^3}{\rho}\Bigr)\tanh kh}.
+\]
+深水重力波 $c=\sqrt{g/k}$，$v_g=\frac12c$（船后的 Kelvin 尾迹角 $19.5^\circ$ 由此而来）；浅水 $c=\sqrt{gh}$（无色散，海啸）。水的最小相速约 $23\,$cm/s，在 $\lambda\approx1.7\,$cm 处，小于它的扰动源不激发尾波。
+\end{结论}
+
+\begin{结论}{梁：挠度与 Euler 屈曲}
+Euler--Bernoulli 梁 $EI\,y''''=q(x)$。悬臂端点集中力 $F$：
+\[
+\重点{\delta=\frac{FL^3}{3EI}};\qquad \text{两端铰接压杆屈曲载荷 }F_c=\frac{\pi^2EI}{L^2}.
+\]
+一端固定一端自由 $F_c=\frac{\pi^2EI}{4L^2}$，两端固定 $\frac{4\pi^2EI}{L^2}$。矩形截面 $I=\frac{bh^3}{12}$：立着放的木板比平放硬 $(h/b)^2$ 倍。
+\end{结论}
+
+\begin{结论}{各类波速}
+\[
+\text{弦 }\sqrt{T/\mu},\quad \text{细棒纵波 }\sqrt{Y/\rho},\quad \text{剪切波 }\sqrt{G/\rho},\quad \重点{\text{气体声速 }\sqrt{\gamma p/\rho}=\sqrt{\gamma RT/M}}.
+\]
+空气 $20^\circ$C 约 $343\,$m/s，$\propto\sqrt T$；Newton 用等温 $\sqrt{p/\rho}$ 低估约 $15\%$（声波是绝热的）。固体中纵波快于横波：地震 P 波先到。
+\end{结论}
+
+\begin{结论}{扭丝与扭摆}
+半径 $R$、长 $L$、剪切模量 $G$ 的细丝扭转常数 \重点{\kappa=\frac{\pi GR^4}{2L}}，扭摆周期 $T=2\pi\sqrt{I/\kappa}$。
+$R^4$ 使极细的丝能测极小的力矩（Cavendish 测 $G$、Coulomb 定律、Eötvös 实验）。圆管 $\kappa=\frac{\pi G(R_2^4-R_1^4)}{2L}$。
+\end{结论}
+
+\begin{结论}{旋转液面与刚体转动流体}
+容器以 $\omega$ 匀速转动，液体随之刚体转动：等压面 $p=$ 常数满足
+\[
+\重点{z=z_0+\frac{\omega^2r^2}{2g}}\ (\text{旋转抛物面}).
+\]
+液面最低点下降量等于边缘上升量（体积守恒）。液态镜面望远镜：焦距 $f=\frac{g}{2\omega^2}$。
+\end{结论}
+
+\begin{结论}{Lagrange 点}
+质量比 $\mu=\frac{m}{M+m}\ll1$，间距 $a$：
+\[
+\重点{r_{L1}\approx r_{L2}\approx a\Bigl(\frac{\mu}{3}\Bigr)^{1/3}}\ (\text{即 Hill 半径}),\qquad L_3\text{ 在对侧约 }a\ \text{处}.
+\]
+$L_1,L_2,L_3$ 不稳定（鞍点），$L_4,L_5$ 与两天体成等边三角形，$M/m>24.96$ 时线性稳定（Coriolis 力维持），如木星的特洛伊小行星。日地 $L_2$ 距地球约 $1.5\times10^6\,$km（JWST）。
+\end{结论}
+
+\begin{结论}{悬臂梁的固有频率与 Rayleigh 法}
+均匀悬臂梁第一阶：$\beta_1L=1.875$，
+\[
+\重点{\omega_1=(1.875)^2\sqrt{\frac{EI}{\rho AL^4}}},\qquad \omega_2/\omega_1\approx6.27 .
+\]
+Rayleigh 法：$\omega^2\le\frac{\int EI\,y''^2\dd x}{\int\rho Ay^2\dd x}$，代入静挠曲线作试探函数即可得 $1\%$ 以内的基频上界。
+\end{结论}
+
+\begin{结论}{对数衰减率：从衰减曲线读 $Q$}
+$\ddot x+\gamma\dot x+\omega_0^2x=0$，相邻同向峰值之比：
+\[
+\重点{\delta=\ln\frac{x_n}{x_{n+1}}=\frac{\gamma T_d}{2}},\qquad Q\approx\frac{\pi}{\delta}\ (\text{弱阻尼}).
+\]
+振幅降为 $1/\ee$ 需约 $Q/\pi$ 个周期。比读共振线宽更适合高 $Q$ 系统（音叉、钟摆、石英晶体）。
+\end{结论}
+
+\begin{结论}{涡量与 Kelvin 环量定理}
+无粘、正压、保守外力：沿随流体运动的闭合曲线，环量 \重点{\Gamma=\oint\mathbf v\cdot\dd\boldsymbol\ell\ \text{守恒}}。
+推论：初始无旋的流动保持无旋（势流 $\mathbf v=\nabla\phi$，$\nabla^2\phi=0$）；涡线随流体运动，拉伸时涡量增大（浴缸涡旋、龙卷）。机翼升力 $L'=\rho v\Gamma$（Kutta--Joukowski，单位翼展）。
+\end{结论}
+
+\参考{Faber, \emph{Fluid Dynamics for Physicists}；Acheson, \emph{Elementary Fluid Dynamics}；Landau--Lifshitz 第 6、7 卷；Timoshenko--Gere, \emph{Mechanics of Materials}；Murray--Dermott, \emph{Solar System Dynamics} 第 3 章（MIT 8.21 / 2.25）。}

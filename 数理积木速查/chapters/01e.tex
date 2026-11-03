@@ -1,0 +1,224 @@
+\subsection{极限与渐近技巧}
+
+\begin{结论}{加减中不能整体替换等价无穷小：展开到抵消后的首项}
+乘除因子可换成等价量；和差中各项须展开到\textbf{首个不抵消的阶}。常用五阶展开（$x\to0$）：
+\[
+\tan x=x+\tfrac{x^3}{3}+\tfrac{2x^5}{15},\quad \arcsin x=x+\tfrac{x^3}{6}+\tfrac{3x^5}{40},\quad \arctan x=x-\tfrac{x^3}{3}+\tfrac{x^5}{5},
+\]
+\[
+\ln\cos x=-\tfrac{x^2}{2}-\tfrac{x^4}{12}-\tfrac{x^6}{45},\qquad \frac{x}{\sin x}=1+\tfrac{x^2}{6}+\tfrac{7x^4}{360}.
+\]
+如 \重点{\tan x-\sin x=\tfrac{x^3}{2}+O(x^5)}，$\tan x-x$ 与 $x-\sin x$ 的首项分别为 $\tfrac{x^3}{3}$、$\tfrac{x^3}{6}$，比值极限为 $2$。
+\end{结论}
+
+\begin{结论}{$1^\infty$ 型：指数化后只需一阶差}
+$f\to1$，$g\to\infty$：\重点{\lim f^g=\exp\bigl(\lim g\,(f-1)\bigr)}（因 $\ln f=(f-1)+O((f-1)^2)$，要求 $g(f-1)^2\to0$）。不满足时要多展开一项：
+\[
+\Bigl(1+\frac1n\Bigr)^{n^2}\ee^{-n}\to\ee^{-1/2},\qquad \Bigl(1+\frac1n\Bigr)^{n}=\ee\Bigl(1-\frac1{2n}+\frac{11}{24n^2}+O(n^{-3})\Bigr).
+\]
+\end{结论}
+
+\begin{结论}{调和数与 $\ln n!$ 的渐近级数}
+\[
+\重点{H_n=\ln n+\gamma+\frac1{2n}-\frac1{12n^2}+\frac1{120n^4}-\cdots},\qquad
+\ln n!=n\ln n-n+\tfrac12\ln(2\pi n)+\frac1{12n}-\frac1{360n^3}+\cdots
+\]
+两者都是\textbf{发散的渐近级数}：固定截断项数时误差小于首个略去项，但项数不能无限增加。$\gamma\approx0.5772$。
+\end{结论}
+
+\begin{结论}{$\sum k^{-s}$ 的常数项是 $\zeta(s)$}
+$s>0$，$s\ne1$：
+\[
+\重点{\sum_{k=1}^n k^{-s}=\frac{n^{1-s}}{1-s}+\zeta(s)+\frac{n^{-s}}2-\frac{s\,n^{-s-1}}{12}+O(n^{-s-3})}.
+\]
+对 $0<s<1$ 也成立（$\zeta$ 取解析延拓值），如 $\sum_{k\le n}k^{-1/2}=2\sqrt n+\zeta(\tfrac12)+\frac1{2\sqrt n}+\cdots$，$\zeta(\tfrac12)\approx-1.4604$。
+\end{结论}
+
+\begin{结论}{Riemann 和求极限：认出 $\frac1n\sum f(k/n)$}
+\[
+\lim\sum_{k=1}^n\frac{n}{n^2+k^2}=\frac\pi4,\qquad \lim\frac{\sqrt[n]{n!}}{n}=\frac1\ee,\qquad
+\lim\frac1n\Bigl(\prod_{k=1}^n(n+k)\Bigr)^{1/n}=\exp\!\int_0^1\ln(1+x)\dd x=\frac4\ee.
+\]
+乘积先取对数变成和。若求和项是 $\frac1n f\bigl(\frac kn\bigr)+o(\frac1n)$（一致地），极限不变。
+\end{结论}
+
+\begin{结论}{Riemann 和的一阶误差：$\lim n(\text{和}-\text{积分})$}
+$f\in C^2[0,1]$：
+\[
+\重点{\frac1n\sum_{k=1}^n f\Bigl(\frac kn\Bigr)-\int_0^1f=\frac{f(1)-f(0)}{2n}+O(n^{-2})},
+\]
+\[
+\frac1n\sum_{k=1}^n f\Bigl(\frac{k-\frac12}{n}\Bigr)-\int_0^1f=-\frac{f'(1)-f'(0)}{24n^2}+O(n^{-4}).
+\]
+后者要 $f\in C^4$。用于“$\lim n(\cdots)$”型题，如 $\lim n\bigl(\sum_{k\le n}\frac{n}{n^2+k^2}-\frac\pi4\bigr)=-\frac14$。
+\end{结论}
+
+\begin{结论}{Cesàro 与 Toeplitz：平均保持极限}
+$a_n\to a$ $\Rightarrow$ $\frac{a_1+\cdots+a_n}{n}\to a$；$a_n>0$ 时几何平均也 $\to a$。一般地，权 $c_{nk}\ge0$、$\sum_kc_{nk}\to1$、每个固定 $k$ 有 $c_{nk}\to0$，则 \重点{\sum_kc_{nk}a_k\to a}。
+推论：$a_{n+1}/a_n\to L$ $\Rightarrow$ $a_n^{1/n}\to L$（反之不成立），如 $\sqrt[n]{\binom{2n}{n}}\to4$。
+\end{结论}
+
+\begin{结论}{$x_{n+1}=x_n+1/x_n$：先平方再求和}
+平方得 $x_{n+1}^2=x_n^2+2+x_n^{-2}$，于是 $x_n^2=2n+O(\ln n)$，再代回：
+\[
+\重点{x_n^2=2n+\tfrac12\ln n+O(1)},\qquad x_n=\sqrt{2n}+\frac{\ln n}{4\sqrt{2n}}+O(n^{-1/2}).
+\]
+一般 $x_{n+1}=x_n+x_n^{-p}$（$p>-1$）：看 $x^{p+1}$ 的增量 $\to p+1$，得 $x_n\sim((p+1)n)^{1/(p+1)}$。
+\end{结论}
+
+\begin{结论}{条件收敛级数重排：交错调和的显式值}
+$\sum(-1)^{n+1}/n=\ln2$。按“$p$ 个正项、$q$ 个负项”循环重排：
+\[
+\重点{\text{和}=\ln2+\tfrac12\ln\frac pq}.
+\]
+来源：前 $m$ 轮正项和 $\tfrac12\ln(pm)+\ln2+\tfrac\gamma2$、负项和 $\tfrac12\ln(qm)+\tfrac\gamma2$ 的差。Riemann 定理：条件收敛级数可重排成任意值；绝对收敛则和不变。
+\end{结论}
+
+\begin{结论}{$n!\,\ee$ 的小数部分}
+$n!\,\ee=\sum_{k\le n}\frac{n!}{k!}+r_n$，前者是整数，
+\[
+\重点{\frac1{n+1}<r_n=\frac1{n+1}+\frac1{(n+1)(n+2)}+\cdots<\frac1n}.
+\]
+故 $n\sin(2\pi n!\,\ee)\to2\pi$；$0<r_n<1$ 也直接证明 $\ee$ 无理（若 $\ee=p/q$，$n=q$ 时 $n!\,\ee$ 为整数）。
+\end{结论}
+
+\begin{结论}{上下极限的不等式}
+\[
+\liminf a_n+\liminf b_n\le\liminf(a_n+b_n)\le\liminf a_n+\limsup b_n,
+\]
+\[
+\liminf a_n+\limsup b_n\le\limsup(a_n+b_n)\le\limsup a_n+\limsup b_n,
+\]
+$a_n>0$：\重点{\liminf\frac{a_{n+1}}{a_n}\le\liminf a_n^{1/n}\le\limsup a_n^{1/n}\le\limsup\frac{a_{n+1}}{a_n}}。所以根值判别比比值判别强。
+\end{结论}
+
+\begin{结论}{Fekete 次可加引理}
+\重点{a_{m+n}\le a_m+a_n} 对所有 $m,n\ge1$ 成立 $\Rightarrow$ $\lim\frac{a_n}{n}=\inf_n\frac{a_n}{n}$（可为 $-\infty$）。
+用法：证明“增长率”存在，如自回避行走数 $c_{m+n}\le c_mc_n$ 取 $a_n=\ln c_n$ 得连通常数 $\mu=\lim c_n^{1/n}$；矩阵 $\|A^n\|$ 给 $\rho(A)=\lim\|A^n\|^{1/n}$。超可加时对应 $\sup$。
+\end{结论}
+
+\begin{结论}{峰形积分：$x^n$ 把质量推到端点}
+$f\in C[0,1]$：$n\int_0^1x^nf(x)\dd x\to f(1)$。若 $f\in C^1[0,1]$，再进一阶：
+\[
+\重点{n\Bigl(n\int_0^1x^nf(x)\dd x-f(1)\Bigr)\to-\bigl(f(1)+f'(1)\bigr)}.
+\]
+来自 $\int_0^1x^n\dd x=\frac1{n+1}$，$\int_0^1x^n(x-1)\dd x=-\frac1{(n+1)(n+2)}$。
+\end{结论}
+
+\begin{结论}{近似单位元（$\delta$ 序列）}
+$K_n\ge0$，$\int K_n=1$，且对每个 $\delta>0$ 有 $\int_{|x|>\delta}K_n\to0$；$f$ 有界、在 $0$ 连续 $\Rightarrow$ \重点{\int K_n(x)f(x)\dd x\to f(0)}。
+常用核：$\frac{n}{\pi(1+n^2x^2)}$（Poisson）、$\frac{n}{\sqrt\pi}\ee^{-n^2x^2}$（热核）、Landau 核 $c_n(1-x^2)^n$（在 $[-1,1]$，$c_n\sim\sqrt{n/\pi}$）、Fejér 核。例：$\lim n\int_0^1\frac{f(x)}{1+n^2x^2}\dd x=\frac\pi2f(0)$（半个核）。
+\end{结论}
+
+\begin{结论}{$(1+x/n)^n$ 逼近 $\ee^x$ 的误差}
+固定 $x$：
+\[
+\重点{\Bigl(1+\frac xn\Bigr)^n=\ee^x\Bigl(1-\frac{x^2}{2n}+O(n^{-2})\Bigr)},\qquad 0\le \ee^x-\Bigl(1+\frac xn\Bigr)^n\le\frac{x^2\ee^x}{2n}\ (0\le x\le n).
+\]
+复利、Euler 法求解 $y'=y$ 的整体误差都是这一项。
+\end{结论}
+
+\begin{结论}{超越方程根的渐近：迭代代回}
+$x\tan$ 型：$\tan x=x$ 在 $(n\pi,n\pi+\frac\pi2)$ 的根，令 $a=(n+\frac12)\pi$，
+\[
+\重点{x_n=a-\frac1a-\frac2{3a^3}+O(a^{-5})}.
+\]
+$x\ee^x=y$（$y\to\infty$，Lambert $W$）：$x=L_1-L_2+\frac{L_2}{L_1}+O\bigl(\frac{L_2^2}{L_1^2}\bigr)$，$L_1=\ln y$，$L_2=\ln\ln y$。方法：先取主项，代入方程求下一项的修正。
+\end{结论}
+
+\begin{结论}{幂平均的极限}
+$a_i>0$，权 $w_i>0$，$\sum w_i=1$，$M_p=\bigl(\sum w_ia_i^p\bigr)^{1/p}$：
+\[
+\重点{\lim_{p\to0}M_p=\prod a_i^{w_i}},\qquad \lim_{p\to+\infty}M_p=\max a_i,\qquad \lim_{p\to-\infty}M_p=\min a_i .
+\]
+如 $\lim_{n\to\infty}\bigl(\frac{a^{1/n}+b^{1/n}}{2}\bigr)^n=\sqrt{ab}$。$M_p$ 关于 $p$ 单调不减。
+\end{结论}
+
+\begin{结论}{Weyl 等分布}
+$\alpha$ 无理 $\Rightarrow$ $\{n\alpha\}$ 在 $[0,1)$ 等分布：对 Riemann 可积 $f$，$\frac1N\sum_{n=1}^Nf(\{n\alpha\})\to\int_0^1f$。
+判据（Weyl）：\重点{\frac1N\sum_{n\le N}\ee^{2\pi\ii hx_n}\to0\ (\forall h\ne0)}。推论：$\{\sin n\}$ 在 $[-1,1]$ 稠密，$\frac1N\sum|\sin n|\to\frac2\pi$；$2^n$ 首位数字为 $d$ 的频率是 $\log_{10}(1+1/d)$（Benford）。
+\end{结论}
+
+\begin{结论}{二项系数的熵形式}
+$k=\alpha n$，$0<\alpha<1$：
+\[
+\重点{\binom{n}{\alpha n}=\frac{\ee^{nH(\alpha)}}{\sqrt{2\pi n\alpha(1-\alpha)}}\bigl(1+O(\tfrac1n)\bigr)},\qquad H(\alpha)=-\alpha\ln\alpha-(1-\alpha)\ln(1-\alpha).
+\]
+粗略界 $\frac{1}{n+1}\ee^{nH}\le\binom{n}{\alpha n}\le\ee^{nH}$；$\sum_{k\le\alpha n}\binom nk\le\ee^{nH(\alpha)}$（$\alpha\le\frac12$）。
+\end{结论}
+
+\begin{结论}{函数迭代的收敛阶}
+$x_{n+1}=\varphi(x_n)\to x^*$，$\varphi\in C^{p}$。若 $\varphi'(x^*)=\cdots=\varphi^{(p-1)}(x^*)=0\ne\varphi^{(p)}(x^*)$，则
+\[
+\重点{x_{n+1}-x^*\approx\frac{\varphi^{(p)}(x^*)}{p!}(x_n-x^*)^p}.
+\]
+$p=1$ 时 $x_n-x^*\sim Cq^n$，$q=\varphi'(x^*)$。例：$x_{n+1}=\frac12(x_n+\frac{a}{x_n})$ 给 $\sqrt a$ 的二次收敛，$\frac{x_{n+1}-\sqrt a}{x_{n+1}+\sqrt a}=\bigl(\frac{x_n-\sqrt a}{x_n+\sqrt a}\bigr)^2$ 可精确求解。
+\end{结论}
+
+\begin{结论}{递推 $x_{n+1}=x_n+\ee^{-x_n}$ 与 $x_{n+1}=x_n-x_n^2$ 的第二项}
+$x_{n+1}=x_n-x_n^2$（$0<x_0<1$）：$\frac1{x_{n+1}}-\frac1{x_n}=1+x_n+O(x_n^2)$，故
+\[
+\重点{\frac1{x_n}=n+\ln n+O(1)},\qquad x_n=\frac1n-\frac{\ln n}{n^2}+O(n^{-2}).
+\]
+$x_{n+1}=x_n+\ee^{-x_n}$：$\ee^{x_{n+1}}-\ee^{x_n}=1+O(\ee^{-x_n})$，故 $x_n=\ln n+O\bigl(\frac{\ln n}{n}\bigr)$。思路：找使增量趋于常数的函数 $g$，再由误差项的和定下一阶。
+\end{结论}
+
+\begin{结论}{对数与指数尺度的比较}
+对任意 $a>1,\ \varepsilon>0,\ k>0$：$(\ln n)^k\ll n^\varepsilon\ll a^n\ll n!\ll n^n$，且
+\[
+\重点{\sqrt[n]{n!}\sim\frac n\ee},\qquad \frac{n!}{n^n}\ee^n\sim\sqrt{2\pi n},\qquad \Bigl(1-\frac1n\Bigr)^{n\ln n}\sim\frac1n .
+\]
+最后一式常见于“$n$ 次独立尝试都失败”的概率估计。
+\end{结论}
+
+\begin{结论}{分段积分求含参极限}
+$\int_0^{1}\frac{\dd x}{1+x^n}\to1$，要下一阶时令 $x=t^{1/n}$：
+\[
+\int_0^1\frac{x^n}{1+x^n}\dd x=\frac1n\int_0^1\frac{t^{1/n}}{1+t}\dd t\ \Rightarrow\ \重点{n\int_0^1\frac{x^n}{1+x^n}\dd x\to\ln2}.
+\]
+要点：换元 $x=t^{1/n}$ 把“集中在 $x=1$ 附近、宽度 $1/n$”的质量拉到固定区间。
+\end{结论}
+
+\begin{结论}{Stolz 的 $\frac\infty\infty$ 与 $\frac00$ 两种形式}
+$b_n$ 严格增且 $\to\infty$：$\frac{a_{n+1}-a_n}{b_{n+1}-b_n}\to L\Rightarrow\frac{a_n}{b_n}\to L$。
+$a_n,b_n\to0$，$b_n$ 严格减：同样结论（\textbf{此时要求 $a_n\to0$}）。例：$\frac{1^k+2^k+\cdots+n^k}{n^{k+1}}\to\frac1{k+1}$；\重点{\frac{H_n}{\ln n}\to1}。
+\end{结论}
+
+\begin{结论}{生成函数系数的“$1/n$ 平均”：Tauber 型推论}
+$a_n\ge0$，$\sum a_nx^n\sim\dfrac{C}{(1-x)^{\alpha}}$（$x\to1^-$，$\alpha>0$）$\Rightarrow$
+\[
+\重点{\sum_{k\le n}a_k\sim\frac{C\,n^\alpha}{\Gamma(\alpha+1)}}\qquad\text{（Hardy--Littlewood--Karamata）}.
+\]
+只得部分和，不能推出 $a_n\sim Cn^{\alpha-1}/\Gamma(\alpha)$（后者需单调等额外条件）。
+\end{结论}
+
+\begin{结论}{差分商的极限给出高阶导数}
+$f$ 在 $a$ 处 $n$ 阶可导：
+\[
+\重点{\lim_{h\to0}\frac{\Delta_h^nf(a)}{h^n}=f^{(n)}(a)},\qquad \Delta_h^nf(a)=\sum_{k=0}^n(-1)^{n-k}\binom nkf(a+kh).
+\]
+$n=2$ 的对称形式 $\frac{f(a+h)-2f(a)+f(a-h)}{h^2}\to f''(a)$。\注意 反之不成立：$\lim\frac{f(a+h)-f(a-h)}{2h}$ 存在不保证可导（如 $|x|$ 在 $0$）。
+\end{结论}
+
+\begin{结论}{连分式极限与 Möbius 迭代}
+$x_{n+1}=\frac{ax_n+b}{cx_n+d}$：矩阵 $M=\begin{pmatrix}a&b\\c&d\end{pmatrix}$ 的幂给出 $x_n$。若 $M$ 两个特征值 $|\lambda_1|>|\lambda_2|$，则 $x_n$ 收敛到 $\lambda_1$ 对应的不动点（初值不在另一不动点时），
+\[
+\重点{\frac{x_n-p}{x_n-q}=\Bigl(\frac{\lambda_2}{\lambda_1}\Bigr)^n\frac{x_0-p}{x_0-q}}\quad(p,q\text{ 为不动点，}p\text{ 吸引}).
+\]
+例：$x_{n+1}=1+\frac1{x_n}$ 收敛到 $\varphi=\frac{1+\sqrt5}2$，比率 $-1/\varphi^2$。
+\end{结论}
+
+\begin{结论}{积分中值的渐近位置}
+$f\in C^2$，$f'(a)\ne0$：$\int_a^{a+h}f=hf(a+\theta h)$ 中 \重点{\theta\to\tfrac12}；Lagrange 中值 $f(a+h)-f(a)=hf'(a+\theta h)$ 中，若 $f''(a)\ne0$ 则 $\theta\to\frac12$；若 $f''(a)=0\ne f'''(a)$ 则 $\theta\to\frac1{\sqrt3}$。
+做法：两边按 $h$ Taylor 展开到首个含 $\theta$ 的非零项，比较系数。
+\end{结论}
+
+\begin{结论}{$\sum$ 的平方根抵消：$\sqrt{n+1}-\sqrt n$ 型}
+$\sqrt{n+a}-\sqrt{n}=\frac{a}{\sqrt{n+a}+\sqrt n}=\frac{a}{2\sqrt n}-\frac{a^2}{8n^{3/2}}+\cdots$。
+\[
+\lim_{n\to\infty}\bigl(\sqrt[3]{n^3+n^2}-\sqrt{n^2+n}\bigr)=\frac13-\frac12=\重点{-\frac16}.
+\]
+套路：把每个根式写成 $n\,(1+u)^{1/k}$ 并展开到 $O(1)$ 项；不必有理化。
+\end{结论}
+
+\参考{Pólya--Szegő, \emph{Problems and Theorems in Analysis I}；de Bruijn, \emph{Asymptotic Methods in Analysis}；Graham--Knuth--Patashnik, \emph{Concrete Mathematics} 第 9 章；Kuipers--Niederreiter, \emph{Uniform Distribution of Sequences}；MIT 18.100B。}

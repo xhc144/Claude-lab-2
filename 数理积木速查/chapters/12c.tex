@@ -1,0 +1,94 @@
+\subsection{信号处理与数据整理}
+
+\begin{结论}{滑动平均与指数平滑的频率响应}
+$N$ 点滑动平均（采样率 $f_s$）：
+\[
+\重点{|H(f)|=\Bigl|\frac{\sin(\pi fN/f_s)}{N\sin(\pi f/f_s)}\Bigr|},\qquad \text{第一零点 }f_s/N .
+\]
+取 $N=f_s/50$ 恰好滤掉 $50\,$Hz 及其谐波（积分型 ADC 选积分时间为工频周期的原因）。指数平滑 $y_n=\alpha x_n+(1-\alpha)y_{n-1}$ 等效 RC 时间常数 $\tau\approx\Delta t/\alpha$；一阶滤波器阶跃响应到 $99\%$ 需 $4.6\tau$。
+\end{结论}
+
+\begin{结论}{窗函数的选择}
+\begin{tabular}{@{}llll@{}}
+窗 & 最高旁瓣 & 主瓣半宽 & 扇贝损失\\
+矩形 & $-13\,$dB & $1$ 个频格 & $3.9\,$dB\\
+Hann & $-31\,$dB & $2$ 个频格 & $1.4\,$dB\\
+平顶 & $<-90\,$dB & $\sim5$ 个频格 & $<0.01\,$dB
+\end{tabular}
+
+\重点{\text{分辨相近频率用矩形或 Hann，测幅值用平顶，弱线紧挨强线用低旁瓣窗}}。加窗后功率谱要除以窗的等效噪声带宽（Hann 为 $1.5$ 个频格）。
+\end{结论}
+
+\begin{结论}{功率谱密度的归一化与 Welch 平均}
+$X_k=\sum_{n=0}^{N-1}x_n\ee^{-2\pi\ii kn/N}$，单边 PSD（$0<k<N/2$）：
+\[
+\重点{S_k=\frac{2|X_k|^2}{f_sN}},\qquad \sum_kS_k\,\Delta f\approx\langle x^2\rangle\ (\text{Parseval 自检}),\ \Delta f=f_s/N .
+\]
+单个周期图每点的相对标准差约 $100\%$，加长数据不改善；分成 $M$ 段平均（Welch）降为 $1/\sqrt M$，代价是分辨率变为 $Mf_s/N$。
+\end{结论}
+
+\begin{结论}{相关函数、Wiener--Khinchin 与匹配滤波}
+平稳过程：\重点{S(f)=\int R(\tau)\ee^{-2\pi\ii f\tau}\dd\tau}（功率谱是自相关的 Fourier 变换）。
+两信号的互相关峰位置给出时间延迟。已知波形 $s(t)$ 埋在白噪声（单边谱密度 $N_0$）中：以 $s(-t)$ 为冲激响应的匹配滤波器使峰值信噪比最大，$\mathrm{SNR}_{\max}=2E/N_0$（$E$ 为信号能量），与波形形状无关。
+\end{结论}
+
+\begin{结论}{幂律分布的指数：用极大似然而非对数直方图}
+连续幂律 $p(x)\propto x^{-\alpha}$（$x\ge x_{\min}$）：
+\[
+\重点{\hat\alpha=1+n\Bigl[\sum_{i=1}^n\ln\frac{x_i}{x_{\min}}\Bigr]^{-1}},\qquad \sigma_{\hat\alpha}=\frac{\hat\alpha-1}{\sqrt n}.
+\]
+在双对数直方图上作直线拟合会因尾部小计数与分箱而系统性偏差；$x_{\min}$ 用 KS 距离最小化选取，再用似然比与对数正态等对手模型比较。
+\end{结论}
+
+\begin{结论}{指数衰减加未知本底：Guggenheim 法}
+$y=A\ee^{-t/\tau}+B$，$B$ 未知。取等间隔 $\Delta$ 的成对数据相减：
+\[
+y(t)-y(t+\Delta)=A(1-\ee^{-\Delta/\tau})\ee^{-t/\tau}\ \Rightarrow\ \重点{\ln[y(t)-y(t+\Delta)]\ \text{对 }t\ \text{线性，斜率 }-1/\tau}.
+\]
+$\Delta$ 取 $1$--$2\tau$ 为宜。正式分析用三参数非线性拟合；先扣“估计的本底”再取对数会使 $\tau$ 有偏。
+\end{结论}
+
+\begin{结论}{线型宽度的换算}
+Gauss：$\mathrm{FWHM}=2\sqrt{2\ln2}\,\sigma=\重点{2.355\,\sigma}$；Lorentz $\frac{\gamma/\pi}{x^2+\gamma^2}$：$\mathrm{FWHM}=2\gamma$，没有方差。
+Voigt（卷积）宽度近似 $f_V\approx0.5346f_L+\sqrt{0.2166f_L^2+f_G^2}$（误差约 $0.02\%$）。峰面积：Gauss $=\text{峰高}\times1.064\,\mathrm{FWHM}$，Lorentz $=\text{峰高}\times1.571\,\mathrm{FWHM}$。
+\end{结论}
+
+\begin{结论}{含噪数据求导：Savitzky--Golay}
+前向差分把噪声 $\sigma$ 放大为 $\frac{\sqrt2\sigma}{h}$，步长越小越糟。在滑动窗口（$2m+1$ 点）内做局部多项式最小二乘拟合，用拟合多项式的导数：
+\[
+\text{二次、5 点的一阶导：}\ \重点{y'_0\approx\frac{-2y_{-2}-y_{-1}+y_1+2y_2}{10h}}.
+\]
+窗口越宽噪声越小、但峰值被压平；窗宽应小于特征宽度。也可先平滑再求导，或在 Fourier 空间乘 $\ii k$ 后加低通。
+\end{结论}
+
+\begin{结论}{标量 Kalman 滤波 $=$ 递推加权平均}
+状态估计 $\hat x$、方差 $P$；预测 $P\leftarrow P+Q$（过程噪声），新测量 $z$（方差 $R$）：
+\[
+\重点{K=\frac{P}{P+R}},\qquad \hat x\leftarrow\hat x+K(z-\hat x),\qquad P\leftarrow(1-K)P .
+\]
+$Q=0$ 时退化为逐次加权平均，$P\to0$；$Q>0$ 时 $K$ 收敛到稳态值，等效于指数平滑。多维形式把标量换成矩阵与观测矩阵 $H$。
+\end{结论}
+
+\begin{结论}{抛物线插值精确定峰}
+采样峰值点 $y_0$ 及两邻点 $y_{\pm1}$，峰位偏移（以采样间隔为单位）：
+\[
+\重点{\delta=\frac12\,\frac{y_{-1}-y_{1}}{y_{-1}-2y_0+y_1}},\qquad y_{\mathrm{peak}}\approx y_0-\tfrac14(y_{-1}-y_1)\delta .
+\]
+用于 FFT 频格之间的频率估计（对 Hann 窗后的对数幅度谱插值更准）、互相关的亚采样时延、谱线中心。
+\end{结论}
+
+\begin{结论}{效率与比例的误差}
+$n$ 次中 $k$ 次通过：$\hat\varepsilon=k/n$，$\sigma=\sqrt{\hat\varepsilon(1-\hat\varepsilon)/n}$。$k=0$ 或 $k=n$ 时给出零误差，显然错误。
+改用 Clopper--Pearson（精确，偏保守）或 Wilson 区间；$k=n$ 时 $95\%$ 下限约 $1-3/n$。\重点{\text{同一样本的通过数与总数不独立}}，不能把 $k$ 与 $n$ 当独立 Poisson 量做误差传递。
+\end{结论}
+
+\begin{结论}{已知频率的正弦拟合是线性问题}
+$y=A\cos\omega t+B\sin\omega t+C$ 对 $(A,B,C)$ 线性，直接最小二乘：振幅 $\sqrt{A^2+B^2}$，相位 $\operatorname{atan2}(-B,A)$。
+$N$ 个噪声 $\sigma$ 的点均匀覆盖整数个周期：
+\[
+\重点{\sigma_A=\sigma_B=\sigma\sqrt{2/N}},\qquad \sigma_\phi\approx\frac{\sigma}{\text{振幅}}\sqrt{\frac2N}.
+\]
+这正是数字锁相的运算。频率未知时先用 FFT 粗定，再非线性拟合。
+\end{结论}
+
+\参考{Oppenheim--Schafer, \emph{Discrete-Time Signal Processing}；Harris, \emph{Proc.\ IEEE} \textbf{66}, 51 (1978)（窗函数）；Press et al., \emph{Numerical Recipes} 第 13--14 章；Clauset--Shalizi--Newman, \emph{SIAM Rev.}\ \textbf{51}, 661 (2009)（幂律）；Savitzky--Golay (1964)。}

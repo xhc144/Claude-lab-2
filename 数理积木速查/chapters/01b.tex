@@ -1,0 +1,112 @@
+\subsection{实分析与级数进阶}
+
+\begin{结论}{Cauchy 凝聚判别}
+$a_n\ge0$ 单调递减：\重点{\sum a_n<\infty\iff\sum_k2^ka_{2^k}<\infty}。
+$\sum\frac{1}{n^p}$：$\sum 2^{k(1-p)}$，故 $p>1$ 收敛；$\sum\frac{1}{n(\ln n)^p}$：凝聚后为 $\sum\frac{1}{(k\ln2)^p}$，同样 $p>1$ 收敛。可反复凝聚处理 $\frac{1}{n\ln n(\ln\ln n)^p}$。
+\end{结论}
+
+\begin{结论}{Gauss 判别：比值趋于 1 时看 $1/n$ 项}
+$a_n>0$，\重点{\frac{a_n}{a_{n+1}}=1+\frac{\beta}{n}+O\bigl(n^{-1-\varepsilon}\bigr)}：$\beta>1$ 收敛，$\beta\le1$ 发散；且 $a_n\asymp n^{-\beta}$。
+例：$a_n=\binom{2n}{n}4^{-n}$，$\frac{a_n}{a_{n+1}}=\frac{2n+2}{2n+1}=1+\frac{1}{2n}+O(n^{-2})$，故 $a_n\asymp n^{-1/2}$，$\sum a_n$ 发散而 $\sum a_n^3$ 收敛。
+\end{结论}
+
+\begin{结论}{Euler--Maclaurin 求和渐近}
+\[
+\sum_{k=1}^nf(k)=\int_1^nf+\frac{f(1)+f(n)}{2}+\sum_{j\ge1}\frac{B_{2j}}{(2j)!}\bigl(f^{(2j-1)}(n)-f^{(2j-1)}(1)\bigr)+R .
+\]
+\[
+\重点{H_n=\ln n+\gamma+\frac1{2n}-\frac1{12n^2}+O(n^{-4})},\qquad \ln n!=n\ln n-n+\tfrac12\ln(2\pi n)+\frac{1}{12n}-\frac{1}{360n^3}+\cdots
+\]
+常数项（$\gamma$、$\frac12\ln2\pi$）不能由公式本身得到，需另行确定（如 Wallis 积）。$B_2=\frac16,\ B_4=-\frac1{30}$。
+\end{结论}
+
+\begin{结论}{Wallis 积与中心二项式系数}
+$I_n=\int_0^{\pi/2}\sin^nx\,\dd x$ 满足 $I_n=\frac{n-1}{n}I_{n-2}$，且 $I_{2n+1}\le I_{2n}\le I_{2n-1}$ 夹逼：
+\[
+\frac{\pi}{2}=\prod_{k\ge1}\frac{4k^2}{4k^2-1},\qquad \重点{\binom{2n}{n}\sim\frac{4^n}{\sqrt{\pi n}}}.
+\]
+对称随机游走 $P(S_{2n}=0)=\binom{2n}n4^{-n}\sim(\pi n)^{-1/2}$，即由此而来。
+\end{结论}
+
+\begin{结论}{逐项求导：要的是导数列一致收敛}
+$f_n$ 在 $[a,b]$ 可微，\重点{f_n'\rightrightarrows g} 且 $\{f_n(x_0)\}$ 收敛 $\Rightarrow$ $f_n\rightrightarrows f$ 且 $f'=g$。
+只有 $f_n\rightrightarrows f$ 不够：$f_n=\frac{\sin nx}{\sqrt n}\rightrightarrows0$，但 $f_n'(0)=\sqrt n\to\infty$。幂级数在收敛开区间内的任意闭子区间上满足条件，可无限次逐项求导。
+\end{结论}
+
+\begin{结论}{单调收敛给出 $\Gamma$ 的极限表示}
+$\bigl(1-\frac xn\bigr)^n\mathbf 1_{[0,n]}\uparrow\ee^{-x}$（对每个 $x\ge0$ 关于 $n$ 单调），由单调收敛定理
+\[
+\重点{\Gamma(s)=\lim_{n\to\infty}\int_0^n\Bigl(1-\frac xn\Bigr)^nx^{s-1}\dd x=\lim_{n\to\infty}\frac{n!\,n^s}{s(s+1)\cdots(s+n)}}\quad(s>0).
+\]
+后一等号由分部积分 $n$ 次得到（Gauss 乘积公式）。控制收敛的常用控制函数：$|f_n|\le g\in L^1$ 与 $n$ 无关。
+\end{结论}
+
+\begin{结论}{Wirtinger 不等式（一维 Poincaré）}
+\[
+\重点{f(0)=f(1)=0\ \Rightarrow\ \int_0^1f'^2\ge\pi^2\int_0^1f^2},\qquad f\ 2\pi\text{ 周期且 }\int_0^{2\pi}f=0\ \Rightarrow\ \int f'^2\ge\int f^2 .
+\]
+证明：正弦/Fourier 展开后逐项比较 $n^2\ge1$。等号只在最低模 $\sin\pi x$（或 $a\cos x+b\sin x$）取到。用于证明平面等周不等式 $L^2\ge4\pi A$。
+\end{结论}
+
+\begin{结论}{Landau 不等式：用 $f$ 与 $f''$ 控制 $f'$}
+$f\in C^2(\mathbb R)$，$M_k=\sup|f^{(k)}|$：
+\[
+\重点{M_1^2\le2M_0M_2}\qquad(\text{半直线上为 }M_1^2\le4M_0M_2).
+\]
+推导：$f(x\pm h)=f(x)\pm hf'(x)+\frac{h^2}2f''(\xi_\pm)$ 相减得 $|f'(x)|\le\frac{M_0}{h}+\frac{hM_2}{2}$，取 $h=\sqrt{2M_0/M_2}$。
+\end{结论}
+
+\begin{结论}{Darboux 定理：导函数有介值性}
+$f$ 在 $[a,b]$ 可导（$f'$ 不必连续），则 $f'$ 取遍 $f'(a)$ 与 $f'(b)$ 之间的每个值。
+推论：\重点{\text{导函数不能有跳跃间断}}；若 $f'$ 处处不为零，则 $f'$ 恒正或恒负，$f$ 严格单调。构造：$g(x)=f(x)-cx$ 在 $[a,b]$ 上取到内部极值点。
+\end{结论}
+
+\begin{结论}{压缩映射：误差的先验与后验估计}
+完备度量空间上 $d(Tx,Ty)\le q\,d(x,y)$，$q<1$：唯一不动点 $x^*$，
+\[
+\重点{d(x_n,x^*)\le\frac{q^n}{1-q}\,d(x_1,x_0)},\qquad d(x_n,x^*)\le\frac{q}{1-q}\,d(x_n,x_{n-1}).
+\]
+Picard 迭代：$f$ 关于 $y$ Lipschitz 常数 $L$，在 $|t-t_0|\le h<1/L$ 上积分算子为压缩，给出 ODE 解的局部存在唯一。
+\end{结论}
+
+\begin{结论}{隐函数的一、二阶导数}
+$F(x,y)=0$，$F_y\ne0$：
+\[
+y'=-\frac{F_x}{F_y},\qquad \重点{y''=-\frac{F_{xx}F_y^2-2F_{xy}F_xF_y+F_{yy}F_x^2}{F_y^3}}.
+\]
+曲线 $F=0$ 的曲率 $\kappa=\frac{|F_{xx}F_y^2-2F_{xy}F_xF_y+F_{yy}F_x^2|}{(F_x^2+F_y^2)^{3/2}}$；多元情形 $\frac{\partial y}{\partial x}=-(D_yF)^{-1}D_xF$。
+\end{结论}
+
+\begin{结论}{换元：用反方向 Jacobian}
+新变量 $(u,v)$ 由 $(x,y)$ 显式给出时，不必反解：\重点{\dd x\,\dd y=\Bigl|\frac{\partial(u,v)}{\partial(x,y)}\Bigr|^{-1}\dd u\,\dd v}。
+例：由 $xy=1,\ xy=2,\ y=x,\ y=2x$ 围成（第一象限）的区域，取 $u=xy,\ v=y/x$，$\frac{\partial(u,v)}{\partial(x,y)}=2v$，面积 $=\int_1^2\!\int_1^2\frac{\dd v}{2v}\dd u=\frac{\ln2}{2}$。
+\end{结论}
+
+\begin{结论}{Beta、Gamma 与余元公式}
+\[
+B(a,b)=\int_0^1t^{a-1}(1-t)^{b-1}\dd t=2\int_0^{\pi/2}\sin^{2a-1}\theta\cos^{2b-1}\theta\,\dd\theta=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}.
+\]
+\[
+\重点{\Gamma(s)\Gamma(1-s)=\frac{\pi}{\sin\pi s}},\qquad \int_0^\infty\frac{x^{s-1}}{1+x}\dd x=\frac{\pi}{\sin\pi s}\ (0<s<1),
+\]
+倍元公式 $\Gamma(s)\Gamma(s+\tfrac12)=2^{1-2s}\sqrt\pi\,\Gamma(2s)$，由此 $\Gamma(\tfrac12)=\sqrt\pi$。
+\end{结论}
+
+\begin{结论}{展开成几何级数再逐项积分}
+被积函数含 $\frac1{1-x}$、$\frac1{\ee^x-1}$ 时展开，非负项由单调收敛可交换：
+\[
+\int_0^1\frac{\ln x}{1-x}\dd x=-\sum_{n\ge0}\frac{1}{(n+1)^2}=-\zeta(2),\qquad \重点{\int_0^\infty\frac{x^{s-1}}{\ee^x-1}\dd x=\Gamma(s)\zeta(s)}\ (s>1).
+\]
+Fermi 型：$\int_0^\infty\frac{x^{s-1}}{\ee^x+1}\dd x=(1-2^{1-s})\Gamma(s)\zeta(s)$；$s=4$ 时前者为 $\pi^4/15$（黑体）。
+\end{结论}
+
+\begin{结论}{Fourier 级数在跳跃点：平均值与 Gibbs 现象}
+分段光滑 $f$ 在跳跃点 $x_0$ 处部分和收敛到 \重点{\tfrac12\bigl(f(x_0^+)+f(x_0^-)\bigr)}。
+跳跃附近部分和的过冲不随项数消失，极限为跳跃量的
+\[
+\frac{1}{\pi}\mathrm{Si}(\pi)-\frac12\approx0.0895\quad(\text{约 }9\%),
+\]
+位置以 $\sim\pi/N$ 向跳跃点靠拢。Fejér（Cesàro）平均消除过冲，但收敛变慢。
+\end{结论}
+
+\参考{Rudin《数学分析原理》；Apostol, \emph{Mathematical Analysis}；Folland, \emph{Real Analysis}（MIT 18.100 / 18.125）；Graham--Knuth--Patashnik, \emph{Concrete Mathematics} 第 9 章。}

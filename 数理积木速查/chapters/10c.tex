@@ -1,0 +1,84 @@
+\subsection{波动与现代光学}
+
+\begin{结论}{管乐器的驻波}
+两端开口：\重点{f_n=\frac{nv}{2L}}（全部谐波）；一端闭口：$f_n=\frac{(2n-1)v}{4L}$（只有奇次谐波，基频低一个八度）。
+开口端有效长度要加端点修正约 $0.6a$（$a$ 为管半径，无凸缘）。弦的驻波 $f_n=\frac{n}{2L}\sqrt{T/\mu}$；长度不变时调音靠张力。
+\end{结论}
+
+\begin{结论}{声强级与声阻抗}
+\[
+\beta=10\lg\frac{I}{I_0},\quad I_0=10^{-12}\,\mathrm{W/m^2};\qquad \text{点源距离加倍 }\重点{-6\,\mathrm{dB}}.
+\]
+空气 $Z\approx415\,$Pa\,s/m，水 $1.48\times10^6$：空气--水界面强度透射率 $\frac{4Z_1Z_2}{(Z_1+Z_2)^2}\approx0.1\%$（$-30\,$dB）。超声检查要用耦合剂，原理相同。
+\end{结论}
+
+\begin{结论}{Fourier 光学：透镜做 Fourier 变换}
+物在前焦面、相干照明：后焦面复振幅 $\propto\tilde t\bigl(\frac{x}{\lambda f},\frac{y}{\lambda f}\bigr)$，即空间频率 \重点{f_x=\frac{x}{\lambda f}}。
+4$f$ 系统在频谱面放滤波器：针孔低通（光束净化）、挡零级（暗场）、零级移相 $\pi/2$（Zernike 相衬）。全息：记录 $|R+O|^2$，用 $R$ 再照明得到 $|R|^2O$ 项（原物波）与共轭项 $R^2O^*$。
+\end{结论}
+
+\begin{结论}{Michelson 干涉仪：条纹计数与 Fourier 变换光谱}
+动镜移动 $d$，中心条纹变化 $N=\frac{2d}{\lambda}$（测位移、测波长）。干涉图 $I(\Delta)$ 是光谱的 Fourier 变换：
+\[
+\重点{\Delta\tilde\nu\approx\frac{1}{\Delta_{\max}}}\quad(\Delta_{\max}\text{ 为最大光程差}).
+\]
+双线（如钠 D 线 $0.6\,$nm）产生拍：可见度周期 $\Delta=\lambda^2/\delta\lambda\approx0.6\,$mm。FTS 的 Fellgett（多路）与 Jacquinot（通量）优势优于色散光谱仪。
+\end{结论}
+
+\begin{结论}{Sagnac 效应与光纤陀螺}
+面积 $A$ 的环路以 $\Omega$ 转动，正反两束光相位差：
+\[
+\重点{\Delta\phi=\frac{8\pi A\Omega}{\lambda c}}\quad(N\text{ 圈光纤再乘 }N).
+\]
+与环路形状、介质折射率无关。地球自转 $7.3\times10^{-5}\,$rad/s 用千米级光纤即可测出；环形激光陀螺读出为拍频 $\Delta f=\frac{4A\Omega}{\lambda P}$（$P$ 为周长）。
+\end{结论}
+
+\begin{结论}{非线性光学：相位匹配与 Kerr 效应}
+二次谐波：$\Delta k=k_{2\omega}-2k_\omega$，相干长度 \重点{L_c=\pi/\Delta k}，强度 $\propto\mathrm{sinc}^2\frac{\Delta kL}{2}$。双折射晶体中选取角度使 $n_e(2\omega)=n_o(\omega)$ 实现 $\Delta k=0$；准相位匹配用周期极化（周期 $2L_c$）。
+Kerr：$n=n_0+n_2I$，产生自相位调制与自聚焦；Gauss 光束自聚焦临界功率 $P_{\mathrm{cr}}\approx\frac{3.77\lambda^2}{8\pi n_0n_2}$（熔石英 $800\,$nm 约几 MW），与光束尺寸无关。
+\end{结论}
+
+\begin{结论}{激光阈值与纵模}
+腔长 $L$、镜反射率 $R_1,R_2$、内部损耗 $\alpha$：
+\[
+\重点{g_{\mathrm{th}}=\alpha+\frac{1}{2L}\ln\frac{1}{R_1R_2}},\qquad \text{纵模间隔 }\frac{c}{2nL}.
+\]
+增益带宽内的纵模数 $\approx\Delta\nu_{\mathrm{gain}}\cdot\frac{2nL}{c}$；锁模后脉宽 $\sim1/\Delta\nu_{\mathrm{gain}}$、重复频率 $c/2nL$。光子寿命 $\tau_p=\frac{2nL}{c\,(2\alpha L-\ln R_1R_2)}$。
+\end{结论}
+
+\begin{结论}{光子统计与 $g^{(2)}(0)$}
+\[
+g^{(2)}(0)=\frac{\langle n(n-1)\rangle}{\langle n\rangle^2}:\quad \text{热光 }\重点{2},\quad \text{相干光 }1,\quad \text{单光子源 }0 .
+\]
+热光（单模）光子数服从 Bose--Einstein：$\langle\Delta n^2\rangle=\bar n+\bar n^2$；相干光为 Poisson。Hanbury Brown--Twiss 强度关联测量 $g^{(2)}(\tau)$，用于测恒星角径和证明单光子性（$g^{(2)}(0)<\frac12$）。
+\end{结论}
+
+\begin{结论}{激光散斑}
+粗糙表面的相干散射是许多随机相位的叠加：强度服从指数分布，\重点{\text{对比度}\ \sigma_I/\bar I=1}。
+散斑颗粒尺寸 $\sim\lambda z/D$（$D$ 为照明斑或孔径），在成像面为 $\sim\lambda N$（$N$ 为 $f$ 数）。$N$ 个独立散斑图叠加对比度降为 $1/\sqrt N$（旋转漫射片去相干的原理）。
+\end{结论}
+
+\begin{结论}{波片厚度与零级波片}
+双折射 $\Delta n=n_e-n_o$，相位延迟 $\delta=\frac{2\pi\Delta n\,d}{\lambda}$：
+\[
+\text{四分之一波片 }\重点{d=\frac{\lambda}{4|\Delta n|}}\ (\text{零级}).
+\]
+石英 $\Delta n\approx0.0091$（$633\,$nm），零级 $\lambda/4$ 片约 $17\,\mu$m，太薄，常用两片差厚组合；方解石 $|\Delta n|=0.172$，适合做偏振分束棱镜。多级波片对波长、温度、角度更敏感。
+\end{结论}
+
+\begin{结论}{Faraday 旋转与光隔离器}
+\重点{\theta=VBL}（$V$ 为 Verdet 常数），旋转方向由 $\mathbf B$ 决定而与传播方向无关（非互易）。
+隔离器：起偏器 $\to$ 旋 $45^\circ$ $\to$ $45^\circ$ 检偏器。反射回来的光再旋 $45^\circ$，总共 $90^\circ$，被起偏器挡住。对比旋光性（糖溶液）：往返后旋转抵消，不能做隔离器。
+\end{结论}
+
+\begin{结论}{激光冷却的温度极限}
+Doppler 冷却极限 \重点{k_BT_D=\frac{\hbar\Gamma}{2}}：Na（$\Gamma/2\pi=9.8\,$MHz）$240\,\mu$K，Rb $146\,\mu$K。
+反冲温度 $k_BT_r=\frac{\hbar^2k^2}{m}$（单光子反冲动能的 2 倍）：Na 约 $2.4\,\mu$K。偏振梯度（Sisyphus）冷却可低于 $T_D$；蒸发冷却到 nK 实现 BEC。散射力上限 $\hbar k\Gamma/2$，Na 原子加速度约 $10^5\,g$。
+\end{结论}
+
+\begin{结论}{Lloyd 镜：反射的 $\pi$ 相移}
+点光源与其在平面镜（掠入射）中的像构成双缝，条纹间距 $\frac{\lambda D}{2h}$。
+贴近镜面处（零光程差）为\重点{\text{暗纹}}：从光疏到光密的掠入射反射有 $\pi$ 相移。同一原因：Newton 环反射中心暗、薄肥皂膜变薄到消失前变黑。
+\end{结论}
+
+\参考{Hecht 第 7--11、13 章；Goodman, \emph{Introduction to Fourier Optics}；Saleh--Teich 第 12、15、21 章；Boyd, \emph{Nonlinear Optics}；Foot 第 9 章（激光冷却）；Loudon, \emph{The Quantum Theory of Light}（MIT 8.422 / 6.631）。}

@@ -1,0 +1,105 @@
+\subsection{极限定理与随机过程}
+
+\begin{结论}{Berry--Esseen：CLT 的误差有多大}
+iid，$\E X=\mu$，$\Var X=\sigma^2$，$\rho=\E|X-\mu|^3<\infty$：
+\[
+\重点{\sup_x\Bigl|P\Bigl(\frac{S_n-n\mu}{\sigma\sqrt n}\le x\Bigr)-\Phi(x)\Bigr|\le\frac{C\rho}{\sigma^3\sqrt n}},\qquad C<0.48 .
+\]
+误差阶 $n^{-1/2}$ 来自偏度；离散分布（如二项）的格点结构使这个阶不可改进，用连续性修正 $\pm\frac12$ 改善。
+\end{结论}
+
+\begin{结论}{特征函数：和的分布与 LLN 的反例}
+独立和 $\varphi_{X+Y}=\varphi_X\varphi_Y$；$\varphi_{aX+b}(t)=\ee^{\ii bt}\varphi_X(at)$。
+Cauchy 分布 $\varphi(t)=\ee^{-|t|}$：\重点{\bar X_n\overset d=X_1}，样本均值不收敛（无期望）。Lévy 连续性：$\varphi_n\to\varphi$ 且 $\varphi$ 在 0 连续 $\Rightarrow$ 依分布收敛。矩：$\E X^k=\ii^{-k}\varphi^{(k)}(0)$。
+\end{结论}
+
+\begin{结论}{强大数律与重对数律}
+iid：\重点{\bar X_n\to\mu\ \text{a.s.}\iff\E|X|<\infty}（Kolmogorov）。涨落的精确包络：
+\[
+\limsup_{n\to\infty}\frac{S_n-n\mu}{\sqrt{2n\ln\ln n}}=\sigma\quad\text{a.s.}
+\]
+CLT 说典型偏差 $\sim\sigma\sqrt n$，重对数律说偶尔会到 $\sigma\sqrt{2n\ln\ln n}$，但不会更大。
+\end{结论}
+
+\begin{结论}{大偏差（Cramér）：速率函数是 Legendre 变换}
+$\Lambda(t)=\ln\E\ee^{tX}$，$a>\mu$：
+\[
+P(\bar X_n\ge a)=\ee^{-nI(a)+o(n)},\qquad \重点{I(a)=\sup_t\bigl(ta-\Lambda(t)\bigr)}.
+\]
+正态 $I=\frac{(a-\mu)^2}{2\sigma^2}$；Bernoulli$(p)$：$I(a)=a\ln\frac ap+(1-a)\ln\frac{1-a}{1-p}$（KL 散度）；Poisson$(\lambda)$：$I(a)=a\ln\frac a\lambda-a+\lambda$。Chernoff 界就是取 $\ee^{-nI(a)}$ 本身。
+\end{结论}
+
+\begin{结论}{稀有事件的 Poisson 近似与生日问题}
+独立 Bernoulli$(p_i)$ 之和 $S$，$\lambda=\sum p_i$：$\sum_k|P(S=k)-\ee^{-\lambda}\frac{\lambda^k}{k!}|\le2\sum p_i^2$（Le Cam）。
+$n$ 人、$N$ 天：配对数近似 Poisson$\bigl(\binom n2/N\bigr)$，\重点{P(\text{无重复})\approx\exp\Bigl(-\frac{n(n-1)}{2N}\Bigr)}；$N=365$ 时 $n=23$ 给 $0.50$。哈希碰撞在 $\sim\sqrt N$ 个元素时出现。
+\end{结论}
+
+\begin{结论}{Brown 运动的五条性质}
+协方差 $\min(s,t)$；尺度 $B_{ct}\overset d=\sqrt c\,B_t$；二次变差 $\sum(\Delta B)^2\to t$（故 $(\dd B)^2=\dd t$）；处处不可微。
+首中时 $\tau_a$（$a>0$）：
+\[
+\重点{f_{\tau_a}(t)=\frac{a}{\sqrt{2\pi t^3}}\ee^{-a^2/2t}},\qquad P(\tau_a<\infty)=1,\quad \E\tau_a=\infty .
+\]
+Brown 桥 $B_t-tB_1$ 的方差 $t(1-t)$。
+\end{结论}
+
+\begin{结论}{Itô 公式与几何 Brown 运动}
+$\dd X=\mu\,\dd t+\sigma\,\dd B$，$f(X,t)$：
+\[
+\重点{\dd f=\Bigl(f_t+\mu f_x+\tfrac12\sigma^2f_{xx}\Bigr)\dd t+\sigma f_x\,\dd B}.
+\]
+$\dd S=\mu S\,\dd t+\sigma S\,\dd B$ 的解 $S_t=S_0\exp\bigl[(\mu-\frac{\sigma^2}2)t+\sigma B_t\bigr]$：$\E S_t=S_0\ee^{\mu t}$，但中位数 $S_0\ee^{(\mu-\sigma^2/2)t}$。多出的 $\frac12\sigma^2f_{xx}$ 正是 $(\dd B)^2=\dd t$。
+\end{结论}
+
+\begin{结论}{带漂移 Brown 运动离开区间}
+$\dd X=\mu\,\dd t+\sigma\,\dd B$，$X_0=x\in(a,b)$。用鞅 $\ee^{-2\mu X/\sigma^2}$：
+\[
+\重点{P(\text{先到 }b)=\frac{1-\ee^{-2\mu(x-a)/\sigma^2}}{1-\ee^{-2\mu(b-a)/\sigma^2}}};\qquad \mu=0:\ P=\frac{x-a}{b-a},\quad \E\tau=\frac{(x-a)(b-x)}{\sigma^2}.
+\]
+一般扩散 $Lu=0$（概率）与 $Lu=-1$（期望时间）在端点取边值即可，$L=\mu\partial_x+\frac{\sigma^2}{2}\partial_x^2$。
+\end{结论}
+
+\begin{结论}{生灭过程与 M/M/1 排队}
+连续时间 Markov 链 $P(t)=\ee^{tQ}$，平稳 $\pi Q=0$。生灭过程细致平衡：$\pi_n=\pi_0\prod_{k=1}^n\frac{\lambda_{k-1}}{\mu_k}$。
+M/M/1（到达 $\lambda$，服务 $\mu$，$\rho=\lambda/\mu<1$）：
+\[
+\pi_n=(1-\rho)\rho^n,\qquad L=\frac{\rho}{1-\rho},\qquad \重点{L=\lambda W}\ \Rightarrow\ W=\frac{1}{\mu-\lambda}.
+\]
+Little 公式对任何稳定排队系统成立，不依赖分布。$\rho\to1$ 时等待时间发散。
+\end{结论}
+
+\begin{结论}{更新过程与检查悖论}
+间隔 iid、均值 $\mu$：$N(t)/t\to1/\mu$。随机时刻 $t$ 所在间隔的长度均值
+\[
+\重点{\frac{\E[X^2]}{\E X}\ \ge\ \E X}.
+\]
+Poisson（$\mathrm{Exp}(\lambda)$ 间隔）：所在间隔平均 $2/\lambda$，剩余等待仍为 $1/\lambda$。公交车平均间隔 10 分钟但不规则时，乘客平均等待 $\frac{\E X^2}{2\E X}>5$ 分钟。
+\end{结论}
+
+\begin{结论}{鞅的极大不等式与 Azuma}
+Doob：$P\bigl(\max_{k\le n}|M_k|\ge a\bigr)\le\frac{\E|M_n|^p}{a^p}$（$p\ge1$）。增量有界 $|M_k-M_{k-1}|\le c_k$：
+\[
+\重点{P(M_n-M_0\ge t)\le\exp\Bigl(-\frac{t^2}{2\sum_kc_k^2}\Bigr)}.
+\]
+McDiarmid：$f(X_1,\dots,X_n)$ 改变任一坐标至多变 $c_i$，则对 Doob 鞅 $\E[f\mid\mathcal F_k]$ 用 Azuma，得 $f$ 集中在均值附近（如随机图色数、装箱数）。
+\end{结论}
+
+\begin{结论}{谱隙与混合时间}
+可逆链，$\lambda_*=\max\{|\lambda|:\lambda\ne1\}$：$\Bigl|\frac{P^t(x,y)}{\pi(y)}-1\Bigr|\le\frac{\lambda_*^t}{\pi_{\min}}$，弛豫时间 \重点{t_{\mathrm{rel}}=\frac{1}{1-\lambda_*}}。
+$n$ 圈（$n$ 奇）简单游走：$1-\cos\frac{2\pi}n\approx\frac{2\pi^2}{n^2}$，混合需 $\sim n^2$ 步（扩散）；超立方体懒惰游走 $\sim\frac12n\ln n$；52 张牌鸽尾洗牌约 7 次。
+\end{结论}
+
+\begin{结论}{吸收链：基本矩阵与等待图案}
+转移矩阵写成 $\begin{pmatrix}Q&R\\0&I\end{pmatrix}$：\重点{N=(I-Q)^{-1}}，期望吸收步数 $N\mathbf 1$，吸收概率 $NR$。
+抛硬币等待图案：$\E[\text{HH}]=6$，$\E[\text{HT}]=4$。一般用“赌徒鞅”：期望等待 $=\sum$（图案前缀与后缀重合长度 $k$ 处的 $2^k$），HH 为 $2+4$，HTH 为 $2+8=10$。
+\end{结论}
+
+\begin{结论}{Erdős--Rényi 随机图的阈值}
+$G(n,p)$，$p=c/n$：$c<1$ 时最大连通分支 $O(\ln n)$；$c>1$ 时出现巨分支，占比 $\zeta$ 满足
+\[
+\重点{1-\zeta=\ee^{-c\zeta}}.
+\]
+（即 Poisson$(c)$ 分支过程的存活概率。）连通阈值 $p=\frac{\ln n}{n}$：$p=\frac{\ln n+x}{n}$ 时 $P(\text{连通})\to\ee^{-\ee^{-x}}$，瓶颈是孤立点。
+\end{结论}
+
+\参考{Durrett, \emph{Probability: Theory and Examples}；Karlin--Taylor, \emph{A First Course in Stochastic Processes}；Øksendal, \emph{Stochastic Differential Equations}；Levin--Peres, \emph{Markov Chains and Mixing Times}；Dembo--Zeitouni, \emph{Large Deviations}；Alon--Spencer, \emph{The Probabilistic Method}（MIT 18.445 / 18.S096）。}

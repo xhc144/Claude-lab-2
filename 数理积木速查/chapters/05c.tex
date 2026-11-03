@@ -1,0 +1,114 @@
+\subsection{偏微分方程、渐近与优化}
+
+\begin{结论}{圆膜振动：Bessel 零点给出非谐频率}
+半径 $a$ 的固定边圆膜：$u=J_m(kr)\cos m\theta\,\cos\omega t$，\重点{k_{mn}=j_{mn}/a}，$\omega_{mn}=ck_{mn}$。
+频率比（相对基频）：$(0,1)\!:\!1$，$(1,1)\!:\!1.593$，$(2,1)\!:\!2.136$，$(0,2)\!:\!2.295$——不是整数比，所以鼓声没有明确音高（与弦、管的谐波列不同）。
+\end{结论}
+
+\begin{结论}{球坐标 Laplace：按 $P_l$ 展开边值}
+轴对称：$V=\sum\bigl(A_lr^l+B_lr^{-(l+1)}\bigr)P_l(\cos\theta)$。球面 $r=R$ 上 $V=\sum c_lP_l$：
+\[
+\重点{V_{\mathrm{in}}=\sum c_l\Bigl(\frac rR\Bigr)^lP_l,\qquad V_{\mathrm{out}}=\sum c_l\Bigl(\frac Rr\Bigr)^{l+1}P_l}.
+\]
+$V(R,\theta)=V_0\cos\theta$：内部为均匀场 $-\frac{V_0}{R}\hat z$，外部为偶极场。面电荷 $\sigma=\varepsilon_0\sum(2l+1)\frac{c_l}{R}P_l$（由法向导数跃变）。
+\end{结论}
+
+\begin{结论}{拨弦的 Fourier 系数与能量守恒}
+长 $L$ 的弦在中点拉起高度 $h$ 后静止释放：
+\[
+\重点{b_n=\frac{8h}{n^2\pi^2}\sin\frac{n\pi}{2}},\qquad u=\sum b_n\sin\frac{n\pi x}{L}\cos\frac{n\pi ct}{L}.
+\]
+只有奇次谐波，振幅 $\propto1/n^2$；拨点在 $L/k$ 处时第 $k$ 倍谐波缺失。能量 $E=\frac12\int(\mu u_t^2+Tu_x^2)\dd x$ 守恒，由此证明初边值问题解的唯一性。
+\end{结论}
+
+\begin{结论}{对流扩散与 Péclet 数}
+$u_t+vu_x=Du_{xx}$：换到随流坐标 $\xi=x-vt$ 化为热方程，
+\[
+u=\frac{1}{\sqrt{4\pi Dt}}\exp\Bigl[-\frac{(x-vt)^2}{4Dt}\Bigr],\qquad \重点{\mathrm{Pe}=\frac{vL}{D}}.
+\]
+$\mathrm{Pe}\gg1$ 对流主导，梯度集中在厚度 $\sim D/v$ 的边界层；数值上中心差分需网格 Péclet 数 $v\Delta x/D<2$，否则出现振荡（改用迎风格式）。
+\end{结论}
+
+\begin{结论}{半空间 Green 函数与半平面 Poisson 公式}
+$z>0$ 的 Dirichlet 问题：$G=\frac{1}{4\pi}\Bigl(\frac{1}{|\mathbf r-\mathbf r'|}-\frac{1}{|\mathbf r-\mathbf r''|}\Bigr)$，$\mathbf r''$ 为 $\mathbf r'$ 关于 $z=0$ 的镜像。二维上半平面：
+\[
+\重点{u(x,y)=\frac{y}{\pi}\int_{-\infty}^{\infty}\frac{f(s)}{(x-s)^2+y^2}\dd s}.
+\]
+核为 Cauchy 分布，积分为 1；例：$f$ 在 $s>0$ 为 1、$s<0$ 为 0，得 $u=1-\frac{\theta}{\pi}$（$\theta$ 为极角）。
+\end{结论}
+
+\begin{结论}{Fredholm 择一：何时可解、何时出久期项}
+$Lu=f$（自伴边值问题）若齐次方程有非零解 $u_0$，则可解 \重点{\iff\langle f,u_0\rangle=0}。
+例：$u''+u=f$，$u(0)=u(\pi)=0$，需 $\int_0^\pi f\sin x\,\dd x=0$。摄动展开中正是这一条件决定频率修正或振幅方程：违反时出现 $t\sin t$ 型久期项。
+\end{结论}
+
+\begin{结论}{Poincaré--Lindstedt：Duffing 振子的频移}
+$\ddot x+x+\epsilon x^3=0$，振幅 $A$：令 $\tau=\omega t$，$\omega=1+\epsilon\omega_1+\cdots$，消去一阶的共振项 $\cos\tau$：
+\[
+\重点{\omega=1+\frac38\epsilon A^2+O(\epsilon^2)}.
+\]
+用 $\cos^3\tau=\frac34\cos\tau+\frac14\cos3\tau$；$\frac14\cos3\tau$ 给出三次谐波。硬弹簧（$\epsilon>0$）频率随振幅升高；单摆 $\sin\theta\approx\theta-\frac{\theta^3}6$ 对应 $\epsilon=-\frac16$，$\omega\approx1-\frac{A^2}{16}$。
+\end{结论}
+
+\begin{结论}{多尺度法：振幅方程}
+$\ddot x+x=\epsilon h(x,\dot x)$，令 $x=A(T)\cos(t+\phi(T))$，$T=\epsilon t$，平均：
+\[
+\重点{A'=-\frac{1}{2\pi}\int_0^{2\pi}h\sin\theta\,\dd\theta},\qquad A\phi'=-\frac{1}{2\pi}\int_0^{2\pi}h\cos\theta\,\dd\theta
+\]
+（$h$ 在 $x=A\cos\theta$，$\dot x=-A\sin\theta$ 处取值）。Van der Pol $h=(1-x^2)\dot x$：$A'=\frac A2\bigl(1-\frac{A^2}{4}\bigr)$，极限环振幅 2。线性阻尼 $h=-2\dot x$：$A=A_0\ee^{-\epsilon t}$。
+\end{结论}
+
+\begin{结论}{WKB 求大本征值}
+$y''+\lambda^2q(x)y=0$，$q>0$，$y(a)=y(b)=0$，$\lambda\to\infty$：
+\[
+\重点{\lambda_n\approx\frac{n\pi}{\int_a^b\sqrt{q(x)}\,\dd x}},\qquad y_n\approx q^{-1/4}\sin\Bigl(\lambda_n\int_a^x\sqrt q\Bigr).
+\]
+振幅 $\propto q^{-1/4}$ 是“能流守恒”。非均匀弦的高阶频率只取决于总传播时间 $\int\dd x/c(x)$。
+\end{结论}
+
+\begin{结论}{Watson 引理与 erfc 渐近}
+$g$ 在 0 附近解析，$\alpha>-1$：
+\[
+\重点{\int_0^\infty\ee^{-\lambda t}t^\alpha g(t)\,\dd t\sim\sum_{n\ge0}\frac{g^{(n)}(0)}{n!}\frac{\Gamma(\alpha+n+1)}{\lambda^{\alpha+n+1}}}.
+\]
+\[
+\mathrm{erfc}(x)\sim\frac{\ee^{-x^2}}{x\sqrt\pi}\Bigl(1-\frac{1}{2x^2}+\frac{3}{4x^4}-\cdots\Bigr).
+\]
+渐近级数发散：固定 $x$ 时在最小项处截断，误差不超过第一个被略去项的量级。正态尾 $1-\Phi(x)\approx\frac{\phi(x)}{x}$。
+\end{结论}
+
+\begin{结论}{KKT 条件与影子价格}
+$\min f$ s.t. $g_i\le0$，$h_j=0$（凸问题或满足约束规范）：
+\[
+\nabla f+\sum\mu_i\nabla g_i+\sum\lambda_j\nabla h_j=0,\quad \mu_i\ge0,\quad \重点{\mu_ig_i=0}\ (\text{互补松弛}).
+\]
+等式约束 $g=c$ 下的最优值 $f^*(c)$：\重点{\frac{\dd f^*}{\dd c}=\lambda}，乘子是约束放松一单位的边际收益。统计力学中 $\beta$、$\mu$ 就是能量与粒子数约束的乘子。
+\end{结论}
+
+\begin{结论}{线性规划对偶}
+\[
+\max\{c^{\mathsf T}x:Ax\le b,x\ge0\}=\min\{b^{\mathsf T}y:A^{\mathsf T}y\ge c,y\ge0\}\quad(\text{有可行解时}).
+\]
+弱对偶 $c^{\mathsf T}x\le b^{\mathsf T}y$ 给出任意可行对的界；最优时互补松弛 \重点{y_i(b-Ax)_i=0,\ x_j(A^{\mathsf T}y-c)_j=0}。最大流 $=$ 最小割是其特例。
+\end{结论}
+
+\begin{结论}{凸共轭（Legendre--Fenchel）}
+\[
+\重点{f^*(y)=\sup_x\bigl(xy-f(x)\bigr)},\qquad f(x)+f^*(y)\ge xy\ (\text{Fenchel--Young}),\qquad f^{**}=f\ (\text{凸下半连续}).
+\]
+$\frac12x^2\leftrightarrow\frac12y^2$；$\ee^x\leftrightarrow y\ln y-y$；$\frac{|x|^p}{p}\leftrightarrow\frac{|y|^q}{q}$（$\frac1p+\frac1q=1$，由此得 Young 不等式）。Lagrange 量 $\leftrightarrow$ Hamilton 量、$U(S)\leftrightarrow F(T)$、对数矩母函数 $\leftrightarrow$ 大偏差速率函数都是这一变换。
+\end{结论}
+
+\begin{结论}{Abel 积分方程与等时线}
+\[
+\int_0^x\frac{\phi(t)}{\sqrt{x-t}}\dd t=f(x)\ \Rightarrow\ \重点{\phi(x)=\frac1\pi\frac{\dd}{\dd x}\int_0^x\frac{f(t)}{\sqrt{x-t}}\dd t}.
+\]
+从高度 $y$ 滑到底的时间 $T(y)=\int_0^y\frac{s'(\eta)\,\dd\eta}{\sqrt{2g(y-\eta)}}$，要求 $T$ 与 $y$ 无关，解得 $s'(\eta)\propto\eta^{-1/2}$，曲线为摆线（等时线）。也用于由逃逸时间、散射角反演势函数。
+\end{结论}
+
+\begin{结论}{变分：自由端条件与 Legendre 条件}
+$J=\int_a^bF(x,y,y')\dd x$，$y(b)$ 不固定：除 E--L 方程外还需 \重点{F_{y'}\big|_{x=b}=0}（自然边界条件）；端点在曲线 $y=\psi(x)$ 上滑动时为横截条件 $\bigl[F+(\psi'-y')F_{y'}\bigr]_{x=b}=0$。
+极小值的必要条件：沿极值曲线 $F_{y'y'}\ge0$。悬臂梁自由端的弯矩、剪力为零就是自然边界条件。
+\end{结论}
+
+\参考{Strauss, \emph{Partial Differential Equations}；Haberman, \emph{Applied Partial Differential Equations}；Bender--Orszag 第 6、10、11 章；Boyd--Vandenberghe, \emph{Convex Optimization}；Gelfand--Fomin, \emph{Calculus of Variations}（MIT 18.303 / 18.305 / 6.255）。}

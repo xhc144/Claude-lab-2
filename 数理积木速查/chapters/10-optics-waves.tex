@@ -1,0 +1,105 @@
+\section{光学波动}
+
+\subsection{核心积木}
+
+\begin{结论}{Fresnel 公式、Brewster 角与倏逝波}
+\[
+r_s=\frac{n_1\cos\theta_i-n_2\cos\theta_t}{n_1\cos\theta_i+n_2\cos\theta_t},\qquad r_p=\frac{n_2\cos\theta_i-n_1\cos\theta_t}{n_2\cos\theta_i+n_1\cos\theta_t}.
+\]
+正入射 $R=\bigl(\frac{n_1-n_2}{n_1+n_2}\bigr)^2$（玻璃约 $4\%$）；\重点{\tan\theta_B=n_2/n_1} 时 $r_p=0$。全反射时透射场按 $\ee^{-z/\delta}$ 衰减，\重点{\delta=\frac{1}{k_0\sqrt{n_1^2\sin^2\theta_i-n_2^2}}}。（$r_p$ 的整体符号随约定而异，$|r_p|$ 不变。）
+\end{结论}
+
+\begin{结论}{薄膜干涉与四分之一波增透}
+膜厚 $t$、折射率 $n_f$，两反射光程差 $2n_ft\cos\theta_t$，再按\textbf{从低到高折射率反射}的次数补 $\lambda/2$：
+\[
+\text{增透：}\ \重点{n_ft=\frac\lambda4,\quad n_f=\sqrt{n_1n_2}}\ \Rightarrow\ R=0\ (\text{设计波长、正入射}).
+\]
+楔形膜条纹间距 $\frac{\lambda}{2n\alpha}$；Newton 环暗环半径 $r_m=\sqrt{m\lambda R}$（反射光，中心暗）。
+\end{结论}
+
+\begin{结论}{Fabry--Pérot：精细度与分辨率}
+\[
+T=\frac{1}{1+F\sin^2(\delta/2)},\quad \delta=\frac{4\pi nd\cos\theta}{\lambda},\quad F=\frac{4R}{(1-R)^2},\quad \重点{\mathcal F=\frac{\pi\sqrt R}{1-R}}.
+\]
+自由光谱区 $\Delta\nu_{\mathrm{FSR}}=\frac{c}{2nd}$，线宽 $\Delta\nu_{\mathrm{FSR}}/\mathcal F$，分辨本领 \重点{\frac{\lambda}{\delta\lambda}=m\mathcal F}。$R=0.99$ 时 $\mathcal F\approx313$。
+\end{结论}
+
+\begin{结论}{光栅：强度分布与分辨本领}
+$N$ 缝、缝距 $d$、缝宽 $a$；$\beta=\frac{\pi a\sin\theta}{\lambda}$，$\alpha=\frac{\pi d\sin\theta}{\lambda}$：
+\[
+I=I_0\Bigl(\frac{\sin\beta}{\beta}\Bigr)^2\Bigl(\frac{\sin N\alpha}{\sin\alpha}\Bigr)^2,\qquad \重点{\frac{\lambda}{\Delta\lambda}=mN}.
+\]
+主极大 $d\sin\theta=m\lambda$，相邻主极大间有 $N-1$ 个零点；$d/a$ 为整数 $k$ 时 $m=k,2k,\dots$ 级缺级。角色散 $\frac{\dd\theta}{\dd\lambda}=\frac{m}{d\cos\theta}$。
+\end{结论}
+
+\begin{结论}{衍射极限与 Fresnel 数}
+单缝暗纹 $a\sin\theta=m\lambda$；圆孔 Airy 第一暗环 \重点{\sin\theta=1.22\lambda/D}（Rayleigh 判据）。
+\重点{N_F=\frac{a^2}{L\lambda}}：$N_F\ll1$ 为 Fraunhofer（远场 $=$ 孔径函数的 Fourier 变换，透镜焦面上精确成立），$N_F\gtrsim1$ 为 Fresnel。Babinet：互补屏在 Fraunhofer 区除零级外强度相同。
+\end{结论}
+
+\begin{结论}{Fresnel 半波带}
+平面波照射，轴上距离 $L$，第 $m$ 带外半径 \重点{r_m=\sqrt{m\lambda L}}。每带贡献振幅近似等大、相邻反号，总振幅 $\approx$ 第一带的一半。
+只露出第一带：强度为无遮挡时的 \重点{4} 倍；挡住奇数带的波带片焦距 $f=r_1^2/\lambda$（另有 $f/3,f/5,\dots$ 次焦点）。圆盘阴影中心总是亮点（Arago/Poisson 斑）。
+\end{结论}
+
+\begin{结论}{时间与空间相干}
+相干时间 $\tau_c\approx\frac{1}{\Delta\nu}$，\重点{\ell_c=c\tau_c\approx\frac{\lambda^2}{\Delta\lambda}}：Michelson 光程差超过 $\ell_c$ 条纹消失。
+van Cittert--Zernike：角直径 $\theta_s$ 的非相干源，横向相干宽度 \重点{\sim\lambda/\theta_s}（均匀圆盘源第一零点在 $1.22\lambda/\theta_s$）。双缝间距超过它条纹可见度消失——Michelson 恒星干涉仪测星角径的原理。
+\end{结论}
+
+\begin{结论}{Gauss 光束}
+\[
+w(z)=w_0\sqrt{1+(z/z_R)^2},\quad \重点{z_R=\frac{\pi w_0^2}{\lambda}},\quad R(z)=z\Bigl[1+\Bigl(\frac{z_R}{z}\Bigr)^2\Bigr],\quad \theta_{\mathrm{div}}=\frac{\lambda}{\pi w_0}.
+\]
+Gouy 相位 $\arctan(z/z_R)$，过焦点共移 $\pi$。焦距 $f$ 的透镜聚焦束腰 $w$ 的准直光：$w_0'\approx\frac{\lambda f}{\pi w}$。复参数 $q=z+\ii z_R$ 按 ABCD 律变换（见下条）。
+\end{结论}
+
+\begin{结论}{ABCD 矩阵与谐振腔稳定性}
+自由传播 $\begin{pmatrix}1&d\\0&1\end{pmatrix}$，薄透镜 $\begin{pmatrix}1&0\\-1/f&1\end{pmatrix}$，曲率半径 $R$ 的反射镜同 $f=R/2$。成像条件 $B=0$，放大率 $A$。
+\[
+q'=\frac{Aq+B}{Cq+D};\qquad \text{两镜腔稳定：}\ \重点{0\le g_1g_2\le1,\quad g_i=1-\frac{L}{R_i}}.
+\]
+共焦腔 $g_1=g_2=0$，平行平面腔 $g_1=g_2=1$ 处于稳定边界。
+\end{结论}
+
+\begin{结论}{偏振：Jones 矩阵与 Malus}
+快轴与 $x$ 轴成 $\theta$ 的半波片使线偏振方向从 $\phi$ 变为 \重点{2\theta-\phi}；快轴 $45^\circ$ 的四分之一波片把 $x$ 线偏振变为圆偏振。
+Malus：$I=I_0\cos^2\theta$。自然光经三片依次转 $45^\circ$ 的偏振片：$\frac{I_0}{2}\cdot\frac12\cdot\frac12=\frac{I_0}{8}$；若去掉中间一片则为零。首片之后再放 $N$ 片、每片转 $\frac{\pi}{2N}$：$\frac{I_0}2\cos^{2N}\frac{\pi}{2N}\to\frac{I_0}{2}$（量子 Zeno 效应的光学类比）。
+\end{结论}
+
+\begin{结论}{色散：群速度与脉冲展宽}
+\[
+\重点{v_g=\frac{\dd\omega}{\dd k}=\frac{c}{n+\omega\frac{\dd n}{\dd\omega}}=\frac{c}{n-\lambda\frac{\dd n}{\dd\lambda}}},\qquad \beta_2=\frac{\dd^2k}{\dd\omega^2}.
+\]
+Gauss 脉冲（$1/\ee$ 强度半宽 $\tau_0$）：$\tau(z)=\tau_0\sqrt{1+(z/L_D)^2}$，$L_D=\tau_0^2/|\beta_2|$。脉冲越短，展宽越快（$L_D\propto\tau_0^2$）。
+\end{结论}
+
+\begin{结论}{阻抗失配：反射、透射与匹配}
+弦 $Z=\sqrt{T\mu}$，声 $Z=\rho v$，传输线 $Z_0$。振幅（位移/电压）：
+\[
+\重点{r=\frac{Z_1-Z_2}{Z_1+Z_2}},\quad t=\frac{2Z_1}{Z_1+Z_2},\quad R+T=1\ \text{其中 }T=\frac{4Z_1Z_2}{(Z_1+Z_2)^2}.
+\]
+电压反射系数 $\Gamma=\frac{Z_L-Z_0}{Z_L+Z_0}$（与弦的符号约定相反）。四分之一波段匹配：$Z_m=\sqrt{Z_1Z_2}$，与增透膜同一结构。
+\end{结论}
+
+\begin{结论}{波导截止与 $v_gv_p=c^2$}
+矩形波导 $a\times b$（$a>b$）：
+\[
+\重点{\omega_{mn}=c\pi\sqrt{(m/a)^2+(n/b)^2}},\qquad k=\frac1c\sqrt{\omega^2-\omega_{mn}^2},\qquad v_gv_p=c^2 .
+\]
+主模 TE$_{10}$，截止波长 $2a$；TM 模要求 $m,n\ge1$。低于截止频率时场倏逝衰减。
+\end{结论}
+
+\begin{结论}{等离子体频率}
+\[
+\重点{\omega_p^2=\frac{ne^2}{\varepsilon_0m_e}},\qquad \omega^2=\omega_p^2+c^2k^2,\qquad f_p\approx9\sqrt{n/\mathrm{m^{-3}}}\ \mathrm{Hz}.
+\]
+$\omega<\omega_p$ 的电磁波被反射（电离层反射短波；金属对可见光反射、紫外透明）。$n(\omega)=\sqrt{1-\omega_p^2/\omega^2}<1$，但 $v_g<c$。
+\end{结论}
+
+\begin{结论}{Doppler、Mach 锥与 Cherenkov 角}
+声波（介质静止，速度 $v$）：$f'=f\,\dfrac{v+v_o}{v-v_s}$（相互接近为正）。
+超音速源：Mach 锥半角 $\sin\theta=v/v_s$；带电粒子在介质中 $v>c/n$：\重点{\cos\theta_C=\frac{1}{n\beta}}，阈值 $\beta>1/n$，单位长度光子数 $\propto\bigl(1-\frac{1}{n^2\beta^2}\bigr)$。
+\end{结论}
+
+\参考{Hecht, \emph{Optics}；Born--Wolf, \emph{Principles of Optics}；French, \emph{Vibrations and Waves}（MIT 8.03）；Saleh--Teich, \emph{Fundamentals of Photonics}；Siegman, \emph{Lasers}。}

@@ -1,0 +1,71 @@
+\subsection{测量仪器与信号}
+
+\begin{结论}{示波器探头补偿与上升时间}
+示波器输入 $R_2=1\,$M$\Omega\parallel C_2$（$\sim15\,$pF），$10\times$ 探头 $R_1=9\,$M$\Omega\parallel C_1$。分压比与频率无关的条件：
+\[
+\重点{R_1C_1=R_2C_2}.
+\]
+欠补偿方波边沿变圆，过补偿出现过冲（调探头上的微调电容）。系统上升时间 $t_r\approx\frac{0.35}{\mathrm{BW}}$；级联时 $t_r^2$ 相加，故示波器带宽应为信号带宽的 3--5 倍。
+\end{结论}
+
+\begin{结论}{接地环路与磁耦合噪声}
+磁感应拾取 $\mathcal E=-A\dot B$：\重点{\text{减小回路面积}}（双绞线）比加电屏蔽更有效；电场耦合靠接地屏蔽。
+同轴屏蔽层两端都接地形成接地环路，地电位差与环路中的 $50/60\,$Hz 磁通引入哼声：低频敏感测量单点接地，或用差分放大/隔离变压器。
+\end{结论}
+
+\begin{结论}{电表负载效应与内外接法}
+电压表内阻 $R_V$ 并在 $R$ 上：读数偏低比例 $\approx R/R_V$；电流表内阻 $R_A$ 串入：偏高 $R_A/R$。
+测电阻：\重点{R\gg\sqrt{R_AR_V}\ \text{用电流表内接},\ R\ll\sqrt{R_AR_V}\ \text{用外接}}。高阻源（pH 电极、静电计）需输入阻抗 $>10^{12}\,\Omega$ 的缓冲器。
+\end{结论}
+
+\begin{结论}{ADC 量化噪声与平均}
+满量程分成 $2^N$ 级，步长 $q$：量化噪声均方根 \重点{q/\sqrt{12}}，满幅正弦的理论信噪比 $6.02N+1.76\,$dB（12 位约 $74\,$dB）。
+$N$ 次独立平均使随机噪声降为 $1/\sqrt N$；量化步长远大于噪声时平均无效，需加抖动（dither）。过采样 4 倍并滤波约增加 1 位分辨率。
+\end{结论}
+
+\begin{结论}{级联放大器的噪声：Friis 公式}
+各级噪声系数 $F_i$、功率增益 $G_i$：
+\[
+\重点{F=F_1+\frac{F_2-1}{G_1}+\frac{F_3-1}{G_1G_2}+\cdots}
+\]
+第一级决定整体噪声：低噪声前置放大器放在最前、尽量靠近传感器。电阻源的最优噪声匹配 $R_s=e_n/i_n$（放大器电压噪声与电流噪声之比）。
+\end{结论}
+
+\begin{结论}{振铃衰减法测 $Q$}
+关掉激励后储能按 $\ee^{-t/\tau}$ 衰减：
+\[
+\重点{Q=\omega_0\tau_E=\frac{\omega_0\tau_A}{2}},\qquad \tau_A\ \text{为振幅衰减时间}.
+\]
+与线宽法 $Q=\omega_0/\Delta\omega$ 一致；$Q\gtrsim10^4$ 时线宽太窄，扫频受激励源稳定度限制，振铃法更准（光学腔的 cavity ring-down 光谱同理）。
+\end{结论}
+
+\begin{结论}{测磁场：翻转线圈与各类探头}
+$N$ 匝、面积 $A$ 的探测线圈接冲击电流计（回路总电阻 $R$），翻转 $180^\circ$：
+\[
+\重点{Q=\frac{2NBA}{R}}\quad(\text{积分电荷只取决于磁通变化}).
+\]
+Hall 探头：$\sim$mT 至 T，需温度修正；NMR 测磁计最准（$10^{-6}$ 以下，靠质子 $42.58\,$MHz/T）；磁通门 nT；SQUID 达 fT$/\sqrt{\mathrm{Hz}}$（脑磁图）。
+\end{结论}
+
+\begin{结论}{温度传感器的标定式}
+铂电阻 Pt100：$R=R_0(1+\alpha T)$，\重点{\alpha=0.00385\,/^\circ\mathrm C}。热敏电阻：$R=R_0\exp\bigl[B\bigl(\frac1T-\frac1{T_0}\bigr)\bigr]$，$\ln R$ 对 $1/T$ 线性。
+热电偶测的是两结点\textbf{温差}（K 型约 $41\,\mu$V/K），需冷端补偿；Si 二极管正向压降约 $-2\,$mV/K（恒流下）。低温用 RuO$_2$、Cernox，标定点用相变（水三相点 $273.16\,$K）。
+\end{结论}
+
+\begin{结论}{光电探测器：响应度与散粒噪声极限}
+量子效率 $\eta$：
+\[
+\重点{\mathcal R=\frac{\eta e\lambda}{hc}=\eta\,\frac{\lambda[\mu\mathrm m]}{1.24}\ \mathrm{A/W}}.
+\]
+散粒噪声极限的信噪比 $\mathrm{SNR}=\sqrt{\frac{\eta P}{2h\nu\Delta f}}$（以振幅计）；暗电流与放大器噪声主导时用 NEP（W$/\sqrt{\mathrm{Hz}}$）描述。Si 适用 $400$--$1100\,$nm，InGaAs 到 $1.7\,\mu$m。
+\end{结论}
+
+\begin{结论}{调制光的相位法测光速}
+光强以频率 $f$ 调制，往返路程增加 $\Delta L$，调制相位滞后：
+\[
+\重点{c=\frac{2\pi f\,\Delta L}{\Delta\phi}}.
+\]
+$f=50\,$MHz 时 $\Delta L=1\,$m 对应 $\Delta\phi=60^\circ$。用多组 $(\Delta L,\Delta\phi)$ 做直线拟合，斜率给 $c$，截距吸收电子学固定延迟。介质中测得 $c/n_g$（群折射率）。
+\end{结论}
+
+\参考{Horowitz--Hill, \emph{The Art of Electronics} 第 1、8 章；Ott, \emph{Electromagnetic Compatibility Engineering}；Moore et al., \emph{Building Scientific Apparatus}；MIT 8.13--8.14 实验讲义；Bevington--Robinson。}

@@ -1,0 +1,97 @@
+\section{力学}
+
+\subsection{核心积木}
+
+\begin{结论}{变质量：火箭方程}
+喷气相对火箭速度 $u$（大小），外力 $F$：\重点{m\dot v=-u\,\dot m+F}（$\dot m<0$）。
+\[
+F=0:\ \重点{\Delta v=u\ln\frac{m_0}{m_f}};\qquad \text{竖直重力场：}\ v(t)=u\ln\frac{m_0}{m(t)}-gt .
+\]
+\注意 不能对系统直接写 $F=\frac{\dd(mv)}{\dd t}$：喷出的质量带走动量 $\dd m\,(v-u)$，必须对“火箭 $+$ 喷出物”取动量差。
+\end{结论}
+
+\begin{结论}{有效势与圆轨道稳定性}
+有心力，单位质量角动量 $h=r^2\dot\theta$：\重点{U_{\mathrm{eff}}(r)=U(r)+\frac{h^2}{2r^2}}。幂律力 $F=-kr^{\alpha}$（$k>0$）：
+\[
+\text{圆轨道稳定}\iff\alpha>-3,\qquad \重点{\frac{\omega_r}{\omega_\theta}=\sqrt{3+\alpha}}.
+\]
+近日点进动角每周 $2\pi(1/\sqrt{3+\alpha}-1)$；所有有界轨道闭合只发生在 $\alpha=1$（$\omega_r=2\omega_\theta$）和 $\alpha=-2$（$\omega_r=\omega_\theta$）——Bertrand 定理。
+\end{结论}
+
+\begin{结论}{轨道方程（Binet）与圆锥曲线参数}
+$u=1/r$：\重点{u''+u=-\frac{F(1/u)}{h^2u^2}}（$F$ 为单位质量径向力）。平方反比 $F=-GM/r^2$：
+\[
+r=\frac{p}{1+e\cos\theta},\qquad p=\frac{h^2}{GM},\qquad \重点{e^2=1+\frac{2Eh^2}{(GM)^2}}\ (E\text{ 为单位质量能量}).
+\]
+由此反推力律：已知轨道 $r(\theta)$，代入左端即得 $F$。
+\end{结论}
+
+\begin{结论}{Kepler 问题的三条速算式}
+\[
+\重点{v^2=GM\Bigl(\frac2r-\frac1a\Bigr)},\qquad E=-\frac{GMm}{2a},\qquad T^2=\frac{4\pi^2a^3}{G(M+m)} .
+\]
+Hohmann 转移（圆轨道 $r_1\to r_2$）：$\Delta v_1=\sqrt{\frac{GM}{r_1}}\Bigl(\sqrt{\frac{2r_2}{r_1+r_2}}-1\Bigr)$，$\Delta v_2=\sqrt{\frac{GM}{r_2}}\Bigl(1-\sqrt{\frac{2r_1}{r_1+r_2}}\Bigr)$，转移时间为半个椭圆周期 $\pi\sqrt{(r_1+r_2)^3/(8GM)}$。
+\end{结论}
+
+\begin{结论}{纯滚动：加速度与所需摩擦}
+记 \重点{\beta=I_{\mathrm{cm}}/(mR^2)}（实心球 $\frac25$，实心柱 $\frac12$，薄环 $1$）。斜面倾角 $\theta$ 纯滚：
+\[
+a=\frac{g\sin\theta}{1+\beta},\qquad f=\frac{\beta}{1+\beta}mg\sin\theta,\qquad \重点{\mu_s\ge\frac{\beta\tan\theta}{1+\beta}}.
+\]
+对\textbf{接触点}取力矩可一步得 $a$：$mgR\sin\theta=(I_{\mathrm{cm}}+mR^2)\frac aR$（只在接触点加速度指向质心时成立；均匀圆体纯滚满足此条件）。
+\end{结论}
+
+\begin{结论}{滑动到纯滚：对接触点角动量守恒}
+摩擦力过地面接触线，重力与支持力力矩相消，故对地面上固定点的角动量守恒：
+\[
+\重点{v_f=\frac{v_0+\beta R\omega_0}{1+\beta}}\qquad(\omega_0\text{ 与前进方向同向为正}).
+\]
+保龄球（实心球、$\omega_0=0$）：$v_f=\frac57v_0$，滑动时间 $t=\frac{2v_0}{7\mu g}$，损失动能 $\frac27\cdot\frac12mv_0^2$。
+\end{结论}
+
+\begin{结论}{二体碰撞：质心系与散射角上限}
+一维弹性：$v_1'=\dfrac{(m_1-m_2)v_1+2m_2v_2}{m_1+m_2}$。动能 $=\frac12MV^2+\frac12\mu v_{\mathrm{rel}}^2$，$\mu=\frac{m_1m_2}{m_1+m_2}$；
+恢复系数 $e$ 时损失 \重点{\Delta K=\frac12\mu(1-e^2)v_{\mathrm{rel}}^2}。弹性碰撞中 $m_1>m_2$ 撞静止 $m_2$，入射粒子偏转角 \重点{\sin\theta_{\max}=m_2/m_1}；等质量时两出射方向垂直。
+\end{结论}
+
+\begin{结论}{转动参考系：四项惯性力}
+\[
+\重点{m\ddot{\mathbf r}=\mathbf F-2m\boldsymbol\Omega\times\dot{\mathbf r}-m\boldsymbol\Omega\times(\boldsymbol\Omega\times\mathbf r)-m\dot{\boldsymbol\Omega}\times\mathbf r}.
+\]
+纬度 $\lambda$ 处自高 $h$ 静止下落，向东偏 $\frac13\Omega g t^3\cos\lambda=\frac13\Omega\cos\lambda\sqrt{8h^3/g}$；Foucault 摆进动角速度 $\Omega\sin\lambda$。
+\end{结论}
+
+\begin{结论}{广义坐标下的小振动频率}
+$L=\frac12M(q)\dot q^2-U_{\mathrm{eff}}(q)$，$U_{\mathrm{eff}}'(q_0)=0$：\重点{\omega^2=\frac{U_{\mathrm{eff}}''(q_0)}{M(q_0)}}。
+例：半径 $R$ 的圆环绕竖直直径以 $\Omega$ 转动，环上珠子（$\theta$ 自最低点量起），$U_{\mathrm{eff}}=-\frac12mR^2\Omega^2\sin^2\theta-mgR\cos\theta$。$\Omega^2<g/R$ 时底部稳定，$\omega^2=g/R-\Omega^2$；$\Omega^2>g/R$ 时稳定点 $\cos\theta_0=\frac{g}{\Omega^2R}$，\重点{\omega^2=\Omega^2\sin^2\theta_0}。
+\end{结论}
+
+\begin{结论}{受迫阻尼振子：振幅、相位与 $Q$}
+$\ddot x+\gamma\dot x+\omega_0^2x=\frac{F_0}{m}\cos\omega t$：
+\[
+\重点{A=\frac{F_0/m}{\sqrt{(\omega_0^2-\omega^2)^2+\gamma^2\omega^2}}},\qquad \tan\delta=\frac{\gamma\omega}{\omega_0^2-\omega^2}.
+\]
+$Q=\omega_0/\gamma$；吸收功率曲线半高全宽 $=\gamma$；振幅峰在 $\sqrt{\omega_0^2-\gamma^2/2}$（需 $Q>1/\sqrt2$）；自由振动能量按 $\ee^{-\gamma t}$ 衰减，每周期损失比例 $2\pi/Q$。
+\end{结论}
+
+\begin{结论}{位力定理}
+有界运动、$U\propto r^n$：\重点{2\langle T\rangle=n\langle U\rangle}。引力（$n=-1$）：$E=-\langle T\rangle=\frac12\langle U\rangle$。
+引力束缚系统失去能量会\textbf{升温}（负热容）；星系团速度弥散 $\sigma$、半径 $R$ 给出质量 $M\sim\sigma^2R/G$。谐振子（$n=2$）：$\langle T\rangle=\langle U\rangle$。
+\end{结论}
+
+\begin{结论}{潮汐加速度与 Hill 半径}
+质量 $M$ 在距离 $r$ 处，对尺度 $d\ll r$ 的物体：沿连线潮汐加速度 \重点{\frac{2GMd}{r^{3}}}，垂直方向 $-\frac{GMd}{r^3}$。
+小天体 $m$ 绕 $M$ 以半径 $a$ 公转，引力主导区域：\重点{r_H\approx a\Bigl(\frac{m}{3M}\Bigr)^{1/3}}。刚体卫星的 Roche 极限 $d\approx R\,(2\rho_M/\rho_m)^{1/3}$（流体约 $2.44R(\rho_M/\rho_m)^{1/3}$）。
+\end{结论}
+
+\begin{结论}{陀螺进动与复摆}
+快速陀螺（$I_3\omega_3\gg$ 其他角动量）：\重点{\Omega_p=\frac{Mg\ell}{I_3\omega_3}}，方向由 $\boldsymbol\tau=\boldsymbol\Omega_p\times\mathbf L$ 定。
+复摆：$T=2\pi\sqrt{\frac{I_P}{mgd}}=2\pi\sqrt{\frac{k^2+d^2}{gd}}$（$k$ 为回转半径），在 \重点{d=k} 时最短；等效摆长 $d+k^2/d$ 处为打击中心。大振幅修正 $T\approx T_0\bigl(1+\frac{\theta_0^2}{16}\bigr)$。
+\end{结论}
+
+\begin{结论}{绳索：绞盘公式与悬链线}
+绕柱包角 $\theta$、摩擦系数 $\mu$，将滑未滑：\重点{T_{\text{大}}=T_{\text{小}}\,\ee^{\mu\theta}}（只与包角有关，与柱半径无关）。
+均匀重链，最低点张力 $T_0$，线密度 $\lambda$：$y=a\cosh\frac xa$，\重点{a=\frac{T_0}{\lambda g}}，任一点张力 $T=\lambda g\,y$。
+\end{结论}
+
+\参考{Kleppner--Kolenkow, \emph{An Introduction to Mechanics}（MIT 8.012）；Morin, \emph{Introduction to Classical Mechanics}；Taylor, \emph{Classical Mechanics}；Murray--Dermott, \emph{Solar System Dynamics}。}

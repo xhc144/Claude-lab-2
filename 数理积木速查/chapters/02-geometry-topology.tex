@@ -1,0 +1,116 @@
+\section{几何拓扑}
+
+\subsection{核心积木}
+
+\begin{结论}{Euler 示性数的四条运算}
+闭曲面：可定向亏格 $g$ 时 $\chi=2-2g$，$k$ 个交叉帽时 $\chi=2-k$；连通和 $\chi(M\# N)=\chi(M)+\chi(N)-2$；$d$ 叶覆叠 \重点{\chi(\tilde X)=d\,\chi(X)}。
+紧 Riemann 曲面间 $d$ 次全纯映射（Riemann--Hurwitz）：
+\[
+\重点{2g_X-2=d\,(2g_Y-2)+\sum_{p\in X}(e_p-1)}.
+\]
+例：$y^2=f(x)$，$\deg f\in\{2g+1,2g+2\}$，对 $x$ 坐标 $d=2$、分歧点 $2g+2$ 个，得亏格 $g$。
+\end{结论}
+
+\begin{结论}{粘 2-胞腔 = 加一条关系}
+CW 复形 $X$ 沿闭路 $w$ 粘一个 2-胞腔：\重点{\pi_1(X\cup_w D^2)=\pi_1(X)/\langle\!\langle w\rangle\!\rangle}（van Kampen）。由此
+\[
+\pi_1(\Sigma_g)=\Bigl\langle a_1,b_1,\dots,a_g,b_g\ \Big|\ \prod_{i=1}^g[a_i,b_i]\Bigr\rangle,\quad H_1(\Sigma_g)=\mathbb Z^{2g},\quad \pi_1(\mathbb{RP}^2)=\mathbb Z/2 .
+\]
+$n$ 个圆的楔和 $\pi_1$ 为秩 $n$ 自由群；$H_1=\pi_1$ 的交换化。粘 3 维以上胞腔不改变 $\pi_1$。
+\end{结论}
+
+\begin{结论}{无收缩 $\Rightarrow$ Brouwer 不动点}
+若有收缩 $r:D^2\to S^1$（$r|_{S^1}=\mathrm{id}$），则 $\mathrm{id}_{\mathbb Z}=r_*\circ i_*$ 经过 $\pi_1(D^2)=0$，矛盾。连续 $f:D^2\to D^2$ 无不动点时，\重点{\text{从 }f(x)\text{ 经 }x\text{ 的射线交 }S^1\text{ 的点}} 就是这种收缩。高维用 $H_{n-1}(S^{n-1})=\mathbb Z$ 同理。
+\end{结论}
+
+\begin{结论}{映射度：对径映射与毛球}
+对径映射 $a:S^n\to S^n$ 的度 \重点{\deg a=(-1)^{n+1}}（$n+1$ 个坐标反射之积）。$f$ 无不动点 $\Rightarrow$ $f\simeq a$；$f(x)\ne -x$ 对所有 $x$ $\Rightarrow$ $f\simeq\mathrm{id}$。
+若 $S^n$ 上有处处非零切向量场 $v$，则 $f_t=\cos(\pi t)x+\sin(\pi t)\frac{v(x)}{|v(x)|}$ 连接 $\mathrm{id}$ 与 $a$，需 $1=(-1)^{n+1}$：\重点{n\ \text{必须为奇数}}。
+\end{结论}
+
+\begin{结论}{Poincaré--Hopf 与 Lefschetz}
+紧流形上只有孤立零点的向量场：\重点{\sum_{\text{零点}}\operatorname{ind}=\chi(M)}；平面零点指标 $=$ 绕零点小圆一周向量转过的圈数（源、汇、中心为 $+1$，鞍点为 $-1$）。
+紧可三角剖分 $X$ 上，$L(f)=\sum_k(-1)^k\tr\bigl(f_*|H_k(X;\mathbb Q)\bigr)$，\重点{L(f)\ne0\Rightarrow f\text{ 有不动点}}。例：$\mathbb{RP}^{2n}$ 的有理同调只有 $H_0$，$L\equiv1$，故其上每个自映射都有不动点。
+\end{结论}
+
+\begin{结论}{提升判据：何时映射可以“展开”}
+覆叠 $p:\tilde X\to X$，$Y$ 道路连通且局部道路连通，$f:Y\to X$。
+\[
+\重点{f\text{ 可提升}\iff f_*\pi_1(Y)\subseteq p_*\pi_1(\tilde X)}.
+\]
+单连通 $Y$（如 $S^n$，$n\ge2$）到 $S^1$ 的映射提升到 $\mathbb R$，故零伦；叶数 $=[\pi_1(X):p_*\pi_1(\tilde X)]$。
+\end{结论}
+
+\begin{结论}{空间曲线的曲率与挠率（任意参数）}
+\[
+\重点{\kappa=\frac{|\mathbf r'\times\mathbf r''|}{|\mathbf r'|^{3}},\qquad
+\tau=\frac{(\mathbf r'\times\mathbf r'')\cdot\mathbf r'''}{|\mathbf r'\times\mathbf r''|^{2}}}.
+\]
+圆柱螺线 $(a\cos t,a\sin t,bt)$：$\kappa=\frac{a}{a^2+b^2}$，$\tau=\frac{b}{a^2+b^2}$。$\kappa,\tau$ 为常数（$\kappa>0$）的曲线只有螺线（含圆、直线退化情形）。
+\end{结论}
+
+\begin{结论}{图像曲面 $z=f(x,y)$ 的 $K$ 与 $H$}
+记 $W=1+f_x^2+f_y^2$：
+\[
+\重点{K=\frac{f_{xx}f_{yy}-f_{xy}^2}{W^{2}}},\qquad
+H=\frac{(1+f_y^2)f_{xx}-2f_xf_yf_{xy}+(1+f_x^2)f_{yy}}{2W^{3/2}}.
+\]
+在临界点 $\nabla f=0$ 处退化为 Hessian 的行列式与半迹。极小曲面即 $H\equiv0$。
+\end{结论}
+
+\begin{结论}{只用度量算 Gauss 曲率}
+正交参数 $\dd s^2=E\,\dd u^2+G\,\dd v^2$：
+\[
+K=-\frac{1}{2\sqrt{EG}}\Bigl[\partial_u\Bigl(\frac{G_u}{\sqrt{EG}}\Bigr)+\partial_v\Bigl(\frac{E_v}{\sqrt{EG}}\Bigr)\Bigr].
+\]
+两个常用特例：
+\[
+\重点{\dd s^2=\lambda(\dd u^2+\dd v^2)\Rightarrow K=-\frac{1}{2\lambda}\Delta\ln\lambda},\qquad
+\重点{\dd s^2=\dd r^2+G\,\dd\theta^2\Rightarrow K=-\frac{(\sqrt G)_{rr}}{\sqrt G}}.
+\]
+前者为共形坐标，后者为测地极坐标。
+例：$\lambda=\frac{4}{(1\mp r^2)^2}$ 分别给 $K=\pm1$ 的 Poincaré 圆盘（取 $-$）与球面球极投影（取 $+$）。
+\end{结论}
+
+\begin{结论}{Gauss--Bonnet（带边、带角）}
+紧定向曲面 $M$，边界分段光滑，内角 $\theta_i$：
+\[
+\重点{\int_M K\,\dd A+\int_{\partial M}k_g\,\dd s+\sum_i(\pi-\theta_i)=2\pi\chi(M)}.
+\]
+测地三角形：$\alpha+\beta+\gamma-\pi=\int_T K\,\dd A$。单位球纬线 $\theta=\theta_0$（余纬）所围极冠：$\int K=2\pi(1-\cos\theta_0)$，即该纬线上平行移动一周的转角。
+\end{结论}
+
+\begin{结论}{Clairaut 关系：旋转面测地线}
+旋转面上，$\rho$ 为点到轴的距离，$\psi$ 为测地线与\textbf{纬线}夹角：\重点{\rho\cos\psi=\text{常数}}。
+故测地线在 $\rho=|c|$ 处与纬线相切后折回；子午线（$\psi=\pi/2$，$c=0$）总是测地线。它是轴向角动量守恒的几何版本。
+\end{结论}
+
+\begin{结论}{闭而不恰当的形式：绕数与立体角}
+$\mathbb R^2\setminus0$ 上 $\omega=\dfrac{x\,\dd y-y\,\dd x}{x^2+y^2}$ 满足 $\dd\omega=0$，但 \重点{\oint_\gamma\omega=2\pi\,\mathrm{wind}(\gamma,0)}，故非恰当。
+$\mathbb R^3\setminus0$ 上 $\Omega=\dfrac{x\,\dd y\wedge\dd z+y\,\dd z\wedge\dd x+z\,\dd x\wedge\dd y}{r^3}$ 闭，$\int_{S}\Omega=4\pi$（$S$ 包围原点）。由 Stokes，任何包围原点的闭曲面积分都相同——这就是 Gauss 定律的拓扑骨架。
+\end{结论}
+
+\begin{结论}{Gauss 环绕数积分}
+不相交闭曲线 $\gamma_1,\gamma_2\subset\mathbb R^3$：
+\[
+\重点{\mathrm{lk}(\gamma_1,\gamma_2)=\frac{1}{4\pi}\oint_{\gamma_1}\!\oint_{\gamma_2}\frac{(\mathbf r_1-\mathbf r_2)\cdot(\dd\mathbf r_1\times\dd\mathbf r_2)}{|\mathbf r_1-\mathbf r_2|^{3}}}\in\mathbb Z .
+\]
+物理读法：$\gamma_2$ 载单位电流，Biot--Savart 场沿 $\gamma_1$ 的环量 $=\mu_0\cdot\mathrm{lk}$（Ampère 定律）。
+\end{结论}
+
+\begin{结论}{$n$ 维球体积：用 Gauss 积分反推}
+$\int_{\mathbb R^n}\ee^{-|x|^2}\dd^nx=\pi^{n/2}$，另一方面 $=|S^{n-1}|\int_0^\infty r^{n-1}\ee^{-r^2}\dd r=\tfrac12|S^{n-1}|\Gamma(\tfrac n2)$：
+\[
+\重点{|S^{n-1}|=\frac{2\pi^{n/2}}{\Gamma(n/2)}},\qquad V_n(R)=\frac{\pi^{n/2}}{\Gamma(\frac n2+1)}R^n .
+\]
+$V_n(1)$ 在 $n=5$ 最大，$n\to\infty$ 时趋于 $0$；高维球的体积集中在半径 $1-O(1/n)$ 的薄壳中。
+\end{结论}
+
+\begin{结论}{Cartan 公式：何时流保持一个形式}
+\[
+\重点{\mathcal L_X\omega=\dd\,\iota_X\omega+\iota_X\dd\omega}.
+\]
+辛形式 $\omega$（$\dd\omega=0$）与 Hamilton 场 $\iota_{X_H}\omega=\dd H$：$\mathcal L_{X_H}\omega=\dd\dd H=0$，Hamilton 流保辛；再由 $\omega^n$ 守恒得 Liouville 定理。散度版本：$\mathcal L_X(\dd V)=(\nabla\cdot X)\,\dd V$。
+\end{结论}
+
+\参考{Hatcher, \emph{Algebraic Topology} 第 1--2 章；Munkres, \emph{Topology}（MIT 18.901）；do Carmo, \emph{Differential Geometry of Curves and Surfaces}（MIT 18.950）；Spivak, \emph{Calculus on Manifolds}。}

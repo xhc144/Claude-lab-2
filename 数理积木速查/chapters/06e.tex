@@ -1,0 +1,149 @@
+\subsection{连续介质与流体补充}
+
+\begin{结论}{各向同性弹性常数之间的关系}
+Young 模量 $E$、剪切模量 $G$、体积模量 $K$、Poisson 比 $\nu$：
+\[
+\重点{E=2G(1+\nu)=3K(1-2\nu)},\qquad -1<\nu\le\frac12 .
+\]
+$\nu=\frac12$ 不可压（橡胶 $\approx0.5$，$K\to\infty$）；金属 $\approx0.3$；软木 $\approx0$（瓶塞好插）；负 Poisson 比材料（拉伸变粗）存在。只需两个独立常数。
+\end{结论}
+
+\begin{结论}{薄壁压力容器}
+内压 $p$、半径 $R$、壁厚 $t\ll R$：
+\[
+\text{圆柱：环向 }\重点{\sigma_\theta=\frac{pR}t},\ \text{轴向 }\sigma_z=\frac{pR}{2t};\qquad \text{球：}\sigma=\frac{pR}{2t}.
+\]
+圆柱环向应力是轴向的两倍——香肠沿长度方向裂开；同材料同壁厚，球形容器能承受两倍压力。肥皂泡、血管壁同理（Laplace 定律）。
+\end{结论}
+
+\begin{结论}{静水压力与压力中心}
+宽 $w$ 的竖直矩形闸门、水深 $h$：总力 $F=\frac12\rho gwh^2$，作用点在水面以下 \重点{\frac23h}（三角形分布的形心）。
+倾斜/任意形状平面：$F=\rho gh_cA$（$h_c$ 为形心深度），压力中心深度 $h_c+\frac{I_c}{h_cA}$（$I_c$ 为对过形心水平轴的面积惯性矩）。冰山露出比例 $1-\frac{\rho_{\text{冰}}}{\rho_{\text{海水}}}\approx11\%$。
+\end{结论}
+
+\begin{结论}{Stokes 阻力与终端速度}
+$Re\ll1$：$F=6\pi\eta Rv$；终端速度
+\[
+\重点{v_t=\frac{2(\rho_s-\rho_f)gR^2}{9\eta}}.
+\]
+直径 $10\ \mu$m 的水滴在空气中约 $3$ mm/s；适用于 $Re=\frac{2R\rho_fv}\eta<1$，否则用 $F=\frac12C_d\rho_fAv^2$（球 $C_d\approx0.47$，$10^3<Re<2\times10^5$）。气泡（自由滑移表面）阻力为 $4\pi\eta Rv$。Oseen 修正因子 $1+\frac3{16}Re$（$Re$ 以直径计）。
+\end{结论}
+
+\begin{结论}{升力：Kutta--Joukowski 与薄翼理论}
+二维物体绕流有环量 $\Gamma$ 时单位展长升力 \重点{L'=\rho v\Gamma}（与形状无关）。Kutta 条件（尾缘流动光滑）确定 $\Gamma$。
+薄翼：$C_L=2\pi\alpha$（$\alpha$ 为攻角，弧度），失速前有效（约 $15^\circ$）；有限翼展 $C_L=\frac{2\pi\alpha}{1+2/\mathcal A}$（$\mathcal A$ 为展弦比），并伴随诱导阻力 $C_{D,i}=\frac{C_L^2}{\pi e\mathcal A}$。旋转球的 Magnus 力也是环量产生的升力。
+\end{结论}
+
+\begin{结论}{Rankine 涡与自由涡}
+核心 $r<a$ 刚体旋转 $v=\Omega r$，外部无旋 $v=\frac{\Gamma}{2\pi r}$（$\Gamma=2\pi\Omega a^2$）。中心压力低于远处
+\[
+\重点{p_\infty-p_0=\rho\Omega^2a^2},
+\]
+内外各贡献一半。自由液面中心下陷 $\frac{\Omega^2a^2}{g}$（龙卷风、浴缸涡）。Helmholtz：无粘时涡线随流体运动、涡管强度沿管不变。
+\end{结论}
+
+\begin{结论}{斜面薄液膜与 Couette 流}
+倾角 $\theta$、厚 $h$ 的液膜沿斜面稳态流动（自由表面无剪切）：
+\[
+u(y)=\frac{\rho g\sin\theta}{\eta}\Bigl(hy-\frac{y^2}2\Bigr),\qquad u_{\max}=\frac{\rho g\sin\theta\,h^2}{2\eta},\qquad \重点{q=\frac{\rho g\sin\theta\,h^3}{3\eta}}.
+\]
+Couette（上板速度 $U$）：线性剖面，剪应力 $\eta\frac Uh$。流量 $\propto h^3$——润滑、涂层、冰川流动对厚度极其敏感。
+\end{结论}
+
+\begin{结论}{无量纲数速查}
+\[
+Re=\frac{\rho vL}{\eta},\quad Fr=\frac{v}{\sqrt{gL}},\quad We=\frac{\rho v^2L}{\gamma},\quad Ma=\frac vc,\quad Pr=\frac\nu\alpha,\quad Bo=\frac{\Delta\rho gL^2}{\gamma},\quad St=\frac{fL}{v}.
+\]
+圆柱绕流涡街 \重点{St\approx0.2}（$300<Re<2\times10^5$）：$v=10$ m/s 吹过 $5$ mm 电线发声约 $400$ Hz（Aeolian 音）。$Bo=1$ 定毛细长度；$Ma>0.3$ 时须考虑可压缩性。
+\end{结论}
+
+\begin{结论}{Rayleigh--Plateau 不稳定：液柱断成液滴}
+半径 $R$ 的液柱：波长 \重点{\lambda>2\pi R} 的扰动不稳定（表面积减小）；无粘时增长最快的 $\lambda\approx9.02R$，增长率 $\approx0.34\sqrt{\frac{\gamma}{\rho R^3}}$。
+所以水龙头细流断成直径约 $1.9\times2R$ 的液滴；喷墨打印用压电调制控制断裂。粘性大时最快波长变长。
+\end{结论}
+
+\begin{结论}{Rayleigh--Taylor 与 Kelvin--Helmholtz 不稳定}
+重流体在轻流体之上（无粘、无表面张力）：增长率 \重点{\sigma=\sqrt{Agk}}，$A=\frac{\rho_2-\rho_1}{\rho_2+\rho_1}$（Atwood 数），表面张力稳定 $k>\sqrt{\frac{(\rho_2-\rho_1)g}{\gamma}}$ 的短波。
+剪切层（速度差 $\Delta U$、等密度）：$\sigma=\frac{k\Delta U}2$，所有波长不稳定；密度分层由 Richardson 数 $Ri>\frac14$ 稳定。超新星混合、云的波纹、惯性约束聚变的靶丸设计。
+\end{结论}
+
+\begin{结论}{层流边界层（Blasius）}
+平板，距前缘 $x$，$Re_x=\frac{vx}\nu$：
+\[
+\重点{\delta_{99}\approx\frac{5.0x}{\sqrt{Re_x}}},\qquad C_f=\frac{0.664}{\sqrt{Re_x}},\qquad \text{全板 }C_D=\frac{1.328}{\sqrt{Re_L}}.
+\]
+$Re_x\approx5\times10^5$ 转捩为湍流，此后 $\delta\propto x^{4/5}$。边界层厚 $\propto\sqrt{\nu x/v}$ 就是“粘性扩散时间 $\frac{x}{v}$ 内扩散的距离”。
+\end{结论}
+
+\begin{结论}{湍流的 Kolmogorov 标度}
+单位质量耗散率 $\varepsilon$：耗散尺度 $\eta_K=\bigl(\frac{\nu^3}\varepsilon\bigr)^{1/4}$，时间 $\tau_\eta=\sqrt{\frac\nu\varepsilon}$；惯性区能谱
+\[
+\重点{E(k)=C\varepsilon^{2/3}k^{-5/3}}\ (C\approx1.5).
+\]
+$\frac{L}{\eta_K}\sim Re^{3/4}$，直接数值模拟网格数 $\sim Re^{9/4}$。圆管转捩 $Re\approx2300$；光滑管湍流 Darcy 摩擦因子 $f\approx0.316Re^{-1/4}$（Blasius，$Re<10^5$）。
+\end{结论}
+
+\begin{结论}{弹性波：P 波、S 波、Rayleigh 波}
+\[
+\重点{v_P=\sqrt{\frac{K+\frac43G}{\rho}},\qquad v_S=\sqrt{\frac G\rho}},\qquad \frac{v_P}{v_S}=\sqrt{\frac{2(1-\nu)}{1-2\nu}}\ (\nu=0.25\text{ 时 }\sqrt3).
+\]
+液体 $G=0$ 无 S 波（地核液态的证据）；表面 Rayleigh 波 $\approx0.92v_S$（$\nu=0.25$），破坏性最大。地震测距：$d\approx\frac{\Delta t}{1/v_S-1/v_P}\approx8$ km/s $\times\Delta t$。
+\end{结论}
+
+\begin{结论}{梁的弯曲应力与截面设计}
+弯矩 $M$：$\sigma=\frac{My}{I}$，最大在离中性轴最远处，\重点{\sigma_{\max}=\frac{M}{W}},\ $W=\frac{I}{y_{\max}}$。矩形 $b\times h$：$I=\frac{bh^3}{12}$，$W=\frac{bh^2}6$——竖放比平放强 $\frac hb$ 倍。
+工字梁把材料放在远离中性轴处，用料少而 $I$ 大。悬臂端载 $F$：$M_{\max}=FL$；简支中载：$\frac{FL}4$，挠度 $\frac{FL^3}{48EI}$。
+\end{结论}
+
+\begin{结论}{热应力与弹性储能}
+两端固定的杆升温 $\Delta T$：\重点{\sigma=E\alpha\Delta T}（与长度无关）。钢 $E=200$ GPa，$\alpha=12\times10^{-6}$/K：每升温 $1$ K 约 $2.4$ MPa，$50$ K 就是 $120$ MPa（铁轨留缝的原因）。
+弹性能密度 $\frac{\sigma^2}{2E}$；杆的刚度 $\frac{EA}L$；串联 $\frac1k=\sum\frac1{k_i}$，并联 $k=\sum k_i$。
+\end{结论}
+
+\begin{结论}{Venturi 流量计}
+截面从 $A_1$ 收缩到 $A_2$，压差 $\Delta p$：
+\[
+\重点{Q=A_2\sqrt{\frac{2\Delta p}{\rho\bigl(1-(A_2/A_1)^2\bigr)}}}.
+\]
+实际乘流量系数（$\approx0.98$）。皮托管 $v=\sqrt{\frac{2\Delta p}{\rho}}$ 测局部流速（飞机空速）；喷雾器、化油器、虹吸都是 Bernoulli 的应用。
+\end{结论}
+
+\begin{结论}{射流冲击与 Pelton 水轮}
+射流（流量 $Q$、速度 $v$）垂直冲击固定平板：$F=\rho Qv$；被曲面反向折回：$2\rho Qv$。斗叶以速度 $u$ 后退：$F=2\rho Q(v-u)$，功率 $P=2\rho Q(v-u)u$，
+\[
+\重点{u=\frac v2\text{ 时最大},\quad P_{\max}=\frac12\rho Qv^2}
+\]
+（射流动能全部被提取）。动量方程（控制体）比能量方程更直接给力。
+\end{结论}
+
+\begin{结论}{水跃}
+明渠中急流（$Fr_1=\frac{v_1}{\sqrt{gh_1}}>1$）跃变为缓流：质量 $+$ 动量守恒给
+\[
+\重点{\frac{h_2}{h_1}=\frac12\Bigl(\sqrt{1+8Fr_1^2}-1\Bigr)},\qquad \Delta E=\frac{(h_2-h_1)^3}{4h_1h_2}\ (\text{单位重量的能量损失}).
+\]
+能量不守恒（湍流耗散），所以只能用动量方程。厨房水槽中水柱落点周围的圆环即水跃；浅水波的激波类比。
+\end{结论}
+
+\begin{结论}{水锤（Joukowsky 公式）}
+管中流速 $\Delta v$ 突然被阀门截止：压强突升
+\[
+\重点{\Delta p=\rho c\,\Delta v},
+\]
+$c$ 为管中声速（水约 $1000$--$1400$ m/s，计入管壁弹性）。$1$ m/s 的水流骤停 $\approx1.4$ MPa。关阀时间 $<\frac{2L}c$ 即算骤停；缓慢关阀可避免。
+\end{结论}
+
+\begin{结论}{毛细与润湿}
+Jurin：$h=\frac{2\gamma\cos\theta}{\rho gr}$（水在 $0.1$ mm 半径玻璃管中升约 $15$ cm）；Young 方程 $\gamma_{SV}=\gamma_{SL}+\gamma\cos\theta$ 定接触角。
+平行板间距 $d$：$h=\frac{2\gamma\cos\theta}{\rho gd}$；两板间的毛细“胶”力 $\approx\frac{2\gamma A\cos\theta}{d}$——两片湿玻璃难以分开。\重点{\text{毛细长度 }\ell_c=\sqrt{\gamma/\rho g}\approx2.7\text{ mm}}（水）：小于它表面张力主导（水滴成球），大于它重力主导（水坑变平，厚度 $\approx2\ell_c\sin\frac\theta2$）。
+\end{结论}
+
+\begin{结论}{阻尼与 Reynolds 相似：模型试验}
+动力相似要求所有相关无量纲数相等。船模同时要求 $Fr$（波浪阻力）与 $Re$（摩擦阻力）相等，二者矛盾（缩比 $\frac1{25}$ 时需 $\nu$ 降为 $\frac1{125}$），实践中\重点{\text{只匹配 }Fr\text{，摩擦阻力用经验公式单独修正}}（Froude 假设）。风洞匹配 $Re$ 常用加压或低温。
+\end{结论}
+
+\begin{结论}{声学中的流体力学：声压与声强}
+小振幅声波 $p'=\rho_0cv'$（声阻抗 $\rho_0c$：空气 $415$ Pa$\cdot$s/m，水 $1.5\times10^6$）；声强 $I=\frac{p_{\mathrm{rms}}^2}{\rho_0c}$。
+空气--水界面强度透射率 $\frac{4Z_1Z_2}{(Z_1+Z_2)^2}\approx\重点{1.1\times10^{-3}}$（$-30$ dB）：水下几乎听不到岸上的声音。$0$ dB $=20\ \mu$Pa $=10^{-12}$ W/m$^2$。
+\end{结论}
+
+\参考{Landau--Lifshitz, \emph{Fluid Mechanics}、\emph{Theory of Elasticity}；Acheson, \emph{Elementary Fluid Dynamics}；Kundu--Cohen, \emph{Fluid Mechanics}；de Gennes 等, \emph{Capillarity and Wetting Phenomena}；Gere, \emph{Mechanics of Materials}；MIT 2.25、2.001、12.510。}

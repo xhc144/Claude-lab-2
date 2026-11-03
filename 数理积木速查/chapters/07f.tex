@@ -1,0 +1,134 @@
+\subsection{热力学与统计物理补充}
+
+\begin{结论}{热力学势的自然变量}
+\[
+\dd U=T\dd S-p\dd V+\mu\dd N,\quad \dd H=T\dd S+V\dd p,
+\]
+\[
+\dd F=-S\dd T-p\dd V,\quad \重点{\dd G=-S\dd T+V\dd p+\mu\dd N}.
+\]
+平衡判据：等温等容 $F$ 最小，等温等压 $G$ 最小，等温等体积开放系统 $\Omega=F-\mu N=-pV$ 最小。Gibbs--Helmholtz：$H=-T^2\frac{\partial(G/T)}{\partial T}$；Gibbs--Duhem $S\dd T-V\dd p+N\dd\mu=0$。
+\end{结论}
+
+\begin{结论}{能量涨落与热容}
+正则系综：\重点{\langle\Delta E^2\rangle=k_BT^2C_V}，相对涨落 $\frac{\sqrt{\langle\Delta E^2\rangle}}{\langle E\rangle}\sim N^{-1/2}$。所以 $C_V\ge0$（稳定性）；Monte Carlo 中用能量方差算热容比数值求导稳定。
+推广：$\langle\Delta X^2\rangle=k_BT\frac{\partial\langle X\rangle}{\partial f}$（$f$ 为与 $X$ 共轭的场）：磁化涨落 $\leftrightarrow$ 磁化率，粒子数涨落 $\leftrightarrow$ 压缩率。
+\end{结论}
+
+\begin{结论}{Joule--Thomson 系数与反转温度}
+节流（等焓）：
+\[
+\重点{\mu_{JT}=\Bigl(\frac{\partial T}{\partial p}\Bigr)_H=\frac{V}{C_p}(T\alpha-1)},
+\]
+理想气体 $T\alpha=1$，$\mu_{JT}=0$。van der Waals 低压近似：$\mu_{JT}\approx\frac1{C_p}\bigl(\frac{2a}{RT}-b\bigr)$，反转温度 $T_{\text{inv}}=\frac{2a}{Rb}=\frac{27}4T_c$。氦 $T_{\text{inv}}\approx45$ K（需预冷），氮 $\approx620$ K（室温节流可降温，Linde 液化）。
+\end{结论}
+
+\begin{结论}{自由膨胀与混合熵}
+理想气体自由膨胀（$Q=W=0$，$T$ 不变）：$\Delta S=nR\ln\frac{V_2}{V_1}$，不可逆。混合两种不同理想气体：
+\[
+\重点{\Delta S_{\text{mix}}=-nR\sum x_i\ln x_i}.
+\]
+同种气体混合 $\Delta S=0$（Gibbs 佯谬由全同粒子的 $\frac1{N!}$ 解决）。最小分离功 $=T\Delta S_{\text{mix}}$：海水淡化理论最小能耗约 $1$ kWh/m$^3$。
+\end{结论}
+
+\begin{结论}{相律与化学平衡}
+Gibbs 相律：$C$ 个组元、$P$ 相共存，自由度 \重点{F=C-P+2}（纯物质三相点 $F=0$）。
+反应 $\sum\nu_iA_i=0$：平衡 $\sum\nu_i\mu_i=0$，$K=\exp\bigl(-\frac{\Delta G^\circ}{RT}\bigr)$；van 't Hoff $\frac{\dd\ln K}{\dd T}=\frac{\Delta H^\circ}{RT^2}$——吸热反应高温有利。Le Chatelier 原理是它的定性版本。
+\end{结论}
+
+\begin{结论}{稀溶液的依数性}
+渗透压（van 't Hoff）\重点{\Pi=cRT}（$c$ 为溶质摩尔浓度，电解质乘离子数 $i$）：$0.1$ mol/L 在室温约 $2.5$ bar。
+沸点升高 $\Delta T_b=K_bm$、凝固点降低 $\Delta T_f=K_fm$（水 $K_b=0.512$、$K_f=1.86$ K$\cdot$kg/mol）。都源于溶剂化学势降低 $-RTx_{\text{溶质}}$；只与粒子数有关，与种类无关。
+\end{结论}
+
+\begin{结论}{两能级系统：Schottky 反常与负温度}
+能级差 $\Delta$：$C=Nk_B\Bigl(\frac{\Delta}{k_BT}\Bigr)^2\frac{\ee^{\Delta/k_BT}}{(1+\ee^{\Delta/k_BT})^2}$，峰值 \重点{C_{\max}\approx0.44Nk_B}\ 于 $k_BT\approx0.42\Delta$。
+能谱有上界时布居反转对应 $T<0$：负温度比任何正温度“更热”（接触时热量从负温系统流向正温系统）。核自旋系统、激光增益介质。
+\end{结论}
+
+\begin{结论}{转动配分函数与对称数}
+线性分子 $z_{\text{rot}}=\sum(2J+1)\ee^{-J(J+1)\theta_r/T}\approx\frac{T}{\sigma\theta_r}$（$T\gg\theta_r=\frac{\hbar^2}{2Ik_B}$），同核 $\sigma=2$。
+$\mathrm H_2$：核自旋统计使正氢（奇 $J$，三重态）与仲氢（偶 $J$）比例高温为 \重点{3:1}，低温平衡全转为仲氢；转化缓慢导致液氢储存中的“汽化热”问题。$\theta_r$：$\mathrm H_2$ $85$ K，$\mathrm N_2$ $2.9$ K。
+\end{结论}
+
+\begin{结论}{光子气体的热力学}
+$u=aT^4$，\重点{p=\frac u3},\ $s=\frac43aT^3$，$\mu=0$，$C_V=4aT^3V$。绝热过程 $VT^3=$ 常数，$pV^{4/3}=$ 常数——宇宙膨胀中辐射温度 $T\propto\frac1a$。
+光子数密度 $n\approx2.03\times10^7T^3$ m$^{-3}$；每光子平均能量 $\approx2.70k_BT$，熵 $\approx3.60k_B$。CMB（$2.725$ K）约 $411$ 个/cm$^3$。
+\end{结论}
+
+\begin{结论}{第二维里系数与 Boyle 温度}
+$\frac{pV}{nRT}=1+\frac{B_2(T)}{V_m}+\cdots$，$B_2=-2\pi N_A\int_0^\infty(\ee^{-u(r)/k_BT}-1)r^2\dd r$。
+硬球 $B_2=\frac{2\pi}3N_A\sigma^3$（四倍分子体积）；van der Waals \重点{B_2=b-\frac a{RT}}，Boyle 温度 $T_B=\frac a{Rb}=\frac{27}8T_c$（此时低压下最像理想气体）。$B_2<0$ 时吸引占优。
+\end{结论}
+
+\begin{结论}{临界指数与标度关系}
+\[
+\begin{array}{lcccccc}
+&\alpha&\beta&\gamma&\delta&\nu&\eta\\\hline
+\text{平均场}&0&\frac12&1&3&\frac12&0\\
+\text{2D Ising}&0\,(\ln)&\frac18&\frac74&15&1&\frac14\\
+\text{3D Ising}&0.110&0.326&1.237&4.79&0.630&0.036
+\end{array}
+\]
+标度关系 \重点{\alpha+2\beta+\gamma=2},\ $\gamma=\beta(\delta-1)$，$\gamma=\nu(2-\eta)$，超标度 $d\nu=2-\alpha$。液--气临界点、单轴磁体同属 3D Ising 普适类；$d\ge4$ 时平均场正确。
+\end{结论}
+
+\begin{结论}{Langmuir 吸附等温线}
+$N$ 个吸附位，吸附能 $\varepsilon$，与理想气体（压强 $p$）平衡（巨正则）：
+\[
+\重点{\theta=\frac{Kp}{1+Kp}},\qquad K\propto\ee^{\varepsilon/k_BT}.
+\]
+低压 $\theta\propto p$，高压饱和。同一形式：Michaelis--Menten 酶动力学、配体结合、Fermi--Dirac 占据（$K p\to\ee^{(\mu-\varepsilon)/k_BT}$）。
+\end{结论}
+
+\begin{结论}{Onsager 倒易与热电效应}
+线性响应 $J_i=\sum L_{ij}X_j$，微观可逆性给 \重点{L_{ij}=L_{ji}}（磁场下 $L_{ij}(\mathbf B)=L_{ji}(-\mathbf B)$）。
+热电：Seebeck 系数 $S$（$\Delta V=-S\Delta T$）与 Peltier 系数 $\Pi$（$J_Q=\Pi J$）满足 Kelvin 关系 $\Pi=ST$。热电优值 $ZT=\frac{S^2\sigma T}\kappa$，最大效率 $\eta=\eta_C\frac{\sqrt{1+ZT}-1}{\sqrt{1+ZT}+T_c/T_h}$。
+\end{结论}
+
+\begin{结论}{最大有用功（㶲）}
+环境温度 $T_0$、压强 $p_0$，系统从状态 1 到与环境平衡：
+\[
+\重点{W_{\max}=(U-U_0)-T_0(S-S_0)+p_0(V-V_0)}.
+\]
+实际功 $=W_{\max}-T_0S_{\text{gen}}$（Gouy--Stodola），不可逆熵产生乘环境温度就是损失的功。热源 $Q$（温度 $T$）的㶲 $Q(1-\frac{T_0}T)$——低温热的价值很低。
+\end{结论}
+
+\begin{结论}{第三定律与残余熵}
+$T\to0$：$S\to S_0$（完美晶体为 $0$），$C\to0$，热膨胀系数 $\to0$，有限步不能达到绝对零度。
+玻璃、无序冰有残余熵：冰的质子无序（Pauling）\重点{S_0=R\ln\frac32\approx3.37}\ J/(mol$\cdot$K)，与测量 $3.4$ 吻合。CO 晶体头尾无序 $R\ln2$ 的一部分。
+\end{结论}
+
+\begin{结论}{相对论理想气体}
+Maxwell--Jüttner 分布；极端相对论（$k_BT\gg mc^2$）：$\langle E\rangle=\重点{3k_BT}$（非相对论 $\frac32k_BT$），$p=\frac{u}{3}$，$C_V=3Nk_B$，$\gamma_{\text{绝热}}=\frac43$。
+状态方程 $pV=Nk_BT$ 对任何速度的理想气体都成立（$p$ 来自动量通量，$\langle pv\rangle=3k_BT$ 普适）。中子星、早期宇宙中 $\gamma=\frac43$ 导致不稳定性（Chandrasekhar 极限的来源之一）。
+\end{结论}
+
+\begin{结论}{Otto、Diesel、Brayton 循环效率}
+\[
+\text{Otto：}\重点{\eta=1-r^{1-\gamma}},\qquad \text{Brayton：}\eta=1-\Bigl(\frac{p_1}{p_2}\Bigr)^{(\gamma-1)/\gamma},\qquad \text{Diesel：}\eta=1-\frac{r^{1-\gamma}}{\gamma}\frac{r_c^\gamma-1}{r_c-1}.
+\]
+$r$ 为压缩比，$r_c$ 为截止比。Otto $r=10$、$\gamma=1.4$：$60\%$（实际约 $30\%$）。效率只依赖压缩比，与最高温无关；Diesel 同压缩比下效率低于 Otto，但可用更高压缩比（无爆震）。
+\end{结论}
+
+\begin{结论}{橡皮筋的热力学}
+理想橡胶 $U=U(T)$（熵弹性）：张力 $f=-T\bigl(\frac{\partial S}{\partial L}\bigr)_T\propto T$。
+\重点{\text{绝热拉伸时升温}}（拉伸降低构象熵，绝热时由热运动熵补偿）；恒张力下加热会收缩（负热膨胀）。用嘴唇感受快速拉伸的橡皮筋变热。与金属丝（能弹性，拉伸后绝热略降温）相反。
+\end{结论}
+
+\begin{结论}{Bose 与 Fermi 的经典极限判据}
+热 de Broglie 波长 $\lambda_T=\frac{h}{\sqrt{2\pi mk_BT}}$。量子效应显著 $\iff$ \重点{n\lambda_T^3\gtrsim1}。
+室温空气 $n\lambda_T^3\sim10^{-6}$（经典）；金属电子 $\sim10^3$（高度简并，$T_F\sim5\times10^4$ K）；冷原子 BEC 在 $n\lambda_T^3=\zeta(\frac32)=2.612$ 处凝聚。液氦 $\lambda_T\approx$ 原子间距，因此有超流。
+\end{结论}
+
+\begin{结论}{熵的统计计数：Einstein 固体的直接计算}
+$N$ 个振子共享 $q$ 个能量量子：$\Omega=\binom{q+N-1}{q}$。高温（$q\gg N$）：$S\approx Nk_B\bigl(\ln\frac qN+1\bigr)$，由 $\frac1T=\frac{\partial S}{\partial U}$ 得 $U=Nk_BT$（经典能均分）。
+两个固体接触，热量自发流向使 \重点{\Omega_1\Omega_2} 增大的方向，即温度相等：热平衡的统计定义。微正则数态是理解温度、熵的最直接入口。
+\end{结论}
+
+\begin{结论}{涨落的 Einstein 公式}
+宏观量 $x$ 偏离平衡的概率 $P(x)\propto\ee^{\Delta S(x)/k_B}$，二阶展开 $\Delta S\approx-\frac12\frac{(x-x_0)^2}{\sigma^2/k_B}$。
+例：体积涨落 $\langle\Delta V^2\rangle=k_BTV\kappa_T$；温度涨落（小系统）$\langle\Delta T^2\rangle=\frac{k_BT^2}{C_V}$。\重点{\text{涨落的大小由响应函数决定}}——这是涨落--耗散关系的静态版本。临界点处 $\kappa_T\to\infty$，密度涨落发散（临界乳光）。
+\end{结论}
+
+\参考{Callen, \emph{Thermodynamics and an Introduction to Thermostatistics}；Kardar, \emph{Statistical Physics of Particles}、\emph{of Fields}；Reif, \emph{Fundamentals of Statistical and Thermal Physics}；Schroeder, \emph{An Introduction to Thermal Physics}；MIT 8.044、8.08、8.333。}

@@ -1,0 +1,162 @@
+\subsection{质点系、轨道与刚体补充}
+
+\begin{结论}{变质量的一般方程与雨滴}
+质量以相对速度 $\mathbf u-\mathbf v$ 进出：\重点{m\frac{\dd\mathbf v}{\dd t}=\mathbf F+(\mathbf u-\mathbf v)\frac{\dd m}{\dd t}}（$\mathbf u$ 为进出质量的速度）。火箭 $\mathbf u-\mathbf v=-\mathbf v_e$，传送带落砂 $\mathbf u=0$。
+雨滴在静止雾中下落、吸收率 $\propto$ 截面积 $\times$ 速度（$\dot m\propto r^2v$，$m\propto r^3$）：从小雨滴开始，加速度趋于 \重点{\frac g7}；若 $\dot m\propto m$ 则终速 $g/k$。
+\end{结论}
+
+\begin{结论}{Hohmann 转移}
+圆轨道 $r_1\to r_2$（$\mu=GM$），两次切向冲量：
+\[
+\Delta v_1=\sqrt{\frac\mu{r_1}}\Bigl(\sqrt{\frac{2r_2}{r_1+r_2}}-1\Bigr),\quad \Delta v_2=\sqrt{\frac\mu{r_2}}\Bigl(1-\sqrt{\frac{2r_1}{r_1+r_2}}\Bigr),\quad \重点{t=\pi\sqrt{\frac{(r_1+r_2)^3}{8\mu}}}.
+\]
+近地轨道（$300$ km）到地球同步：$\Delta v\approx2.43+1.47=3.9$ km/s，用时约 $5.3$ h。$r_2/r_1>11.94$ 时双椭圆转移更省。
+\end{结论}
+
+\begin{结论}{近圆轨道的拱点角}
+中心力 $F(r)$，近圆轨道径向振动频率与公转频率之比 $\sqrt{3+\frac{rF'}F}$，相邻近日点与远日点的夹角
+\[
+\重点{\psi=\frac{\pi}{\sqrt{3+rF'(r)/F(r)}}},\qquad F\propto r^n:\ \psi=\frac{\pi}{\sqrt{n+3}}.
+\]
+$n=-2$（Kepler）$\psi=\pi$ 闭合；$n=1$（谐振子）$\psi=\frac\pi2$ 闭合；其他幂律一般进动；在 Kepler 力上加小的 $r^{-3}$ 力（扁率、广义相对论的有效项）即产生每圈固定角度的近日点进动。
+\end{结论}
+
+\begin{结论}{落体的 Coriolis 东偏}
+纬度 $\lambda$，高度 $h$ 静止释放（忽略空气阻力）：
+\[
+\重点{x_{\text{东}}=\frac{2\omega\cos\lambda}{3}\sqrt{\frac{2h^3}{g}}}\ (=\tfrac13\omega g t^3\cos\lambda).
+\]
+赤道上 $100$ m 落体东偏约 $2.2$ cm。竖直上抛再落回：\textbf{西偏} $\frac43\omega\cos\lambda\sqrt{\frac{8h^3}g}$。水平运动的偏转（北半球向右）$\sim2\omega\sin\lambda\,vt$。
+\end{结论}
+
+\begin{结论}{有效重力与铅垂线偏差}
+离心修正：$g_{\text{eff}}(\lambda)\approx g-\omega^2R\cos^2\lambda$，铅垂线偏离地心方向的角度
+\[
+\重点{\delta\approx\frac{\omega^2R\sin\lambda\cos\lambda}{g}},\qquad \max\approx0.1^\circ\ (\lambda=45^\circ).
+\]
+赤道与两极的 $g$ 差约 $0.5\%$（离心约 $0.34\%$，扁率贡献其余）。地球扁率 $f\approx\frac1{298}$ 本身就是这个离心势的结果。
+\end{结论}
+
+\begin{结论}{对称重陀螺：睡眠陀螺的稳定条件}
+支点在对称轴上，质心距 $l$，$I_3$ 为对称轴转动惯量、$I_1$ 为过支点的横向转动惯量。竖直“睡眠”状态稳定 $\iff$
+\[
+\重点{\omega_3^2>\frac{4I_1mgl}{I_3^2}}.
+\]
+摩擦使 $\omega_3$ 下降到阈值以下时陀螺开始摇晃倒下。快陀螺的慢进动 $\Omega\approx\frac{mgl}{I_3\omega_3}$，章动频率 $\approx\frac{I_3\omega_3}{I_1}$、幅度 $\propto\frac{1}{\omega_3^2}$。
+\end{结论}
+
+\begin{结论}{恢复系数与弹跳}
+碰撞损失的动能 $\Delta E=\frac12\mu v_{\mathrm{rel}}^2(1-e^2)$（$\mu$ 为约化质量）。从高度 $h$ 释放、恢复系数 $e$ 的球：
+\[
+\重点{\text{总时间 }T=\sqrt{\frac{2h}g}\cdot\frac{1+e}{1-e}},\qquad \text{总路程 }h\frac{1+e^2}{1-e^2}.
+\]
+弹跳次数无穷但时间有限（Zeno 型）。$e$ 可由相邻两次弹跳高度比 $e^2$ 或时间比 $e$ 测得。
+\end{结论}
+
+\begin{结论}{一维弹性碰撞速算}
+$v_1'=\frac{(m_1-m_2)v_1+2m_2v_2}{m_1+m_2}$，$v_2'=\frac{(m_2-m_1)v_2+2m_1v_1}{m_1+m_2}$。相对速度反向：$v_2'-v_1'=v_1-v_2$。
+静止靶获得的动能比例 \重点{\frac{4m_1m_2}{(m_1+m_2)^2}}：等质量全部转移（中子慢化用氢）；$m_2\gg m_1$ 时以 $2v_2$ 反弹（墙）；叠放弹力球（大下小上）从 $h$ 落下，小球可弹到约 $9h$（$m_2\gg m_1$ 极限）。
+\end{结论}
+
+\begin{结论}{弱耦合双摆的能量交换}
+两个相同单摆用弱弹簧 $k$ 连接：$\omega_1=\sqrt{\frac gl}$（同相）、$\omega_2=\sqrt{\frac gl+\frac{2k}m}$（反相）。只推一个摆时
+\[
+x_1=A\cos\frac{\Delta\omega t}2\cos\bar\omega t,\qquad x_2=A\sin\frac{\Delta\omega t}2\sin\bar\omega t,
+\]
+能量完全转到另一摆用时 \重点{\frac{\pi}{\omega_2-\omega_1}\approx\frac{\pi\sqrt{g/l}\,m}{k}}。耦合越弱交换越慢；两摆频率不等（失谐 $>$ 耦合）时转移不完全。
+\end{结论}
+
+\begin{结论}{一维晶格的色散关系}
+单原子链（质量 $m$，弹簧 $K$，间距 $a$）：
+\[
+\重点{\omega(k)=2\sqrt{\frac Km}\Bigl|\sin\frac{ka}2\Bigr|},\qquad v_g\to a\sqrt{K/m}\ (k\to0),\quad v_g=0\ (k=\tfrac\pi a).
+\]
+双原子链（$m_1<m_2$）：声学支与光学支，$k=0$ 光学频率 $\sqrt{2K(\frac1{m_1}+\frac1{m_2})}$，布里渊区边界的带隙在 $\sqrt{\frac{2K}{m_2}}$ 与 $\sqrt{\frac{2K}{m_1}}$ 之间。最高频率对应相邻原子反相振动。
+\end{结论}
+
+\begin{结论}{卫星阻力悖论}
+圆轨道 $E=-\frac{GMm}{2r}$，$K=\frac{GMm}{2r}=-E$：大气阻力使 $E$ 减小、$r$ 减小，而\重点{\text{速度反而增大}}（$\dd K=-\dd E>0$）。阻力做功的两倍转为动能来自势能。
+同理：引力束缚系统“负比热”（恒星失去能量后升温）；推进器沿速度方向加速反而使轨道变高、速度变小。
+\end{结论}
+
+\begin{结论}{自由下落坍缩时间}
+均匀静止球（密度 $\rho$）在自引力下坍缩到中心的时间
+\[
+\重点{t_{ff}=\sqrt{\frac{3\pi}{32G\rho}}},
+\]
+与初始半径无关（每层同时到达）。也等于贴地轨道周期 $T=\sqrt{\frac{3\pi}{G\rho}}$ 的 $\frac{1}{4\sqrt2}$。地球平均密度贴地周期约 $84$ min；分子云 $n\sim10^4$ cm$^{-3}$ 时 $t_{ff}\sim3\times10^5$ 年。
+\end{结论}
+
+\begin{结论}{地球隧道：任意弦都是 42 分钟}
+均匀球内 $g(r)=g\frac rR$，沿任意直弦的分量使运动为简谐振动：
+\[
+\重点{T=2\pi\sqrt{\frac Rg}\approx84.4\text{ min}},\qquad \text{单程 }42.2\text{ min}，\ \text{与弦的位置无关}.
+\]
+最大速度 $d\sqrt{g/R}$（$d$ 为半弦长）。真实地球密度不均，过地心约 $38$ min。
+\end{结论}
+
+\begin{结论}{多级火箭与重力损失}
+各级 $\Delta v_i=v_e\ln\frac{m_{0,i}}{m_{f,i}}$ 相加；抛掉空壳使后续级的质量比更高。单级结构比 $\varepsilon=\frac{m_{\text{结构}}}{m_{\text{结构}}+m_{\text{推进剂}}}$ 下，单级 $\Delta v<v_e\ln\frac1\varepsilon$（$\varepsilon=0.1$、$v_e=3$ km/s 时 $<6.9$ km/s，不够入轨）。
+竖直上升的重力损失 \重点{\Delta v_{\text{损}}\approx g\,t_{\text{燃烧}}}：推力越大燃烧越快损失越小，但受过载与气动限制。
+\end{结论}
+
+\begin{结论}{旋转圆环上的珠子：对称性破缺}
+半径 $R$ 的竖直圆环绕竖直直径以 $\omega$ 转动，光滑珠子的平衡：$\theta=0$（底部）在 $\omega^2<\frac gR$ 时稳定；超过后底部失稳，新平衡
+\[
+\重点{\cos\theta_0=\frac{g}{\omega^2R}},\qquad \text{小振动频率 }\omega\sin\theta_0 .
+\]
+是叉式分岔的力学原型（类比 Landau 相变：$\omega$ 对应温度的倒数，$\theta_0\propto\sqrt{\omega-\omega_c}$）。
+\end{结论}
+
+\begin{结论}{转盘上滚动的球：$\frac27$ 的圆周运动}
+均匀实心球在以 $\Omega$ 匀速转动的水平转盘上纯滚动（转动惯量 $\frac25mr^2$）：从转盘静止参考系看，球心在\重点{\text{固定的圆上运动，角频率 }\frac27\Omega}，与初始速度无关（不会被甩出去）。
+推导：接触点无滑动 $+$ 角动量定理，球心速度满足 $\dot{\mathbf v}=\frac27\boldsymbol\Omega\times\mathbf v$。实验中常被误以为会飞出。
+\end{结论}
+
+\begin{结论}{双星质量函数}
+周期 $P$，可见星视向速度半振幅 $K_1$，轨道倾角 $i$：
+\[
+\重点{f(M)=\frac{(M_2\sin i)^3}{(M_1+M_2)^2}=\frac{PK_1^3}{2\pi G}}.
+\]
+$f(M)$ 是 $M_2$ 的严格下界：$f(M)>3M_\odot$ 即暗伴星为黑洞的强证据（如 Cyg X-1、V404 Cyg）。Kepler 第三定律两体形式 $P^2=\frac{4\pi^2a^3}{G(M_1+M_2)}$。
+\end{结论}
+
+\begin{结论}{Oberth 效应}
+推进剂一定（$\Delta v$ 一定）时，在速度 $v$ 处点火获得的比动能增量
+\[
+\重点{\Delta\Bigl(\frac{v^2}2\Bigr)=v\Delta v+\frac{(\Delta v)^2}{2}},
+\]
+速度越大越划算，故在近拱点（深引力井中）点火最有效。从抛物线轨道在近日点 $r_p$ 加速 $\Delta v$，无穷远剩余速度 $v_\infty\approx\sqrt{2v_{\mathrm{esc}}(r_p)\Delta v}\gg\Delta v$。
+\end{结论}
+
+\begin{结论}{引力聚焦截面}
+质量 $M$、半径 $R$ 的天体，来流相对速度 $v_\infty$：
+\[
+\重点{\sigma=\pi R^2\Bigl(1+\frac{v_{\mathrm{esc}}^2}{v_\infty^2}\Bigr)},\qquad v_{\mathrm{esc}}^2=\frac{2GM}R.
+\]
+由角动量与能量守恒求擦边轨道的碰撞参数。行星形成中“失控增长”、地球被小天体撞击率、恒星吸积都用它；$v_\infty\ll v_{\mathrm{esc}}$ 时截面远大于几何截面。
+\end{结论}
+
+\begin{结论}{刚体的动能与角动量分解（König）}
+\[
+T=\frac12MV_{\mathrm{cm}}^2+\frac12\boldsymbol\omega^{\mathsf T}I_{\mathrm{cm}}\boldsymbol\omega,\qquad \mathbf L_O=\mathbf R_{\mathrm{cm}}\times M\mathbf V_{\mathrm{cm}}+I_{\mathrm{cm}}\boldsymbol\omega .
+\]
+\重点{\text{对质心或对瞬时静止点（纯滚接触点）}\ \dot{\mathbf L}=\boldsymbol\tau}；对一般运动的点需加修正项 $-M\mathbf v_P\times\mathbf V_{\mathrm{cm}}$。纯滚时 $T=\frac12I_P\omega^2$（对接触点的转动惯量）。
+\end{结论}
+
+\begin{结论}{贴地轨道周期只依赖密度}
+半径 $R$、平均密度 $\rho$ 的天体表面圆轨道：
+\[
+\重点{T=\sqrt{\frac{3\pi}{G\rho}}}.
+\]
+地球 $84$ min，月球 $108$ min，中子星（$\rho\sim10^{17}$ kg/m$^3$）约 $1$ ms——毫秒脉冲星的转速上限即由此（自转更快会把赤道物质甩出）。白矮星 $\sim10$ s。
+\end{结论}
+
+\begin{结论}{单摆的大振幅修正}
+\[
+\重点{T=2\pi\sqrt{\frac lg}\Bigl(1+\frac{\theta_0^2}{16}+\frac{11\theta_0^4}{3072}+\cdots\Bigr)}=\frac{4K(\sin\frac{\theta_0}2)}{\sqrt{g/l}}.
+\]
+$\theta_0=10^\circ$ 修正 $0.19\%$，$30^\circ$ 修正 $1.7\%$，$90^\circ$ 修正 $18\%$。“小角度”指 $\theta_0^2/16$ 小于所需精度。
+\end{结论}
+
+\参考{Kleppner--Kolenkow, \emph{An Introduction to Mechanics}；Morin, \emph{Introduction to Classical Mechanics}；Goldstein, \emph{Classical Mechanics}；Curtis, \emph{Orbital Mechanics for Engineering Students}；MIT 8.01、8.09、16.346。}

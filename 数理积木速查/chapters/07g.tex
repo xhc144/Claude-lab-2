@@ -1,0 +1,138 @@
+\subsection{量子力学补充}
+
+\begin{结论}{矢量算符与角动量的对易关系}
+$\mathbf V$ 为矢量算符 $\iff$ \重点{[L_i,V_j]=\ii\hbar\varepsilon_{ijk}V_k}（$\mathbf r,\mathbf p,\mathbf L$ 都是）。由此 $[L_i,\mathbf V^2]=0$，$[\mathbf L^2,\mathbf V]\ne0$。
+$[x,p_x]=\ii\hbar$，$[x,p^2]=2\ii\hbar p_x$，$[L_z,x\pm\ii y]=\pm\hbar(x\pm\ii y)$——$x\pm\ii y$ 是 $m$ 的升降算符，给出选择定则 $\Delta m=\pm1$（圆偏振）、$0$（$z$ 偏振）。
+\end{结论}
+
+\begin{结论}{一阶含时微扰：常数与简谐微扰}
+$V$ 在 $t=0$ 打开并保持常数：
+\[
+\重点{P_{i\to f}(t)=\frac{|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}t/2)}{(\omega_{fi}/2)^2}},
+\]
+对 $\omega_{fi}$ 积分时 $\frac{\sin^2(\omega t/2)}{(\omega/2)^2}\to2\pi t\,\delta(\omega)$，得 Fermi 黄金规则。简谐 $V\ee^{-\ii\omega t}+\text{h.c.}$ 时把 $\omega_{fi}$ 换成 $\omega_{fi}\mp\omega$（吸收/受激发射）。有效条件：$P\ll1$，$t\gg\frac1{\Delta\omega}$。
+\end{结论}
+
+\begin{结论}{绝热定理的适用条件}
+哈密顿量缓变，系统留在瞬时本征态（加上动力学相位与 Berry 相位），条件
+\[
+\重点{\hbar\,|\langle m|\dot H|n\rangle|\ll(E_n-E_m)^2}.
+\]
+能隙闭合时失效（Landau--Zener 给出跃迁概率 $\ee^{-2\pi a^2/(\hbar|\dot\varepsilon|)}$，$2a$ 为最小间隙、$\varepsilon$ 为两态能量差）。绝热量子计算的速度受最小能隙的平方限制。
+\end{结论}
+
+\begin{结论}{$\delta$ 势阱与 $\delta$ 势垒}
+$V=-\alpha\delta(x)$：唯一束缚态 $\psi=\sqrt\kappa\,\ee^{-\kappa|x|}$，\重点{\kappa=\frac{m\alpha}{\hbar^2},\ E=-\frac{m\alpha^2}{2\hbar^2}}。边界条件：$\psi'$ 在 $0$ 处跳变 $-\frac{2m\alpha}{\hbar^2}\psi(0)$。
+散射（阱或垒）透射率 $T=\frac{1}{1+\frac{m\alpha^2}{2\hbar^2E}}$，与符号无关。双 $\delta$ 阱：对称、反对称两个态，分裂 $\approx4|E|\ee^{-\kappa d}$（$d$ 为间距，$\kappa d\gg1$）——化学键的玩具模型。
+\end{结论}
+
+\begin{结论}{相干态}
+$a|\alpha\rangle=\alpha|\alpha\rangle$，$|\alpha\rangle=\ee^{-|\alpha|^2/2}\sum\frac{\alpha^n}{\sqrt{n!}}|n\rangle$：光子数 Poisson 分布，$\langle n\rangle=|\alpha|^2$，$\Delta n=|\alpha|$；最小不确定 \重点{\Delta x\Delta p=\frac\hbar2}，波包形状不变地做经典振动 $\alpha(t)=\alpha\ee^{-\ii\omega t}$。
+$|\langle\beta|\alpha\rangle|^2=\ee^{-|\alpha-\beta|^2}$（非正交、过完备）。由位移算符 $D(\alpha)=\ee^{\alpha a^\dagger-\alpha^*a}$ 作用于真空产生（经典电流驱动谐振子的结果）。
+\end{结论}
+
+\begin{结论}{两个自旋 $\frac12$ 的耦合}
+$\frac12\otimes\frac12=0\oplus1$：三重态 $|\!\uparrow\uparrow\rangle$，$\frac{|\!\uparrow\downarrow\rangle+|\!\downarrow\uparrow\rangle}{\sqrt2}$，$|\!\downarrow\downarrow\rangle$（对称）；单态 $\frac{|\!\uparrow\downarrow\rangle-|\!\downarrow\uparrow\rangle}{\sqrt2}$（反对称）。
+\[
+\重点{\mathbf S_1\cdot\mathbf S_2=\frac{\hbar^2}2\Bigl[S(S+1)-\frac32\Bigr]=\frac{\hbar^2}4\ (S=1),\ -\frac{3\hbar^2}4\ (S=0)}.
+\]
+维数检验 $(2j_1+1)(2j_2+1)=\sum_J(2J+1)$。氢原子超精细分裂（21 cm）、Heisenberg 交换作用 $J\mathbf S_1\cdot\mathbf S_2$ 都用这一式。
+\end{结论}
+
+\begin{结论}{全同粒子与交换能}
+两电子空间波函数对称 $\leftrightarrow$ 自旋单态，反对称 $\leftrightarrow$ 三重态。一阶微扰下 $E_\pm=E_0+J\pm K$，$K=\Bigl\langle\psi_a(1)\psi_b(2)\Bigl|\frac{e^2}{4\pi\varepsilon_0r_{12}}\Bigr|\psi_b(1)\psi_a(2)\Bigr\rangle>0$。
+\重点{\text{三重态（空间反对称）能量低 }2K}：电子彼此远离、排斥能小——Hund 第一规则与铁磁性的起源。氦 $1s2s$：$^3S$ 比 $^1S$ 低约 $0.8$ eV。
+\end{结论}
+
+\begin{结论}{态密度}
+自由粒子（体积 $V$，含自旋简并 $g_s$）：
+\[
+\重点{g(E)=g_s\frac{V}{4\pi^2}\Bigl(\frac{2m}{\hbar^2}\Bigr)^{3/2}E^{1/2}}\ (3\text{D}),\qquad g_s\frac{mA}{2\pi\hbar^2}\ (2\text{D，常数}),\qquad g_s\frac{L}{\pi\hbar}\sqrt{\frac{m}{2E}}\ (1\text{D}).
+\]
+光子 $g(\omega)=\frac{V\omega^2}{\pi^2c^3}$（两偏振）。二维常数态密度给量子阱的台阶状吸收谱；一维的 $E^{-1/2}$ 奇点（van Hove）出现在纳米线、碳管中。
+\end{结论}
+
+\begin{结论}{近自由电子：Bragg 面上的能隙}
+弱周期势 $V(x)=\sum V_G\ee^{\ii Gx}$，在 $k=\pm\frac G2$ 处两平面波简并，二阶简并微扰：
+\[
+\重点{E_\pm=\frac{\hbar^2k^2}{2m}\pm|V_G|},\qquad \text{能隙 }2|V_G|.
+\]
+两个驻波 $\cos\frac{Gx}2$、$\sin\frac{Gx}2$ 把电子密度分别集中在势能低/高处。能隙处群速度为零（Bragg 反射）；Kronig--Penney 模型给出精确的带结构。
+\end{结论}
+
+\begin{结论}{有限深方势阱的束缚态个数}
+宽 $L$、深 $V_0$：令 $z_0=\frac L2\frac{\sqrt{2mV_0}}\hbar$，束缚态个数
+\[
+\重点{N=\Bigl\lceil\frac{2z_0}{\pi}\Bigr\rceil}=\Bigl\lceil\frac{L\sqrt{2mV_0}}{\pi\hbar}\Bigr\rceil,
+\]
+偶宇称态 $z\tan z=\sqrt{z_0^2-z^2}$，奇宇称态 $-z\cot z=\sqrt{z_0^2-z^2}$（$z=\frac{kL}2$）。一维总有至少一个；三维球阱（只有奇解）需 $z_0>\frac\pi2$ 才有第一个束缚态，即 $V_0a^2>\frac{\pi^2\hbar^2}{8m}$（$a$ 为球半径）。
+\end{结论}
+
+\begin{结论}{二次 Stark 效应：氢基态极化率}
+基态无一阶效应（宇称），二阶 $\Delta E=-\frac12\alpha_pE^2$，精确结果
+\[
+\重点{\alpha_p=\frac92\cdot4\pi\varepsilon_0a_0^3}.
+\]
+简单上界：$\Delta E^{(2)}\ge-\frac{e^2E^2\langle z^2\rangle}{E_2-E_1}$ 给 $\alpha_p\le\frac{16}{3}\cdot4\pi\varepsilon_0a_0^3$（把所有中间态能量取为 $E_2$）。原子极化率 $\sim4\pi\varepsilon_0\times(\text{体积})$。
+\end{结论}
+
+\begin{结论}{纠缠：Schmidt 分解与纠缠熵}
+两体纯态 $|\psi\rangle=\sum_i\sqrt{\lambda_i}|a_i\rangle|b_i\rangle$（系数矩阵的 SVD）。约化密度矩阵 $\rho_A$ 的本征值即 $\lambda_i$，纠缠熵
+\[
+\重点{S=-\sum\lambda_i\ln\lambda_i},
+\]
+可分态 $S=0$，Bell 态 $S=\ln2$（最大）。Schmidt 秩 $>1\iff$ 纠缠（纯态）。混合态的纠缠判据：Peres--Horodecki 部分转置（$2\times2$、$2\times3$ 充要）。
+\end{结论}
+
+\begin{结论}{不可克隆与量子隐形传态}
+不存在 $U|\psi\rangle|0\rangle=|\psi\rangle|\psi\rangle$ 对所有 $|\psi\rangle$ 成立（线性性：对叠加态矛盾）；可以完美克隆一组正交态。
+隐形传态：共享一对 Bell 态 $+$ 发送方做 Bell 测量 $+$ \重点{\text{经典信道传 2 比特}} $+$ 接收方做对应 Pauli 校正。不超光速（无经典信息时接收方状态是完全混合态）、原态被破坏（不违反不可克隆）。
+\end{结论}
+
+\begin{结论}{谐振子的热态}
+$\rho=\frac{\ee^{-\beta H}}Z$：$\langle n\rangle=\frac1{\ee^{\beta\hbar\omega}-1}$，
+\[
+\重点{\langle x^2\rangle=\frac{\hbar}{2m\omega}\coth\frac{\beta\hbar\omega}2}\ \xrightarrow{k_BT\gg\hbar\omega}\ \frac{k_BT}{m\omega^2},\qquad \xrightarrow{T\to0}\ \frac{\hbar}{2m\omega}.
+\]
+热态是位置的 Gauss 分布；$k_BT\approx\hbar\omega$ 处量子--经典交叉（如悬臂、纳米机械振子的冷却目标 $\langle n\rangle<1$）。
+\end{结论}
+
+\begin{结论}{退相干：$T_1$、$T_2$ 与 Bloch 方程}
+两能级系统：纵向弛豫（能量）时间 $T_1$，横向（相位）时间 $T_2$，\重点{T_2\le2T_1}（纯退相位 $\frac1{T_\varphi}=\frac1{T_2}-\frac1{2T_1}$）。
+非均匀展宽给 $T_2^*<T_2$，自旋回波（$\pi$ 脉冲）可消除静态非均匀性，恢复到 $T_2$。Lindblad 形式 $\dot\rho=-\frac\ii\hbar[H,\rho]+\sum\gamma_k(L_k\rho L_k^\dagger-\frac12\{L_k^\dagger L_k,\rho\})$ 保证完全正性。
+\end{结论}
+
+\begin{结论}{环上的粒子与 Aharonov--Bohm 能级}
+半径 $R$ 的环，质量 $M$：$E_m=\frac{\hbar^2m^2}{2MR^2}$，$m\in\mathbb Z$（$\pm m$ 简并）。穿过环的磁通 $\Phi$：
+\[
+\重点{E_m=\frac{\hbar^2}{2MR^2}\Bigl(m-\frac{\Phi}{\Phi_0}\Bigr)^2},\qquad \Phi_0=\frac he,
+\]
+能谱以 $\Phi_0$ 为周期（介观环的持续电流 $I=-\frac{\partial E}{\partial\Phi}$）。超导环因 Cooper 对电荷 $2e$ 周期为 $\frac h{2e}$。
+\end{结论}
+
+\begin{结论}{立方体中的粒子：简并与“偶然”简并}
+$E=\frac{\pi^2\hbar^2}{2mL^2}(n_x^2+n_y^2+n_z^2)$：前几个能级 $3,6,9,11,12,14$（单位 $\frac{\pi^2\hbar^2}{2mL^2}$），简并度 $1,3,3,3,1,6$。
+\重点{(n_x,n_y,n_z)\text{ 的置换给“对称性简并”}}，$3^2+3^2+3^2=1^2+1^2+5^2=27$ 是数论偶然简并。用于数原子核壳层、量子点的态数。
+\end{结论}
+
+\begin{结论}{Heisenberg 绘景中的谐振子与“经典式”运动}
+$a(t)=a\ee^{-\ii\omega t}$，$x(t)=x\cos\omega t+\frac p{m\omega}\sin\omega t$——算符满足经典运动方程（$H$ 为二次型时 Ehrenfest 定理精确）。
+对任何二次 Hamiltonian（谐振子、均匀场中的粒子、线性耦合），\重点{\text{量子期望值严格遵循经典轨道}}，量子效应只体现在涨落中。非线性势（$x^4$）时 $\langle V'(x)\rangle\ne V'(\langle x\rangle)$。
+\end{结论}
+
+\begin{结论}{测量与 Born 规则的几个推论}
+测量 $A$ 得本征值 $a$ 的概率 $|\langle a|\psi\rangle|^2$，之后态塌缩到 $|a\rangle$。
+推论：对易的可观测量可同时确定；反复快速测量冻结演化（量子 Zeno 效应：$N$ 次测量后留存概率 $\approx1-\frac{(\Delta H)^2t^2}{\hbar^2N}\to1$）；\重点{\text{密度矩阵的对角元依赖于测量基}}——区分纯态叠加与经典混合需测非对角元（干涉）。
+\end{结论}
+
+\begin{结论}{类氢波函数的几个精确期望值}
+\[
+\langle r\rangle=\frac{a}{2Z}\bigl[3n^2-l(l+1)\bigr],\qquad \Bigl\langle\frac1r\Bigr\rangle=\frac{Z}{n^2a},
+\]
+\[
+\Bigl\langle\frac1{r^2}\Bigr\rangle=\frac{Z^2}{n^3(l+\frac12)a^2},\qquad \重点{\Bigl\langle\frac1{r^3}\Bigr\rangle=\frac{Z^3}{n^3l(l+\frac12)(l+1)a^3}}.
+\]
+$\langle\frac1r\rangle$ 由位力定理即得；$\langle r^{-3}\rangle$ 用于自旋--轨道与超精细分裂（$l\ge1$）。基态最可几半径 $a$，平均半径 $\frac32a$。
+\end{结论}
+
+\参考{Griffiths, \emph{Introduction to Quantum Mechanics}；Sakurai, \emph{Modern Quantum Mechanics}；Cohen-Tannoudji, \emph{Quantum Mechanics}；Nielsen--Chuang, \emph{Quantum Computation and Quantum Information}；Ashcroft--Mermin 第 9 章；MIT 8.04、8.05、8.06。}

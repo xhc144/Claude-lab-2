@@ -1,0 +1,148 @@
+\subsection{分析力学与电动力学补充}
+
+\begin{结论}{Rayleigh 耗散函数}
+线性阻尼 $F_i=-b_i\dot q_i$：令 $\mathcal F=\frac12\sum b_{ij}\dot q_i\dot q_j$，
+\[
+\重点{\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q_i}-\frac{\partial L}{\partial q_i}+\frac{\partial\mathcal F}{\partial\dot q_i}=0},\qquad \frac{\dd E}{\dd t}=-2\mathcal F .
+\]
+电路：$L=\frac12L\dot Q^2-\frac{Q^2}{2C}$，$\mathcal F=\frac12R\dot Q^2$，直接给 RLC 方程。耦合电路的互感进入动能项 $M\dot Q_1\dot Q_2$。
+\end{结论}
+
+\begin{结论}{相对论带电粒子的 Lagrange 量}
+\[
+\重点{L=-mc^2\sqrt{1-\frac{v^2}{c^2}}-q\phi+q\mathbf v\cdot\mathbf A},\qquad \mathbf p=\gamma m\mathbf v+q\mathbf A,\qquad H=\sqrt{(\mathbf p-q\mathbf A)^2c^2+m^2c^4}+q\phi .
+\]
+正则动量含 $q\mathbf A$；规范变换改变 $\mathbf p$ 但不改变 $\gamma m\mathbf v$。均匀磁场中回旋频率 $\omega=\frac{qB}{\gamma m}$（随能量下降，回旋加速器失步、同步加速器调频的原因）。
+\end{结论}
+
+\begin{结论}{Poisson 括号：角动量代数}
+$\{f,g\}=\sum\bigl(\frac{\partial f}{\partial q_i}\frac{\partial g}{\partial p_i}-\frac{\partial f}{\partial p_i}\frac{\partial g}{\partial q_i}\bigr)$，$\dot f=\{f,H\}+\partial_tf$。
+\[
+\重点{\{L_i,L_j\}=\varepsilon_{ijk}L_k},\qquad \{L_i,x_j\}=\varepsilon_{ijk}x_k,\qquad \{L_i,L^2\}=0 .
+\]
+量子化规则 $\{\cdot,\cdot\}\to\frac{1}{\ii\hbar}[\cdot,\cdot]$。Poisson 定理：两个守恒量的括号也守恒（$L_x,L_y$ 守恒 $\Rightarrow L_z$ 守恒）。
+\end{结论}
+
+\begin{结论}{Routh 方法：消去循环坐标}
+$q_k$ 循环（$L$ 不含 $q_k$）$\Rightarrow p_k$ 守恒。Routhian $R=L-p_k\dot q_k$（以 $p_k$ 代替 $\dot q_k$），其余坐标满足以 $R$ 为 Lagrange 量的方程，自由度减一。
+中心力：$R=\frac12m\dot r^2-\frac{\ell^2}{2mr^2}-V(r)$，即有效势；\重点{\text{注意符号}}：直接把 $\dot\theta=\frac\ell{mr^2}$ 代入 $L$ 会得到错误的 $+\frac{\ell^2}{2mr^2}$。
+\end{结论}
+
+\begin{结论}{Liouville 定理与 Poincaré 回归}
+Hamilton 流保持相体积，相空间密度沿轨道不变 $\frac{\dd\rho}{\dd t}=0$。
+有界相空间（能量面有限测度）中几乎每个初态都会任意接近地返回（Poincaré 回归）。\重点{\text{回归时间随自由度指数增长}}（$\sim\ee^{N}$），宏观系统远超宇宙年龄。有耗散时相体积收缩到吸引子。
+\end{结论}
+
+\begin{结论}{Thomas 进动}
+加速运动的参考系（电子绕核）中自旋额外进动 $\boldsymbol\omega_T=\frac{\gamma^2}{\gamma+1}\frac{\mathbf a\times\mathbf v}{c^2}\approx\frac{\mathbf a\times\mathbf v}{2c^2}$。
+它使原子自旋--轨道耦合的“朴素”结果减半：\重点{\text{实际耦合}=\frac12\times\text{静止系计算值}}，正好符合观测（$g=2$ 加 Thomas 因子 $\frac12$）。来源：两个不共线 boost 的复合含一个转动（Wigner 转动）。
+\end{结论}
+
+\begin{结论}{Debye 弛豫的介电函数}
+\[
+\重点{\varepsilon(\omega)=\varepsilon_\infty+\frac{\varepsilon_s-\varepsilon_\infty}{1-\ii\omega\tau}},
+\]
+损耗 $\varepsilon''$ 在 $\omega\tau=1$ 处达到最大 $\frac{\varepsilon_s-\varepsilon_\infty}2$。Cole--Cole 图为半圆。水 $\tau\approx8$ ps（$\approx20$ GHz）——微波炉 $2.45$ GHz 在损耗峰的低频侧（穿透深，加热均匀）。
+\end{结论}
+
+\begin{结论}{电磁场的动量与角动量：辐射压}
+动量密度 $\mathbf g=\frac{\mathbf S}{c^2}$。垂直入射强度 $I$：完全吸收压强 $\frac Ic$，完全反射 \重点{\frac{2I}c}；斜入射乘 $\cos^2\theta$。
+太阳常数 $1361$ W/m$^2$：吸收时 $4.5\ \mu$Pa。圆偏振光每个光子角动量 $\pm\hbar$，即单位能量 $\frac1\omega$：吸收功率 $P$ 的圆偏振光施加扭矩 $\frac P\omega$（Beth 实验）。轨道角动量 $\ell\hbar$（涡旋光束）。
+\end{结论}
+
+\begin{结论}{规范变换与常用规范}
+$\mathbf A\to\mathbf A+\nabla\chi$，$\phi\to\phi-\partial_t\chi$ 不改变 $\mathbf E,\mathbf B$。
+Coulomb 规范 $\nabla\cdot\mathbf A=0$：$\phi$ 为瞬时 Coulomb 势，辐射只在横向 $\mathbf A$；Lorenz 规范 \重点{\nabla\cdot\mathbf A+\frac1{c^2}\partial_t\phi=0}：$\Box\phi=-\frac\rho{\varepsilon_0}$、$\Box\mathbf A=-\mu_0\mathbf J$，协变。量子力学中波函数同时乘 $\ee^{\ii q\chi/\hbar}$。
+\end{结论}
+
+\begin{结论}{Dirac 量子化条件}
+若存在磁荷 $g$，电荷 $e$ 的波函数绕 Dirac 弦一圈的相位须为 $2\pi$ 的整数倍：
+\[
+\重点{eg=\frac{n\hbar c}{2}}\quad(\text{Gauss 单位}),
+\]
+一个磁单极的存在就解释了电荷量子化。最小磁荷 $g=\frac{e}{2\alpha}\approx68.5e$，磁单极之间的作用比电荷强 $\sim(68.5)^2$ 倍。
+\end{结论}
+
+\begin{结论}{磁镜与损失锥}
+回旋运动的磁矩 $\mu=\frac{mv_\perp^2}{2B}$ 是绝热不变量；向强场区运动时 $v_\perp$ 增大、$v_\parallel$ 减小直至反射。中心处投掷角 $\theta$ 的粒子被约束 $\iff$
+\[
+\重点{\sin^2\theta>\frac{B_{\min}}{B_{\max}}}\quad(\text{否则落入损失锥}).
+\]
+地球辐射带（Van Allen）、磁镜聚变装置、极光（损失锥中的粒子沉降到大气）。
+\end{结论}
+
+\begin{结论}{带电粒子漂移}
+回旋半径 $r_L=\frac{mv_\perp}{|q|B}$。叠加力 $\mathbf F$ 时导心漂移 $\mathbf v_d=\frac{\mathbf F\times\mathbf B}{qB^2}$：
+\[
+\重点{\mathbf E\times\mathbf B\text{ 漂移 }\frac{\mathbf E\times\mathbf B}{B^2}}\ (\text{与电荷、质量无关}),\qquad \text{梯度漂移 }\frac{mv_\perp^2}{2qB^3}\mathbf B\times\nabla B .
+\]
+曲率漂移 $\frac{mv_\parallel^2}{qB^2}\frac{\mathbf R_c\times\mathbf B}{R_c^2}$；梯度与曲率漂移依赖电荷符号，产生电流（地球环电流）。
+\end{结论}
+
+\begin{结论}{同步辐射}
+相对论电子沿半径 $\rho$ 的圆周：功率 $P=\frac{e^2c\gamma^4}{6\pi\varepsilon_0\rho^2}$，辐射集中在前向 $\frac1\gamma$ 锥内，临界频率
+\[
+\重点{\omega_c=\frac32\gamma^3\frac c\rho}.
+\]
+每圈能量损失 $\Delta E[\text{keV}]\approx88.5\frac{E[\text{GeV}]^4}{\rho[\text{m}]}$——LEP（$100$ GeV）每圈损失约 $3$ GeV，是环形电子对撞机的能量极限，质子因 $\gamma$ 小 $1836$ 倍而几乎不受影响。
+\end{结论}
+
+\begin{结论}{Green 互易定理}
+两组电荷分布 $(\rho_1,\phi_1)$、$(\rho_2,\phi_2)$ 在同一组导体下：\重点{\int\rho_1\phi_2=\int\rho_2\phi_1}。
+妙用：接地导体球外点电荷 $q$ 在球上感应电荷 $-q\frac Rd$，不用解边值问题——取“球带电 $Q$、点处电势”作为第二组。两接地平行板间点电荷 $q$ 在两板上的感应电荷按距离反比分配：$-q\frac{d-x}{d}$、$-q\frac xd$。
+\end{结论}
+
+\begin{结论}{细导线圆环的自感}
+半径 $R$、导线半径 $a\ll R$：
+\[
+\重点{L\approx\mu_0R\Bigl(\ln\frac{8R}a-2\Bigr)}\quad(\text{外自感；均匀电流再加 }\tfrac{\mu_0R}4).
+\]
+自感对导线半径只有对数依赖——理想细线自感发散。长直导线单位长度的内自感 $\frac{\mu_0}{8\pi}$ 与半径无关。
+\end{结论}
+
+\begin{结论}{复折射率与吸收}
+$n=n'+\ii\kappa$：$E\propto\ee^{\ii(n\omega z/c-\omega t)}$，强度衰减系数
+\[
+\重点{\alpha=\frac{2\omega\kappa}{c}=\frac{4\pi\kappa}{\lambda_0}},\qquad I=I_0\ee^{-\alpha z}\ (\text{Beer--Lambert}).
+\]
+$\varepsilon=n^2$：$\varepsilon'=n'^2-\kappa^2$，$\varepsilon''=2n'\kappa$。弱吸收 $\alpha\approx\frac{\omega\varepsilon''}{n'c}$；溶液 $A=\varepsilon_{\mathrm{mol}}cl$（以 $10$ 为底的吸光度）。
+\end{结论}
+
+\begin{结论}{磁偶极辐射}
+磁矩 $m_0\cos\omega t$ 的小电流环：
+\[
+\重点{P=\frac{\mu_0m_0^2\omega^4}{12\pi c^3}},
+\]
+角分布 $\sin^2\theta$ 与电偶极相同（$\mathbf E$、$\mathbf B$ 角色互换）。同尺寸 $a$ 下磁偶极/电偶极功率比 $\sim(ka)^2$，小环天线效率低。原子 M1 跃迁比 E1 慢 $\sim\alpha^2$。
+\end{结论}
+
+\begin{结论}{天线增益、有效面积与 Friis 公式}
+任何天线 \重点{A_e=\frac{\lambda^2}{4\pi}G}（互易性 $+$ 热力学）。自由空间链路：
+\[
+\frac{P_r}{P_t}=G_tG_r\Bigl(\frac{\lambda}{4\pi d}\Bigr)^2 .
+\]
+抛物面天线 $G\approx\eta\bigl(\frac{\pi D}\lambda\bigr)^2$，波束宽度 $\approx1.2\frac\lambda D$。雷达方程回波 $\propto\frac{\sigma}{d^4}$（往返两次 $\frac1{d^2}$）。
+\end{结论}
+
+\begin{结论}{准静态电磁场中的能量与力：虚功原理}
+线性磁系统 $W_m=\frac12\sum L_{ij}I_iI_j$。机械力：
+\[
+\重点{F_x=+\frac{\partial W_m}{\partial x}\Big|_{I}=-\frac{\partial W_m}{\partial x}\Big|_{\Phi}}.
+\]
+恒流时电源供给 $2\dd W_m$（一半做功一半增加储能）。电磁铁吸力 $F=\frac{B^2A}{2\mu_0}$；两载流线圈之间 $F=I_1I_2\frac{\partial M}{\partial x}$。
+\end{结论}
+
+\begin{结论}{Lorentz 力不做功，但磁场能“举起”东西}
+$\mathbf F=q\mathbf v\times\mathbf B\perp\mathbf v$，磁场对点电荷不做功。载流导线在磁场中受力做功，能量来自维持电流的电源（感应电动势反抗电流）。
+磁铁吸起铁块：功来自磁场能量的变化（\重点{\text{恒定磁通下 }W_m\text{ 减小}}）。永磁体内部是“束缚电流”，宏观上可以做功。
+\end{结论}
+
+\begin{结论}{电磁波在导体表面：表面阻抗与损耗}
+良导体表面阻抗 $Z_s=(1-\ii)\sqrt{\frac{\mu\omega}{2\sigma}}=\frac{1-\ii}{\sigma\delta}$。单位面积损耗功率
+\[
+\重点{P=\frac12R_s|H_\parallel|^2},\qquad R_s=\frac1{\sigma\delta}.
+\]
+铜在 $10$ GHz：$\delta\approx0.66\ \mu$m，$R_s\approx26$ m$\Omega$。谐振腔 $Q\approx\frac{\text{体积}}{\text{表面积}\times\delta}$ 量级；超导腔 $Q$ 可达 $10^{10}$。
+\end{结论}
+
+\参考{Goldstein, \emph{Classical Mechanics}；José--Saletan；Jackson, \emph{Classical Electrodynamics}；Zangwill, \emph{Modern Electrodynamics}；Chen, \emph{Introduction to Plasma Physics}；MIT 8.09、8.311、8.07。}

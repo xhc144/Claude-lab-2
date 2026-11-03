@@ -1,0 +1,124 @@
+\subsection{电路、器件与材料补充}
+
+\begin{结论}{$\Delta$--Y 变换}
+$\Delta$ 形 $R_{ab},R_{bc},R_{ca}$ 等价于 Y 形：
+\[
+\重点{R_a=\frac{R_{ab}R_{ca}}{R_{ab}+R_{bc}+R_{ca}}}\ (\text{轮换}),\qquad R_{ab}=\frac{R_aR_b+R_bR_c+R_cR_a}{R_c}.
+\]
+三个相等时 $R_Y=\frac{R_\Delta}3$。用于不平衡电桥等无法用串并联化简的网络；复阻抗同样适用。
+\end{结论}
+
+\begin{结论}{无穷梯形网络与立方体电阻}
+无穷 $R$--$R$ 梯形（串 $R$、并 $R$）：$R_\infty=R+\frac{RR_\infty}{R+R_\infty}$，\重点{R_\infty=\frac{1+\sqrt5}2R}。
+单位电阻立方体：体对角 $\frac56R$，面对角 $\frac34R$，棱 $\frac7{12}R$（对称性：等电势点合并；或 Foster 定理 $\sum_{\text{边}}R_{\text{eff}}=(V-1)R$）。无穷正方网格相邻点 $\frac R2$，对角点 $\frac{2}{\pi}R$。
+\end{结论}
+
+\begin{结论}{二极管：Shockley 方程与小信号电阻}
+\[
+\重点{I=I_s\bigl(\ee^{V/(nV_T)}-1\bigr)},\qquad V_T=\frac{k_BT}{e}\approx25.9\text{ mV}\ (300\text{ K}).
+\]
+电流每增 $10$ 倍电压增 $\approx60n$ mV；小信号电阻 $r_d=\frac{nV_T}{I}$（$1$ mA 时约 $26\ \Omega$）；恒流下正向压降温度系数约 $-2$ mV/K（温度计）。$I_s$ 每升 $10$ K 约翻倍。
+\end{结论}
+
+\begin{结论}{晶体管的跨导}
+BJT：$g_m=\frac{I_C}{V_T}$（$1$ mA 时 $38.5$ mS），共射放大 $A_v\approx-g_mR_C$；本征增益 $g_mr_o=\frac{V_A}{V_T}$（Early 电压 $V_A$）。
+MOSFET 饱和区 $I_D=\frac k2(V_{GS}-V_{th})^2$，\重点{g_m=\frac{2I_D}{V_{GS}-V_{th}}}；同电流下 BJT 跨导更高（指数律），亚阈区 MOSFET 也变成指数律（$\approx60$ mV/dec 的理论下限）。
+\end{结论}
+
+\begin{结论}{反射系数、驻波比与回波损耗}
+\[
+\重点{\Gamma=\frac{Z_L-Z_0}{Z_L+Z_0}},\qquad \mathrm{VSWR}=\frac{1+|\Gamma|}{1-|\Gamma|},\qquad \mathrm{RL}=-20\log_{10}|\Gamma|.
+\]
+开路 $\Gamma=1$、短路 $-1$、匹配 $0$。$50\ \Omega$ 线接 $75\ \Omega$：$\Gamma=0.2$，VSWR $1.5$，反射功率 $4\%$。时域反射（TDR）由反射脉冲的符号和延迟定位故障。
+\end{结论}
+
+\begin{结论}{趋肤效应下导线的交流电阻}
+圆导线半径 $a\gg\delta$：电流集中在厚 $\delta=\sqrt{\frac{2}{\omega\mu\sigma}}$ 的表层，
+\[
+\重点{\frac{R_{ac}}{R_{dc}}\approx\frac{a}{2\delta}}.
+\]
+铜 $\delta\approx\frac{66\text{ mm}}{\sqrt{f[\text{Hz}]}}$：$50$ Hz $9.3$ mm，$1$ MHz $66\ \mu$m，$1$ GHz $2\ \mu$m。高频线圈用利兹线（多股绝缘细线）降低交流电阻；高压输电线用钢芯铝绞线。
+\end{结论}
+
+\begin{结论}{耦合谐振器：频率分裂与无线供能效率}
+两个相同 LC 谐振器（$\omega_0$）以耦合系数 $k=\frac M{\sqrt{L_1L_2}}$ 耦合：
+\[
+\重点{\omega_\pm=\frac{\omega_0}{\sqrt{1\pm k}}}\approx\omega_0\Bigl(1\mp\frac k2\Bigr).
+\]
+无线功率传输最大效率由 $U^2=k^2Q_1Q_2$ 决定：$\eta_{\max}=\frac{U^2}{(1+\sqrt{1+U^2})^2}$。$k$ 小时靠高 $Q$ 补偿（$U\gg1$ 才高效）；过耦合（$kQ>1$）时出现频率分裂。
+\end{结论}
+
+\begin{结论}{磁滞损耗与软硬磁材料}
+每周期单位体积损耗 \重点{w=\oint H\,\dd B}（磁滞回线面积）；功率 $\propto f$（磁滞）$+\propto f^2$（涡流，叠片厚度 $t$：$\propto t^2f^2B^2/\rho$）。
+软磁（硅钢、铁氧体、坡莫合金）：窄回线、矫顽力小，用于变压器与电感；硬磁（NdFeB、SmCo）：宽回线，最大磁能积 $(BH)_{\max}$ 达 $400$ kJ/m$^3$。铁氧体电阻率高，适合高频。
+\end{结论}
+
+\begin{结论}{气体击穿：Paschen 定律}
+击穿电压只依赖 $pd$（压强 $\times$ 间距），曲线有极小值：空气约 \重点{330\text{ V}}，在 $pd\approx0.75$ Torr$\cdot$cm（常压下约 $10\ \mu$m）。
+常压大间隙空气击穿场强约 $3$ MV/m；小于 $\sim327$ V 的电压在任何间隙都不会发生气体击穿（微机电器件的设计依据）。低气压时更易放电（荧光灯、真空中高压导线的电晕）。
+\end{结论}
+
+\begin{结论}{电阻率的温度依赖}
+金属：Matthiessen 规则 $\rho=\rho_0+\rho_{\text{ph}}(T)$，$\rho_{\text{ph}}\propto T$（$T\gtrsim\Theta_D/3$，铜 $\alpha\approx0.0039$/K），低温 $\propto T^5$（Bloch--Grüneisen）；剩余电阻比 $\frac{\rho_{300\text{K}}}{\rho_{4\text{K}}}$ 衡量纯度。
+本征半导体 \重点{\rho\propto\ee^{E_g/2k_BT}}（随温度升高而降低）；Kondo 效应给低温电阻极小。
+\end{结论}
+
+\begin{结论}{电解质中的 Debye 屏蔽长度}
+\[
+\重点{\lambda_D=\sqrt{\frac{\varepsilon_rk_BT}{2N_Ae^2I}}}\ (I\text{ 为离子强度，mol/m}^3),\qquad \text{水中 }\lambda_D\approx\frac{0.304\text{ nm}}{\sqrt{I[\text{mol/L}]}}.
+\]
+生理盐水（$0.15$ M）约 $0.8$ nm：带电生物分子在一纳米外即被屏蔽。等离子体中同一表达式（电子）$\lambda_D=\sqrt{\frac{\varepsilon_0k_BT}{ne^2}}$。双电层电容 $\approx\frac{\varepsilon}{\lambda_D}$（超级电容器）。
+\end{结论}
+
+\begin{结论}{输电损耗与三相电}
+输送功率 $P$、线路电阻 $R$、电压 $V$：损耗比 \重点{\frac{P_{\text{损}}}{P}=\frac{PR}{V^2\cos^2\varphi}}——电压升 $10$ 倍，损耗降 $100$ 倍。
+三相：线电压 $=\sqrt3\times$ 相电压（$380/220$ V），总功率 $\sqrt3V_LI_L\cos\varphi$，平衡负载下瞬时总功率恒定（电机转矩平稳）、中性线无电流，用三根线输送单相三倍的功率。
+\end{结论}
+
+\begin{结论}{两个电容并联的能量损失}
+$C_1$（电压 $V_1$）与 $C_2$（$V_2$）并联：电荷守恒给 $V=\frac{C_1V_1+C_2V_2}{C_1+C_2}$，能量损失
+\[
+\重点{\Delta E=\frac{C_1C_2}{2(C_1+C_2)}(V_1-V_2)^2},
+\]
+与连线电阻无关（电阻小则电流大、时间短；电阻为零时以辐射/振荡耗散）。与“电源给电容充电损失一半”同源。
+\end{结论}
+
+\begin{结论}{直流电机：反电动势与最大功率}
+$V=IR+K\omega$，转矩 $\tau=KI$（SI 下转矩常数等于反电动势常数）。转矩--转速线性下降：
+\[
+\omega=\frac{V}{K}-\frac{R}{K^2}\tau,\qquad \重点{P_{\max}\text{ 在空载转速的一半}},\ P_{\max}=\frac{V^2}{4R}.
+\]
+最大功率点效率仅 $50\%$；最高效率在接近空载处。堵转电流 $\frac VR$ 很大（启动冲击）。发电机运行时 $\omega>\frac VK$。
+\end{结论}
+
+\begin{结论}{电感的反冲与续流}
+断开电感电流时 $V=L\frac{\dd I}{\dd t}$ 极大（火花、损坏开关）。续流二极管让电流以 $\frac LR$ 衰减；最大反压等于二极管压降。
+升压变换器正是利用这一点：\重点{V_{\text{out}}=\frac{V_{\text{in}}}{1-D}}（$D$ 为占空比）；降压 $V_{\text{out}}=DV_{\text{in}}$；理想无损，开关电源效率 $>90\%$。点火线圈、继电器保护同理。
+\end{结论}
+
+\begin{结论}{Norton 与叠加定理}
+线性网络端口：Thevenin（$V_{th}$ 串 $R_{th}$）$\iff$ Norton（$I_N=\frac{V_{th}}{R_{th}}$ 并 $R_{th}$）。$R_{th}$：所有独立源置零（电压源短路、电流源开路）后的端口电阻，或 $\frac{V_{\text{开路}}}{I_{\text{短路}}}$。
+叠加：每次只留一个独立源，结果相加（受控源保留）。\重点{\text{功率不能叠加}}（二次量）。
+\end{结论}
+
+\begin{结论}{运放电路三例}
+理想运放“虚短虚断”：积分器 $V_o=-\frac1{RC}\int V_i\dd t$；微分器 $V_o=-RC\frac{\dd V_i}{\dd t}$（高频噪声放大，实际加串联电阻）；跨阻放大器 $V_o=-R_fI_{\text{in}}$（光电二极管）。
+增益带宽积 $GBW$ 恒定：同相增益 $G$ 时带宽 \重点{\approx\frac{GBW}{G}}；压摆率 $SR$ 限制大信号：满幅正弦最高频率 $\frac{SR}{2\pi V_p}$。
+\end{结论}
+
+\begin{结论}{电池、内阻与能量密度}
+电动势 $\mathcal E$、内阻 $r$：端电压 $\mathcal E-Ir$，外阻 $R=r$ 时输出功率最大 $\frac{\mathcal E^2}{4r}$（效率 $50\%$）。容量 mAh $\times$ 电压 $=$ 能量（$3.7$ V、$3000$ mAh $\approx11$ Wh $=40$ kJ）。
+比能：锂电池 $\sim250$ Wh/kg，汽油 $\sim12000$ Wh/kg（热能）；超级电容 $\sim5$ Wh/kg 但功率密度高。\重点{\text{内阻随温度降低而增大}}——冬天手机掉电快。
+\end{结论}
+
+\begin{结论}{导体中的电流与漂移速度}
+$J=nev_d$：铜（$n\approx8.5\times10^{28}$ m$^{-3}$）中 $1$ mm$^2$ 导线通 $1$ A，漂移速度 \重点{\approx7\times10^{-5}}\ m/s（每小时约 $25$ cm），而信号以接近光速传播（场的传播）。
+迁移率 $\mu=\frac{e\tau}{m}$，$\sigma=ne\mu$；铜 $\tau\approx2.5\times10^{-14}$ s，平均自由程约 $40$ nm（Fermi 速度 $1.6\times10^6$ m/s 计）。
+\end{结论}
+
+\begin{结论}{接触电势与热电偶}
+两种金属接触，Fermi 能级拉平，接触电势差 $=\frac{\phi_1-\phi_2}e$（功函数差），闭合回路中各接触电势之和为零（等温时无电流）。
+有温差时 Seebeck 电动势 $\mathcal E=\int_{T_1}^{T_2}(S_A-S_B)\dd T$；K 型热电偶约 $41\ \mu$V/K。\重点{\text{中间导体定律}}：插入第三种金属只要两端同温，不改变读数——所以可以用铜导线接仪表。
+\end{结论}
+
+\参考{Horowitz--Hill, \emph{The Art of Electronics}；Sedra--Smith, \emph{Microelectronic Circuits}；Pozar, \emph{Microwave Engineering}；Kittel, \emph{Introduction to Solid State Physics}；Raizer, \emph{Gas Discharge Physics}；MIT 6.002、6.012、6.013。}

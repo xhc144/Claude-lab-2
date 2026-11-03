@@ -1,0 +1,124 @@
+\subsection{静电与静磁补充}
+
+\begin{结论}{圆环与圆盘轴线上的场}
+电荷 $Q$ 的圆环（半径 $R$）：$E_z=\frac{Qz}{4\pi\varepsilon_0(z^2+R^2)^{3/2}}$，最大值在 \重点{z=\frac{R}{\sqrt2}}。面电荷 $\sigma$ 的圆盘：
+\[
+E_z=\frac{\sigma}{2\varepsilon_0}\Bigl(1-\frac{z}{\sqrt{z^2+R^2}}\Bigr),
+\]
+$z\ll R$ 时趋于无限大平面 $\frac\sigma{2\varepsilon_0}$，$z\gg R$ 时趋于点电荷。载流圆环轴线 $B_z=\frac{\mu_0IR^2}{2(z^2+R^2)^{3/2}}$。
+\end{结论}
+
+\begin{结论}{由轴线上的势得到全空间的势}
+轴对称、无源区域：若轴上 $V(z)=\sum a_lz^l$（$|z|<R$），则
+\[
+\重点{V(r,\theta)=\sum_la_lr^lP_l(\cos\theta)},
+\]
+远区 $V=\sum\frac{b_l}{z^{l+1}}$ 则 $\sum\frac{b_l}{r^{l+1}}P_l$。圆环的离轴势、两线圈中点附近的场均匀度（Helmholtz 条件即令 $a_2=0$）都由此快速得到，不必算椭圆积分。
+\end{结论}
+
+\begin{结论}{平行双导线的电容与电感}
+导线半径 $a$、中心距 $d$：
+\[
+\重点{C'=\frac{\pi\varepsilon_0}{\operatorname{arccosh}(d/2a)}},\qquad L'=\frac{\mu_0}\pi\operatorname{arccosh}\frac{d}{2a}\ (\text{外电感}),
+\]
+$d\gg a$ 时 $\operatorname{arccosh}\frac d{2a}\approx\ln\frac da$。特征阻抗 $Z_0=\sqrt{L'/C'}=\frac{\eta_0}{\pi}\operatorname{arccosh}\frac{d}{2a}$（$\eta_0\approx377\ \Omega$），双绞线/扁平馈线约 $100$--$300\ \Omega$。
+\end{结论}
+
+\begin{结论}{导体圆柱与线电荷的镜像；角形区域的镜像}
+线电荷 $\lambda$ 距接地导体圆柱（半径 $a$）轴心 $d$：镜像线电荷 $-\lambda$ 位于反演点 \重点{\frac{a^2}{d}}（与球不同：镜像电量不缩放）。
+两接地导体平面夹角 $\frac\pi n$：需 $2n-1$ 个镜像（正负交替，分布在以交线为轴的圆周上）；角度不是 $\frac\pi n$ 时镜像法失败（改用保角映射，角点附近场 $\propto r^{\pi/\alpha-1}$）。
+\end{结论}
+
+\begin{结论}{点电荷与接地导体球之间的力}
+电荷 $q$ 距球心 $d>R$：镜像 $q'=-q\frac Rd$ 于 $\frac{R^2}d$，
+\[
+\重点{F=\frac{q^2}{4\pi\varepsilon_0}\frac{Rd}{(d^2-R^2)^2}}\quad(\text{吸引}).
+\]
+球不接地且总电荷 $Q$：再在球心加 $Q+q\frac Rd$；即使 $Q$ 与 $q$ 同号，足够近时仍吸引。近距离 $d-R\ll R$ 时退化为平面镜像 $\frac{q^2}{16\pi\varepsilon_0(d-R)^2}$。
+\end{结论}
+
+\begin{结论}{均匀极化球与均匀磁化球}
+极化 $\mathbf P$ 的球：内部 \重点{\mathbf E=-\frac{\mathbf P}{3\varepsilon_0}}（均匀），外部是 $\mathbf p=\frac{4\pi}3R^3\mathbf P$ 的偶极场。
+磁化 $\mathbf M$ 的球：内部 $\mathbf B=\frac23\mu_0\mathbf M$，$\mathbf H=-\frac{\mathbf M}3$，外部为 $\mathbf m=\frac{4\pi}3R^3\mathbf M$ 的偶极场。均匀外场中的介质球 $\mathbf E_{\text{内}}=\frac{3}{\kappa+2}\mathbf E_0$；介质圆柱（横场）$\frac{2}{\kappa+1}\mathbf E_0$。
+\end{结论}
+
+\begin{结论}{退磁因子}
+均匀磁化椭球：$\mathbf H_{\text{内}}=-N\mathbf M$，$N_x+N_y+N_z=1$（SI）。
+\[
+\text{球 }\重点{N=\tfrac13},\qquad \text{长圆柱（横向）}\tfrac12、\text{（轴向）}0,\qquad \text{薄片（法向）}1 .
+\]
+形状各向异性：长条磁体沿长轴易磁化；测量磁化率时样品形状要修正 $\chi_{\text{测}}=\frac{\chi}{1+N\chi}$；超导体（$\chi=-1$）球面赤道处场增强为 $\frac32B_0$。
+\end{结论}
+
+\begin{结论}{有限长螺线管与有限长直导线}
+螺线管轴上 $B=\frac{\mu_0nI}2(\cos\theta_1-\cos\theta_2)$（$\theta$ 为到两端的半张角，按方向取号），\重点{\text{端口处 }B=\frac{\mu_0nI}2}。
+有限直导线：$B=\frac{\mu_0I}{4\pi d}(\sin\theta_2-\sin\theta_1)$。边长 $a$ 的正方形线圈中心 $B=\frac{2\sqrt2\mu_0I}{\pi a}$；正 $N$ 边形 $N\to\infty$ 时趋于圆环 $\frac{\mu_0I}{2R}$。
+\end{结论}
+
+\begin{结论}{旋转带电球的磁场与磁矩}
+面电荷 $\sigma$ 的球壳以 $\omega$ 旋转：内部 \重点{\mathbf B=\frac23\mu_0\sigma R\boldsymbol\omega}（均匀），外部是 $\mathbf m=\frac{4\pi}{3}\sigma\omega R^4$ 的偶极场。
+总电荷 $Q$：球壳 $m=\frac{QR^2\omega}3$，均匀实心球 $m=\frac{QR^2\omega}5$。电荷与质量分布相同的任何旋转体，回旋磁比 $\frac mL=\frac q{2M}$（经典值，电子实测为 $2\times$）。
+\end{结论}
+
+\begin{结论}{静电能：球壳与均匀球}
+\[
+\text{导体球（壳）}\ U=\frac{Q^2}{8\pi\varepsilon_0R},\qquad \text{均匀带电实心球}\ \重点{U=\frac35\frac{Q^2}{4\pi\varepsilon_0R}}.
+\]
+导体表面受静电压强 $\frac{\sigma^2}{2\varepsilon_0}$（向外）：带电肥皂泡平衡半径增大；液滴带电超过 Rayleigh 极限 $Q^2=64\pi^2\varepsilon_0\gamma R^3$ 时分裂（电喷雾）。原子核 Coulomb 能 $\frac35\frac{Z^2e^2}{4\pi\varepsilon_0R}$ 即半经验质量公式中的 $a_C$ 项。
+\end{结论}
+
+\begin{结论}{电容器把介质吸进去}
+平行板（宽 $w$、间距 $d$），介电常数 $\kappa$ 的板插入深度 $x$，恒压 $V$：
+\[
+\重点{F=\frac{\varepsilon_0(\kappa-1)wV^2}{2d}}\ (\text{与 }x\text{ 无关，指向内}).
+\]
+力来自边缘场对极化电荷的作用（不是板内均匀场）。竖直板浸入液体：液面上升 $h=\frac{(\kappa-1)\varepsilon_0E^2}{2\rho g}$——介电泳、电润湿的原理。
+\end{结论}
+
+\begin{结论}{磁化率材料受力与抗磁悬浮}
+线性磁介质（$|\chi|\ll1$）体积 $V$：$\mathbf F=\frac{\chi V}{2\mu_0}\nabla B^2$。顺磁被吸向强场，抗磁被推向弱场。抗磁悬浮条件
+\[
+\重点{B\frac{\dd B}{\dd z}=\frac{\mu_0\rho g}{|\chi|}},
+\]
+水（$\chi\approx-9\times10^{-6}$）约 $1400$ T$^2$/m：$16$ T 磁体悬浮青蛙。热解石墨 $|\chi|$ 大，可用永磁体悬浮。
+\end{结论}
+
+\begin{结论}{导线与矩形线圈的互感}
+长直导线与共面矩形线圈（与导线平行的边长 $b$，近边距离 $d$，宽 $a$）：
+\[
+\重点{M=\frac{\mu_0b}{2\pi}\ln\frac{d+a}{d}}.
+\]
+互感对称 $M_{12}=M_{21}$（Neumann 公式 $M=\frac{\mu_0}{4\pi}\oint\oint\frac{\dd\mathbf l_1\cdot\dd\mathbf l_2}{r_{12}}$），算较难一侧的磁通可改算较易一侧。电流互感器、钳形电流表、感应式位置传感器。
+\end{结论}
+
+\begin{结论}{平行导线的力与安培的旧定义}
+单位长度 $\frac{F}{L}=\frac{\mu_0I_1I_2}{2\pi d}$：同向相吸。$1$ A、相距 $1$ m：$2\times10^{-7}$ N/m（2019 年前 SI 安培的定义；现以 $e$ 定义，$\mu_0$ 变为测量值，偏差 $\sim10^{-10}$）。
+电子束平行同向运动：电力排斥 $\propto1$、磁力吸引 $\propto\frac{v^2}{c^2}$，净排斥 \重点{\propto\frac1{\gamma^2}}——高能束的自聚焦与空间电荷效应随 $\gamma$ 减弱。
+\end{结论}
+
+\begin{结论}{介质中的边界与光滑化：$\mathbf D$、$\mathbf H$ 的源}
+$\nabla\cdot\mathbf D=\rho_f$，$\nabla\times\mathbf H=\mathbf J_f+\partial_t\mathbf D$。线性各向同性：$\mathbf D=\varepsilon\mathbf E$，$\mathbf B=\mu\mathbf H$。
+\重点{\text{只对自由电荷/电流用 Gauss/Ampère 定律}}，再除以 $\varepsilon$ 或 $\mu$。点电荷埋在无限大介质中：$E=\frac{q}{4\pi\varepsilon r^2}$（被束缚电荷屏蔽 $\kappa$ 倍）；两介质界面的电荷需用镜像。
+\end{结论}
+
+\begin{结论}{电偶极层与磁壳}
+偶极层（面偶极密度 $\tau$）两侧电势跃变 \重点{\Delta V=\frac{\tau}{\varepsilon_0}}，场有限。电流环等价于边界相同的磁壳：$\phi_m=-\frac{I}{4\pi}\Omega$（$\Omega$ 为环对场点所张立体角），$\mathbf B=-\mu_0\nabla\phi_m$——穿过线圈时 $\phi_m$ 跃变 $I$。
+功函数中的表面偶极、细胞膜电势差都用偶极层描述。
+\end{结论}
+
+\begin{结论}{均匀场中导体/介质的受力：只看表面}
+导体表面单位面积受力 $\frac{\sigma^2}{2\varepsilon_0}\hat n=\frac{\varepsilon_0E^2}{2}\hat n$（向外拉）；超导/理想导体表面磁压 $\frac{B^2}{2\mu_0}$（向内推）。
+均匀外场中的导体球不受净力，但被拉伸（两极向外的应力）：\重点{\text{不均匀场才产生净力}}（偶极受力 $(\mathbf p\cdot\nabla)\mathbf E$）。介电泳力 $\propto\operatorname{Re}\frac{\varepsilon_p-\varepsilon_m}{\varepsilon_p+2\varepsilon_m}\nabla|E|^2$（Clausius--Mossotti 因子）。
+\end{结论}
+
+\begin{结论}{二维静电：复势与保角映射}
+二维无源区 $V=\operatorname{Re}w(z)$，$w$ 解析；电场 $E_x-\ii E_y=-w'(z)$。共形映射保持 Laplace 方程，把复杂边界映成简单边界。
+例：同轴圆柱用 $w=\ln z$，单位长度电容 $\frac{2\pi\varepsilon_0}{\ln(b/a)}$；导体半平面的边缘用 $w=\sqrt z$，\重点{\text{边缘附近 }E\propto r^{-1/2}}；一般张角 $\alpha$ 的导体楔形角点处 $E\propto r^{\pi/\alpha-1}$（尖端 $\alpha>\pi$ 时场发散，避雷针、场发射）。平行板的边缘场使实际电容大于 $\varepsilon_0\frac{A}{d}$，修正为对数项量级，用 Schwarz--Christoffel 映射精确求出。
+\end{结论}
+
+\begin{结论}{磁标势与无电流区的场}
+无传导电流区 $\mathbf H=-\nabla\phi_m$，$\nabla^2\phi_m=0$（均匀介质），边界上 $B_n$、$H_t$ 连续——与静电问题完全对应（$\mathbf P\leftrightarrow\mu_0\mathbf M$，$\varepsilon_0\leftrightarrow\mu_0$）。
+高磁导率球壳（$\mu_r\gg1$，内外半径 $a,b$）对均匀外场的屏蔽因子 \重点{\approx\frac{2\mu_r}{9}\Bigl(1-\frac{a^3}{b^3}\Bigr)}；多层嵌套屏蔽因子近似相乘（零磁场实验室）。
+\end{结论}
+
+\参考{Purcell--Morin, \emph{Electricity and Magnetism}；Griffiths, \emph{Introduction to Electrodynamics}；Jackson 第 2--5 章；Smythe, \emph{Static and Dynamic Electricity}；MIT 8.02、8.07。}

@@ -1,0 +1,123 @@
+\subsection{物理光学与激光补充}
+
+\begin{结论}{单缝与圆孔的 Fraunhofer 衍射}
+单缝宽 $a$：$I=I_0\operatorname{sinc}^2\beta$，$\beta=\frac{\pi a\sin\theta}\lambda$；暗纹 $a\sin\theta=m\lambda$，第一旁瓣仅 \重点{4.7\%}，中央亮纹宽度为旁瓣的两倍。
+圆孔直径 $D$：$I\propto\bigl(\frac{2J_1(x)}x\bigr)^2$，$x=\frac{\pi D\sin\theta}\lambda$；第一暗环 $1.22\frac\lambda D$，中央亮斑含 $84\%$ 能量，第一亮环峰值 $1.75\%$。
+\end{结论}
+
+\begin{结论}{Babinet 原理与 Arago 亮点}
+互补屏（孔$\leftrightarrow$挡板）的衍射场之和等于无屏场，故 Fraunhofer 图样（除前向点外）\重点{\text{相同}}：细丝与同宽狭缝的衍射图样一样（激光测细丝直径）。
+圆盘阴影中心总有亮点（Poisson--Arago 斑），强度约等于无遮挡时（Fresnel 区间的贡献）；1818 年证实了波动说。直边阴影边缘强度为 $\frac14I_0$，亮区最大振荡 $1.37I_0$（Cornu 螺线）。
+\end{结论}
+
+\begin{结论}{光栅方程与闪耀}
+斜入射 $\theta_i$：\重点{d(\sin\theta_i+\sin\theta_m)=m\lambda}（同侧取正）。自由光谱范围 $\Delta\lambda=\frac\lambda m$；分辨本领 $mN$，与 $\frac{Nd(\sin\theta_i+\sin\theta_m)}\lambda$ 相同——只依赖总宽度与角度。
+闪耀光栅：刻槽倾角 $\theta_B$ 使单槽的“镜面反射”方向与某级重合，把能量集中到该级（Littrow 构型 $2d\sin\theta_B=m\lambda$）。阶梯光栅（echelle）用高级次高色散。
+\end{结论}
+
+\begin{结论}{Stokes 参量与 Poincaré 球}
+$S_0=I$，$S_1=I_x-I_y$，$S_2=I_{45^\circ}-I_{-45^\circ}$，$S_3=I_R-I_L$；偏振度 \重点{P=\frac{\sqrt{S_1^2+S_2^2+S_3^2}}{S_0}}。
+完全偏振光在 Poincaré 球面上（赤道线偏振、两极圆偏振），部分偏振在球内。波片是绕某轴的旋转，偏振片是投影。四次强度测量（三个偏振片方向 $+$ 一个圆偏振分析）确定全部 Stokes 参量；非相干叠加时 Stokes 矢量相加。
+\end{结论}
+
+\begin{结论}{色散公式：Cauchy 与 Sellmeier}
+透明区 Cauchy：$n=A+\frac B{\lambda^2}+\frac{C}{\lambda^4}$。更准的 Sellmeier：
+\[
+\重点{n^2=1+\sum_i\frac{B_i\lambda^2}{\lambda^2-C_i}}
+\]
+（$C_i$ 对应紫外、红外吸收共振）。群折射率 $n_g=n-\lambda\frac{\dd n}{\dd\lambda}$；熔石英零色散波长约 $1.27\ \mu$m，光纤通信选在 $1.3$/$1.55\ \mu$m 附近。
+\end{结论}
+
+\begin{结论}{激光的纵模、锁模与调 Q}
+腔长 $L$：纵模间隔 $\Delta\nu=\frac{c}{2L}$，增益带宽 $\Delta\nu_g$ 内约 $\frac{\Delta\nu_g}{\Delta\nu}$ 个模。锁模（各模相位锁定）产生脉冲列：重复率 $\frac c{2L}$，
+\[
+\重点{\text{脉宽}\approx\frac{1}{\Delta\nu_g}}\quad(\text{钛宝石 }\Delta\nu_g\sim100\text{ THz}\Rightarrow\sim10\text{ fs}).
+\]
+调 Q：先蓄积反转粒子数再突然开启腔，得到纳秒、高峰值功率脉冲。
+\end{结论}
+
+\begin{结论}{激光线宽的量子极限}
+Schawlow--Townes：
+\[
+\重点{\Delta\nu_{\text{laser}}=\frac{\pi h\nu(\Delta\nu_c)^2}{P}}
+\]
+（$\Delta\nu_c$ 为无源腔线宽，$P$ 为输出功率；半导体激光再乘 $1+\alpha^2$ 的 Henry 因子）。实际线宽多由机械/温度噪声决定；稳频激光可达 Hz 以下（光钟）。
+\end{结论}
+
+\begin{结论}{光束质量因子 $M^2$}
+实际光束 $w_0\theta=M^2\frac\lambda\pi$（理想 Gauss 束 $M^2=1$）。聚焦光斑与 Rayleigh 长度：
+\[
+\重点{w_f\approx M^2\frac{\lambda f}{\pi w_{\text{in}}}},\qquad z_R=\frac{\pi w_0^2}{M^2\lambda}.
+\]
+$M^2$ 由聚焦后不同位置的光斑尺寸拟合双曲线得到（ISO 11146）。多模光纤输出 $M^2\gg1$。光学扩展量 $\propto(M^2\lambda)^2$ 决定可耦合进光纤的效率。
+\end{结论}
+
+\begin{结论}{表面等离激元}
+金属（$\varepsilon_m<0$）与介质（$\varepsilon_d$）界面的束缚表面波：
+\[
+\重点{k_{sp}=\frac\omega c\sqrt{\frac{\varepsilon_m\varepsilon_d}{\varepsilon_m+\varepsilon_d}}}>\frac\omega c\sqrt{\varepsilon_d},
+\]
+动量大于光，需棱镜（Kretschmann）或光栅耦合激发。Drude 金属在 $\omega_p/\sqrt{1+\varepsilon_d}$ 处共振；共振角对表面折射率极敏感（SPR 生物传感，$10^{-6}$ RIU）。
+\end{结论}
+
+\begin{结论}{Bragg 反射镜（多层介质膜）}
+$N$ 对 $\frac\lambda4$ 层（$n_H,n_L$），基底 $n_s$、入射介质 $n_0$：
+\[
+\重点{R=\Biggl(\frac{1-\frac{n_s}{n_0}\bigl(\frac{n_L}{n_H}\bigr)^{2N}}{1+\frac{n_s}{n_0}\bigl(\frac{n_L}{n_H}\bigr)^{2N}}\Biggr)^2},\qquad \frac{\Delta\omega}{\omega_0}=\frac4\pi\arcsin\frac{n_H-n_L}{n_H+n_L}.
+\]
+TiO$_2$/SiO$_2$（$2.3/1.45$）$10$ 对即 $R>99.5\%$。一维光子晶体的禁带；VCSEL、高反镜、滤光片的原理。
+\end{结论}
+
+\begin{结论}{光纤中的孤子}
+非线性 Schrödinger 方程，反常色散 $\beta_2<0$。基本孤子（sech 形）条件
+\[
+\重点{N^2=\frac{\gamma P_0T_0^2}{|\beta_2|}=1},
+\]
+色散长度 $L_D=\frac{T_0^2}{|\beta_2|}$ 等于非线性长度 $L_{NL}=\frac1{\gamma P_0}$。$N>1$ 为高阶孤子，周期性压缩（脉冲压缩、超连续谱）。标准单模光纤 $1550$ nm：$\beta_2\approx-21$ ps$^2$/km，$\gamma\approx1.3$ W$^{-1}$km$^{-1}$。
+\end{结论}
+
+\begin{结论}{4f 系统与空间滤波}
+两透镜相距 $f_1+f_2$：中间焦平面是输入的 Fourier 变换（空间频率 $\nu=\frac{x}{\lambda f_1}$）。在此放针孔低通滤波，可清除激光束的散斑与杂纹：
+\[
+\重点{\text{针孔直径}\approx\frac{2\lambda f}{\pi w}\times1.5}\quad(w\text{ 为入射束半径}).
+\]
+相衬显微镜（在频谱面给零级加 $\frac\pi2$ 相移）、暗场（挡零级）、Schlieren 成像都是频谱面操作。
+\end{结论}
+
+\begin{结论}{光学频率梳}
+锁模激光的频谱是等间隔梳齿：
+\[
+\重点{f_n=nf_{\text{rep}}+f_{\text{ceo}}},
+\]
+$f_{\text{rep}}$ 为重复频率（微波可测），$f_{\text{ceo}}$ 由 $f$--$2f$ 自参考测得（$2f_n-f_{2n}=f_{\text{ceo}}$，需倍频程光谱）。一把“光学尺”把光频与微波频率直接相连（2005 年诺贝尔奖），光钟、天文光谱定标。
+\end{结论}
+
+\begin{结论}{干涉对比度与光强比}
+两束光强 $I_1,I_2$、互相干度 $|\gamma|$：
+\[
+\重点{V=\frac{2\sqrt{I_1I_2}}{I_1+I_2}|\gamma|}.
+\]
+强度比 $100:1$ 时仍有 $V\approx0.2$——弱信号光与强参考光干涉可放大检测（外差/零差探测、全息）。偏振不平行时 $V$ 再乘 $\cos$ 夹角。
+\end{结论}
+
+\begin{结论}{全息：记录干涉、再现波前}
+记录：参考波 $R$ 与物波 $O$ 的干涉强度 $|R+O|^2$；再现：用 $R$ 照明，透射场含 $|R|^2O$（虚像）与 $R^2O^*$（共轭实像）。
+离轴全息使各项分开，所需条纹周期 \重点{\Lambda=\frac{\lambda}{2\sin(\theta/2)}}（$\theta$ 为两波夹角），记录介质分辨率须达数千线/mm；稳定性要求曝光期间光程漂移 $\ll\frac\lambda4$。体全息的 Bragg 选择性给出波长与角度复用。
+\end{结论}
+
+\begin{结论}{Fabry--Pérot 的常用量}
+反射率 $R$：精细度 $\mathcal F=\frac{\pi\sqrt R}{1-R}$，透射线宽 $\delta\nu=\frac{\mathrm{FSR}}{\mathcal F}$，腔内光子寿命 $\tau=\frac{1}{2\pi\delta\nu}$，品质因数 $Q=\frac{\nu}{\delta\nu}$。
+共焦腔模式匹配；\重点{\text{透射峰处腔内功率增强 }\approx\frac{\mathcal F}\pi}（腔增强光谱、引力波探测器臂腔）。$R=99.99\%$ 时 $\mathcal F\approx3\times10^4$。
+\end{结论}
+
+\begin{结论}{光的偏振与反射：从金属到介质}
+介质：Brewster 角处 $p$ 光不反射；全反射时两分量相位差 $\delta$，$\tan\frac\delta2=\frac{\cos\theta\sqrt{\sin^2\theta-n^{-2}}}{\sin^2\theta}$（光密到光疏）。
+金属：$n$ 为复数，$p$ 光反射有极小（准 Brewster 角）但不为零；椭偏仪测反射的振幅比 $\tan\Psi$ 与相位差 $\Delta$（$\frac{r_p}{r_s}=\tan\Psi\,\ee^{\ii\Delta}$），\重点{\text{可测到埃级的薄膜厚度}}。
+\end{结论}
+
+\begin{结论}{相干长度与线宽的换算}
+相干时间 $\tau_c\approx\frac1{\Delta\nu}$，相干长度 $L_c=c\tau_c=\frac{\lambda^2}{\Delta\lambda}$。
+白光（$\Delta\lambda\sim300$ nm）约 $1\ \mu$m（白光干涉、OCT 轴向分辨 $\approx0.44\frac{\lambda^2}{\Delta\lambda}$）；LED 约 $10\ \mu$m；He--Ne 多模约 $20$ cm，单频可达百米以上；稳频激光 $>1000$ km。\重点{\text{OCT 用宽带光恰恰是为了短相干长度}}。
+\end{结论}
+
+\参考{Hecht, \emph{Optics}；Saleh--Teich, \emph{Fundamentals of Photonics}；Siegman, \emph{Lasers}；Agrawal, \emph{Nonlinear Fiber Optics}；Goodman, \emph{Introduction to Fourier Optics}；MIT 6.631、8.421、2.71。}

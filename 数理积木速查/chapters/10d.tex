@@ -1,0 +1,101 @@
+\subsection{几何光学与光学仪器补充}
+
+\begin{结论}{厚透镜的焦距与主面}
+折射率 $n$、曲率半径 $R_1,R_2$、中心厚 $d$（空气中）：
+\[
+\重点{\frac1f=(n-1)\Bigl[\frac1{R_1}-\frac1{R_2}+\frac{(n-1)d}{nR_1R_2}\Bigr]}.
+\]
+主面到顶点距离 $h_1=-\frac{f(n-1)d}{nR_2}$、$h_2=-\frac{f(n-1)d}{nR_1}$；物像距从主面量起即可用薄透镜公式。空气中节点与主点重合。球透镜（$R_1=-R_2=R$，$d=2R$）：$f=\frac{nR}{2(n-1)}$（从球心量起）。
+\end{结论}
+
+\begin{结论}{像差：Abbe 数与球差的标度}
+色散用 Abbe 数 \重点{V=\frac{n_d-1}{n_F-n_C}}（冕牌 $\approx64$，火石 $\approx36$）；单透镜纵向色差 $\Delta f\approx\frac fV$。
+三阶（Seidel）像差：球差、彗差、像散、场曲、畸变。球差横向 $\propto h^3$（$h$ 为孔径高度）、纵向 $\propto h^2$；平凸透镜凸面朝向平行光时球差约为反向的 $\frac14$。抛物面镜轴上无球差但离轴彗差严重。
+\end{结论}
+
+\begin{结论}{景深与超焦距}
+光圈数 $N$，弥散圆容限 $c$，焦距 $f$，对焦距离 $s\gg f$：
+\[
+\text{景深}\approx\frac{2Ncs^2}{f^2},\qquad \重点{H\approx\frac{f^2}{Nc}}\ (\text{超焦距：对焦于 }H\text{ 时 }\tfrac H2\text{ 到无穷都清晰}).
+\]
+同等视角与 $N$ 下，小画幅（$f$、$c$ 同比缩小）景深更大——手机“背景虚化”靠计算。衍射限制 $c\gtrsim2.44\lambda N$ 给出最佳光圈。
+\end{结论}
+
+\begin{结论}{人眼与放大镜}
+明视距离 $25$ cm，角分辨约 $1'$（$\approx0.3$ mrad，瞳孔 $3$ mm 的衍射极限 $\approx0.2$ mrad）；屈光度 $=\frac1{f[\text{m}]}$，近视用负透镜。
+放大镜角放大率 \重点{M=\frac{25\text{ cm}}{f}}（像在无穷远）或 $1+\frac{25\text{ cm}}f$（像在明视距离）。视网膜分辨极限对应约 $300$ dpi（$30$ cm 处）——“视网膜屏”的来历。
+\end{结论}
+
+\begin{结论}{视深与平板位移}
+从空气看水中深 $d$ 的物体（近正视）：视深 \重点{\frac dn}（水 $\approx0.75d$）。厚 $t$ 的平板使像沿光轴前移 $t\bigl(1-\frac1n\bigr)$；斜入射光线侧移 $t\sin\theta_i\bigl(1-\frac{\cos\theta_i}{n\cos\theta_t}\bigr)$。
+显微镜中盖玻片引入球差，高 NA 物镜标定盖玻片厚度（$0.17$ mm）。
+\end{结论}
+
+\begin{结论}{反射镜组的偏转不变量}
+平面镜转 $\theta$，反射光转 $2\theta$（光杠杆：检流计、扭秤读数放大）。两平面镜夹角 $\alpha$：两次反射后的偏转 \重点{2\alpha}，与入射方向无关（五棱镜 $90^\circ$ 恒偏，测距仪）。
+三面互相垂直的镜（角反射器）把光原路反射回去（激光测月、自行车尾灯）；屋脊棱镜使像翻转（双筒望远镜）。
+\end{结论}
+
+\begin{结论}{棱镜光谱仪的分辨本领}
+棱镜底边长 $b$（光束充满时）：
+\[
+\重点{R=\frac\lambda{\Delta\lambda}=b\frac{\dd n}{\dd\lambda}}.
+\]
+火石玻璃 $\frac{\dd n}{\dd\lambda}\approx10^{-4}$ nm$^{-1}$（可见光），$b=5$ cm 时 $R\approx5000$，刚好分辨钠 D 双线（$R=980$）。光栅 $R=mN$ 通常更高；棱镜的优点是无级次重叠、效率高。
+\end{结论}
+
+\begin{结论}{大气折射与 22° 晕}
+天顶距 $z$ 处的折射 $\approx58''\tan z$（中等 $z$）；地平线处约 $34'$——日落时太阳几何上已在地平线下（日长增加约 $5$ min），扁形太阳。海市蜃楼：近地层温度梯度使 $n$ 梯度足以弯曲掠射光线。
+冰晶六角柱（顶角 $60^\circ$）最小偏向角 \重点{21.8^\circ}：太阳周围 $22^\circ$ 晕（内缘偏红）；$90^\circ$ 棱给 $46^\circ$ 晕。
+\end{结论}
+
+\begin{结论}{Newton 环与劈尖条纹}
+平凸透镜（半径 $R$）放在平板上，反射光第 $m$ 个暗环半径
+\[
+\重点{r_m=\sqrt{m\lambda R}}\quad(\text{中心为暗点，有半波损失}).
+\]
+劈尖（夹角 $\alpha$，介质 $n$）条纹间距 $\frac{\lambda}{2n\alpha}$；数条纹测细丝直径、平面度（光学平板检验，条纹弯曲 $\frac12$ 间距对应 $\frac\lambda4$ 的高度差）。
+\end{结论}
+
+\begin{结论}{针孔相机的最佳孔径}
+几何模糊 $\approx d$，衍射模糊 $\approx\frac{2.44\lambda f}{d}$，二者相当时最清晰：
+\[
+\重点{d_{\text{opt}}\approx1.9\sqrt{f\lambda}}\quad(\text{Rayleigh}).
+\]
+$f=10$ cm、$\lambda=550$ nm：$d\approx0.45$ mm，$f$ 数约 $220$，曝光很长。针孔景深无穷（无对焦），常用于日食投影、X 射线/伽马成像（编码孔径）。
+\end{结论}
+
+\begin{结论}{孔径光阑、视场光阑与光瞳}
+孔径光阑限制轴上光束的锥角（决定亮度与分辨）；入射光瞳/出射光瞳是它在物方/像方的像。视场光阑限制视场（如目镜视场光阑）。
+望远镜出瞳直径 \重点{=\frac{D}{M}}，应 $\approx$ 眼瞳（夜间 $7$ mm）：$D=70$ mm 时最低有用放大率 $10\times$；最高有用放大率约 $2D[\text{mm}]$（超过后只放大衍射斑）。出瞳距（眼点）要够长才方便观察。
+\end{结论}
+
+\begin{结论}{球面镜成像与焦距}
+$\frac1s+\frac1{s'}=\frac2R$，$f=\frac R2$（凹面为正）。球差：高度 $h$ 的平行光交轴于距镜顶 $R-\frac{R}{2\cos\theta}$ 处（$\sin\theta=\frac hR$），比近轴焦点更靠近镜面约 $\frac{h^2}{4R}$。
+\重点{\text{镜无色差}}：大型天文望远镜全部用反射镜。卡塞格林（主抛物面 $+$ 副双曲面）缩短镜筒。
+\end{结论}
+
+\begin{结论}{望远镜的集光与极限星等}
+集光本领 $\propto D^2$；相对于人眼（瞳孔 $7$ mm、极限 $\approx6$ 等），望远镜目视极限星等
+\[
+\重点{m_{\lim}\approx6+5\log_{10}\frac{D}{7\text{ mm}}}\ (\approx2+5\log_{10}D[\text{mm}]),
+\]
+$D=200$ mm 约 $13.5$ 等。点源亮度随口径增长，面源（星云）每单位面积亮度不能超过肉眼（光学扩展量守恒），只是变大。
+\end{结论}
+
+\begin{结论}{Fermat 原理的推论}
+光程 $\int n\,\dd s$ 取驻值：反射定律、折射定律、梯度介质中的光线方程 $\frac{\dd}{\dd s}\bigl(n\frac{\dd\mathbf r}{\dd s}\bigr)=\nabla n$。
+理想成像要求物点到像点\重点{\text{所有光线光程相等}}（等光程）：椭球面镜对两焦点、抛物面镜对无穷远与焦点、笛卡尔卵形面对单次折射完美成像。完美成像的“绝对光学仪器”（Maxwell 鱼眼）几乎不存在于均匀介质。
+\end{结论}
+
+\begin{结论}{显微镜的放大率与有效放大}
+总放大率 $M=M_{\text{物}}\times M_{\text{目}}=\frac{L}{f_o}\cdot\frac{25\text{ cm}}{f_e}$（$L$ 为筒长，常为 $160$ mm）。
+有用放大率上限约 \重点{1000\times\mathrm{NA}}：再大只是“空放大”。油浸（$n=1.515$）$\mathrm{NA}\le1.4$，分辨约 $0.2\ \mu$m；共聚焦显微镜轴向分辨 $\approx\frac{1.4n\lambda}{\mathrm{NA}^2}$。
+\end{结论}
+
+\begin{结论}{光学纤维以外的波导：平板波导的模式数}
+厚 $d$、芯 $n_1$、包层 $n_2$ 的对称平板波导，V 参数 $V=\frac{\pi d}{\lambda}\sqrt{n_1^2-n_2^2}$：TE 模式数 \重点{\lceil2V/\pi\rceil}；$V<\frac\pi2$ 单模（对称平板总有一个导模）。
+集成光子学中的硅波导（$n=3.48$ 对 $1.44$）高折射率差，可做到亚微米弯曲半径；光纤 $V<2.405$ 单模（圆柱情形）。
+\end{结论}
+
+\参考{Hecht, \emph{Optics}；Born--Wolf, \emph{Principles of Optics}；Smith, \emph{Modern Optical Engineering}；Pedrotti, \emph{Introduction to Optics}；MIT 2.71、8.03。}

@@ -1,0 +1,120 @@
+\subsection{点集拓扑与度量空间}
+
+\begin{结论}{紧性的等价刻画（度量空间）}
+度量空间 $X$：紧 $\iff$ 序列紧 $\iff$ \重点{\text{完备且全有界}}。$\mathbb R^n$ 中紧 $\iff$ 有界闭（Heine--Borel）；无穷维赋范空间中闭单位球\textbf{不}紧（Riesz 引理：可取单位向量 $x_n$ 两两距离 $\ge\frac12$）。
+完备性不是拓扑性质：$\mathbb R\cong(0,1)$，前者完备后者不完备；但紧性是。
+\end{结论}
+
+\begin{结论}{紧集上的连续映射}
+紧集的连续像紧 $\Rightarrow$ 最值定理、一致连续（Heine--Cantor）。
+\重点{\text{紧空间到 Hausdorff 空间的连续双射是同胚}}：用来证 $[0,1]/\{0\sim1\}\cong S^1$、$D^n/\partial D^n\cong S^n$ 等商空间同胚，只需写出连续双射。Hausdorff 空间中紧子集闭，所以紧到 Hausdorff 的连续映射是闭映射。
+\end{结论}
+
+\begin{结论}{Lebesgue 数引理}
+紧度量空间 $X$ 的开覆盖 $\{U_\alpha\}$：存在 $\delta>0$，\重点{\text{直径}<\delta\text{ 的集合必含于某个 }U_\alpha}。
+用于：一致连续的证明；把 $[0,1]$ 上的道路细分成每段落在单个坐标卡/可提升邻域中（提升定理、van Kampen 的证明）；单纯逼近定理。
+\end{结论}
+
+\begin{结论}{连通与道路连通}
+道路连通 $\Rightarrow$ 连通，反之不成立：拓扑学家的正弦曲线 $\{(x,\sin\frac1x):0<x\le1\}\cup\{0\}\times[-1,1]$ 连通但不道路连通。
+\重点{\mathbb R^n\text{ 的连通开集道路连通}}（局部道路连通 $+$ 连通 $\Rightarrow$ 道路连通）。连通集的连续像连通（一般化的介值定理）；连通集之并若两两相交则连通；闭包保持连通。
+\end{结论}
+
+\begin{结论}{区分空间的拓扑不变量}
+删点后连通分支数：$[0,1]$ 删内点不连通，$S^1$ 删一点仍连通，$\mathbb R^2$ 删一点仍连通 $\Rightarrow$ $\mathbb R\not\cong\mathbb R^2$、$[0,1]\not\cong S^1$。
+其他：紧性（$[0,1]\not\cong[0,1)$）、$\pi_1$（$S^2\not\cong T^2$）、同调（$S^m\not\cong S^n$）、局部同调（维数不变性）。\重点{\text{证明不同胚找不变量，证明同胚写映射}}。
+\end{结论}
+
+\begin{结论}{Baire 纲推论：$G_\delta$ 集}
+函数的连续点集总是 $G_\delta$（可数个开集之交：$\bigcap_n\{x:\omega_f(x)<\frac1n\}$）；$\mathbb Q$ 不是 $G_\delta$（否则 $\mathbb R=\mathbb Q^c\cup\mathbb Q$ 两个稠密 $G_\delta$ 的交为空，与 Baire 矛盾）。
+所以 \重点{\text{不存在恰在 }\mathbb Q\text{ 上连续的函数}}，而 Thomae 函数（$\frac pq\mapsto\frac1q$，无理数 $\mapsto0$）恰在无理数上连续。导函数的连续点集是稠密 $G_\delta$。
+\end{结论}
+
+\begin{结论}{Cantor 交定理与完备化}
+完备度量空间中一列非空闭集递降、直径 $\to0$ $\Rightarrow$ \重点{\bigcap F_n\text{ 恰为一点}}（区间套的推广；直径条件不可省：$[n,\infty)$）。
+每个度量空间有唯一（差等距）的完备化：Cauchy 列等价类。$\mathbb Q\to\mathbb R$；$C[0,1]$ 在 $L^p$ 范数下的完备化是 $L^p[0,1]$——\textbf{带 $L^1$ 范数的 $C[0,1]$ 不完备}。
+\end{结论}
+
+\begin{结论}{Arzelà--Ascoli 与 Peano 存在定理}
+紧度量空间 $K$ 上 $\mathcal F\subset C(K)$：相对紧（每列有一致收敛子列）$\iff$ \重点{\text{一致有界且等度连续}}。
+常用充分条件：一致有界且一致 Lipschitz（导数一致有界）。推论：$f$ 连续时 $y'=f(t,y)$ 局部有解（Euler 折线的一致收敛子列，Peano），但未必唯一（$y'=\sqrt{|y|}$）。Fredholm 理论中“积分算子把有界集映成等度连续集”同样靠它。
+\end{结论}
+
+\begin{结论}{Stone--Weierstrass}
+$K$ 紧 Hausdorff，$\mathcal A\subset C(K,\mathbb R)$ 为含常数、\重点{\text{分离点}}的子代数 $\Rightarrow$ $\mathcal A$ 在一致范数下稠密。复值时还需对共轭封闭。
+例：多项式在 $C[a,b]$ 稠密；三角多项式在 $C(S^1)$ 稠密；$\{\sum c_k\ee^{-kx}\}$ 在 $C[0,\infty]$ 稠密；$\{f(x)g(y)\}$ 的线性组合在 $C(X\times Y)$ 稠密。反例：$\{p(x^2)\}$ 不分离 $\pm x$。
+\end{结论}
+
+\begin{结论}{Urysohn 函数与 Tietze 延拓}
+度量空间中两个不交闭集 $A,B$：
+\[
+\重点{f(x)=\frac{d(x,A)}{d(x,A)+d(x,B)}}
+\]
+连续，在 $A$ 上为 $0$、$B$ 上为 $1$（一般正规空间由 Urysohn 引理保证）。Tietze：闭子集上的有界连续函数可延拓到全空间且保持界。单位分解、构造截断函数都基于此。
+\end{结论}
+
+\begin{结论}{积拓扑与 Tychonoff}
+任意多个紧空间之积在积拓扑下紧（Tychonoff，等价于选择公理）。积拓扑中开集只在有限个坐标上受限制；\重点{\text{box 拓扑下 }\mathbb R^\omega\text{ 不连通、不可度量化}}。
+可数积 $\prod[0,1]$（Hilbert 方体）紧且可度量化，每个可分度量空间都嵌入其中（Urysohn 度量化）。$\{0,1\}^{\mathbb N}$ 同胚于 Cantor 集。
+\end{结论}
+
+\begin{结论}{商拓扑的标准例子}
+\[
+[0,1]/\{0\sim1\}\cong S^1,\quad D^n/\partial D^n\cong S^n,\quad S^n/(x\sim-x)=\mathbb{RP}^n,\quad [0,1]^2/\sim\ =T^2,\ \text{Klein 瓶},\ \mathbb{RP}^2 .
+\]
+正方形边的粘合字：$aba^{-1}b^{-1}$ 环面，$abab^{-1}$ Klein 瓶，$abab$ 射影平面，$aa^{-1}$ 球面。\重点{\text{商映射后的连续性：} \bar f\text{ 连续}\iff f\text{ 连续}}（$f$ 在等价类上为常值）。商空间可以不 Hausdorff（$\mathbb R/\mathbb Q$，“双原点直线”）。
+\end{结论}
+
+\begin{结论}{可数性与可分性}
+第二可数 $\Rightarrow$ 可分、Lindelöf；度量空间中三者等价。$\ell^p$（$p<\infty$）、$L^p$、$C[0,1]$ 可分；\重点{\ell^\infty\text{、}L^\infty\text{ 不可分}}（$\{0,1\}^{\mathbb N}$ 是不可数个两两距离 $1$ 的点）。
+Sorgenfrey 直线可分但不第二可数、不可度量化。流形定义要求 Hausdorff 与第二可数，以排除长直线、双原点直线等病态例子。
+\end{结论}
+
+\begin{结论}{Cantor 集的刻画}
+非空、紧、可度量化、完全（无孤立点）、全不连通的空间都同胚于 Cantor 集（Brouwer）。每个紧度量空间都是 Cantor 集的连续像（Alexandroff--Hausdorff）——由此得到\重点{\text{空间填充曲线}}：Cantor 集 $\to[0,1]^2$ 满射再线性插值到 $[0,1]$。
+Cantor 函数是 Cantor 集到 $[0,1]$ 的连续满射（三进制改二进制读）。
+\end{结论}
+
+\begin{结论}{空间填充曲线与维数}
+存在连续满射 $[0,1]\to[0,1]^2$（Peano、Hilbert 曲线；Hölder 指数 $\frac12$），但\重点{\text{不存在连续双射}}：否则由“紧到 Hausdorff”为同胚，而 $[0,1]$ 删一内点不连通、正方形不然。
+一般 $\mathbb R^m\cong\mathbb R^n\Rightarrow m=n$（区域不变性）。Hilbert 曲线的离散版用于多维数据的局部保持排序。
+\end{结论}
+
+\begin{结论}{单点紧化}
+局部紧 Hausdorff 空间 $X$：$X^*=X\cup\{\infty\}$，$\infty$ 的邻域为紧集之补。\重点{(\mathbb R^n)^*\cong S^n}（球极投影），$\mathbb C^*$ 为 Riemann 球面，$\mathbb N^*\cong\{0\}\cup\{\frac1n\}$。
+$C_0(X)$（无穷远处趋零）$=$ 在 $X^*$ 上连续且在 $\infty$ 取零的函数；“$f\to0$ 于无穷远”即在紧化中连续。
+\end{结论}
+
+\begin{结论}{不动点定理三件套}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item Brouwer：$D^n$ 到自身的连续映射有不动点（$D^n$ 换成任意紧凸集）。
+\item Schauder：Banach 空间中非空紧凸集到自身的连续映射有不动点（或闭凸集到自身、像相对紧）——无穷维 ODE/PDE 存在性。
+\item Kakutani：紧凸集上的上半连续、凸值集值映射有不动点 $\Rightarrow$ \重点{\text{有限博弈有混合 Nash 均衡}}；一般均衡存在性。
+\end{itemize}
+三者都是存在性，不给唯一性或构造（那是压缩映射的长处）。
+\end{结论}
+
+\begin{结论}{Hausdorff 距离与 Blaschke 选择定理}
+$d_H(A,B)=\max\{\sup_{a\in A}d(a,B),\sup_{b\in B}d(b,A)\}$：\重点{A\subseteq B_\varepsilon\text{ 且 }B\subseteq A_\varepsilon\text{ 的最小 }\varepsilon}。
+紧度量空间的非空紧子集族在 $d_H$ 下紧（Blaschke）：保证“面积最大的凸集”“最优形状”的极小化序列有收敛子列。分形是迭代函数系在 $(\mathcal K,d_H)$ 上压缩映射的唯一不动点（Hutchinson）。
+\end{结论}
+
+\begin{结论}{自相似分形的维数}
+$m$ 个相似比 $r_i$ 的压缩映射，满足开集条件，吸引子的 Hausdorff 维数 $s$ 由 Moran 方程
+\[
+\重点{\sum_{i=1}^mr_i^s=1}
+\]
+决定。等比时 $s=\frac{\ln m}{\ln(1/r)}$：Cantor $\frac{\ln2}{\ln3}\approx0.631$，Koch $\frac{\ln4}{\ln3}\approx1.262$，Sierpiński 三角 $\frac{\ln3}{\ln2}\approx1.585$，Menger 海绵 $\frac{\ln20}{\ln3}\approx2.727$。盒维数 $\lim\frac{\ln N(\varepsilon)}{\ln(1/\varepsilon)}$ 实测更方便。
+\end{结论}
+
+\begin{结论}{等价度量：拓扑等价与一致等价}
+$d_1,d_2$ 拓扑等价（开集相同）不保证 Cauchy 列相同：$\mathbb R$ 上 $|x-y|$ 与 $|\arctan x-\arctan y|$ 拓扑等价，后者下 $x_n=n$ 是 Cauchy 列。
+\重点{c\,d_1\le d_2\le C\,d_1}（强等价）保持完备性、全有界、一致连续。有限维赋范空间所有范数强等价（单位球紧）；无穷维不然（$C[0,1]$ 上 $\|\cdot\|_\infty$ 与 $\|\cdot\|_1$）。
+\end{结论}
+
+\begin{结论}{度量空间的若干构造技巧}
+$\frac{d}{1+d}$、$\min(d,1)$ 与 $d$ 拓扑等价且有界；可数积的度量 $\sum2^{-n}\frac{d_n}{1+d_n}$ 给积拓扑。
+$p$ 进度量 $|x-y|_p$ 是超度量：\重点{d(x,z)\le\max(d(x,y),d(y,z))}，于是“每个三角形都是等腰的、球内每点都是球心、两球或包含或不交”，$\mathbb Z_p$ 全不连通且紧。
+\end{结论}
+
+\参考{Munkres, \emph{Topology}；Willard, \emph{General Topology}；Steen--Seebach, \emph{Counterexamples in Topology}；Falconer, \emph{Fractal Geometry}；MIT 18.901。}

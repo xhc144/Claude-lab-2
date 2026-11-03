@@ -1,0 +1,168 @@
+\subsection{曲线与曲面补充}
+
+\begin{结论}{渐屈线与渐伸线}
+曲率中心 $\mathbf c=\mathbf r+\frac1\kappa\mathbf N$ 的轨迹是渐屈线；对 $y=f(x)$：
+\[
+\重点{X=x-\frac{f'(1+f'^2)}{f''},\qquad Y=f+\frac{1+f'^2}{f''}}.
+\]
+$y=x^2$ 的渐屈线 $X=-4x^3$，$Y=3x^2+\frac12$（半立方抛物线 $27X^2=16(Y-\frac12)^3$）；摆线的渐屈线是全等摆线（Huygens 等时摆）。单位圆的渐伸线 $(\cos t+t\sin t,\ \sin t-t\cos t)$（齿轮齿廓）。
+\end{结论}
+
+\begin{结论}{包络：$F=F_t=0$}
+曲线族 $F(x,y,t)=0$ 的包络由 \重点{F(x,y,t)=0,\ \partial_tF(x,y,t)=0} 消去 $t$ 得到（再剔除奇点轨迹）。
+长 $L$ 的梯子两端在坐标轴上滑动：$\frac{x}{L\cos t}+\frac{y}{L\sin t}=1$ 的包络是星形线 $x^{2/3}+y^{2/3}=L^{2/3}$。抛射角变化的抛体轨迹族的包络是“安全抛物线” $y=\frac{v^2}{2g}-\frac{gx^2}{2v^2}$；光线族的包络即焦散线。
+\end{结论}
+
+\begin{结论}{平面曲线由曲率重建}
+弧长参数下切向角 $\varphi'(s)=\kappa(s)$：
+\[
+\重点{\varphi(s)=\varphi_0+\int_0^s\kappa,\qquad \mathbf r(s)=\mathbf r_0+\int_0^s(\cos\varphi,\sin\varphi)\dd s}.
+\]
+$\kappa=s$ 给 Euler 螺线（Cornu 螺线，即 Fresnel 积分，道路缓和曲线）；$\kappa=$ 常数给圆；$\kappa=\frac1{as}$ 给对数螺线。空间曲线：$\kappa>0$、$\tau$ 决定曲线（差一个刚体运动）。
+\end{结论}
+
+\begin{结论}{整体曲线论三定理}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 旋转指数（Hopf）：简单闭曲线 \重点{\oint\kappa\dd s=\pm2\pi}；一般闭曲线为 $2\pi\times$ 整数。
+\item 等周不等式：$L^2\ge4\pi A$，等号仅圆；Bonnesen 加强 $L^2-4\pi A\ge\pi^2(R-r)^2$（$r,R$ 为内切、外接圆半径）。
+\item 四顶点定理：简单闭凸（实际上任意简单闭）曲线的曲率至少有 $4$ 个临界点。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{常用曲线的曲率与挠率}
+圆柱螺线 $(a\cos t,a\sin t,bt)$：\重点{\kappa=\frac{a}{a^2+b^2},\ \tau=\frac{b}{a^2+b^2}}；$\kappa,\tau$ 都是常数的曲线只有螺线（含圆、直线）。
+球面（半径 $R$）上的曲线 $\kappa\ge\frac1R$；曲线在球面上 $\iff$ $\bigl(\frac1\kappa\bigr)^2+\bigl(\frac{(1/\kappa)'}{\tau}\bigr)^2=R^2$（$\tau\ne0$）。平面曲线 $\iff\tau\equiv0$。
+\end{结论}
+
+\begin{结论}{曲线管的体积}
+半径 $a$ 的圆盘沿长 $L$ 的空间曲线法向扫出的管（$a<\frac1{\kappa_{\max}}$，不自交）：
+\[
+\重点{V=\pi a^2L},\qquad S=2\pi aL,
+\]
+与曲率、挠率无关（Pappus 的推广，Weyl 管公式最低阶）。曲面情形：$\vol\{\text{距离}\le\varepsilon\}=2A\varepsilon+\frac{2}{3}\varepsilon^3\!\int K\dd A$（闭曲面），即 $2A\varepsilon+\frac{4\pi}{3}\chi\varepsilon^3$。
+\end{结论}
+
+\begin{结论}{曲面上的曲率分解：法曲率与测地曲率}
+曲面上单位速度曲线：$\kappa\mathbf N=\kappa_n\mathbf n+\kappa_g(\mathbf n\times\mathbf T)$，\重点{\kappa^2=\kappa_n^2+\kappa_g^2}，$\kappa_n=\mathrm{II}(\mathbf T,\mathbf T)$。
+测地线 $\iff\kappa_g=0$；渐近曲线 $\iff\kappa_n=0$（仅在 $K\le0$ 处存在实渐近方向）；曲率线 $\iff$ 测地挠率 $\tau_g=0$。正交坐标下 Liouville 公式：$\kappa_g=\frac{\dd\theta}{\dd s}-\frac{E_v}{2E\sqrt G}\cos\theta+\frac{G_u}{2G\sqrt E}\sin\theta$（$\theta$ 为与 $u$ 线夹角）。
+\end{结论}
+
+\begin{结论}{正交坐标的 Christoffel 记号}
+$\dd s^2=E\,\dd u^2+G\,\dd v^2$：
+\[
+\Gamma^u_{uu}=\frac{E_u}{2E},\ \Gamma^u_{uv}=\frac{E_v}{2E},\ \Gamma^u_{vv}=-\frac{G_u}{2E},\qquad
+\Gamma^v_{uu}=-\frac{E_v}{2G},\ \Gamma^v_{uv}=\frac{G_u}{2G},\ \Gamma^v_{vv}=\frac{G_v}{2G},
+\]
+\[
+\重点{K=-\frac{1}{2\sqrt{EG}}\Bigl[\Bigl(\frac{E_v}{\sqrt{EG}}\Bigr)_v+\Bigl(\frac{G_u}{\sqrt{EG}}\Bigr)_u\Bigr]}.
+\]
+测地极坐标 $\dd r^2+f(r)^2\dd\theta^2$：$K=-\frac{f''}{f}$。
+\end{结论}
+
+\begin{结论}{极小曲面方程与例子}
+图像 $z=f(x,y)$ 平均曲率 $H=\frac12\nabla\cdot\frac{\nabla f}{\sqrt{1+|\nabla f|^2}}$；极小 $\iff$
+\[
+\重点{(1+f_y^2)f_{xx}-2f_xf_yf_{xy}+(1+f_x^2)f_{yy}=0}.
+\]
+例：Scherk $z=\ln\frac{\cos y}{\cos x}$；悬链面 $r=a\cosh\frac za$ 与正螺面 $z=c\theta$ 局部等距（同一伴随族）；Enneper $(u-\frac{u^3}3+uv^2,\ v-\frac{v^3}3+vu^2,\ u^2-v^2)$。Weierstrass--Enneper：$(f,g)$ 全纯/亚纯，$\mathbf x=\operatorname{Re}\int\bigl(\frac f2(1-g^2),\frac{\ii f}2(1+g^2),fg\bigr)\dd z$。
+\end{结论}
+
+\begin{结论}{平均曲率 $=$ 面积的一阶变分}
+法向变形 $\mathbf x\mapsto\mathbf x+\varepsilon\phi\mathbf n$：
+\[
+\重点{\frac{\dd A}{\dd\varepsilon}\Big|_0=-\int2H\phi\,\dd A},\qquad H=\frac{k_1+k_2}2
+\]
+（符号随 $\mathbf n$ 的取向）。所以极小曲面是面积的临界点；体积约束下的临界点 $H=$ 常数（肥皂泡，Young--Laplace $\Delta p=2\gamma H$）。二阶变分给 Jacobi 算子 $-\Delta-|A|^2$。
+\end{结论}
+
+\begin{结论}{常 Gauss 曲率曲面}
+$K=0$：可展面（柱面、锥面、切线面）；直纹面 $K\le0$，且可展 $\iff K=0$。
+$K=-1$：伪球面（曳物线旋转面）$r=\operatorname{sech}t$，$z=t-\tanh t$，两半合计面积 $4\pi$、体积 $\frac{2\pi}3$。\重点{\mathbb R^3\text{ 中不存在完备的 }K=-1\text{ 浸入曲面}}（Hilbert）；双曲平面只能在抽象模型中整体实现。
+\end{结论}
+
+\begin{结论}{双曲平面的两个模型}
+上半平面 $\dd s^2=\frac{\dd x^2+\dd y^2}{y^2}$：测地线为垂直于实轴的半圆和竖直线，
+\[
+\重点{\cosh d(z,w)=1+\frac{|z-w|^2}{2\operatorname{Im}z\operatorname{Im}w}},\qquad \text{等距群 }\mathrm{PSL}_2(\mathbb R).
+\]
+Poincaré 圆盘 $\frac{4|\dd z|^2}{(1-|z|^2)^2}$，$K=-1$。测地三角形面积 $\pi-(\alpha+\beta+\gamma)$，理想三角形面积 $\pi$；半径 $r$ 的圆周长 $2\pi\sinh r$（指数增长）。
+\end{结论}
+
+\begin{结论}{测地圆的周长与面积给出曲率}
+常曲率 $K$ 的曲面上半径 $r$ 的测地圆：
+\[
+C(r)=\frac{2\pi\sin(\sqrt Kr)}{\sqrt K},\qquad A(r)=\frac{2\pi(1-\cos\sqrt Kr)}{K}.
+\]
+一般曲面（Bertrand--Diguet--Puiseux）：\重点{K=\frac3\pi\lim_{r\to0}\frac{2\pi r-C(r)}{r^3}=\frac{12}\pi\lim_{r\to0}\frac{\pi r^2-A(r)}{r^4}}——只用曲面上的测量即可得到 $K$。
+\end{结论}
+
+\begin{结论}{平行移动的和乐角}
+沿闭曲线 $\gamma$（围成单连通区域 $D$）平行移动一圈，切向量转过
+\[
+\重点{\Delta\theta=\iint_DK\,\dd A}.
+\]
+球面上沿纬线 $\theta_0$（余纬）一圈：$\Delta\theta=2\pi(1-\cos\theta_0)$（等于所围立体角）；Foucault 摆一天转 $2\pi\sin\lambda$（纬度 $\lambda$）就是这个几何相位。
+\end{结论}
+
+\begin{结论}{多面体的离散 Gauss--Bonnet}
+顶点 $v$ 的角亏 $\delta_v=2\pi-\sum(\text{在 }v\text{ 处的面角})$：\重点{\sum_v\delta_v=2\pi\chi}（Descartes），凸多面体为 $4\pi$。
+例：正方体每顶点亏 $\frac\pi2$，$8\times\frac\pi2=4\pi$；足球 $60$ 顶点各亏 $2\pi-(\frac{3\pi}5+\frac{4\pi}3)=\frac\pi{15}$，合 $4\pi$。离散曲率集中在顶点，是光滑 $\int K\dd A$ 的类比。
+\end{结论}
+
+\begin{结论}{Gauss 映射与全曲率}
+闭可定向曲面 $S\subset\mathbb R^3$：$\int_SK\dd A=$ Gauss 映射 $S\to S^2$ 的带号像面积 $=4\pi\deg$，故 \重点{\deg(\text{Gauss 映射})=\frac{\chi(S)}{2}}。
+Chern--Lashof：$\int|K|\dd A\ge2\pi(4-\chi)$（圆环面 $8\pi$ 取等）；Willmore：$\int H^2\dd A\ge4\pi$，等号仅圆球。
+\end{结论}
+
+\begin{结论}{比较几何三定理}
+完备 Riemann 流形：
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item Bonnet--Myers：$\mathrm{Ric}\ge(n-1)k>0$ $\Rightarrow$ \重点{\operatorname{diam}\le\frac{\pi}{\sqrt k}}，紧且 $\pi_1$ 有限。
+\item Cartan--Hadamard：截面曲率 $\le0$ 且单连通 $\Rightarrow$ $\exp_p$ 是到 $\mathbb R^n$ 的微分同胚。
+\item Hopf--Rinow：度量完备 $\iff$ 测地完备 $\iff$ 有界闭集紧；此时任两点有最短测地线。共轭点（Jacobi 场 $J''+KJ=0$ 的零点）之后测地线不再最短：单位球上在 $\pi$ 处。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{Gauss 方程与 Codazzi 方程}
+曲面的第一、第二基本形式不能任意给：Gauss 方程 \重点{K=\frac{LN-M^2}{EG-F^2}} 中左边只依赖 $E,F,G$（Theorema Egregium）；Codazzi--Mainardi（正交且主方向坐标时）$L_v=HE_v$、$N_u=HG_u$。
+Bonnet 定理：满足两组方程的 $(\mathrm I,\mathrm{II})$ 在单连通区域上决定唯一曲面（差刚体运动），是曲线论“$\kappa,\tau$ 决定曲线”的二维版。
+\end{结论}
+
+\begin{结论}{脐点、曲率线与 Dupin 标形}
+脐点 $k_1=k_2$；全为脐点的连通曲面是球面或平面的一部分。非脐点附近可取曲率线坐标（$F=M=0$）。
+Dupin 标形 $k_1x^2+k_2y^2=\pm1$：$K>0$ 椭圆点、$K<0$ 双曲点（两条渐近方向为标形的渐近线）、$K=0$ 抛物点。\重点{\text{旋转面的曲率线就是经线与纬线}}。
+\end{结论}
+
+\begin{结论}{展开法求可展面上的测地线}
+柱面、锥面可无伸缩地展平，测地线展开后是直线。
+半顶角 $\alpha$ 的锥面展开成角度 $\Theta=2\pi\sin\alpha$ 的扇形；从母线上距顶点 $\rho$ 的点出发绕一圈回到同一母线的测地线长 \重点{2\rho\sin\frac\Theta2}（当 $\Theta<\pi$）；$\Theta\ge\pi$（$\alpha\ge30^\circ$）时不存在这样绕一圈的测地线，最短路是经过顶点的折线（长 $2\rho$）。圆柱面上测地线为螺线（展开为斜线）。
+\end{结论}
+
+\begin{结论}{共形坐标下的曲率}
+$\dd s^2=\lambda(u,v)^2(\dd u^2+\dd v^2)$（等温坐标，二维总可局部取到）：
+\[
+\重点{K=-\frac{\Delta\ln\lambda}{\lambda^2}}.
+\]
+上半平面 $\lambda=\frac1y$：$\Delta\ln\frac1y=\frac1{y^2}$，$K=-1$；球面的球极投影 $\lambda=\frac{2}{1+u^2+v^2}$ 给 $K=1$。
+\end{结论}
+
+\begin{结论}{旋转面的面积、测地线与 Gauss 曲率速算}
+$(f(s)\cos\theta,\ f(s)\sin\theta,\ g(s))$，$s$ 为经线弧长：$\dd s^2=\dd s^2+f^2\dd\theta^2$，\重点{K=-\frac{f''(s)}{f(s)}}，$A=2\pi\int f\dd s$。
+测地线满足 Clairaut $f\sin\psi=$ 常数（$\psi$ 为与经线夹角）；纬线是测地线 $\iff f'(s)=0$（腰、赤道）。环面外侧 $K>0$、内侧 $K<0$，$\int K=0$。
+\end{结论}
+
+\begin{结论}{曲面上的 Laplacian 与热核展开}
+$\Delta_g f=\frac{1}{\sqrt g}\partial_i(\sqrt gg^{ij}\partial_jf)$；共形坐标下 $\Delta_g=\lambda^{-2}(\partial_u^2+\partial_v^2)$。
+热核迹的短时展开（Minakshisundaram--Pleijel）：
+\[
+\重点{\sum_n\ee^{-\lambda_nt}\sim\frac{A}{4\pi t}-\frac{L}{8\sqrt{\pi t}}+\frac{\chi}{6}+O(\sqrt t)}
+\]
+（带边区域、Dirichlet 条件，光滑边界；闭曲面无第二项，常数项 $\frac{1}{12\pi}\int K=\frac\chi6$）。“能否听出鼓的形状”：面积、周长、欧拉数都能听出。
+\end{结论}
+
+\begin{结论}{第一基本形式：角度、面积与地图投影}
+$\mathrm I=E\dd u^2+2F\dd u\dd v+G\dd v^2$：面积元 \重点{\dd A=\sqrt{EG-F^2}\,\dd u\dd v}；两切向 $(\dd u_i,\dd v_i)$ 的夹角 $\cos\theta=\frac{\mathrm I(\cdot,\cdot)}{\sqrt{\mathrm I_1\mathrm I_2}}$ 用双线性形式计算。
+映射保距 $\iff$ 对应坐标下 $E,F,G$ 相同；保角 $\iff$ 成比例；保面积 $\iff EG-F^2$ 相同。球面（经度 $\lambda$、纬度 $\varphi$）：Mercator $y=\ln\tan(\frac\pi4+\frac\varphi2)$ 保角；Archimedes 柱面投影 $y=\sin\varphi$ 保面积。$K\ne0$ 时不可能既保角又保面积（那样就保距，违背 Theorema Egregium）。
+\end{结论}
+
+\参考{do Carmo, \emph{Differential Geometry of Curves and Surfaces}；Pressley, \emph{Elementary Differential Geometry}；O'Neill, \emph{Elementary Differential Geometry}；Petersen, \emph{Riemannian Geometry}；Kac, ``Can one hear the shape of a drum?''；MIT 18.950。}

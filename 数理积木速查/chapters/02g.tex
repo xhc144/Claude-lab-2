@@ -1,0 +1,157 @@
+\subsection{代数拓扑补充}
+
+\begin{结论}{$\mathbb{RP}^n$ 的同调}
+胞腔链复形 $\mathbb Z\xrightarrow{}\cdots$，边缘映射交替为 $0$ 与 $\times2$（$\partial_k=1+(-1)^k$）：
+\[
+\重点{H_k(\mathbb{RP}^n;\mathbb Z)=\begin{cases}\mathbb Z,&k=0\ \text{或}\ k=n\text{ 奇}\\\mathbb Z_2,&k\text{ 奇},\ 0<k<n\\0,&\text{其他}\end{cases}}
+\]
+$\mathbb Z_2$ 系数下每维都是 $\mathbb Z_2$。$\chi(\mathbb{RP}^n)=\frac{1+(-1)^n}2$。$\mathbb{RP}^1\cong S^1$，$\mathbb{RP}^3\cong SO(3)$。
+\end{结论}
+
+\begin{结论}{$\mathbb{CP}^n$ 与上积环}
+$\mathbb{CP}^n$ 每个偶数维 $0,2,\dots,2n$ 一个胞腔，边缘全零：$H_{2k}=\mathbb Z$，$\chi=n+1$。上积环
+\[
+\重点{H^*(\mathbb{CP}^n;\mathbb Z)=\mathbb Z[x]/(x^{n+1})},\ |x|=2;\qquad H^*(\mathbb{RP}^n;\mathbb Z_2)=\mathbb Z_2[a]/(a^{n+1}),\ |a|=1 .
+\]
+上积区分同调相同的空间：$\mathbb{CP}^2\not\simeq S^2\vee S^4$（后者 $x^2=0$）；$T^2\not\simeq S^1\vee S^1\vee S^2$。$\mathbb Z_2$ 上积环给 Borsuk--Ulam 的一个证明。
+\end{结论}
+
+\begin{结论}{曲面的基本群与 $H_1$}
+\[
+\begin{array}{lll}
+\Sigma_g\ (\text{可定向，亏格 }g) & \langle a_1,b_1,\dots,a_g,b_g\mid\prod[a_i,b_i]\rangle & H_1=\mathbb Z^{2g}\\
+N_k\ (k\text{ 个交叉帽}) & \langle a_1,\dots,a_k\mid a_1^2\cdots a_k^2\rangle & H_1=\mathbb Z^{k-1}\oplus\mathbb Z_2
+\end{array}
+\]
+Klein 瓶 $=N_2$：$\pi_1=\langle a,b\mid abab^{-1}\rangle$，\重点{H_1=\mathbb Z\oplus\mathbb Z_2}；$\mathbb Z_2$ 系数 Betti 数 $(1,2,1)$。挖去一个圆盘后 $\pi_1$ 成为自由群（秩 $2g$ 或 $k$）。
+\end{结论}
+
+\begin{结论}{透镜空间：同调相同、同伦不同}
+$L(p,q)=S^3/\mathbb Z_p$（$(z,w)\mapsto(\zeta z,\zeta^qw)$）：$\pi_1=\mathbb Z_p$，$H_1=\mathbb Z_p$，$H_2=0$，$H_3=\mathbb Z$。
+$L(p,q)\simeq L(p,q')$ $\iff$ \重点{qq'\equiv\pm n^2\pmod p}；同胚 $\iff q'\equiv\pm q^{\pm1}\pmod p$。故 $L(5,1)$、$L(5,2)$ 同调群、基本群都相同却不同伦（$2$ 不是模 $5$ 的 $\pm$ 平方）。
+\end{结论}
+
+\begin{结论}{Euler 示性数的乘性与 Riemann--Hurwitz}
+$n$ 叶覆叠：$\chi(\tilde X)=n\chi(X)$；纤维丛：$\chi(E)=\chi(F)\chi(B)$。分歧覆叠（Riemann 面 $f:X\to Y$，$n$ 次）：
+\[
+\重点{2g_X-2=n(2g_Y-2)+\sum_p(e_p-1)}.
+\]
+超椭圆曲线 $y^2=f(x)$，$\deg f=2g+1$ 或 $2g+2$：$2g-2=2(-2)+(2g+2)$，亏格 $g$。推论：$\Sigma_g$（$g\ge2$）不能覆叠 $\Sigma_h$（$h>g$）。
+\end{结论}
+
+\begin{结论}{自由群的子群：Schreier 指标公式}
+自由群的子群都是自由群（覆叠空间仍是图）。$F_k$ 中指标 $n$ 的子群：
+\[
+\重点{\operatorname{rank}=n(k-1)+1}
+\]
+（由图的 $\chi$：$1-k$ 乘 $n$ 叶，$\operatorname{rank}=1-\chi$）。所以 $F_2$ 含 $F_3,F_4,\dots$ 作为有限指标子群；换位子群 $[F_2,F_2]$ 是无穷秩自由群。
+\end{结论}
+
+\begin{结论}{van Kampen 的典型计算}
+$\pi_1(X\cup Y)=\pi_1X*_{\pi_1(X\cap Y)}\pi_1Y$（交道路连通）。粘 $2$-胞腔加一条关系、粘高维胞腔不改变 $\pi_1$。
+\[
+\pi_1(S^1\vee S^1)=F_2,\qquad \pi_1(\mathbb R^3\setminus T_{p,q})=\重点{\langle a,b\mid a^p=b^q\rangle},\qquad \pi_1(\mathbb R^3\setminus\text{三叶结})=\langle x,y\mid xyx=yxy\rangle .
+\]
+$\mathbb R^3$ 去掉两条不交直线 $\simeq S^1\vee S^1$；去掉 Hopf 链环（两个环扣）$\pi_1=\mathbb Z^2$。
+\end{结论}
+
+\begin{结论}{环绕数与 Alexander 多项式}
+两分支链环的环绕数 \重点{\mathrm{lk}=\frac12\sum_{\text{两分支间的交叉}}\varepsilon_c}（$\varepsilon=\pm1$ 按右手定则），等于一个分支穿过另一分支所张 Seifert 面的代数次数。
+Alexander 多项式（差单位 $\pm t^k$）：平凡结 $1$，三叶结 $t^2-t+1$，8 字结 $t^2-3t+1$；$\deg\Delta\le2g$（$g$ 为结亏格），$|\Delta(-1)|$ 是行列式（三叶结 $3$，故可 3-着色）。$\Delta$ 区分不了三叶结与其镜像。
+\end{结论}
+
+\begin{结论}{纤维化长正合列与球面的同伦群}
+纤维化 $F\to E\to B$：$\cdots\to\pi_n(F)\to\pi_n(E)\to\pi_n(B)\to\pi_{n-1}(F)\to\cdots$。Hopf 纤维化 $S^1\to S^3\to S^2$ 给 $\pi_n(S^3)\cong\pi_n(S^2)$（$n\ge3$）。
+\[
+\begin{array}{c|ccccc}
+&\pi_{n}&\pi_{n+1}&\pi_{n+2}&\pi_{n+3}&\\\hline
+S^2&\mathbb Z&\mathbb Z&\mathbb Z_2&\mathbb Z_2&(\pi_2,\dots,\pi_5)\\
+S^3&\mathbb Z&\mathbb Z_2&\mathbb Z_2&\mathbb Z_{12}&\\
+S^n\ (n\ge5)&\mathbb Z&\mathbb Z_2&\mathbb Z_2&\mathbb Z_{24}&\text{（稳定）}
+\end{array}
+\]
+$\pi_k(S^n)=0$（$k<n$），\重点{\pi_n(S^n)=\mathbb Z}（映射度）。
+\end{结论}
+
+\begin{结论}{泛系数定理：挠向上移一维}
+\[
+\重点{H^n(X;\mathbb Z)\cong\operatorname{Hom}(H_n,\mathbb Z)\oplus\operatorname{Ext}(H_{n-1},\mathbb Z)},\qquad \operatorname{Ext}(\mathbb Z_m,\mathbb Z)=\mathbb Z_m .
+\]
+即：上同调的自由部分 $=$ 同调的自由部分，$H_{n-1}$ 的挠出现在 $H^n$。例 $\mathbb{RP}^2$：$H_1=\mathbb Z_2$，$H^1=0$，$H^2=\mathbb Z_2$。系数换成域 $\mathbb F$：$\dim H_n(X;\mathbb F)=b_n+t_n+t_{n-1}$（$t$ 为 $\operatorname{char}\mathbb F$-挠的个数）。
+\end{结论}
+
+\begin{结论}{Lefschetz 数的具体计算}
+$L(f)=\sum(-1)^k\tr\bigl(f_*|H_k(X;\mathbb Q)\bigr)$，$L(f)\ne0\Rightarrow$ 有不动点。
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item $f:S^n\to S^n$：$L=1+(-1)^n\deg f$；无不动点 $\Rightarrow\deg f=(-1)^{n+1}$（对径映射）。
+\item 环面 $T^n=\mathbb R^n/\mathbb Z^n$ 上由整矩阵 $A$ 诱导的映射：\重点{L=\det(I-A)}；双曲自同构的不动点个数恰为 $|\det(I-A)|$，周期 $m$ 点数 $|\det(I-A^m)|$（如猫映射 $\begin{pmatrix}2&1\\1&1\end{pmatrix}$：$|2-\tr A^m|$）。
+\item 可缩空间（或 $\mathbb Q$-零调）上任何连续自映射 $L=1$。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{Jordan 曲线与 Schoenflies}
+平面简单闭曲线把平面分成两个连通分支，以曲线为公共边界（Jordan）；有界分支的闭包同胚于闭圆盘（Schoenflies）。
+高维：$S^{n-1}\subset S^n$ 的补总有两个分支（Jordan--Brouwer，同调证明），但 \重点{n=3\text{ 时 Schoenflies 失败}}：Alexander 角球的外部不单连通。光滑（或局部平坦）嵌入时 Schoenflies 成立。
+\end{结论}
+
+\begin{结论}{常用同伦等价}
+$\mathbb R^n\setminus\{0\}\simeq S^{n-1}$；$\mathbb R^3\setminus\text{直线}\simeq S^1$；$\mathbb C\setminus\{k\text{ 点}\}\simeq\bigvee_kS^1$；$S^2\setminus\{k\text{ 点}\}\simeq\bigvee_{k-1}S^1$；
+Möbius 带 $\simeq S^1$；挖去一点的环面 $\simeq S^1\vee S^1$；$\Sigma_g\setminus\text{点}\simeq\bigvee_{2g}S^1$；$GL_n^+(\mathbb R)\simeq SO(n)$，$GL_n(\mathbb C)\simeq U(n)$（Gram--Schmidt 形变收缩）；
+\重点{S^\infty\text{ 可缩}}，故 $\mathbb{RP}^\infty=K(\mathbb Z_2,1)$，$\mathbb{CP}^\infty=K(\mathbb Z,2)$。
+\end{结论}
+
+\begin{结论}{纬悬与约化同调}
+$\Sigma X$（纬悬）：$\tilde H_{k+1}(\Sigma X)\cong\tilde H_k(X)$，$\Sigma S^n=S^{n+1}$。约化同调 $\tilde H_k(S^n)=\mathbb Z$ 仅 $k=n$。
+相对同调与切除：\重点{H_k(X,A)\cong\tilde H_k(X/A)}（好对）；$H_n(D^n,S^{n-1})=\mathbb Z$。局部同调 $H_k(\mathbb R^n,\mathbb R^n\setminus0)=\mathbb Z$ 仅 $k=n$——维数的拓扑不变性由此而来。
+\end{结论}
+
+\begin{结论}{覆叠空间的分类}
+道路连通、局部单连通的 $X$：连通覆叠（同构类、带基点）$\leftrightarrow$ $\pi_1(X)$ 的子群；正则覆叠 $\leftrightarrow$ 正规子群，甲板群 $=\pi_1/H$。
+万有覆叠：$\mathbb R\to S^1$，$\mathbb R^2\to T^2$，$S^n\to\mathbb{RP}^n$，\重点{\mathbb H^2\to\Sigma_g\ (g\ge2)}（单值化：$g=0,1,\ge2$ 分别对应球面、平面、双曲平面几何）。$S^1\vee S^1$ 的覆叠对应 $F_2$ 的子群，可画成每点出 $a,b$ 各一进一出的有向图。
+\end{结论}
+
+\begin{结论}{最少顶点的三角剖分}
+曲面的三角剖分满足 $3F=2E$、$V-E+F=\chi$、$E\le\binom V2$，于是
+\[
+\重点{V\ge\frac{7+\sqrt{49-24\chi}}{2}}.
+\]
+球面 $4$（四面体）、环面 $7$（Möbius--Császár）、$\mathbb{RP}^2$ $6$（半二十面体）、Klein 瓶 $8$（下界 $7$ 不可达）。等号时一维骨架是完全图 $K_V$——与地图着色定理（Heawood 数）同源。
+\end{结论}
+
+\begin{结论}{Hurewicz、Whitehead 与 Eilenberg--MacLane 空间}
+$H_1(X)=\pi_1(X)^{\mathrm{ab}}$。$X$ 单连通、$\pi_k=0$（$k<n$）$\Rightarrow$ \重点{H_n(X)\cong\pi_n(X)}（$n\ge2$）。
+Whitehead：CW 复形间诱导所有 $\pi_k$ 同构的映射是同伦等价（只看同调不够，需单连通）。$K(G,1)$：$S^1$、$T^n$、$\Sigma_g$（$g\ge1$）、双曲流形、$\mathbb{RP}^\infty$；$K(\mathbb Z,2)=\mathbb{CP}^\infty$。$H^n(X;G)=[X,K(G,n)]$。
+\end{结论}
+
+\begin{结论}{辫子群}
+$\mathbb R^2$ 中 $n$ 个不同点的（无序）构型空间的基本群：
+\[
+\重点{B_n=\langle\sigma_1,\dots,\sigma_{n-1}\mid\sigma_i\sigma_{i+1}\sigma_i=\sigma_{i+1}\sigma_i\sigma_{i+1},\ \sigma_i\sigma_j=\sigma_j\sigma_i\ (|i-j|\ge2)\rangle}.
+\]
+加 $\sigma_i^2=1$ 得 $S_n$（三维以上只有玻色、费米：构型空间 $\pi_1=S_n$）；二维的任意子统计来自 $B_n$ 的一维表示 $\sigma_i\mapsto\ee^{\ii\theta}$。$B_3\cong$ 三叶结群，中心由 $(\sigma_1\sigma_2)^3$ 生成。
+\end{结论}
+
+\begin{结论}{Hopf 不变量 $1$ 与可除代数}
+映射 $S^{2n-1}\to S^n$ 的 Hopf 不变量（两点原像的环绕数）为 $1$ 只在 $n=2,4,8$（Adams）。等价陈述：\重点{\mathbb R^n\text{ 上的可除代数只在 }n=1,2,4,8}（$\mathbb R,\mathbb C,\mathbb H,\mathbb O$），$S^{n-1}$ 可平行化只在 $n=1,2,4,8$。Hopf 纤维化 $S^1\to S^3\to S^2$、$S^3\to S^7\to S^4$、$S^7\to S^{15}\to S^8$。
+\end{结论}
+
+\begin{结论}{挖洞后的 Euler 示性数}
+$\chi(A\cup B)=\chi(A)+\chi(B)-\chi(A\cap B)$（好的分解）。挖去 $k$ 个开圆盘：$\chi$ 减 $k$；连通和 $\chi(M\#N)=\chi(M)+\chi(N)-2$（曲面）。
+\重点{\chi(\Sigma_{g,b})=2-2g-b}（$b$ 个边界圆）：裤子（$g=0,b=3$）$\chi=-1$，$\Sigma_g$ 可切成 $2g-2$ 条裤子。$\mathbb{RP}^2\#\mathbb{RP}^2=$ Klein 瓶，$T^2\#\mathbb{RP}^2\cong\mathbb{RP}^2\#\mathbb{RP}^2\#\mathbb{RP}^2$。
+\end{结论}
+
+\begin{结论}{度数与代数基本定理}
+$z\mapsto z^n$ 在 $S^1$ 上度 $n$，$z\mapsto\bar z$ 度 $-1$。多项式 $p(z)=z^n+\cdots$：大圆 $|z|=R$ 上 $p$ 与 $z^n$ 同伦（不经过 $0$），度为 $n$；若 $p$ 无零点则可缩到小圆，度为 $0$，矛盾——\重点{\text{代数基本定理}}。同理零点个数（含重数）$=$ 绕数 $\frac1{2\pi\ii}\oint\frac{p'}{p}$。
+\end{结论}
+
+\begin{结论}{环面的映射类群}
+$\mathrm{MCG}(T^2)\cong SL_2(\mathbb Z)$（作用于 $H_1=\mathbb Z^2$），由两条 Dehn 扭转 $\begin{pmatrix}1&1\\0&1\end{pmatrix}$、$\begin{pmatrix}1&0\\-1&1\end{pmatrix}$ 生成。
+按 $|\tr|$ 分类：$<2$ 周期（有限阶），$=2$ 可约（沿一曲线扭转），\重点{>2\text{ 为 Anosov}}（猫映射，混沌、Lyapunov 指数 $\ln\lambda_{\max}$）。高亏格由 Dehn 扭转生成，Thurston 分类为周期、可约、伪 Anosov。
+\end{结论}
+
+\begin{结论}{Mayer--Vietoris 的一个速算：$S^n$ 去掉子集的补}
+Alexander 对偶：$K\subset S^n$ 为紧的好子集，\重点{\tilde H_k(S^n\setminus K)\cong\tilde H^{n-k-1}(K)}。
+例：$S^3$ 中任意纽结的补 $H_1=\mathbb Z$（由环绕数检测），$H_2=0$；$S^3$ 中两分支链环的补 $H_1=\mathbb Z^2$。所以同调分不出纽结，必须看 $\pi_1$ 或更精细的不变量。
+\end{结论}
+
+\参考{Hatcher, \emph{Algebraic Topology}；Massey, \emph{A Basic Course in Algebraic Topology}；Rolfsen, \emph{Knots and Links}；Farb--Margalit, \emph{A Primer on Mapping Class Groups}；MIT 18.905、18.906。}

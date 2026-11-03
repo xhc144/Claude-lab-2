@@ -1,0 +1,146 @@
+\subsection{流形、微分形式与 Lie 群}
+
+\begin{结论}{Stokes 定理与边界定向}
+紧定向 $n$ 维带边流形 $M$，$\omega$ 为 $(n-1)$-形式：\重点{\int_M\dd\omega=\int_{\partial M}\omega}。
+边界定向约定“外法向在前”：$(\mathbf n,v_1,\dots,v_{n-1})$ 为 $M$ 的正定向时 $(v_1,\dots,v_{n-1})$ 为 $\partial M$ 的正定向。于是 $[a,b]$ 的边界是 $\{b\}-\{a\}$，平面区域边界逆时针，与 Green、Gauss、经典 Stokes 一致。
+\end{结论}
+
+\begin{结论}{de Rham 上同调的常用值}
+$H^k(\mathbb R^n)=0$（$k>0$，Poincaré 引理，星形域上闭形式恰当）。
+\[
+H^k(S^n)=\mathbb R\ (k=0,n),\qquad H^1(T^2)=\mathbb R^2,\ H^2(T^2)=\mathbb R,\qquad \重点{H^1(\mathbb R^2\setminus0)=\mathbb R\cdot\Bigl[\frac{x\dd y-y\dd x}{x^2+y^2}\Bigr]}.
+\]
+判定一个闭形式是否恰当：在每个生成闭链上积分为零 $\iff$ 恰当（de Rham 定理）。$H^k$ 同伦不变，Mayer--Vietoris 同样适用。
+\end{结论}
+
+\begin{结论}{外微分与拉回的计算规则}
+$\alpha\wedge\beta=(-1)^{pq}\beta\wedge\alpha$；\重点{\dd(\alpha\wedge\beta)=\dd\alpha\wedge\beta+(-1)^p\alpha\wedge\dd\beta}；$\dd^2=0$；$f^*\dd=\dd f^*$，$f^*(\alpha\wedge\beta)=f^*\alpha\wedge f^*\beta$。
+顶次形式的拉回就是 Jacobi 行列式：$f^*(g\,\dd y^1\wedge\cdots\wedge\dd y^n)=(g\circ f)\det(Df)\,\dd x^1\wedge\cdots\wedge\dd x^n$。故 $\int_Mf^*\omega=\deg f\int_N\omega$（$f:M\to N$ 为闭定向流形间映射）。
+\end{结论}
+
+\begin{结论}{Hodge 星与 Maxwell 方程}
+$\mathbb R^3$：$*\dd x=\dd y\wedge\dd z$（轮换），$*1=\dd V$；$\delta=(-1)^{n(p+1)+1}*\dd*$，$\Delta=\dd\delta+\delta\dd$（在 $0$-形式上是 $-\nabla^2$）。
+Minkowski 时空 $F=\frac12F_{\mu\nu}\dd x^\mu\wedge\dd x^\nu$：
+\[
+\重点{\dd F=0}\ (\text{无磁单极}+\text{Faraday}),\qquad \dd*F=*J\ (\text{Gauss}+\text{Ampère--Maxwell}),
+\]
+$F=\dd A$ 局部总成立；$\dd*J=0$ 即电荷守恒。磁单极存在时 $F$ 闭而不恰当（Dirac 弦、量子化）。
+\end{结论}
+
+\begin{结论}{Killing 向量与守恒量}
+$\mathcal L_\xi g=0\iff$ \重点{\nabla_i\xi_j+\nabla_j\xi_i=0}。测地线 $\gamma$ 上 $g(\xi,\dot\gamma)$ 守恒（Noether 的几何形式）。
+个数上限 $\frac{n(n+1)}2$，常曲率空间取等（$\mathbb R^3$：$3$ 平移 $+3$ 转动；$S^2$：$3$）。Schwarzschild 的 $\partial_t,\partial_\varphi$ 给能量与角动量。旋转面的 $\partial_\theta$ 给 Clairaut 关系。
+\end{结论}
+
+\begin{结论}{向量场的流与 Lie 括号}
+$[X,Y]=\mathcal L_XY$；两向量场的流可交换 $\iff$ \重点{[X,Y]=0}。先沿 $X$ 走 $t$、沿 $Y$ 走 $t$、再反向各走 $t$，偏离 $t^2[X,Y]+O(t^3)$（停车时“侧移”靠的就是非零括号）。
+可同时作为坐标向量场 $\iff$ 两两括号为零且线性无关。$X=-y\partial_x+x\partial_y$，$Y=x\partial_x+y\partial_y$：$[X,Y]=0$，对应极坐标 $(\theta,\ln r)$。
+\end{结论}
+
+\begin{结论}{Sard、正则值与嵌入}
+光滑映射的临界值集测度为零（Sard），所以正则值稠密，几乎每个水平集都是子流形（维数 $m-n$）。
+Whitney：$n$ 维流形可嵌入 $\mathbb R^{2n}$、浸入 $\mathbb R^{2n-1}$。例：\重点{\text{Klein 瓶、}\mathbb{RP}^2\text{ 可嵌入 }\mathbb R^4\text{，不能嵌入 }\mathbb R^3}（闭不可定向曲面不能嵌入 $\mathbb R^3$），但可浸入（Boy 曲面）。横截：$f\pitchfork Z$ 时 $f^{-1}(Z)$ 是余维数相同的子流形。
+\end{结论}
+
+\begin{结论}{球面的体积形式与映射度的积分公式}
+$\omega=\sum_i(-1)^{i-1}x_i\,\dd x_1\wedge\cdots\widehat{\dd x_i}\cdots\wedge\dd x_n$ 限制在 $S^{n-1}$ 上是体积形式，$\dd\omega=n\,\dd V$，故 $\int_{S^{n-1}}\omega=nV_n=|S^{n-1}|$。
+\重点{\deg f=\frac{\int_{S^{n-1}}f^*\omega}{|S^{n-1}|}}。$\frac{\omega}{|x|^n}$ 在 $\mathbb R^n\setminus0$ 闭而不恰当，是立体角形式；Gauss 环绕数积分即其在 $T^2\to S^2$ 映射下的拉回。
+\end{结论}
+
+\begin{结论}{Levi-Civita 联络与协变散度}
+\[
+\Gamma^k_{ij}=\frac12g^{kl}(\partial_ig_{jl}+\partial_jg_{il}-\partial_lg_{ij}),\qquad \重点{\Gamma^i_{ij}=\partial_j\ln\sqrt{|g|}},
+\]
+$\nabla_iV^i=\frac1{\sqrt{|g|}}\partial_i(\sqrt{|g|}V^i)$（散度只需行列式）。诱导度量 $h_{ab}=\partial_aX^\mu\partial_bX^\nu G_{\mu\nu}$。二维时 Riemann 张量只有一个独立分量：$R_{1212}=K(g_{11}g_{22}-g_{12}^2)$，$R_{ij}=Kg_{ij}$，$R=2K$。
+\end{结论}
+
+\begin{结论}{测地偏离方程：曲率 $=$ 潮汐}
+相邻测地线的分离向量 $J$：
+\[
+\重点{\frac{D^2J}{\dd t^2}=-R(J,\dot\gamma)\dot\gamma},\qquad \text{二维：}J''+KJ=0 .
+\]
+$K>0$ 时邻近测地线会重新相交（球面在 $\pi$ 处，即共轭点），$K<0$ 时指数分离（双曲流的混沌性）。广义相对论中右边就是潮汐张量 $\partial_i\partial_j\Phi$。
+\end{结论}
+
+\begin{结论}{经典 Lie 群的维数与 Lie 代数}
+\[
+\begin{array}{lllll}
+GL_n(\mathbb R):n^2 & SL_n:n^2-1 & O(n),SO(n):\frac{n(n-1)}2 & U(n):n^2 & SU(n):n^2-1\\
+Sp(2n,\mathbb R):n(2n+1) & Sp(n):n(2n+1) & SO(p,q):\frac{(p+q)(p+q-1)}2 & &
+\end{array}
+\]
+\重点{\mathfrak{so}(3)\cong\mathfrak{su}(2)\cong(\mathbb R^3,\times)}：$[L_i,L_j]=\varepsilon_{ijk}L_k$；$\mathfrak{sl}_2(\mathbb C)\cong\mathfrak{so}(3,1)$（Lorentz）。Lie 代数是单位元处切空间：$\mathfrak{so}(n)$ 为反对称阵，$\mathfrak{u}(n)$ 为反 Hermite 阵。
+\end{结论}
+
+\begin{结论}{Baker--Campbell--Hausdorff 展开}
+\[
+\重点{\log(\ee^X\ee^Y)=X+Y+\frac12[X,Y]+\frac1{12}\bigl([X,[X,Y]]+[Y,[Y,X]]\bigr)-\frac1{24}[Y,[X,[X,Y]]]+\cdots}
+\]
+用途：$\ee^{tA}\ee^{tB}=\ee^{t(A+B)+\frac{t^2}2[A,B]+O(t^3)}$——Lie--Trotter 分裂误差 $O(t^2)$；对称 Strang 分裂 $\ee^{tA/2}\ee^{tB}\ee^{tA/2}$ 误差 $O(t^3)$（辛积分器、量子模拟的阶数来源）。
+\end{结论}
+
+\begin{结论}{随机旋转：Haar 测度下的转角分布}
+$SU(2)\cong S^3$ 上 Haar 测度即均匀测度。$SO(3)$ 上均匀随机旋转的转角 $\theta\in[0,\pi]$ 的密度
+\[
+\重点{p(\theta)=\frac{1-\cos\theta}{\pi}},\qquad \E\theta=\frac\pi2+\frac2\pi .
+\]
+不是均匀分布：小角度旋转很稀少。生成方法：均匀单位四元数（四维标准正态归一化），而不是均匀 Euler 角。
+\end{结论}
+
+\begin{结论}{Lie 群的拓扑}
+$SU(2)\cong S^3$，$SO(3)\cong\mathbb{RP}^3$，\重点{\pi_1(SO(n))=\mathbb Z_2\ (n\ge3)}（转 $2\pi$ 不可缩、$4\pi$ 可缩：皮带戏法、旋量）；$\pi_1(U(n))=\mathbb Z$（$\det$），$SU(n)$ 单连通。
+$GL_n(\mathbb R)$ 两个连通分支（$\det$ 符号），$GL_n(\mathbb C)$ 连通；$O(n)$ 两分支。$S^n$ 可平行化 $\iff n=0,1,3,7$；$S^{n-1}$ 上线性无关向量场的最大个数为 $\rho(n)-1$（Radon--Hurwitz：$n=2^{4a+b}\cdot$奇数，$\rho=2^b+8a$）。
+\end{结论}
+
+\begin{结论}{辛流形：Liouville 与 Darboux}
+$\omega=\sum\dd p_i\wedge\dd q_i$。Hamilton 向量场 $\iota_{X_H}\omega=\dd H$（符号约定使 $\dot q=\partial_pH$），Poisson 括号 $\{f,g\}=\omega(X_f,X_g)$。
+Hamilton 流保持 $\omega$，因而保持 $\omega^n$——\重点{\text{相体积守恒（Liouville）}}；Darboux：辛流形局部都同构于标准形式（没有局部不变量，与 Riemann 几何不同）。正则变换 $\iff$ 保持 $\omega$ $\iff$ Jacobi 阵 $M^{\mathsf T}JM=J$。
+\end{结论}
+
+\begin{结论}{可定向性}
+流形可定向 $\iff$ 有处处非零的顶次形式 $\iff$ 能取一族 Jacobi 行列式全正的坐标卡。
+\重点{\mathbb{RP}^n\text{ 可定向}\iff n\text{ 奇}}（对径映射的度 $(-1)^{n+1}$）；Möbius 带、Klein 瓶不可定向；可定向流形的二重覆叠存在且唯一（连通时不可定向 $\iff$ 定向二重覆叠连通）。单连通流形都可定向。
+\end{结论}
+
+\begin{结论}{Cartan 结构方程：二维快速求 $K$}
+正交标架余标架 $\theta^1,\theta^2$（$\dd s^2=(\theta^1)^2+(\theta^2)^2$），联络形式 $\omega$ 由
+\[
+\dd\theta^1=\omega\wedge\theta^2,\qquad \dd\theta^2=-\omega\wedge\theta^1,\qquad \重点{\dd\omega=-K\,\theta^1\wedge\theta^2}.
+\]
+例 $\dd r^2+f(r)^2\dd\theta^2$：$\theta^1=\dd r$，$\theta^2=f\dd\theta$，$\dd\theta^2=f'\dd r\wedge\dd\theta$ 给 $\omega=f'\dd\theta$，$\dd\omega=f''\dd r\wedge\dd\theta=-K\,f\,\dd r\wedge\dd\theta$，$K=-\frac{f''}{f}$。比算 Christoffel 记号快得多。
+\end{结论}
+
+\begin{结论}{Morse 理论：临界点数拓扑}
+Morse 函数（临界点非退化）$f:M\to\mathbb R$，$c_\lambda$ 为指数 $\lambda$（Hessian 负特征值个数）的临界点数：
+\[
+\重点{\sum_\lambda(-1)^\lambda c_\lambda=\chi(M)},\qquad c_\lambda\ge b_\lambda\ (\text{弱 Morse 不等式}).
+\]
+立着的环面高度函数：极小、两个鞍点、极大，$1-2+1=0$。$S^n$ 上存在只有两个临界点的函数；“球面上的光滑函数至少两个临界点”。势能曲面的稳定点、过渡态计数也服从此式。
+\end{结论}
+
+\begin{结论}{陈数与 Gauss--Bonnet--Chern}
+复线丛的曲率 $F$（$\dd A$），\重点{c_1=\frac1{2\pi}\int_\Sigma F\in\mathbb Z}（闭曲面上）。Dirac 磁单极：$eg/\hbar$ 量子化；能带的 Berry 曲率积分给 Chern 数（量子 Hall 电导 $\sigma_{xy}=\frac{e^2}{h}c_1$）。
+切丛的 Euler 类：$\chi(M)=\frac1{2\pi}\int_MK\dd A$（二维）；四维 $\chi=\frac1{32\pi^2}\int(|Rm|^2-4|Ric|^2+R^2)\dd V$。
+\end{结论}
+
+\begin{结论}{Poincaré 对偶与奇数维的 $\chi$}
+闭可定向 $n$ 维流形：$H^k\cong H_{n-k}$，\重点{b_k=b_{n-k}}。于是 $n$ 奇时 $\chi(M)=\sum(-1)^kb_k=0$。
+不可定向时用 $\mathbb Z_2$ 系数仍成立。四维闭流形的相交形式（$H_2$ 上对称双线性型）对单连通情形几乎决定拓扑（Freedman）。
+\end{结论}
+
+\begin{结论}{光滑结构与浸入的若干事实}
+$\mathbb R^n$（$n\ne4$）只有一种光滑结构，$\mathbb R^4$ 有不可数多种；$S^7$ 有 $28$ 种定向光滑结构（Milnor 怪球）。
+球面外翻（Smale）：$S^2$ 在 $\mathbb R^3$ 中可经过浸入正则同伦翻成内面朝外；圆周在平面中则不能（旋转指数是正则同伦不变量，Whitney--Graustein）。\重点{\text{平面闭曲线按旋转指数分类}}，空间闭曲线的浸入只有一类。
+\end{结论}
+
+\begin{结论}{协变导数与平行移动的分量形式}
+$\nabla_iV^j=\partial_iV^j+\Gamma^j_{ik}V^k$，$\nabla_i\omega_j=\partial_i\omega_j-\Gamma^k_{ij}\omega_k$，度量相容 $\nabla g=0$。
+沿曲线 $x(t)$ 平行移动：\重点{\dot V^j+\Gamma^j_{ik}\dot x^iV^k=0}；测地线即切向量自平行。$[\nabla_i,\nabla_j]V^k=R^k{}_{lij}V^l$——曲率是协变导数的不交换性，也是小环路平行移动的转角密度。
+\end{结论}
+
+\begin{结论}{齐性空间与 Grassmann 流形的维数}
+$S^{n-1}=SO(n)/SO(n-1)$，$S^{2n-1}=U(n)/U(n-1)$，$\mathbb{CP}^n=U(n+1)/(U(n)\times U(1))$。
+Grassmann $G(k,n)$（$\mathbb R^n$ 中 $k$ 维子空间）：\重点{\dim=k(n-k)}，$=O(n)/(O(k)\times O(n-k))$。旗流形 $U(n)/U(1)^n$ 的实维数 $n(n-1)$；Stiefel 流形 $V_k(\mathbb R^n)$ 维数 $nk-\frac{k(k+1)}2$。维数 $=$ 大群维数减稳定子维数。
+\end{结论}
+
+\参考{Lee, \emph{Introduction to Smooth Manifolds}；Spivak, \emph{Calculus on Manifolds}；Guillemin--Pollack, \emph{Differential Topology}；Milnor, \emph{Morse Theory}；Nakahara, \emph{Geometry, Topology and Physics}；Hall, \emph{Lie Groups, Lie Algebras, and Representations}；MIT 18.952、18.965。}

@@ -1,0 +1,177 @@
+\subsection{解析几何与经典几何}
+
+\begin{结论}{点、线、面之间的距离}
+点 $P$ 到过 $A$、方向 $\mathbf u$ 的直线：$\frac{|\vec{AP}\times\mathbf u|}{|\mathbf u|}$；到平面 $\mathbf n\cdot\mathbf x=d$：$\frac{|\mathbf n\cdot P-d|}{|\mathbf n|}$。
+异面直线 $A+s\mathbf u$、$B+t\mathbf v$：
+\[
+\重点{d=\frac{|(B-A)\cdot(\mathbf u\times\mathbf v)|}{|\mathbf u\times\mathbf v|}},
+\]
+公垂线足由 $(A+s\mathbf u-B-t\mathbf v)\perp\mathbf u,\mathbf v$ 的 $2\times2$ 线性方程组求出。
+\end{结论}
+
+\begin{结论}{由顶点或边长求体积：行列式与 Cayley--Menger}
+四面体 $V=\frac16|\det(B-A,\ C-A,\ D-A)|$。只知六条棱长 $d_{ij}$：
+\[
+\重点{288V^2=\det\begin{pmatrix}0&1&1&1&1\\1&0&d_{12}^2&d_{13}^2&d_{14}^2\\1&d_{12}^2&0&d_{23}^2&d_{24}^2\\1&d_{13}^2&d_{23}^2&0&d_{34}^2\\1&d_{14}^2&d_{24}^2&d_{34}^2&0\end{pmatrix}}.
+\]
+三角形版（$3\times3$ 内核）即 Heron：$-16K^2=\det$；正四面体 $V=\frac{a^3}{6\sqrt2}$。$n$ 维单形 $V^2=\frac{(-1)^{n+1}}{2^n(n!)^2}\det(\text{CM})$。
+\end{结论}
+
+\begin{结论}{多边形面积：鞋带公式与 Pick 定理}
+顶点 $(x_i,y_i)$ 按逆时针：\重点{A=\frac12\sum_i(x_iy_{i+1}-x_{i+1}y_i)}（顺时针为负，可判定向）。
+格点多边形：$A=I+\frac B2-1$（$I$ 内部格点、$B$ 边界格点数；边界格点数为 $\sum\gcd(|\Delta x|,|\Delta y|)$）。三维没有 Pick 公式（Reeve 四面体）。
+\end{结论}
+
+\begin{结论}{三角形的半径与距离}
+$K$ 面积，$s$ 半周长：$R=\frac{abc}{4K}$，$r=\frac Ks$，旁切圆 $r_a=\frac{K}{s-a}$，$\frac1r=\frac1{r_a}+\frac1{r_b}+\frac1{r_c}$。
+\[
+\重点{OI^2=R^2-2Rr}\ (\Rightarrow R\ge2r),\qquad OH^2=9R^2-(a^2+b^2+c^2),
+\]
+$O,G,H$ 共线且 $OG:GH=1:2$（Euler 线）。
+\end{结论}
+
+\begin{结论}{Stewart 定理：中线与角平分线}
+$D$ 在 $BC$ 上，$BD=m$，$DC=n$，$a=m+n$，$AD=d$：\重点{b^2m+c^2n=a(d^2+mn)}。
+中线 $m_a=\frac12\sqrt{2b^2+2c^2-a^2}$；角平分线 $t_a=\frac{2bc\cos\frac A2}{b+c}=\sqrt{bc\Bigl(1-\frac{a^2}{(b+c)^2}\Bigr)}$，且分对边为 $c:b$。
+\end{结论}
+
+\begin{结论}{四边形：Brahmagupta、Bretschneider 与 Ptolemy}
+任意凸四边形 $K^2=(s-a)(s-b)(s-c)(s-d)-abcd\cos^2\frac{\alpha+\gamma}{2}$（$\alpha,\gamma$ 为对角）；圆内接时 \重点{K=\sqrt{(s-a)(s-b)(s-c)(s-d)}}，且在给定边长下面积最大。
+Ptolemy：$AC\cdot BD\le AB\cdot CD+AD\cdot BC$，等号 $\iff$ 四点共圆（且按此顺序）。复数证明：$(a-b)(c-d)+(a-d)(b-c)=(a-c)(b-d)$。
+\end{结论}
+
+\begin{结论}{球面三角与大圆距离}
+半径 $R$ 的球面三角形，边（弧度）$a,b,c$、角 $A,B,C$：
+\[
+\cos c=\cos a\cos b+\sin a\sin b\cos C,\qquad \frac{\sin A}{\sin a}=\frac{\sin B}{\sin b},\qquad \重点{\text{面积}=R^2(A+B+C-\pi)}.
+\]
+两地距离（数值稳定的 haversine 形式）：$\operatorname{hav}\frac dR=\operatorname{hav}\Delta\varphi+\cos\varphi_1\cos\varphi_2\operatorname{hav}\Delta\lambda$，$\operatorname{hav}\theta=\sin^2\frac\theta2$。小三角形极限回到平面公式。
+\end{结论}
+
+\begin{结论}{三角形对一点张的立体角}
+从原点看三角形 $\mathbf a,\mathbf b,\mathbf c$（模长 $a,b,c$）：
+\[
+\重点{\tan\frac\Omega2=\frac{|\mathbf a\cdot(\mathbf b\times\mathbf c)|}{abc+(\mathbf a\cdot\mathbf b)c+(\mathbf a\cdot\mathbf c)b+(\mathbf b\cdot\mathbf c)a}}
+\]
+（Van Oosterom--Strackee；分母为负时 $\frac\Omega2$ 取第二象限角）。多边形剖成三角形求和；正方体一面对中心张 $\frac{4\pi}6$。
+\end{结论}
+
+\begin{结论}{二次曲线的分类与不变量}
+$Ax^2+Bxy+Cy^2+Dx+Ey+F=0$，$M=\begin{pmatrix}A&B/2\\B/2&C\end{pmatrix}$，$\Delta=\det\begin{pmatrix}A&B/2&D/2\\B/2&C&E/2\\D/2&E/2&F\end{pmatrix}$。
+$\Delta\ne0$ 时：$B^2-4AC<0$ 椭圆，$=0$ 抛物线，$>0$ 双曲线；$\Delta=0$ 退化。转角 $\cot2\theta=\frac{A-C}{B}$ 消去 $xy$；$A+C$、$B^2-4AC$、$\Delta$ 旋转平移不变。椭圆面积
+\[
+\重点{S=\frac{8\pi|\Delta|}{(4AC-B^2)^{3/2}}}.
+\]
+\end{结论}
+
+\begin{结论}{切线与极线：“一半代入”}
+二次曲线在 $(x_0,y_0)$ 处切线：$x^2\to xx_0$，$xy\to\frac{xy_0+x_0y}2$，$x\to\frac{x+x_0}2$：
+\[
+\重点{Axx_0+B\tfrac{xy_0+x_0y}{2}+Cyy_0+D\tfrac{x+x_0}2+E\tfrac{y+y_0}2+F=0}.
+\]
+$(x_0,y_0)$ 不在曲线上时同一方程是它的\textbf{极线}：曲线外一点的极线过两切点；配极保持关联（点在 $\ell$ 上 $\iff$ $\ell$ 的极点在该点极线上）。
+\end{结论}
+
+\begin{结论}{圆锥曲线的焦点性质}
+焦半径与准线：$r=e\cdot(\text{到准线距离})$；极坐标（焦点为极点）$r=\frac{\ell}{1+e\cos\theta}$，半正焦弦 $\ell=\frac{b^2}a$。
+反射性质：椭圆把一焦点发出的光反射到另一焦点；抛物线把焦点光反射成平行光；双曲线反射后好像来自另一焦点。\重点{\text{切线平分焦半径的（外）角}}。椭圆周长近似（Ramanujan）$\pi\bigl[3(a+b)-\sqrt{(3a+b)(a+3b)}\bigr]$。
+\end{结论}
+
+\begin{结论}{二次曲面与直纹面}
+$x^{\mathsf T}Ax+b^{\mathsf T}x+c=0$ 由 $A$ 的特征值符号分类：$(+,+,+)$ 椭球；$(+,+,-)$ 单叶/双叶双曲面（看常数项符号）或锥；有零特征值时为抛物面或柱面。
+\重点{\text{单叶双曲面与双曲抛物面是双重直纹面}}：$\frac{x^2}{a^2}+\frac{y^2}{b^2}-\frac{z^2}{c^2}=1$ 含两族直线 $\frac xa-\frac zc=\lambda(1-\frac yb)$，$\lambda(\frac xa+\frac zc)=1+\frac yb$（及 $y\to-y$ 族）。
+\end{结论}
+
+\begin{结论}{交比与调和点列}
+$(A,B;C,D)=\frac{(C-A)(D-B)}{(C-B)(D-A)}$（在直线坐标或复坐标中）在射影变换 / Möbius 变换下不变；四点共圆（或共线）$\iff$ 复交比为实数。
+调和：$(A,B;C,D)=-1$。例：三角形内外角平分线与对边交点调和分割该边；完全四边形的对角线调和分割。
+\end{结论}
+
+\begin{结论}{Möbius 变换：三点确定，按迹分类}
+$f(z)=\frac{az+b}{cz+d}$，$ad-bc=1$。由 $z_1,z_2,z_3\mapsto0,1,\infty$ 唯一确定：$f(z)=\frac{(z-z_1)(z_2-z_3)}{(z-z_3)(z_2-z_1)}$。圆（含直线）映到圆，保角。
+\重点{\tr^2\in[0,4)\text{ 椭圆型（共轭于旋转）},\ =4\text{ 抛物型（平移）},\ >4\text{ 双曲型（伸缩）}}，非实则斜驶型。$\mathrm{PSL}_2(\mathbb C)$ 是 $\hat{\mathbb C}$ 的全体保向共形自同构。
+\end{结论}
+
+\begin{结论}{反演}
+以 $O$ 为心、$R$ 为半径：$P\mapsto P'$，$OP\cdot OP'=R^2$。不过 $O$ 的圆 $\mapsto$ 圆，过 $O$ 的圆 $\leftrightarrow$ 不过 $O$ 的直线；保角（反向）。圆心 $\mathbf c$、半径 $\rho$（不过 $O$）的像：
+\[
+\重点{\mathbf c'=\frac{R^2\mathbf c}{|\mathbf c|^2-\rho^2},\qquad \rho'=\frac{R^2\rho}{\bigl||\mathbf c|^2-\rho^2\bigr|}}.
+\]
+注意像圆心\textbf{不是}原圆心的像。用法：把相切圆链（Pappus 链、Steiner 链）变成平行线间的等圆。
+\end{结论}
+
+\begin{结论}{等距变换的分类}
+平面：平移、旋转、反射、滑移反射（反射后沿镜线平移）。\重点{\text{任何等距是至多 3 个反射之积}}；两反射之积：镜线相交 $\to$ 绕交点转两倍夹角，平行 $\to$ 平移两倍间距。不同中心的旋转 $\rho_{B,\beta}\rho_{A,\alpha}$ 是转角 $\alpha+\beta$ 的旋转（$\alpha+\beta\equiv0$ 时为平移）。
+三维：旋转、螺旋运动、反射、旋转反射、滑移反射、平移（Chasles：保向刚体运动都是螺旋运动）。
+\end{结论}
+
+\begin{结论}{四元数表示旋转}
+单位四元数 $q=\cos\frac\theta2+\sin\frac\theta2\,(n_x\mathbf i+n_y\mathbf j+n_z\mathbf k)$：$\mathbf v\mapsto q\mathbf vq^{-1}$ 是绕 $\mathbf n$ 转 $\theta$。乘法
+\[
+\重点{(s_1,\mathbf v_1)(s_2,\mathbf v_2)=(s_1s_2-\mathbf v_1\cdot\mathbf v_2,\ s_1\mathbf v_2+s_2\mathbf v_1+\mathbf v_1\times\mathbf v_2)}.
+\]
+$q$ 与 $-q$ 给同一旋转（$S^3\to SO(3)$ 二对一）。插值用 slerp：$\frac{\sin((1-t)\Omega)}{\sin\Omega}q_0+\frac{\sin t\Omega}{\sin\Omega}q_1$，$\cos\Omega=q_0\cdot q_1$（取 $\ge0$ 的号）。
+\end{结论}
+
+\begin{结论}{Minkowski 凸体定理}
+格 $L\subset\mathbb R^n$（基矩阵 $B$，$\det L=|\det B|$），$K$ 凸、关于原点对称：
+\[
+\重点{\vol K>2^n\det L\Rightarrow K\text{ 含非零格点}}\quad(K\text{ 紧时可取 }\ge).
+\]
+应用：两平方和（$p\equiv1\pmod4$，格 $\{(a,b):a\equiv tb\}$，$t^2\equiv-1$，圆盘 $a^2+b^2<2p$）；四平方和；Dirichlet 逼近的多维推广。
+\end{结论}
+
+\begin{结论}{Ceva、Menelaus 与重心坐标}
+三角形 $ABC$，$D,E,F$ 在 $BC,CA,AB$（所在直线）上：$AD,BE,CF$ 共点 $\iff$ \重点{\frac{BD}{DC}\cdot\frac{CE}{EA}\cdot\frac{AF}{FB}=1}；$D,E,F$ 共线 $\iff$ 带符号乘积 $=-1$（Menelaus）。
+重心坐标 $P=\alpha A+\beta B+\gamma C$，$\alpha+\beta+\gamma=1$，$\alpha=\frac{[PBC]}{[ABC]}$；$P$ 在三角形内 $\iff$ 三者均正。重心 $(\frac13,\frac13,\frac13)$，内心 $(a,b,c)/2s$。
+\end{结论}
+
+\begin{结论}{Pascal 与 Brianchon}
+圆锥曲线上六点 $A_1\cdots A_6$：对边 $A_1A_2\cap A_4A_5$、$A_2A_3\cap A_5A_6$、$A_3A_4\cap A_6A_1$ 三点\重点文{共线}（Pascal）；对偶：外切六边形三条主对角线共点（Brianchon）。
+退化（两点重合 $\to$ 切线）给出五点、四点版本，用于“过五点作圆锥曲线”“已知四点和一条切线作图”。Desargues：两三角形透视于一点 $\iff$ 透视于一线。
+\end{结论}
+
+\begin{结论}{球冠、球带与球面上的随机点}
+半径 $R$、高 $h$ 的球冠：面积 \重点{2\pi Rh}（与位置无关），体积 $\frac{\pi h^2(3R-h)}{3}$。
+推论（Archimedes）：在 $[-1,1]$ 均匀取 $z$、$[0,2\pi)$ 均匀取 $\varphi$ 得到球面均匀点；随机方向与固定方向夹角 $\theta$ 的密度 $\frac12\sin\theta$；$n$ 维球面上一坐标的密度 $\propto(1-x^2)^{(n-3)/2}$。
+\end{结论}
+
+\begin{结论}{Steiner 公式：平行体的体积}
+凸体 $K$ 外扩 $\varepsilon$：平面 $A(K_\varepsilon)=A+L\varepsilon+\pi\varepsilon^2$；三维
+\[
+\重点{V(K_\varepsilon)=V+S\varepsilon+M\varepsilon^2+\tfrac43\pi\varepsilon^3},\qquad M=\int_{\partial K}H\dd A
+\]
+（$H$ 为平均曲率，多面体时 $M=\frac12\sum_{\text{棱}}\ell_e(\pi-\theta_e)$，$\theta_e$ 为二面角）。用于“到集合距离 $\le\varepsilon$ 的点”的概率、卷积平滑后的体积。
+\end{结论}
+
+\begin{结论}{积分几何：Crofton 与 Cauchy 公式}
+平面直线以 $(p,\theta)$（$p\in\mathbb R$，$\theta\in[0,\pi)$）参数化，$n(p,\theta)$ 为与曲线的交点数：
+\[
+\重点{L=\frac12\iint n(p,\theta)\dd p\,\dd\theta}.
+\]
+凸体：周长 $=\pi\times$ 平均宽度；三维凸体表面积 $=4\times$ 平均投影面积（球：$4\pi R^2=4\cdot\pi R^2$）。Buffon 投针是 Crofton 的概率版。
+\end{结论}
+
+\begin{结论}{格点、面积与 Farey 序列}
+$|ad-bc|=1$ 的两向量张成的平行四边形不含其他格点（面积 $1$ 的“基本”平行四边形）。
+Farey 序列相邻分数 $\frac ab<\frac cd$ 满足 \重点{bc-ad=1}，中位分数 $\frac{a+c}{b+d}$ 是它们之间分母最小的分数。Ford 圆（在 $\frac pq$ 处半径 $\frac1{2q^2}$）两两相切或相离。
+\end{结论}
+
+\begin{结论}{椭圆的若干公式}
+$\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$，$c^2=a^2-b^2$，$e=\frac ca$：
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 顶点曲率半径：长轴端 $\frac{b^2}a$，短轴端 $\frac{a^2}b$；参数 $(a\cos t,b\sin t)$ 处 $\kappa=\frac{ab}{(a^2\sin^2t+b^2\cos^2t)^{3/2}}$。
+\item 共轭直径定理：$a'^2+b'^2=a^2+b^2$，$a'b'\sin\phi=ab$。
+\item 内接最大面积三角形 $\frac{3\sqrt3}4ab$；\重点{\text{椭圆是圆在平面上的仿射像}}，所以面积比、平行、中点、切线类结论可先在圆里证。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{三线、四点共圆/共线的代数判据}
+三点共线 $\iff\det\begin{pmatrix}x_1&y_1&1\\x_2&y_2&1\\x_3&y_3&1\end{pmatrix}=0$；四点共圆 $\iff$
+\[
+\重点{\det\begin{pmatrix}x_i^2+y_i^2&x_i&y_i&1\end{pmatrix}_{i=1..4}=0}.
+\]
+空间四点共面同理（$4\times4$ 含 $1$ 列）；五点共球用 $5\times5$。三点外接圆心也可由前三行的余子式读出。
+\end{结论}
+
+\参考{Coxeter, \emph{Introduction to Geometry}；Brannan--Esplen--Gray, \emph{Geometry}；Needham, \emph{Visual Complex Analysis} 第 3 章；Santaló, \emph{Integral Geometry}；MIT 18.900。}

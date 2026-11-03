@@ -1,0 +1,135 @@
+\subsection{统计推断补充}
+
+\begin{结论}{因子分解定理与极小充分统计量}
+$T$ 充分 $\iff p(x\mid\theta)=g(T(x),\theta)h(x)$。极小充分：\重点{\frac{p(x\mid\theta)}{p(y\mid\theta)}\text{ 与 }\theta\text{ 无关}\iff T(x)=T(y)}。
+例：正态 $(\bar X,S^2)$；$U(\theta,\theta+1)$ 的 $(X_{(1)},X_{(n)})$（二维统计量对一维参数，且不完备）；Cauchy 位置族的极小充分统计量是全部次序统计量（无降维）。
+\end{结论}
+
+\begin{结论}{Basu 定理}
+$T$ 完备充分、$A$ 辅助（分布与 $\theta$ 无关）$\Rightarrow$ \重点{T\perp A}。
+正态（$\sigma$ 已知）：$\bar X$ 完备充分，$S^2$ 辅助 $\Rightarrow$ 独立（$\sigma$ 未知时也成立）；指数样本 $\sum X_i$ 与 $\frac{X_1}{\sum X_i}$ 独立；均匀 $U(0,\theta)$ 中 $X_{(n)}$ 与 $\frac{X_{(1)}}{X_{(n)}}$ 独立。常用于算 $\E[\frac{X_1}{\sum X}]$ 类期望：$\E X_1=\E[\frac{X_1}{\sum X}]\E\sum X$。
+\end{结论}
+
+\begin{结论}{枢轴量构造区间}
+正态方差：$\frac{(n-1)S^2}{\sigma^2}\sim\chi^2_{n-1}$，\重点{\Bigl[\frac{(n-1)S^2}{\chi^2_{n-1,1-\alpha/2}},\ \frac{(n-1)S^2}{\chi^2_{n-1,\alpha/2}}\Bigr]}（对非正态极不稳健）。
+方差比：$\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2}\sim F$。指数率：$2\lambda\sum X_i\sim\chi^2_{2n}$。Poisson 均值精确区间：$\bigl[\frac12\chi^2_{2k,\alpha/2},\frac12\chi^2_{2(k+1),1-\alpha/2}\bigr]$（Garwood）。
+\end{结论}
+
+\begin{结论}{Wald、Score、LRT 三种检验}
+$W=(\hat\theta-\theta_0)^2I(\hat\theta)$，$S=\frac{U(\theta_0)^2}{I(\theta_0)}$，$\Lambda=2(\ell(\hat\theta)-\ell(\theta_0))$，零假设下都 $\to\chi^2_1$。
+差别：Wald 依赖参数化（不变性差），在边界附近很差（比例接近 $0/1$ 时的 Wald 区间）；\重点{\text{Score 只需零假设下的拟合}}（二项的 Score 区间即 Wilson 区间）；LRT 对参数化不变、小样本通常最好。线性模型三者满足 $W\ge\Lambda\ge S$。
+\end{结论}
+
+\begin{结论}{列联表：Fisher 精确检验与 McNemar}
+$2\times2$ 表固定边缘后，左上格服从超几何分布 $P(a)=\frac{\binom{a+b}{a}\binom{c+d}{c}}{\binom{n}{a+c}}$，Fisher 精确检验对小样本有效。
+配对二分类（前后测）：只看不一致的格 $b,c$，\重点{\frac{(b-c)^2}{b+c}\sim\chi^2_1}（McNemar）；一致的格不含信息。$r\times c$ 独立性 $\chi^2$ 自由度 $(r-1)(c-1)$，期望频数 $<5$ 的格多时改用精确或 Monte Carlo 检验。
+\end{结论}
+
+\begin{结论}{拟合优度：估计参数要扣自由度}
+Pearson $\sum\frac{(O-E)^2}{E}$：$k$ 类、用 MLE（分组数据）估计 $p$ 个参数 $\Rightarrow$ \重点{\chi^2_{k-1-p}}。用原始数据的 MLE 时真实分布介于 $\chi^2_{k-1-p}$ 与 $\chi^2_{k-1}$ 之间（Chernoff--Lehmann）。
+KS 检验在参数已估计时偏保守（应用 Lilliefors 临界值或参数 bootstrap）；Anderson--Darling 对尾部更敏感；正态性检验首选 Shapiro--Wilk。
+\end{结论}
+
+\begin{结论}{符号秩检验与渐近相对效率}
+Wilcoxon 符号秩 $W^+$（零假设对称于 $0$）：
+\[
+\重点{\E W^+=\frac{n(n+1)}4,\qquad \Var W^+=\frac{n(n+1)(2n+1)}{24}}.
+\]
+相对 $t$ 检验的 Pitman ARE：正态下 $\frac3\pi\approx0.955$，对任何对称分布 $\ge0.864$，重尾时可 $>1$（甚至 $\infty$）；符号检验正态下仅 $\frac2\pi\approx0.637$。秩检验“几乎不损失、偶尔大赚”。
+\end{结论}
+
+\begin{结论}{Kruskal--Wallis 与秩方差分析}
+$k$ 组共 $N$ 个观测混合排秩，$R_i$ 为第 $i$ 组秩和：
+\[
+\重点{H=\frac{12}{N(N+1)}\sum_i\frac{R_i^2}{n_i}-3(N+1)}\ \overset{\cdot}{\sim}\ \chi^2_{k-1}.
+\]
+$k=2$ 时等价于 Mann--Whitney。有结时除以 $1-\frac{\sum(t^3-t)}{N^3-N}$ 修正。事后两两比较用 Dunn 检验并做多重比较校正。
+\end{结论}
+
+\begin{结论}{置换检验}
+零假设下标签可交换：重新随机分配标签算统计量，$p=\frac{1+\#\{T^*\ge T_{\text{obs}}\}}{1+B}$（含观测本身，保证有效）。
+精确、无分布假设，统计量可任选（均值差、中位数差、相关）。\重点{\text{检验的是“分布相同”}}，而非仅“均值相同”：两组方差不同时作为均值检验会失真（这时用 Welch 或 bootstrap）。
+\end{结论}
+
+\begin{结论}{序贯概率比检验（SPRT）}
+累计对数似然比 $\Lambda_n=\sum\ln\frac{f_1(X_i)}{f_0(X_i)}$，越过 $\ln A$ 拒绝 $H_0$，越过 $\ln B$ 接受：
+\[
+\重点{A\approx\frac{1-\beta}\alpha,\qquad B\approx\frac{\beta}{1-\alpha}},\qquad \E_0N\approx\frac{\alpha\ln A+(1-\alpha)\ln B}{\E_0\ln\frac{f_1}{f_0}}.
+\]
+在所有达到 $(\alpha,\beta)$ 的检验中平均样本量最小（Wald--Wolfowitz），通常只需固定样本检验的一半左右。
+\end{结论}
+
+\begin{结论}{Bayes 估计对应的损失函数}
+平方损失 $\to$ 后验均值；绝对损失 $\to$ 后验中位数；$0$--$1$ 损失（极限）$\to$ 后验众数（MAP）。
+可信区间 $P(\theta\in C\mid x)=1-\alpha$ 是关于参数的概率陈述；置信区间是关于程序的覆盖率。\重点{\text{平坦先验下正态均值两者数值相同}}，但对有界参数、小样本比例、多重比较会显著不同。最高后验密度区间最短。
+\end{结论}
+
+\begin{结论}{James--Stein 收缩}
+$X\sim N_p(\theta,I)$，$p\ge3$：
+\[
+\重点{\hat\theta_{JS}=\Bigl(1-\frac{p-2}{\|X\|^2}\Bigr)X},\qquad R(\theta,\hat\theta_{JS})=p-(p-2)^2\E\frac1{\|X\|^2}<p=R(\theta,X).
+\]
+MLE 在 $p\ge3$ 时不可容许。向任何固定点（或向样本均值，此时 $p-3$）收缩都改善总风险；正部版本 $\max(0,\cdot)$ 更好。证明核心是 Stein 引理。
+\end{结论}
+
+\begin{结论}{经验 Bayes：正态--正态模型}
+$X_i\mid\theta_i\sim N(\theta_i,\sigma^2)$，$\theta_i\sim N(\mu,\tau^2)$：后验均值 $\E[\theta_i\mid X_i]=\mu+(1-B)(X_i-\mu)$，
+\[
+\重点{B=\frac{\sigma^2}{\sigma^2+\tau^2}}\ (\text{收缩因子}),\qquad \hat B=\frac{(p-3)\sigma^2}{\sum(X_i-\bar X)^2}.
+\]
+数据决定收缩多少：组间差异小（$\tau$ 小）就向总均值大幅收缩。Efron--Morris 棒球击球率是经典示例；混合模型的 BLUP 是同一公式。
+\end{结论}
+
+\begin{结论}{Bayes 因子、BIC 与 Lindley 悖论}
+$\mathrm{BF}_{10}=\frac{p(x\mid M_1)}{p(x\mid M_0)}$；大样本 $2\ln\mathrm{BF}_{10}\approx-(\mathrm{BIC}_1-\mathrm{BIC}_0)$，$\mathrm{BIC}=-2\ell+k\ln n$。
+Lindley：固定 $p$ 值（如 $0.01$），$n\to\infty$ 时 Bayes 因子越来越支持 $H_0$——\重点{\text{同一个 }p\text{ 值在大样本时代表的证据更弱}}；Bayes 因子对 $H_1$ 下先验的宽度敏感（越宽越偏向 $H_0$）。
+\end{结论}
+
+\begin{结论}{中位数的无分布置信区间}
+连续分布，次序统计量 $[X_{(k)},X_{(n-k+1)}]$ 覆盖中位数的概率
+\[
+\重点{1-2P\bigl(\mathrm{Bin}(n,\tfrac12)\le k-1\bigr)}.
+\]
+$n=20$ 时 $[X_{(6)},X_{(15)}]$ 覆盖率 $95.9\%$；大样本 $k\approx\frac n2-0.98\sqrt n$。任意分位数同理（用 $\mathrm{Bin}(n,q)$）。
+\end{结论}
+
+\begin{结论}{MLE 不相合的例子：Neyman--Scott}
+$X_{i1},X_{i2}\sim N(\mu_i,\sigma^2)$，$i=1..n$（每对一个新参数）：$\hat\sigma^2_{MLE}=\frac1{4n}\sum(X_{i1}-X_{i2})^2$，
+\[
+\重点{\hat\sigma^2_{MLE}\to\frac{\sigma^2}2}.
+\]
+参数个数随样本增长时 MLE 可能不相合（附带参数问题）。修正：条件似然或边际似然（只用差 $X_{i1}-X_{i2}$），即 REML 的思想。
+\end{结论}
+
+\begin{结论}{轮廓似然区间}
+感兴趣参数 $\psi$、冗余参数 $\lambda$：$\ell_p(\psi)=\max_\lambda\ell(\psi,\lambda)$，
+\[
+\重点{\{\psi:2(\ell_p(\hat\psi)-\ell_p(\psi))\le\chi^2_{1,1-\alpha}\}}.
+\]
+不要求 $\hat\psi$ 近似正态，对参数化不变，非对称；Wald 区间在似然不对称（如比值、方差、边界附近）时覆盖率差。$\chi^2_{1,0.95}=3.84$，即对数似然下降 $1.92$。
+\end{结论}
+
+\begin{结论}{等效性检验（TOST）}
+要证明 $|\mu_1-\mu_2|<\Delta$：做两个单侧检验 $H_{01}:\mu_1-\mu_2\le-\Delta$、$H_{02}:\mu_1-\mu_2\ge\Delta$，都拒绝才宣布等效。
+等价于 \重点{(1-2\alpha)\text{ 置信区间完全落在 }(-\Delta,\Delta)\text{ 内}}。“差异不显著”不等于“等效”——检验力不足时什么都不显著。
+\end{结论}
+
+\begin{结论}{$p$ 值的分布}
+连续检验统计量、零假设成立：$p\sim U(0,1)$。备择下 $p$ 偏向 $0$；检验力为 $P(p<\alpha)$。
+推论：$m$ 个独立真零假设中至少一个 $p<0.05$ 的概率 $1-0.95^m$（$m=20$ 时 $64\%$）；\重点{p\text{ 值不是 }H_0\text{ 为真的概率}}，后者还依赖先验与检验力（$p=0.05$ 时对应的 Bayes 因子上界约 $2.5$，Sellke--Bayarri--Berger 界 $-\frac{1}{\ee p\ln p}$）。
+\end{结论}
+
+\begin{结论}{Bootstrap 何时失效}
+非光滑泛函与边界：$U(0,\theta)$ 的 $X_{(n)}$——bootstrap 分布在 $X_{(n)}$ 处有 $1-(1-\frac1n)^n\to0.632$ 的原子，而真分布连续。
+修正：$m$-out-of-$n$ bootstrap（$m\to\infty$，$m/n\to0$）、参数 bootstrap。重尾（无方差）时均值的 bootstrap 也不相合。\重点{\text{光滑函数}+\text{有限方差}+\text{i.i.d.}} 是安全区；相关数据用块 bootstrap。
+\end{结论}
+
+\begin{结论}{Pitman 渐近相对效率}
+两个检验在局部备择 $\theta_n=\theta_0+\frac h{\sqrt n}$ 下达到同样检验力所需样本量之比的极限：
+\[
+\重点{\mathrm{ARE}(T_1,T_2)=\Bigl(\frac{e_1}{e_2}\Bigr)^2},\qquad e=\frac{\mu'(\theta_0)}{\sigma(\theta_0)}\ (\text{效能}).
+\]
+符号检验 vs $t$：$4f(0)^2\sigma^2$（正态 $\frac2\pi$，Laplace $2$）；中位数 vs 均值作为位置估计同此式。
+\end{结论}
+
+\参考{Casella--Berger, \emph{Statistical Inference}；Lehmann--Romano, \emph{Testing Statistical Hypotheses}；Efron--Hastie, \emph{Computer Age Statistical Inference}；Wasserman, \emph{All of Statistics}；Gelman 等, \emph{Bayesian Data Analysis}；MIT 18.650、18.655。}

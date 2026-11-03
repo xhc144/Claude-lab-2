@@ -1,0 +1,126 @@
+\subsection{微分方程数值解补充}
+
+\begin{结论}{经典 RK4 与阶条件个数}
+\[
+k_1=f(y),\ k_2=f(y+\tfrac h2k_1),\ k_3=f(y+\tfrac h2k_2),\ k_4=f(y+hk_3),
+\]
+\[
+\重点{y_{n+1}=y_n+\tfrac h6(k_1+2k_2+2k_3+k_4)}.
+\]
+局部误差 $O(h^5)$，整体 $O(h^4)$。$p$ 阶需满足的条件数（有根树个数）：$1,2,4,8,17,37$（$p=1..6$）；显式 RK 达到 $p$ 阶所需级数：$p\le4$ 时 $s=p$，$p=5$ 需 $6$ 级，$p=6$ 需 $7$ 级（Butcher 屏障）。
+\end{结论}
+
+\begin{结论}{刚性：A 稳定与 L 稳定}
+刚性：特征值实部相差悬殊，显式方法步长受最快模式限制 $h\lesssim\frac{2}{|\lambda_{\max}|}$，而精度只需要跟上慢模式。
+稳定函数 $R(z)$（$y_{n+1}=R(h\lambda)y_n$）：向后 Euler $\frac1{1-z}$，梯形 $\frac{1+z/2}{1-z/2}$。二者都 A 稳定；但 \重点{R(-\infty)=0} 的 L 稳定只有向后 Euler（及 BDF、某些 SDIRK）——梯形法对极刚性模式 $R\to-1$，产生不衰减的振荡。
+\end{结论}
+
+\begin{结论}{BDF 方法}
+$\sum_{j=0}^k\alpha_jy_{n+1-j}=h\beta f(y_{n+1})$：BDF1（向后 Euler）、BDF2 $\frac32y_{n+1}-2y_n+\frac12y_{n-1}=hf_{n+1}$。
+\重点{\text{BDF}k\text{ 零稳定仅当 }k\le6}；$k\le2$ A 稳定，$3\le k\le6$ 为 $A(\alpha)$ 稳定（$\alpha$ 从 $86^\circ$ 降到 $18^\circ$）。刚性求解器（如 \texttt{ode15s}、CVODE）的主力；每步解非线性方程，用简化 Newton 并复用 Jacobi 矩阵。
+\end{结论}
+
+\begin{结论}{Euler--Maruyama 与 Milstein}
+$\dd X=a(X)\dd t+b(X)\dd W$：Euler--Maruyama $X_{n+1}=X_n+a\Delta t+b\Delta W$，\重点{\text{强阶 }\tfrac12,\ \text{弱阶 }1}。
+Milstein 加项 $\frac12bb'\bigl((\Delta W)^2-\Delta t\bigr)$，强阶 $1$。只关心期望（弱收敛）时用 EM $+$ Richardson 外推或多层 Monte Carlo（MLMC：总成本从 $O(\varepsilon^{-3})$ 降到 $O(\varepsilon^{-2}(\ln\varepsilon)^2)$）。
+\end{结论}
+
+\begin{结论}{打靶法与有限差分解两点边值问题}
+打靶：猜初始斜率 $s$，积分到 $b$，解 $\phi(s)=y(b;s)-\beta=0$（割线/Newton）。不稳定问题（解随 $x$ 指数增长）误差被 $\ee^{\lambda(b-a)}$ 放大，改用多重打靶（分段 $+$ 连续性条件）。
+有限差分：$-u''+qu=f$ 的中心差分给三对角系统，\重点{\text{Thomas 算法 }O(n)}，误差 $O(h^2)$；对角占优（$q\ge0$）时无需选主元。
+\end{结论}
+
+\begin{结论}{$\theta$ 格式与 Crank--Nicolson}
+热方程 $u_t=u_{xx}$，$r=\frac{\Delta t}{h^2}$：$\frac{u^{n+1}-u^n}{\Delta t}=(1-\theta)\delta^2u^n+\theta\delta^2u^{n+1}$。
+$\theta\ge\frac12$ 无条件稳定；$\theta<\frac12$ 需 $r\le\frac{1}{2(1-2\theta)}$。\重点{\theta=\tfrac12\text{（CN）二阶精度}}，但放大因子在高频处 $\to-1$：初值不光滑、$r$ 大时出现衰减很慢的振荡，常用开头几步向后 Euler（Rannacher 启动）抑制。
+\end{结论}
+
+\begin{结论}{对流方程的格式与修正方程}
+$u_t+au_x=0$，$\nu=\frac{a\Delta t}{h}$（Courant 数），CFL 条件 $|\nu|\le1$。修正方程（格式实际逼近的 PDE）：
+\[
+\text{迎风（}a>0\text{）：}u_t+au_x=\重点{\frac{ah}2(1-\nu)u_{xx}},\qquad \text{Lax--Wendroff：}u_t+au_x=-\frac{ah^2}{6}(1-\nu^2)u_{xxx}.
+\]
+一阶格式引入数值耗散（抹平间断）；二阶格式引入色散（间断附近振荡）。$\nu=1$ 时两者都精确（沿特征线平移）。
+\end{结论}
+
+\begin{结论}{Lax 等价定理与 Godunov 定理}
+相容的线性差分格式（适定的线性问题）：\重点{\text{收敛}\iff\text{稳定}}（Lax 等价）。
+Godunov：保单调的线性格式至多一阶精度。所以高分辨率格式必须是非线性的：通量限制器（minmod、van Leer、superbee）在光滑区取二阶、在间断处退回一阶，满足 TVD（总变差不增）。
+\end{结论}
+
+\begin{结论}{有限体积与守恒形式}
+$u_t+f(u)_x=0$ 写成单元平均：$\bar u_i^{n+1}=\bar u_i^n-\frac{\Delta t}h(F_{i+1/2}-F_{i-1/2})$。守恒形式保证激波速度正确（Lax--Wendroff 定理：收敛则收敛到弱解）；非守恒形式可能收敛到错误的激波速度。
+数值通量：Godunov（精确 Riemann 解）、Lax--Friedrichs $\frac12(f_L+f_R)-\frac\alpha2(u_R-u_L)$（$\alpha=\max|f'|$，耗散大但稳健）、Roe（线性化）。\重点{\text{熵条件}}排除非物理的膨胀激波。
+\end{结论}
+
+\begin{结论}{Galerkin 方法：Céa 引理与 Aubin--Nitsche}
+椭圆问题 $a(u,v)=\ell(v)$，$a$ 有界（$M$）、强制（$\alpha$），有限元空间 $V_h$：
+\[
+\重点{\|u-u_h\|_{H^1}\le\frac M\alpha\inf_{v\in V_h}\|u-v\|_{H^1}}\ (\text{Céa}),
+\]
+$p$ 次元：$\|u-u_h\|_{H^1}=O(h^p)$；对偶论证（Aubin--Nitsche）给 $\|u-u_h\|_{L^2}=O(h^{p+1})$。误差与“最佳逼近”只差常数——FEM 精度问题化为逼近论问题。
+\end{结论}
+
+\begin{结论}{线方法：空间离散后的刚性}
+$u_t=u_{xx}$ 空间中心差分得 ODE 组 $\dot u=\frac1{h^2}Tu$，特征值从 $-\frac{\pi^2}{1}$ 到 $-\frac{4}{h^2}$，\重点{\text{刚性比}\sim\frac{4}{\pi^2h^2}}。显式 Euler 需 $\Delta t\le\frac{h^2}2$；用 BDF/隐式 RK 时步长只受精度限制。
+波方程半离散后特征值纯虚，用辛/保守格式（leapfrog、Störmer--Verlet）而非耗散的 BDF。
+\end{结论}
+
+\begin{结论}{波方程 leapfrog 与数值色散}
+$u^{n+1}_j=2u^n_j-u^{n-1}_j+\nu^2(u^n_{j+1}-2u^n_j+u^n_{j-1})$，$\nu=\frac{c\Delta t}h\le1$。数值色散关系
+\[
+\重点{\sin\frac{\omega\Delta t}{2}=\nu\sin\frac{kh}{2}},
+\]
+相速度 $<c$ 且依赖 $k$：每波长少于约 $10$ 个点时相位误差显著累积（长时间传播需要高阶格式或更细网格）。$\nu=1$ 时一维格式精确。
+\end{结论}
+
+\begin{结论}{算子分裂}
+$u_t=(A+B)u$：Lie 分裂 $\ee^{\Delta tB}\ee^{\Delta tA}$ 一阶，Strang 分裂 \重点{\ee^{\frac{\Delta t}2A}\ee^{\Delta tB}\ee^{\frac{\Delta t}2A}} 二阶（误差由交换子 $[A,B]$ 决定）。
+用法：反应--扩散（反应部分逐点刚性 ODE，扩散部分 FFT 或隐式求解）；分步 Fourier 法解非线性 Schrödinger 方程（线性部分在 Fourier 空间精确，非线性部分在实空间精确）。
+\end{结论}
+
+\begin{结论}{收敛阶的数值验证}
+已知解或参考解，网格加密 $h\to h/2$：
+\[
+\重点{p_{\mathrm{obs}}=\log_2\frac{\|e_h\|}{\|e_{h/2}\|}};\qquad \text{无解析解时 }p\approx\log_2\frac{\|u_h-u_{h/2}\|}{\|u_{h/2}-u_{h/4}\|}.
+\]
+制造解法（MMS）：选好 $u$，代入方程算出源项，检验代码是否达到理论阶。观测阶低于理论通常说明：边界条件精度不够、解不光滑、或代码错误。
+\end{结论}
+
+\begin{结论}{Neumann 边界的二阶处理：虚点}
+$u'(0)=g$：在 $x_{-1}$ 设虚点，中心差分 $\frac{u_1-u_{-1}}{2h}=g$ 消去 $u_{-1}$，代入 $x_0$ 处的方程。
+单侧一阶差分 $\frac{u_1-u_0}h=g$ 会把整体精度降为一阶（\重点{\text{边界的一阶误差污染全局}}）；也可用二阶单侧 $\frac{-3u_0+4u_1-u_2}{2h}$。有限元中 Neumann 条件是自然边界条件，自动满足。
+\end{结论}
+
+\begin{结论}{二维 Poisson 方程的 5 点格式}
+$-\Delta_hu=\frac{4u_{ij}-u_{i\pm1,j}-u_{i,j\pm1}}{h^2}$：截断误差 $\frac{h^2}{12}(u_{xxxx}+u_{yyyy})$，离散最大值原理 $\Rightarrow$ 稳定，\重点{\text{整体误差 }O(h^2)}。
+9 点格式配合源项修正 $f+\frac{h^2}{12}\Delta f$ 达到 $O(h^4)$。不规则区域：嵌入边界 / 浸入界面法，或直接用有限元。
+\end{结论}
+
+\begin{结论}{伪谱法与时间步}
+光滑周期问题用 Fourier 伪谱：空间导数 FFT 求，误差指数小；非线性项在实空间相乘（注意 $\frac23$ 去混叠）。
+时间推进：刚性线性部分用积分因子（$\hat v=\ee^{k^2t}\hat u$）或 ETDRK4（指数时间差分），否则 $\Delta t=O(N^{-2})$。\重点{\text{空间指数精度时，整体精度由时间格式决定}}，所以选高阶时间格式。
+\end{结论}
+
+\begin{结论}{自适应步长：嵌入公式的误差控制}
+误差估计 $\mathrm{err}=\|y^{(p+1)}-y^{(p)}\|$，新步长
+\[
+\重点{h_{\text{新}}=h\cdot\min\Bigl(f_{\max},\ \max\Bigl(f_{\min},\ 0.9\Bigl(\frac{\mathrm{tol}}{\mathrm{err}}\Bigr)^{1/(p+1)}\Bigr)\Bigr)},
+\]
+$\mathrm{err}>\mathrm{tol}$ 则拒绝重算。容差混合 $\mathrm{tol}=\mathrm{atol}+\mathrm{rtol}|y|$。PI 控制器（再乘 $(\mathrm{err}_{\text{旧}}/\mathrm{err})^{\beta}$）减少步长振荡。整体误差不受局部控制直接约束，可用两种容差比较估计。
+\end{结论}
+
+\begin{结论}{长时间积分：辛方法与能量漂移}
+Hamilton 系统用辛积分器（Störmer--Verlet、隐式中点、辛 RK）：能量误差 \重点{O(h^p)\text{ 有界振荡、不漂移}}，可保持指数长时间（后向误差分析：精确求解一个修正 Hamiltonian）。
+非辛的 RK4 能量线性漂移；可逆性（时间对称）也有类似效果。步长须远小于最快振动周期（分子动力学约 $\frac1{10}$--$\frac1{20}$ 周期）。
+\end{结论}
+
+\begin{结论}{抛物方程的显式稳定限与 Du Fort--Frankel 陷阱}
+FTCS：$r=\frac{\Delta t}{h^2}\le\frac12$（一维），$\le\frac1{2d}$（$d$ 维）。Du Fort--Frankel 格式无条件稳定，但截断误差含 $\bigl(\frac{\Delta t}h\bigr)^2u_{tt}$：
+\[
+\重点{\Delta t,h\to0\text{ 但 }\frac{\Delta t}{h}\not\to0\text{ 时收敛到错误的方程}}\ u_t+\Bigl(\frac{\Delta t}h\Bigr)^2u_{tt}=u_{xx}.
+\]
+“无条件稳定”不等于“无条件相容”；Lax 等价定理要求二者兼备。
+\end{结论}
+
+\参考{Hairer--Nørsett--Wanner, \emph{Solving ODEs} I--II；LeVeque, \emph{Finite Difference Methods}、\emph{Finite Volume Methods for Hyperbolic Problems}；Brenner--Scott, \emph{The Mathematical Theory of Finite Element Methods}；Kloeden--Platen；Trefethen, \emph{Spectral Methods in MATLAB}；MIT 18.336。}

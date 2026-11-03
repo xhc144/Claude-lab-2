@@ -1,0 +1,152 @@
+\subsection{非线性方程与数值优化}
+
+\begin{结论}{割线法与 Brent 方法}
+割线法 $x_{k+1}=x_k-f(x_k)\frac{x_k-x_{k-1}}{f(x_k)-f(x_{k-1})}$：$e_{k+1}\approx\frac{f''}{2f'}e_ke_{k-1}$，阶 \重点{\varphi=\frac{1+\sqrt5}2\approx1.618}；每步只需一次函数值，按“每次求值的效率”比 Newton（$\sqrt2$）高。
+试位法（regula falsi）保持括号但可能一端停滞而线性收敛。Brent：二分 $+$ 割线 $+$ 逆二次插值，保证括号又有超线性速度，是一维求根的默认选择。
+\end{结论}
+
+\begin{结论}{Steffensen：不用导数的二次收敛}
+不动点 $x=g(x)$，对迭代序列用 Aitken $\Delta^2$：
+\[
+\重点{x_{k+1}=x_k-\frac{(g(x_k)-x_k)^2}{g(g(x_k))-2g(x_k)+x_k}},
+\]
+只要 $g'(x^*)\ne1$ 就二次收敛（即使原迭代发散）。等价于用差商 $\frac{f(x+f(x))-f(x)}{f(x)}$ 代替 Newton 中的 $f'(x)$（$f=g-x$）。
+\end{结论}
+
+\begin{结论}{多维 Newton 法与 Kantorovich 定理}
+$F'(x_k)\delta=-F(x_k)$，$x_{k+1}=x_k+\delta$。若 $\|F'(x_0)^{-1}\|\le\beta$，$\|F'(x_0)^{-1}F(x_0)\|\le\eta$，$F'$ 的 Lipschitz 常数 $L$，且
+\[
+\重点{h=\beta L\eta\le\tfrac12},
+\]
+则在 $x_0$ 附近存在解并二次收敛。实践中加阻尼（线搜索使 $\|F\|$ 下降）或信赖域保证全局性；Jacobi 矩阵用有限差分或自动微分。
+\end{结论}
+
+\begin{结论}{拟 Newton：BFGS 更新}
+割线条件 $B_{k+1}s_k=y_k$（$s=x_{k+1}-x_k$，$y=\nabla f_{k+1}-\nabla f_k$），逆 Hessian 近似的更新
+\[
+\重点{H_{k+1}=(I-\rho sy^{\mathsf T})H_k(I-\rho ys^{\mathsf T})+\rho ss^{\mathsf T}},\qquad \rho=\frac1{y^{\mathsf T}s}.
+\]
+曲率条件 $y^{\mathsf T}s>0$（Wolfe 线搜索保证）保持正定；超线性收敛。L-BFGS 只存最近 $m$（如 $10$）对 $(s,y)$，用两轮循环算 $H\nabla f$，内存 $O(mn)$。
+\end{结论}
+
+\begin{结论}{线搜索：Armijo 与 Wolfe 条件}
+方向 $p$ 下降（$\nabla f^{\mathsf T}p<0$），$0<c_1<c_2<1$：
+\[
+\重点{f(x+\alpha p)\le f(x)+c_1\alpha\nabla f^{\mathsf T}p}\ (\text{充分下降}),\qquad \nabla f(x+\alpha p)^{\mathsf T}p\ge c_2\nabla f^{\mathsf T}p\ (\text{曲率}).
+\]
+典型 $c_1=10^{-4}$；Newton/拟 Newton 取 $c_2=0.9$，非线性 CG 取 $0.1$。回溯：从 $\alpha=1$ 开始每次乘 $\frac12$ 直到满足 Armijo。
+\end{结论}
+
+\begin{结论}{一阶方法的收敛率}
+$f$ 凸、$\nabla f$ 为 $L$-Lipschitz，步长 $\frac1L$：
+\[
+f(x_k)-f^*\le\frac{L\|x_0-x^*\|^2}{2k};\qquad \mu\text{-强凸：}\|x_k-x^*\|^2\le\Bigl(1-\frac\mu L\Bigr)^k\|x_0-x^*\|^2 .
+\]
+Nesterov 加速：$\frac{2L\|x_0-x^*\|^2}{(k+1)^2}$；强凸时 \重点{\bigl(1-\sqrt{\mu/L}\bigr)^k}——迭代数从 $O(\kappa)$ 降到 $O(\sqrt\kappa)$，且这是一阶方法的最优阶。
+\end{结论}
+
+\begin{结论}{随机梯度：Robbins--Monro 条件}
+步长 $\sum a_k=\infty$、$\sum a_k^2<\infty$（如 $a_k=\frac{c}{k}$）保证收敛到根/极小。$\mu$-强凸、梯度二阶矩 $\le G^2$，$a_k=\frac1{\mu k}$：$\E f(\bar x_k)-f^*=O\bigl(\frac{G^2\ln k}{\mu k}\bigr)$；一般凸 $O(\frac1{\sqrt k})$。
+常数步长只收敛到半径 $\propto a$ 的邻域；\重点{\text{迭代平均（Polyak--Ruppert）}}在大步长下仍达到最优渐近方差。
+\end{结论}
+
+\begin{结论}{非线性最小二乘：Gauss--Newton 与 Levenberg--Marquardt}
+$\min\frac12\|r(x)\|^2$，$J=\partial r/\partial x$：Gauss--Newton $J^{\mathsf T}J\delta=-J^{\mathsf T}r$（忽略二阶项 $\sum r_i\nabla^2r_i$），零残差问题局部二次收敛，大残差时可能不收敛。
+\[
+\重点{(J^{\mathsf T}J+\lambda D)\delta=-J^{\mathsf T}r}
+\]
+（LM，$D=I$ 或 $\diag J^{\mathsf T}J$）：$\lambda$ 大时像梯度下降，小时像 Gauss--Newton；步子成功则减小 $\lambda$，失败则增大。收敛后 $(J^{\mathsf T}J)^{-1}\hat\sigma^2$ 为参数协方差。
+\end{结论}
+
+\begin{结论}{一维极小化：黄金分割与抛物插值}
+单峰函数在括号 $[a,b]$ 内：黄金分割每次求值区间缩为 \重点{0.618} 倍（Fibonacci 搜索在固定次数下最优）。抛物插值（三点拟合二次函数取顶点）超线性收敛但可能失败；Brent 极小化结合二者。
+精度极限：极小点附近 $f(x)\approx f^*+\frac12f''(x-x^*)^2$，函数值精度 $\varepsilon$ 时 $x$ 只能定到 $\sqrt{\varepsilon}$ 量级（双精度约 $10^{-8}$）。
+\end{结论}
+
+\begin{结论}{罚函数、增广 Lagrange 与 ADMM}
+二次罚 $f+\frac\rho2\|c(x)\|^2$ 需 $\rho\to\infty$，Hessian 条件数 $\propto\rho$。增广 Lagrange：
+\[
+\重点{\mathcal L_\rho=f+\lambda^{\mathsf T}c+\frac\rho2\|c\|^2,\qquad \lambda\leftarrow\lambda+\rho\,c(x)},
+\]
+有限 $\rho$ 即可收敛。ADMM（$\min f(x)+g(z)$，$Ax+Bz=c$）：交替极小化 $x$、$z$ 再更新对偶变量；每个子问题常有闭式解（如软阈值），适合分布式与大规模问题。
+\end{结论}
+
+\begin{结论}{内点法：对数障碍与中心路径}
+$\min c^{\mathsf T}x$，$Ax=b$，$x\ge0$：极小化 $c^{\mathsf T}x-\mu\sum\ln x_i$，最优条件 \重点{x_is_i=\mu}（扰动互补松弛），$\mu\to0$ 沿中心路径逼近最优。
+每步一次 Newton，迭代次数 $O(\sqrt n\ln\frac1\varepsilon)$（理论），实践中 $20$--$50$ 步与规模几乎无关。对偶间隙 $=n\mu$ 给出停止准则。
+\end{结论}
+
+\begin{结论}{单纯形法的几个事实}
+LP 最优解（若存在）在顶点达到；单纯形法沿边移动，每步改善目标。最坏情形指数步（Klee--Minty 立方体），但平滑分析下多项式（Spielman--Teng），实践中约 $2m$--$3m$ 步。
+退化（多个基对应同一顶点）可能导致循环，\重点{\text{Bland 规则（选下标最小的入基/出基变量）}}避免循环。对偶单纯形适合加约束后的热启动（分支定界）。
+\end{结论}
+
+\begin{结论}{近端算子与软阈值}
+$\operatorname{prox}_{\lambda g}(v)=\argmin_x\bigl(g(x)+\frac1{2\lambda}\|x-v\|^2\bigr)$：
+\[
+\重点{\operatorname{prox}_{\lambda|\cdot|}(v)=\sgn(v)\max(|v|-\lambda,0)},\qquad \operatorname{prox}_{\iota_C}=\text{到 }C\text{ 的投影}.
+\]
+近端梯度（ISTA）$x\leftarrow\operatorname{prox}_{tg}(x-t\nabla f(x))$：$O(\frac1k)$；FISTA 加动量 $O(\frac1{k^2})$。Lasso、稀疏重建、约束问题统一处理。
+\end{结论}
+
+\begin{结论}{投影到概率单纯形}
+$\min\|x-v\|$ s.t.\ $x\ge0$，$\sum x_i=1$：把 $v$ 降序排为 $u$，
+\[
+\重点{\rho=\max\Bigl\{j:u_j-\frac{1}{j}\Bigl(\sum_{i\le j}u_i-1\Bigr)>0\Bigr\},\quad \theta=\frac1\rho\Bigl(\sum_{i\le\rho}u_i-1\Bigr),\quad x_i=\max(v_i-\theta,0)}.
+\]
+$O(n\log n)$。投影梯度法、镜像下降（指数权更新 $x_i\propto x_i\ee^{-\eta g_i}$）是单纯形上优化的两种标准方式。
+\end{结论}
+
+\begin{结论}{多项式求根：伴随矩阵与 Wilkinson 多项式}
+\重点{\text{根 }=\text{ 伴随矩阵的特征值}}（numpy \texttt{roots} 的做法，后向稳定）；Durand--Kerner 同时迭代全部根 $z_i\leftarrow z_i-\frac{p(z_i)}{\prod_{j\ne i}(z_i-z_j)}$。
+根对系数的敏感性：$\frac{\partial r}{\partial a_k}=-\frac{r^k}{p'(r)}$。Wilkinson 多项式 $\prod_{k=1}^{20}(x-k)$ 的 $x^{19}$ 系数扰动 $2^{-23}$，就有根变成复数对——\textbf{不要先求系数再求根}，能保留因式或矩阵形式就保留。
+\end{结论}
+
+\begin{结论}{从迭代数据估计收敛阶}
+误差 $e_k$（或相邻差 $|x_{k+1}-x_k|$ 代替）：
+\[
+\重点{p\approx\frac{\ln|e_{k+1}/e_k|}{\ln|e_k/e_{k-1}|}},\qquad C\approx\frac{|e_{k+1}|}{|e_k|^p}.
+\]
+二次收敛表现为有效数字位数每步翻倍；只观察到线性收敛的 Newton 法常意味着导数写错、重根或 Jacobi 矩阵不准。
+\end{结论}
+
+\begin{结论}{自动微分：前向与反向模式}
+$F:\mathbb R^n\to\mathbb R^m$。前向模式一次得到 $J\dot x$（一列），成本 $\approx$ 常数 $\times$ 求值；反向模式一次得到 $\bar y^{\mathsf T}J$（一行）。
+\重点{\text{标量函数的梯度：反向模式成本}\le\text{约 }4\text{ 倍函数求值，与 }n\text{ 无关}}（廉价梯度原理，反向传播）；代价是存储前向轨迹。$n\ll m$ 时用前向，$n\gg m$ 时用反向。精确到机器精度，无截断误差。
+\end{结论}
+
+\begin{结论}{复步长求导}
+$f$ 解析（实输入实输出的程序可以复数运行）：
+\[
+\重点{f'(x)=\frac{\operatorname{Im}f(x+\ii h)}{h}+O(h^2)},
+\]
+没有相减相消，可取 $h=10^{-20}$，一次复数求值得到机器精度导数。对比前向差商最优只有 $\sqrt\varepsilon\approx10^{-8}$ 精度。要求代码不含 $|x|$、比较等非解析操作（或做相应改写）。
+\end{结论}
+
+\begin{结论}{坐标下降解 Lasso}
+$\min\frac1{2n}\|y-X\beta\|^2+\lambda\|\beta\|_1$，对第 $j$ 个坐标（部分残差 $r^{(j)}=y-\sum_{k\ne j}x_k\beta_k$）：
+\[
+\重点{\beta_j\leftarrow\frac{S\bigl(\frac1nx_j^{\mathsf T}r^{(j)},\lambda\bigr)}{\frac1n\|x_j\|^2}},\qquad S(z,\lambda)=\sgn z\,(|z|-\lambda)_+ .
+\]
+配合 $\lambda$ 从大到小的路径与“热启动”、活跃集策略（glmnet），比通用 QP 求解器快几个量级。
+\end{结论}
+
+\begin{结论}{非线性共轭梯度}
+$p_{k+1}=-g_{k+1}+\beta_kp_k$：
+\[
+\beta^{FR}=\frac{\|g_{k+1}\|^2}{\|g_k\|^2},\qquad \重点{\beta^{PR+}=\max\Bigl(0,\frac{g_{k+1}^{\mathsf T}(g_{k+1}-g_k)}{\|g_k\|^2}\Bigr)}.
+\]
+PR$+$ 在实践中更稳健（方向变差时自动重启为最速下降）；二次函数加精确线搜索时都退化为线性 CG，$n$ 步终止。内存 $O(n)$，适合超大规模但比 L-BFGS 更依赖线搜索精度。
+\end{结论}
+
+\begin{结论}{全局优化：模拟退火与多起点}
+模拟退火接受上坡步的概率 $\ee^{-\Delta/T}$；对数降温 $T_k=\frac{c}{\ln k}$（$c$ 不小于最深“陷阱”深度）理论上保证收敛到全局极小（Hajek），实际太慢，常用几何降温 $T_{k+1}=0.95T_k$。
+多起点局部优化：若吸引域测度为 $p$，$N$ 次随机起点找不到的概率 $(1-p)^N$。\重点{\text{非凸问题没有通用的全局最优证书}}，对小维度可用区间分析/分支定界得到可证明的界。
+\end{结论}
+
+\begin{结论}{同伦延拓}
+解 $F(x)=0$ 困难时，构造 $H(x,t)=tF(x)+(1-t)G(x)$（$G(x)=0$ 的解已知），从 $t=0$ 沿解曲线追踪到 $t=1$：预测（切线/Euler）$+$ 校正（Newton）。
+曲线在 $t$ 上折返时改用弧长参数化。多项式系统：总次数同伦（$G_i=x_i^{d_i}-1$）以概率 $1$ 找到全部 \重点{\prod d_i} 个解（Bézout 数，含无穷远处）。物理中用参数延拓追踪分岔图。
+\end{结论}
+
+\参考{Nocedal--Wright, \emph{Numerical Optimization}；Boyd--Vandenberghe, \emph{Convex Optimization}；Nesterov, \emph{Lectures on Convex Optimization}；Griewank--Walther, \emph{Evaluating Derivatives}；Kelley, \emph{Solving Nonlinear Equations with Newton's Method}；MIT 6.255、6.7220。}

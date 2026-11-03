@@ -1,0 +1,156 @@
+\subsection{回归与多元统计}
+
+\begin{结论}{Gauss--Markov 定理}
+$y=X\beta+\varepsilon$，$\E\varepsilon=0$，$\Cov\varepsilon=\sigma^2I$（不需正态）：OLS $\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y$ 是\重点{\text{线性无偏估计中方差最小的}}（BLUE），即对任意 $c$，$c^{\mathsf T}\hat\beta$ 方差最小。
+放弃“线性”或“无偏”可以更好：James--Stein、岭回归在 MSE 上可胜过 OLS；误差重尾时稳健回归胜过 OLS。
+\end{结论}
+
+\begin{结论}{帽子矩阵、杠杆与影响}
+$H=X(X^{\mathsf T}X)^{-1}X^{\mathsf T}$：$\tr H=p$，$0\le h_{ii}\le1$（含截距时 $h_{ii}\ge\frac1n$），平均杠杆 $\frac pn$。$\Var e_i=\sigma^2(1-h_{ii})$；
+\[
+\重点{\text{留一残差 }e_{(i)}=\frac{e_i}{1-h_{ii}}},\qquad \text{Cook 距离 }D_i=\frac{e_i^2}{ps^2}\frac{h_{ii}}{(1-h_{ii})^2}.
+\]
+高杠杆点（$h_{ii}>\frac{2p}n$）可以“把回归线拉过来”使自身残差很小——只看残差找不到它，要看学生化残差与 Cook 距离。
+\end{结论}
+
+\begin{结论}{嵌套模型的 $F$ 检验与调整 $R^2$}
+大模型 $p$ 个参数、小模型去掉 $q$ 个：
+\[
+\重点{F=\frac{(\mathrm{RSS}_0-\mathrm{RSS}_1)/q}{\mathrm{RSS}_1/(n-p)}\sim F_{q,n-p}}.
+\]
+$R^2=1-\frac{\mathrm{RSS}}{\mathrm{TSS}}$ 随变量增加单调不降；调整 $R^2=1-(1-R^2)\frac{n-1}{n-p}$（$p$ 含截距）可降。$q=1$ 时 $F=t^2$。整体显著性 $F=\frac{R^2/(p-1)}{(1-R^2)/(n-p)}$。
+\end{结论}
+
+\begin{结论}{多重共线性：方差膨胀因子}
+\[
+\重点{\Var\hat\beta_j=\frac{\sigma^2}{(n-1)\Var(x_j)}\cdot\frac1{1-R_j^2}},\qquad \mathrm{VIF}_j=\frac1{1-R_j^2},
+\]
+$R_j^2$ 为 $x_j$ 对其他自变量回归的 $R^2$。VIF $>10$ 通常认为严重。共线性不影响预测（在数据范围内），只让单个系数不可辨识；对策：合并变量、岭回归、主成分回归，或接受较宽的区间。
+\end{结论}
+
+\begin{结论}{遗漏变量偏差}
+真模型 $y=\beta_1x_1+\beta_2x_2+\varepsilon$，只对 $x_1$ 回归：
+\[
+\重点{\E\hat\beta_1=\beta_1+\beta_2\,\delta},\qquad \delta=\frac{\Cov(x_1,x_2)}{\Var x_1}.
+\]
+偏差方向 $=\sgn(\beta_2)\sgn(\delta)$。混杂变量与处理变量相关时，回归系数不是因果效应；随机化使 $\delta=0$。
+\end{结论}
+
+\begin{结论}{Frisch--Waugh--Lovell 定理}
+在含 $X_1,X_2$ 的回归中，$\hat\beta_2$ 等于：把 $y$ 和 $X_2$ 分别对 $X_1$ 回归取残差 $\tilde y,\tilde X_2$，再做 \重点{\tilde y\text{ 对 }\tilde X_2} 的回归所得系数。
+解释“控制其他变量”：先把 $X_1$ 能解释的部分从两边剔除。推论：固定效应（组均值去心）、去趋势后回归、偏相关系数都是 FWL。
+\end{结论}
+
+\begin{结论}{GLS 与稳健（三明治）标准误}
+$\Cov\varepsilon=\sigma^2\Omega$ 已知：$\hat\beta_{GLS}=(X^{\mathsf T}\Omega^{-1}X)^{-1}X^{\mathsf T}\Omega^{-1}y$（白化后 OLS），BLUE。$\Omega$ 未知、只怀疑异方差时仍用 OLS，但标准误用
+\[
+\重点{\widehat{\Cov}(\hat\beta)=(X^{\mathsf T}X)^{-1}\Bigl(\sum e_i^2x_ix_i^{\mathsf T}\Bigr)(X^{\mathsf T}X)^{-1}}\ (\text{HC0}),
+\]
+小样本用 HC3（$e_i^2$ 换为 $\frac{e_i^2}{(1-h_{ii})^2}$）。聚类数据用聚类稳健标准误。
+\end{结论}
+
+\begin{结论}{Logistic 回归：IRLS 与可分离}
+$\operatorname{logit}p_i=x_i^{\mathsf T}\beta$。Newton $=$ 迭代加权最小二乘：$W=\diag(p_i(1-p_i))$，工作响应 $z=X\beta+W^{-1}(y-p)$，
+\[
+\重点{\beta\leftarrow(X^{\mathsf T}WX)^{-1}X^{\mathsf T}Wz},\qquad \Cov\hat\beta\approx(X^{\mathsf T}WX)^{-1}.
+\]
+$\ee^{\beta_j}$ 为优势比。完全可分离时 MLE 不存在（系数 $\to\infty$）：表现为巨大系数和标准误；用 Firth 惩罚或正则化。事件稀少时样本量看事件数（约每变量 $10$ 个事件）。
+\end{结论}
+
+\begin{结论}{Poisson 回归：偏移与过度离散}
+$\ln\mu_i=x_i^{\mathsf T}\beta+\ln t_i$（暴露时间作偏移，系数为率比的对数）。偏差 $D=2\sum[y\ln\frac y\mu-(y-\mu)]$。
+过度离散检验：$\hat\phi=\frac{\sum(y-\hat\mu)^2/\hat\mu}{n-p}$；\重点{\hat\phi>1\text{ 时标准误乘 }\sqrt{\hat\phi}}（拟 Poisson），或用负二项回归。零过多用零膨胀模型。
+\end{结论}
+
+\begin{结论}{线性判别分析（LDA）}
+两类 $N(\mu_k,\Sigma)$、先验 $\pi_k$：判别方向 \重点{w=\Sigma^{-1}(\mu_1-\mu_0)}，阈值 $w^{\mathsf T}\frac{\mu_0+\mu_1}2+\ln\frac{\pi_0}{\pi_1}$。
+等先验时 Bayes 错误率 $\Phi(-\frac\Delta2)$，$\Delta^2=(\mu_1-\mu_0)^{\mathsf T}\Sigma^{-1}(\mu_1-\mu_0)$（Mahalanobis 距离）。也是 Fisher 判别（最大化类间/类内方差比）。协方差不同时得二次判别（QDA）。
+\end{结论}
+
+\begin{结论}{Hotelling $T^2$}
+$p$ 维正态样本，$T^2=n(\bar x-\mu_0)^{\mathsf T}S^{-1}(\bar x-\mu_0)$：
+\[
+\重点{\frac{n-p}{p(n-1)}T^2\sim F_{p,n-p}}.
+\]
+同时置信区间：对所有方向 $a$，$a^{\mathsf T}\mu\in a^{\mathsf T}\bar x\pm\sqrt{\frac{p(n-1)}{n-p}F_{p,n-p}}\sqrt{\frac{a^{\mathsf T}Sa}n}$（Scheffé 型）。$p\ge n$ 时 $S$ 奇异，需降维或正则化。
+\end{结论}
+
+\begin{结论}{典型相关分析}
+两组变量 $x,y$：寻找 $a,b$ 使 $\operatorname{corr}(a^{\mathsf T}x,b^{\mathsf T}y)$ 最大。典型相关系数平方是
+\[
+\重点{\Sigma_{xx}^{-1}\Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}\text{ 的特征值}},
+\]
+等价于白化后交叉协方差的奇异值。一维 $y$ 时退化为复相关系数 $R$。高维时需正则化（否则样本典型相关趋于 $1$）。
+\end{结论}
+
+\begin{结论}{多元正态的 MLE 与 Wishart 分布}
+$\hat\mu=\bar x$，$\hat\Sigma=\frac1n\sum(x_i-\bar x)(x_i-\bar x)^{\mathsf T}$（有偏，$S=\frac{n}{n-1}\hat\Sigma$ 无偏）。$(n-1)S\sim W_p(\Sigma,n-1)$，$\bar x\perp S$。
+$p/n$ 不小时样本协方差的特征值严重偏离真值（大的偏大、小的偏小，见 Marchenko--Pastur）；\重点{\text{Ledoit--Wolf 收缩 }(1-\delta)S+\delta\frac{\tr S}pI} 给良态估计。
+\end{结论}
+
+\begin{结论}{$k$-means 与 Lloyd 算法}
+最小化 $\sum_i\|x_i-\mu_{c(i)}\|^2$：交替“分配到最近中心”和“中心取均值”，目标单调下降、有限步收敛到局部极小。
+是各向同性等方差 Gauss 混合的 EM 在 $\sigma\to0$ 时的硬分配极限。初始化用 k-means++（按距离平方概率选中心，期望 $O(\ln k)$ 近似）。\重点{\text{只适合凸、大小相近的簇}}；选 $k$ 用肘部法、轮廓系数或 gap 统计量。
+\end{结论}
+
+\begin{结论}{向均值回归}
+$(X,Y)$ 标准化后相关 $\rho$：$\E[Y\mid X=x]=\rho x$。第一次测得极端值的个体，第二次平均\重点{\text{只保留 }\rho\text{ 倍的偏离}}。
+误读：“奖励好表现后表现变差、惩罚差表现后变好”可完全由回归效应解释（Kahneman 飞行教官例）。评估干预需要对照组，而不是前后对比。
+\end{结论}
+
+\begin{结论}{自变量有误差：衰减偏差}
+观测 $w=x+u$（$u$ 独立、方差 $\sigma_u^2$），用 $w$ 回归：
+\[
+\重点{\hat\beta\to\beta\frac{\sigma_x^2}{\sigma_x^2+\sigma_u^2}}\quad(\text{信度比 }\lambda).
+\]
+系数被拉向 $0$；多变量时偏差方向不确定，还会“泄漏”到相关的其他系数。修正：已知 $\lambda$ 时除以 $\lambda$；重复测量估计 $\sigma_u^2$；工具变量；Deming 回归（两边误差比已知）。
+\end{结论}
+
+\begin{结论}{工具变量}
+$y=\beta x+\varepsilon$，$x$ 与 $\varepsilon$ 相关（内生）。工具 $z$：与 $x$ 相关、与 $\varepsilon$ 不相关、只通过 $x$ 影响 $y$：
+\[
+\重点{\hat\beta_{IV}=\frac{\Cov(z,y)}{\Cov(z,x)}}\ (\text{Wald 估计}),
+\]
+多工具时两阶段最小二乘（先 $x$ 对 $z$ 回归得 $\hat x$，再 $y$ 对 $\hat x$）。弱工具（第一阶段 $F<10$）时 IV 偏向 OLS 且区间不可靠。孟德尔随机化用基因型作工具。
+\end{结论}
+
+\begin{结论}{核岭回归与表示定理}
+$\min_{f\in\mathcal H_k}\sum(y_i-f(x_i))^2+\lambda\|f\|_{\mathcal H}^2$ 的解一定形如 \重点{f=\sum_i\alpha_ik(x_i,\cdot)}（表示定理），
+\[
+\alpha=(K+\lambda I)^{-1}y,\qquad \hat f(x)=k(x)^{\mathsf T}(K+\lambda I)^{-1}y .
+\]
+与 Gauss 过程回归的后验均值相同（$\lambda=\sigma^2$）。成本 $O(n^3)$；大数据用 Nyström 或随机 Fourier 特征（Bochner）近似。
+\end{结论}
+
+\begin{结论}{ARMA 的识别：ACF 与 PACF}
+AR($p$)：PACF 在 $p$ 阶后截尾，ACF 拖尾；MA($q$)：ACF 在 $q$ 阶后截尾，PACF 拖尾；ARMA 两者都拖尾。
+Yule--Walker：AR($p$) 满足 \重点{\rho_k=\sum_{j=1}^p\phi_j\rho_{k-j}}，用样本自相关解出 $\phi$。白噪声检验 Ljung--Box $Q=n(n+2)\sum_{k\le h}\frac{\hat\rho_k^2}{n-k}\sim\chi^2_{h-p-q}$。样本 ACF 的白噪声置信带 $\pm\frac{1.96}{\sqrt n}$。
+\end{结论}
+
+\begin{结论}{AR(1) 与 ARMA 的谱密度}
+$X_t=\phi X_{t-1}+\varepsilon_t$（$\Var\varepsilon=\sigma^2$）：
+\[
+\重点{f(\omega)=\frac{\sigma^2}{2\pi}\frac{1}{1-2\phi\cos\omega+\phi^2}},\qquad \text{ARMA：}f(\omega)=\frac{\sigma^2}{2\pi}\frac{|\theta(\ee^{-\ii\omega})|^2}{|\phi(\ee^{-\ii\omega})|^2}.
+\]
+$\phi>0$ 时低频占优（“红噪声”），$\phi<0$ 时高频占优。$f(0)=\frac{\sigma^2}{2\pi(1-\phi)^2}$ 决定样本均值的方差（长程平均的有效样本量）。
+\end{结论}
+
+\begin{结论}{因子分析与 PCA 的区别}
+因子模型 $x=Lf+\epsilon$，$\Sigma=LL^{\mathsf T}+\Psi$（$\Psi$ 对角，特殊方差）；PCA 只是 $\Sigma$ 的特征分解，不区分共同方差与特殊方差。
+因子载荷只确定到正交旋转（varimax 等求可解释性）；\重点{\text{特殊方差差异大时 PCA 与 FA 结论不同}}。因子数选择用平行分析（与随机数据的特征值比较）而非“特征值 $>1$”。
+\end{结论}
+
+\begin{结论}{线性混合模型与 BLUP}
+$y=X\beta+Zu+\varepsilon$，$u\sim N(0,G)$，$\varepsilon\sim N(0,R)$：$V=ZGZ^{\mathsf T}+R$，
+\[
+\hat\beta=(X^{\mathsf T}V^{-1}X)^{-1}X^{\mathsf T}V^{-1}y,\qquad \重点{\hat u=GZ^{\mathsf T}V^{-1}(y-X\hat\beta)}\ (\text{BLUP}).
+\]
+随机截距模型中组效应被收缩：$\hat u_j=\frac{n_j\tau^2}{n_j\tau^2+\sigma^2}(\bar y_j-\hat\mu)$，组内样本少则收缩多（部分合并）。方差分量用 REML 估计。
+\end{结论}
+
+\begin{结论}{回归的 Bootstrap：成对 vs 残差}
+成对 bootstrap：重抽 $(x_i,y_i)$，对异方差、模型误设稳健；残差 bootstrap：$y^*=X\hat\beta+e^*$，假定误差同分布、设计固定，小样本更准。
+\重点{\text{wild bootstrap}}（$y^*=X\hat\beta+e_iv_i$，$v_i$ 取 $\pm1$）兼顾异方差与固定设计。用于非线性函数的区间（如两系数之比）比 Delta 方法更可靠。
+\end{结论}
+
+\参考{Hastie--Tibshirani--Friedman, \emph{The Elements of Statistical Learning}；Weisberg, \emph{Applied Linear Regression}；Agresti, \emph{Categorical Data Analysis}；Anderson, \emph{An Introduction to Multivariate Statistical Analysis}；Brockwell--Davis, \emph{Time Series}；Angrist--Pischke, \emph{Mostly Harmless Econometrics}；MIT 18.650、14.32。}

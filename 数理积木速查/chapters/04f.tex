@@ -1,0 +1,141 @@
+\subsection{插值、逼近与求积补充}
+
+\begin{结论}{重心插值公式（第二型）}
+$w_j=\prod_{k\ne j}(x_j-x_k)^{-1}$：
+\[
+\重点{p(x)=\frac{\sum_j\frac{w_jf_j}{x-x_j}}{\sum_j\frac{w_j}{x-x_j}}},
+\]
+求值 $O(n)$，加点 $O(n)$ 更新权重，数值稳定（Higham）。第二类 Chebyshev 点 $x_j=\cos\frac{j\pi}n$：$w_j=(-1)^j\delta_j$，两端 $\delta=\frac12$、其余 $1$——无需计算乘积。比 Newton 形式、Vandermonde 求解都更好。
+\end{结论}
+
+\begin{结论}{Newton 差商与 Neville 格式}
+$p(x)=f[x_0]+f[x_0,x_1](x-x_0)+\cdots+f[x_0,\dots,x_n]\prod_{i<n}(x-x_i)$，差商表 $O(n^2)$，加一个节点只多一项。
+Neville：$P_{i,j}(x)=\frac{(x-x_i)P_{i+1,j}-(x-x_j)P_{i,j-1}}{x_j-x_i}$，直接算某点的插值值；\重点{\text{外推到 }h=0\text{ 时它就是 Richardson/Romberg}}（节点为 $h_i^2$）。
+\end{结论}
+
+\begin{结论}{Lebesgue 常数与插值的“近最优”}
+插值算子范数 $\Lambda_n$：$\|f-p_n\|_\infty\le(1+\Lambda_n)\|f-p^*_n\|_\infty$（$p^*_n$ 为最佳逼近）。
+\[
+\text{等距：}\Lambda_n\sim\frac{2^{n+1}}{\ee n\ln n},\qquad \重点{\text{Chebyshev：}\Lambda_n\le\frac2\pi\ln(n+1)+1}.
+\]
+Chebyshev 点插值损失至多一个对数因子（$n=100$ 时 $<4$），而等距插值即使对整函数也会因舍入而失败。
+\end{结论}
+
+\begin{结论}{解析函数的 Chebyshev 逼近：Bernstein 椭圆}
+$f$ 在 Bernstein 椭圆 $E_\rho$（焦点 $\pm1$，半轴和 $\rho$）内解析且 $|f|\le M$：
+\[
+\重点{|a_k|\le2M\rho^{-k}},\qquad \|f-p_n\|_\infty\le\frac{4M\rho^{-n}}{\rho-1}.
+\]
+Runge 函数 $\frac1{1+25x^2}$ 的极点 $\pm\frac{\ii}5$ 给 $\rho=\frac15+\sqrt{1+\frac1{25}}\approx1.22$；整函数超几何收敛；$f\in C^k$ 时只有代数收敛 $O(n^{-k})$。系数衰减到 $\varepsilon$ 即可截断（chebfun 的原理）。
+\end{结论}
+
+\begin{结论}{最佳一致逼近：等振荡定理与 Remez}
+$p^*$ 是 $f\in C[a,b]$ 的 $n$ 次最佳一致逼近 $\iff$ 误差在 \重点{n+2} 个点上交替取到 $\pm\|f-p^*\|_\infty$（Chebyshev 等振荡）；最佳逼近唯一。
+Remez 算法：在 $n+2$ 个参考点上解等振荡线性方程，再把参考点移到误差极值处，二次收敛。例：$x^{n+1}$ 的 $n$ 次最佳逼近误差为 $2^{-n}T_{n+1}$。
+\end{结论}
+
+\begin{结论}{Padé 逼近}
+$[m/n]$：$\frac{P_m}{Q_n}$ 与 $f$ 的 Taylor 级数在 $x^{m+n}$ 阶以内一致。
+\[
+\ee^x\approx\frac{1+\frac x2}{1-\frac x2},\qquad \重点{\ee^x\approx\frac{1+\frac x2+\frac{x^2}{12}}{1-\frac x2+\frac{x^2}{12}}}.
+\]
+能表示极点、渐近常数，常把发散的 Taylor 级数“续”到收敛半径之外；$\ee^{-z}$ 的对角 Padé 正是 A 稳定的 Gauss 型 RK 方法的稳定函数。连分式展开是计算 Padé 的稳定途径。
+\end{结论}
+
+\begin{结论}{三次 Hermite 插值在中点的值}
+已知 $f(a),f(b),f'(a),f'(b)$，三次 Hermite 插值多项式在中点：
+\[
+\重点{H_3\Bigl(\frac{a+b}2\Bigr)=\frac{f(a)+f(b)}2+\frac{b-a}{8}\bigl(f'(a)-f'(b)\bigr)}.
+\]
+这是插值多项式的恒等式；作为 $f$ 的近似，误差为 $\frac{f^{(4)}(\xi)}{4!}\bigl(\frac{b-a}2\bigr)^4$。在 ODE 稠密输出、样条的中点细分中直接用。
+\end{结论}
+
+\begin{结论}{周期函数的梯形公式：指数收敛}
+$f$ 周期 $2\pi$、在带 $|\operatorname{Im}z|<a$ 内解析且 $|f|\le M$，$N$ 点梯形公式：
+\[
+\重点{\Bigl|I-T_N\Bigr|\le\frac{4\pi M}{\ee^{aN}-1}}.
+\]
+原因：Euler--Maclaurin 修正项全部抵消（误差等于混叠的 Fourier 系数 $\sum_{k\ne0}\hat f_{kN}$）。$\int_0^{2\pi}\ee^{\cos\theta}\dd\theta$ 用 $N=20$ 点即达机器精度。全直线上快速衰减的函数同理。
+\end{结论}
+
+\begin{结论}{两尺度外推消去主误差（Richardson）}
+若 \重点{Q(h)=L+ch^p+O(h^q)}，$0<p<q$：
+\[
+\frac{2^pQ(h/2)-Q(h)}{2^p-1}=L+O(h^q).
+\]
+看到已知阶的主误差项，就用两种步长作线性组合消去；须确保展开在两种步长下都适用。重复对梯形公式（$h^2,h^4,\dots$）即 Romberg：$R_{k,j}=R_{k,j-1}+\frac{R_{k,j-1}-R_{k-1,j-1}}{4^j-1}$。误差估计：$|Q(h/2)-L|\approx\frac{|Q(h/2)-Q(h)|}{2^p-1}$。
+\end{结论}
+
+\begin{结论}{Gauss 求积：误差常数与 Golub--Welsch}
+$[a,b]$ 上 $n$ 点 Gauss--Legendre：
+\[
+\重点{E_n=\frac{(b-a)^{2n+1}(n!)^4}{(2n+1)((2n)!)^3}f^{(2n)}(\xi)}.
+\]
+节点/权重：正交多项式三项递推构成对称三对角 Jacobi 矩阵，节点是其特征值，权重是 $\mu_0\times$（特征向量首分量）$^2$（Golub--Welsch，$O(n^2)$）。Gauss--Hermite 处理 $\ee^{-x^2}$，Gauss--Laguerre 处理 $\ee^{-x}$ 于 $[0,\infty)$。
+\end{结论}
+
+\begin{结论}{Clenshaw--Curtis 与 Gauss--Kronrod}
+Clenshaw--Curtis（Chebyshev 极值点 $+$ FFT 求权）：$n+1$ 点只对 $n$ 次精确，但\重点文{对大多数函数精度与 Gauss 相当}（Trefethen），且节点嵌套（加倍复用）。
+Gauss--Kronrod：在 $n$ 点 Gauss 上加 $n+1$ 点得 $2n+1$ 点、$3n+1$ 次精确的公式，两者之差作误差估计（G7--K15 是 QUADPACK 自适应积分的默认）。
+\end{结论}
+
+\begin{结论}{端点奇异与无穷区间：变量替换}
+$\int_0^1x^{-1/2}g(x)\dd x$：令 $x=t^2$ 得 $2\int_0^1g(t^2)\dd t$（光滑）。对数奇异、端点代数奇异的通用办法是双指数（tanh-sinh）替换
+\[
+\重点{x=\tanh\Bigl(\frac\pi2\sinh t\Bigr)},
+\]
+被积函数在 $t\to\pm\infty$ 双指数衰减，梯形公式误差 $\sim\ee^{-cN/\ln N}$，对端点奇异几乎不敏感。半无限区间用 $x=\ee^{\frac\pi2\sinh t}$ 类替换。
+\end{结论}
+
+\begin{结论}{振荡积分}
+$\int_a^bf(x)\ee^{\ii\omega x}\dd x$，$\omega$ 大：标准求积每个周期需若干点，代价 $\propto\omega$。Filon 型（对 $f$ 插值后精确积分振荡因子）或 Levin 法（解 $p'+\ii\omega p=f$）误差反而随 $\omega$ 增大而减小。
+无穷区间：在相邻零点之间积分得交错级数，再用 Euler/Shanks 加速（\texttt{quadosc} 的做法）。\重点{\text{渐近展开 }\frac{f(b)\ee^{\ii\omega b}-f(a)\ee^{\ii\omega a}}{\ii\omega}+O(\omega^{-2})}给出领头行为。
+\end{结论}
+
+\begin{结论}{Monte Carlo 与拟 Monte Carlo 的误差}
+MC：误差 $\frac{\sigma}{\sqrt N}$，与维数无关。拟 MC（Sobol、Halton 序列）：Koksma--Hlawka
+\[
+\重点{|I-Q_N|\le V_{HK}(f)\,D_N^*,\qquad D_N^*=O\Bigl(\frac{(\ln N)^d}{N}\Bigr)},
+\]
+对光滑、有效维数低的被积函数实际接近 $O(N^{-1})$。随机化 QMC（随机平移/打乱）可做误差估计。高维中 $(\ln N)^d$ 很大，但有效维数常远小于名义维数（金融积分）。
+\end{结论}
+
+\begin{结论}{有理逼近的威力：$|x|$ 的例子}
+$[-1,1]$ 上 $|x|$ 的 $n$ 次多项式最佳逼近误差 $\sim\frac{\beta}{n}$（$\beta\approx0.2802$，Bernstein）；有理函数（$n$ 次分子分母）误差
+\[
+\重点{\sim8\ee^{-\pi\sqrt n}}\quad(\text{Newman 给出 }\le3\ee^{-\sqrt n}).
+\]
+有奇点或端点奇异时有理逼近“根指数”收敛，多项式只能代数收敛。AAA 算法（重心形式的有理逼近）是实践中的通用工具。
+\end{结论}
+
+\begin{结论}{B 样条}
+$k$ 次 B 样条 $N_{i,k}$：Cox--de Boor 递推 $N_{i,k}=\frac{x-t_i}{t_{i+k}-t_i}N_{i,k-1}+\frac{t_{i+k+1}-x}{t_{i+k+1}-t_{i+1}}N_{i+1,k-1}$。
+性质：支撑 $[t_i,t_{i+k+1}]$（局部）、非负、\重点{\sum_iN_{i,k}\equiv1}（单位分解）、在单节点处 $C^{k-1}$。样条拟合的矩阵带状、良态。三次样条三种端条件：自然（$s''=0$）、夹持（给 $s'$）、not-a-knot（第二、倒数第二个节点处三阶导连续），后者在无端点信息时最准。
+\end{结论}
+
+\begin{结论}{谱微分矩阵}
+Chebyshev 点上的微分矩阵 $D_N$：对解析函数导数误差指数小。但 \重点{\|D_N\|=O(N^2)}，$\|D_N^2\|=O(N^4)$：显式时间步受 $\Delta t=O(N^{-2})$（对流）、$O(N^{-4})$（扩散）限制，舍入误差放大 $N^2$ 倍。周期问题用 Fourier 微分（$\ii k$ 乘子），$\|D\|=O(N)$。
+\end{结论}
+
+\begin{结论}{高维逼近：维数灾难与稀疏网格}
+张量积网格每维 $n$ 点共 $n^d$ 点，误差 $O(n^{-r})=O(N^{-r/d})$。Smolyak 稀疏网格：混合光滑函数用 \重点{O(n(\ln n)^{d-1})} 个点达到近似一维的精度。
+对一般函数无法避免维数灾难；高维可行的前提是结构（低有效维数、可加性、低秩张量、混合光滑）。神经网络、核方法的“无维数灾难”结果都依赖特定函数类。
+\end{结论}
+
+\begin{结论}{三角插值与混叠}
+$N$ 个等距点 $x_j=\frac{2\pi j}N$ 上的插值 $p(x)=\sum_{|k|<N/2}\tilde c_k\ee^{\ii kx}$，$\tilde c_k$ 由 DFT 给出，而
+\[
+\重点{\tilde c_k=\sum_{m\in\mathbb Z}c_{k+mN}}\quad(\text{混叠}).
+\]
+所以插值误差 $\le2\sum_{|k|\ge N/2}|c_k|$。非线性项（如 $u^2$）会把频率加倍，伪谱法用 $\frac23$ 规则（截掉高三分之一模）或补零到 $\frac32N$ 消除混叠。
+\end{结论}
+
+\begin{结论}{误差的 Peano 核表示}
+求积/插值误差泛函 $E$ 对 $n$ 次多项式为零，则 $E(f)=\int K(t)f^{(n+1)}(t)\dd t$，$K(t)=\frac1{n!}E\bigl[(x-t)_+^n\bigr]$。若 $K$ 不变号，
+\[
+\重点{E(f)=\frac{f^{(n+1)}(\xi)}{(n+1)!}E\bigl[x^{n+1}\bigr]}.
+\]
+例：梯形公式 $E(x^2)=-\frac{(b-a)^3}{6}$，得 $-\frac{(b-a)^3}{12}f''(\xi)$；Simpson 公式 $-\frac{(b-a)^5}{2880}f^{(4)}(\xi)$。只需算一个单项式的误差。
+\end{结论}
+
+\参考{Trefethen, \emph{Approximation Theory and Approximation Practice}；Davis--Rabinowitz, \emph{Methods of Numerical Integration}；de Boor, \emph{A Practical Guide to Splines}；Boyd, \emph{Chebyshev and Fourier Spectral Methods}；Dick--Kuo--Sloan, \emph{High-dimensional integration: the quasi-Monte Carlo way}；MIT 18.330、18.335。}

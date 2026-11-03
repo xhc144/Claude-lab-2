@@ -1,0 +1,146 @@
+\subsection{数值线性代数}
+
+\begin{结论}{QR 分解：Householder、Gram--Schmidt 与正交性损失}
+$m\times n$ 矩阵 Householder QR 约 \重点{2mn^2-\tfrac23n^3} 次浮点运算，$Q$ 的正交性 $\|I-Q^{\mathsf T}Q\|=O(\varepsilon)$。
+经典 Gram--Schmidt 正交性损失 $O(\kappa^2\varepsilon)$，修正 Gram--Schmidt $O(\kappa\varepsilon)$，再正交化一次（CGS2）回到 $O(\varepsilon)$。Givens 旋转每次消一个元素，适合稀疏、Hessenberg、带状矩阵和逐行更新。
+\end{结论}
+
+\begin{结论}{实用 QR 算法：先 Hessenberg、再位移}
+先用 Householder 化为上 Hessenberg（对称时三对角），每步 QR 迭代成本从 $O(n^3)$ 降到 $O(n^2)$（三对角 $O(n)$）。位移 $A-\mu I=QR$，$A'=RQ+\mu I$：
+\[
+\重点{\text{Wilkinson 位移：取右下 }2\times2\text{ 块中更接近 }a_{nn}\text{ 的特征值}},
+\]
+对称时全局收敛且局部三次收敛；非对称用双位移（实算术处理复共轭对）。总成本约 $10n^3$（只要特征值）。
+\end{结论}
+
+\begin{结论}{Rayleigh 商迭代：对称矩阵三次收敛}
+$\mu_k=\frac{x_k^{\mathsf T}Ax_k}{x_k^{\mathsf T}x_k}$，$x_{k+1}\propto(A-\mu_kI)^{-1}x_k$。对称时 \重点{\text{误差}\ \theta_{k+1}=O(\theta_k^3)}（Rayleigh 商误差是向量误差的平方），非对称时二次。
+$A-\mu_kI$ 接近奇异不是问题：求解误差集中在所需特征向量方向。缺点：收敛到哪个特征值依赖初值。
+\end{结论}
+
+\begin{结论}{Krylov 子空间：Lanczos 与 Arnoldi}
+$\mathcal K_k=\operatorname{span}\{b,Ab,\dots,A^{k-1}b\}$。Arnoldi：$AQ_k=Q_{k+1}\tilde H_k$（Hessenberg）；对称时为 Lanczos 三项递推 $AQ_k=Q_kT_k+\beta_kq_{k+1}e_k^{\mathsf T}$。
+Ritz 值（$T_k$ 的特征值）\重点{\text{先逼近谱的两端且分离良好的特征值}}；有限精度下 Lanczos 失去正交性并出现“鬼”重复特征值，需选择性再正交化。只需矩阵--向量乘积，适合大型稀疏问题。
+\end{结论}
+
+\begin{结论}{GMRES：残差的多项式极小化}
+$x_k\in x_0+\mathcal K_k$ 使 $\|b-Ax_k\|$ 最小，等价于
+\[
+\重点{\|r_k\|=\min_{p\in\mathcal P_k,\ p(0)=1}\|p(A)r_0\|\le\kappa(V)\min_p\max_{\lambda\in\sigma(A)}|p(\lambda)|\,\|r_0\|}
+\]
+（$A=V\Lambda V^{-1}$）。特征值聚成少数簇时几步收敛；非正规矩阵 $\kappa(V)$ 大，特征值不能说明全部。每步存储增加，需重启 GMRES($m$)（可能停滞）。对称正定改用 CG，对称不定用 MINRES。
+\end{结论}
+
+\begin{结论}{经典迭代：Jacobi、Gauss--Seidel 与 SOR}
+收敛 $\iff$ 迭代矩阵谱半径 $<1$。严格对角占优 $\Rightarrow$ Jacobi、GS 都收敛；对称正定 $\Rightarrow$ GS 与 $0<\omega<2$ 的 SOR 收敛。一维 Poisson（网格 $h$）：
+\[
+\rho_J=\cos\pi h,\quad \rho_{GS}=\rho_J^2,\quad \重点{\omega^*=\frac{2}{1+\sqrt{1-\rho_J^2}}=\frac{2}{1+\sin\pi h}},\quad \rho_{SOR}=\omega^*-1\approx1-2\pi h .
+\]
+迭代次数：Jacobi/GS 为 $O(h^{-2})$，最优 SOR 为 $O(h^{-1})$。
+\end{结论}
+
+\begin{结论}{预条件与 Laplace 矩阵的条件数}
+离散 Laplacian（网格 $h$）\重点{\kappa\approx\frac{4}{\pi^2h^2}}（一维；二维同阶），CG 迭代次数 $\propto\sqrt\kappa\propto h^{-1}$。
+预条件 $M\approx A$ 且 $M^{-1}$ 便宜：Jacobi（对角缩放，只解决尺度差）、不完全 Cholesky/ILU（$\kappa$ 常改善一个量级但仍 $O(h^{-2})$）、多重网格（$\kappa=O(1)$）。目标是让 $M^{-1}A$ 的特征值聚集，而不只是 $\kappa$ 小。
+\end{结论}
+
+\begin{结论}{多重网格：$O(N)$ 求解 Poisson}
+高频误差用几次 Jacobi/GS（光滑子）迅速衰减，低频误差在粗网格上看起来是高频：
+\[
+\重点{\text{光滑}\to\text{限制残差到粗网格}\to\text{粗网格求解修正}\to\text{插值回细网格}\to\text{再光滑}}.
+\]
+V 循环每轮把误差缩小常数倍（与 $h$ 无关，如 $0.1$），工作量 $O(N)$。完全多重网格（FMG）一次即达离散误差水平。代数多重网格（AMG）无需几何网格。
+\end{结论}
+
+\begin{结论}{Gauss 消去的后向稳定性与增长因子}
+部分选主元 LU：计算解是 $(A+E)\hat x=b$ 的精确解，$\|E\|\lesssim n\,\rho_n\,\varepsilon\|A\|$，增长因子
+\[
+\重点{\rho_n=\frac{\max|u_{ij}|}{\max|a_{ij}|}\le2^{n-1}},
+\]
+上界可达（$a_{ii}=1$、$a_{in}=1$、下三角 $-1$ 的矩阵），但实际中极少见，$\rho_n$ 通常 $O(n^{2/3})$。完全选主元界很小但代价高；对称正定和对角占优矩阵无需选主元。
+\end{结论}
+
+\begin{结论}{特征值扰动：Bauer--Fike 与非正规性}
+$A=V\Lambda V^{-1}$：$A+E$ 的每个特征值 $\mu$ 满足 \重点{\min_i|\mu-\lambda_i|\le\kappa(V)\|E\|}；正规矩阵 $\kappa(V)=1$。
+单特征值的条件数 $\frac{1}{|y^*x|}$（$x,y$ 为单位右、左特征向量）。Jordan 块（$n$ 阶）受 $\varepsilon$ 扰动后特征值移动 \textbf{$\varepsilon^{1/n}$}：$n=10$、$\varepsilon=10^{-10}$ 时移动 $0.1$。伪谱 $\sigma_\varepsilon(A)=\{z:\|(zI-A)^{-1}\|>\varepsilon^{-1}\}$ 比特征值更能描述非正规矩阵的行为。
+\end{结论}
+
+\begin{结论}{特征向量的敏感性：取决于间隙}
+对称 $A$，特征值 $\lambda$ 与其余谱的间隙 $\delta$，扰动 $E$：
+\[
+\重点{\sin\angle(x,\hat x)\le\frac{\|E\|}{\delta}}\quad(\text{Davis--Kahan}).
+\]
+近重特征值时单个特征向量不稳定，但它们张成的不变子空间稳定（对子空间用簇外间隙）。PCA 的主方向在相邻方差接近时剧烈晃动，正是这一点。
+\end{结论}
+
+\begin{结论}{最小二乘：QR vs 正规方程 vs SVD}
+$\min\|Ax-b\|$，$\kappa=\kappa_2(A)$，$\theta$ 为 $b$ 与列空间夹角：
+\[
+\text{QR/SVD 相对误差 }\sim\varepsilon\Bigl(\kappa+\kappa^2\tan\theta\Bigr),\qquad \text{正规方程 }\sim\重点{\varepsilon\kappa^2}.
+\]
+残差小时 QR 只损失 $\kappa$，正规方程总是损失 $\kappa^2$（$\kappa=10^6$ 时双精度全部丢光）。秩亏或近秩亏用截断 SVD 或带列选主元的 QR。
+\end{结论}
+
+\begin{结论}{Tikhonov 正则化的滤波因子}
+$\min\|Ax-b\|^2+\lambda\|x\|^2$：$x_\lambda=\sum_i\frac{\sigma_i^2}{\sigma_i^2+\lambda}\frac{u_i^{\mathsf T}b}{\sigma_i}v_i$。滤波因子
+\[
+\重点{f_i=\frac{\sigma_i^2}{\sigma_i^2+\lambda}}\approx\begin{cases}1,&\sigma_i\gg\sqrt\lambda\\\sigma_i^2/\lambda,&\sigma_i\ll\sqrt\lambda\end{cases}
+\]
+截断 SVD 是 $0/1$ 滤波。选 $\lambda$：L 曲线拐角、广义交叉验证、偏差原理（残差 $\approx$ 噪声水平）。Picard 条件：$|u_i^{\mathsf T}b|$ 须比 $\sigma_i$ 衰减更快才可能有稳定解。
+\end{结论}
+
+\begin{结论}{稀疏直接法：排序决定填充}
+Cholesky 的填充由消元顺序决定。二维 $\sqrt N\times\sqrt N$ 网格：自然序带宽 $\sqrt N$，成本 $O(N^2)$；
+\[
+\重点{\text{嵌套剖分：填充 }O(N\log N),\ \text{运算 }O(N^{3/2})}\ (\text{二维});\qquad \text{三维 }O(N^2).
+\]
+箭头矩阵：先消“中心”则全填满，后消则零填充——\textbf{把稠密行列排到最后}。RCM 减带宽，AMD 减填充。
+\end{结论}
+
+\begin{结论}{矩阵指数的计算：缩放与平方}
+$\ee^A=(\ee^{A/2^s})^{2^s}$：选 $s$ 使 $\|A/2^s\|\lesssim1$，对 $\ee^{A/2^s}$ 用 $[m/m]$ Padé 近似（如 $m=13$），再平方 $s$ 次。
+\重点{\text{不要用特征分解算非正规矩阵的指数}}（$\kappa(V)$ 放大误差），也不要直接截断 Taylor 级数（$\|A\|$ 大时相消）。只要 $\ee^{tA}b$ 时用 Krylov 方法，无需形成矩阵。
+\end{结论}
+
+\begin{结论}{随机化 SVD}
+取 Gauss 测试矩阵 $\Omega$（$n\times(k+p)$），$Y=(AA^{\mathsf T})^qA\Omega$，$Q=\operatorname{orth}(Y)$，对小矩阵 $Q^{\mathsf T}A$ 做 SVD。$q=0$ 时
+\[
+\重点{\E\|A-QQ^{\mathsf T}A\|_F\le\Bigl(1+\frac{k}{p-1}\Bigr)^{1/2}\Bigl(\sum_{j>k}\sigma_j^2\Bigr)^{1/2}}
+\]
+（Halko--Martinsson--Tropp）。过采样 $p=5$--$10$ 足够；奇异值衰减慢时加 $q=1$--$2$ 次幂迭代。成本 $O(mnk)$，只需对 $A$ 做两遍。
+\end{结论}
+
+\begin{结论}{循环与 Toeplitz 系统}
+循环矩阵 $C=F^*\diag(\hat c)F$：解 $Cx=b$ 只需三次 FFT，$O(n\log n)$。
+Toeplitz：Levinson 递推 $O(n^2)$；或用循环预条件子（Strang：取中间对角线延拓）配合 CG，\重点{\text{预条件后特征值聚集于 }1}，迭代次数与 $n$ 无关，总成本 $O(n\log n)$。
+\end{结论}
+
+\begin{结论}{快速 Poisson 求解器：用正弦变换对角化}
+Dirichlet 边界的二维 5 点差分 $(T\otimes I+I\otimes T)u=h^2f$，$T=\mathrm{tridiag}(-1,2,-1)$ 的特征向量是离散正弦：
+\[
+\重点{\hat u_{jk}=\frac{h^2\hat f_{jk}}{4\sin^2\frac{j\pi h}{2}+4\sin^2\frac{k\pi h}{2}}},
+\]
+DST 正反各一次，$O(N\log N)$。矩形区域、常系数时比任何迭代法都快；Neumann 用 DCT，周期用 FFT。
+\end{结论}
+
+\begin{结论}{混合精度迭代精化}
+低精度（如单精度）做 LU，高精度算残差：$r=b-A\hat x$（双精度），解 $Ad=r$（复用 LU），$\hat x\leftarrow\hat x+d$。
+只要 \重点{\kappa(A)\,\varepsilon_{\text{低}}\ll1}，每步把误差缩小约 $\kappa\varepsilon_{\text{低}}$ 倍，几步达到双精度结果——GPU 上用半精度张量核做 LU 的理论基础。
+\end{结论}
+
+\begin{结论}{Sylvester 方程与 Lyapunov 方程的数值解}
+$AX+XB=C$ 有唯一解 $\iff\sigma(A)\cap\sigma(-B)=\varnothing$。Bartels--Stewart：把 $A$、$B$ 分别化为 Schur 形（$O(n^3)$），再逐列回代三角形 Sylvester 方程。
+\重点{\text{不要组装 }n^2\times n^2\text{ 的 Kronecker 系统}}（$O(n^6)$）。Lyapunov $AX+XA^{\mathsf T}=-Q$ 的解在低秩 $Q$ 时奇异值快速衰减，可用低秩 ADI/Krylov 方法。
+\end{结论}
+
+\begin{结论}{对称正定矩阵的判定与修正 Cholesky}
+数值上判断正定：直接尝试 Cholesky，失败（出现非正主元）即不正定，比求特征值便宜一个量级。
+Newton 法中 Hessian 不定时用\重点文{修正 Cholesky}（遇到小主元时加 $\delta$）或 $H+\tau I$（$\tau$ 增至 Cholesky 成功）得到下降方向；LDL$^{\mathsf T}$ 的 $D$ 的符号给出惯性。
+\end{结论}
+
+\begin{结论}{幂法的收缩与位移逆迭代}
+已知 $\lambda_1,v_1$（对称），收缩 $A\leftarrow A-\lambda_1v_1v_1^{\mathsf T}$ 后幂法得 $\lambda_2$。位移逆迭代 $(A-\sigma I)^{-1}$：收敛比 \重点{\frac{|\lambda_j-\sigma|}{|\lambda_k-\sigma|}}（$\lambda_j$ 为离 $\sigma$ 最近、$\lambda_k$ 为次近），$\sigma$ 取得好时一两步即可。
+求“最靠近给定值的特征值”、谱中间的特征值都用位移--反转，配合 Lanczos/Arnoldi（shift-invert 模式）。
+\end{结论}
+
+\参考{Trefethen--Bau, \emph{Numerical Linear Algebra}；Golub--Van Loan, \emph{Matrix Computations}；Demmel, \emph{Applied Numerical Linear Algebra}；Saad, \emph{Iterative Methods for Sparse Linear Systems}；Higham, \emph{Accuracy and Stability of Numerical Algorithms}；MIT 18.335。}

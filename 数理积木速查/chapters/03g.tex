@@ -1,0 +1,154 @@
+\subsection{随机过程补充}
+
+\begin{结论}{Poisson 过程：条件均匀与复合 Poisson}
+率 $\lambda$：间隔 i.i.d.\ $\mathrm{Exp}(\lambda)$；\重点{\text{给定 }N(t)=n\text{，到达时刻是 }n\text{ 个 }U(0,t)\text{ 的次序统计量}}。
+复合 Poisson $X(t)=\sum_{i\le N(t)}Y_i$：$\E X=\lambda t\E Y$，$\Var X=\lambda t\,\E Y^2$（不是 $\Var Y$）。“$t$ 时刻前到达者的总等待”$\E\sum(t-T_i)=\frac{\lambda t^2}2$ 由条件均匀立得。
+\end{结论}
+
+\begin{结论}{非齐次 Poisson 过程与稀疏化模拟}
+强度 $\lambda(t)$，$\Lambda(t)=\int_0^t\lambda$：$N(t)\sim\mathrm{Poi}(\Lambda(t))$，时间变换 $s=\Lambda(t)$ 后变为率 $1$ 的齐次过程。
+模拟（Lewis--Shedler）：以 $\lambda^*\ge\sup\lambda$ 生成齐次过程，每点以概率 \重点{\frac{\lambda(t)}{\lambda^*}} 保留。空间 Poisson 点过程同理；最近邻距离 $P(R>r)=\ee^{-\lambda\pi r^2}$（平面）。
+\end{结论}
+
+\begin{结论}{细致平衡与 Kolmogorov 可逆判据}
+$\pi_iP_{ij}=\pi_jP_{ji}$ 对所有 $i,j$ $\Rightarrow$ $\pi$ 平稳且链可逆。不知 $\pi$ 时判定：可逆 $\iff$ 每个圈满足
+\[
+\重点{P_{i_1i_2}P_{i_2i_3}\cdots P_{i_ki_1}=P_{i_1i_k}P_{i_ki_{k-1}}\cdots P_{i_2i_1}}.
+\]
+树上的链（如生灭链）总是可逆；可逆时 $\pi_j\propto\prod\frac{P_{i\to i+1}}{P_{i+1\to i}}$ 沿路径相乘。可逆链的转移矩阵与对称矩阵相似，特征值实。
+\end{结论}
+
+\begin{结论}{首步分析：命中概率与期望命中时间}
+$h_i=P_i(\text{先到 }A\text{ 后到 }B)$：$h=1$ 于 $A$，$h=0$ 于 $B$，其余 \重点{h_i=\sum_jP_{ij}h_j}（调和）。期望命中时间 $k_i$：$k=0$ 于 $A$，其余 $k_i=1+\sum_jP_{ij}k_j$。
+最小非负解原则：无限状态时取方程的最小非负解。例：有偏游走（右 $p$、左 $q$）从 $1$ 出发到达 $0$ 的概率 $\min(1,q/p)$。
+\end{结论}
+
+\begin{结论}{图上的随机游走与电网络}
+连通图（$m$ 条边）上的简单随机游走：$\pi_v=\frac{\deg v}{2m}$，回访时间 $\frac{2m}{\deg v}$。把每条边看成单位电阻：
+\[
+\重点{\text{往返时间 }\E_a\tau_b+\E_b\tau_a=2m\,R_{\mathrm{eff}}(a,b)},\qquad P_a(\tau_b<\tau_a^+)=\frac{1}{\deg(a)R_{\mathrm{eff}}(a,b)}.
+\]
+常返 $\iff$ 到无穷的有效电阻无穷（$\mathbb Z^2$ 是，$\mathbb Z^3$ 否：Pólya）；Rayleigh 单调性：加边减小电阻。覆盖时间 $\le2m(n-1)$。
+\end{结论}
+
+\begin{结论}{Metropolis--Hastings 与 Gibbs}
+目标 $\pi$，提议 $q(x,y)$，接受率
+\[
+\重点{\alpha(x,y)=\min\Bigl(1,\frac{\pi(y)q(y,x)}{\pi(x)q(x,y)}\Bigr)},
+\]
+满足细致平衡，只需 $\pi$ 的比值（不需归一化常数）。随机游走提议 $q$ 对称时比值化为 $\frac{\pi(y)}{\pi(x)}$；高维 Gauss 目标的最优接受率约 $0.234$。Gibbs：逐坐标从条件分布抽样，接受率恒为 $1$。
+\end{结论}
+
+\begin{结论}{连续时间 Markov 链}
+生成元 $Q$（$q_{ij}\ge0$，行和 $0$）：$P(t)=\ee^{tQ}$，$P'=QP=PQ$；平稳 \重点{\pi Q=0}。在状态 $i$ 停留 $\mathrm{Exp}(q_i)$，$q_i=-q_{ii}$，然后按 $\frac{q_{ij}}{q_i}$ 跳（嵌入链）。
+嵌入链平稳分布 $\tilde\pi_i\propto\pi_iq_i$（停留短的状态在跳跃链中出现更频繁）。均匀化：$P(t)=\sum_n\ee^{-\Lambda t}\frac{(\Lambda t)^n}{n!}(I+Q/\Lambda)^n$，$\Lambda\ge\max q_i$。
+\end{结论}
+
+\begin{结论}{排队论三个公式}
+Little：\重点{L=\lambda W}（任何稳定系统，与分布无关）。$M/M/1$：$L=\frac{\rho}{1-\rho}$，$W=\frac1{\mu-\lambda}$。
+Pollaczek--Khinchine（$M/G/1$）：$W_q=\frac{\lambda\E S^2}{2(1-\rho)}=\frac{\rho}{1-\rho}\cdot\frac{1+C_s^2}{2}\E S$——服务时间变异越大越堵；确定性服务（$C_s=0$）等待减半。$M/M/\infty$：在系统人数 $\sim\mathrm{Poi}(\lambda/\mu)$（对 $M/G/\infty$ 也成立）。
+\end{结论}
+
+\begin{结论}{Erlang B 与 Erlang C}
+$c$ 个服务台、负载 $a=\lambda/\mu$。损失制（满则拒绝）的阻塞概率
+\[
+\重点{B(c,a)=\frac{a^c/c!}{\sum_{k=0}^ca^k/k!}},\qquad B(c,a)=\frac{aB(c-1,a)}{c+aB(c-1,a)}\ (\text{递推，数值稳定}).
+\]
+等待制 $M/M/c$ 需等待的概率 $C=\frac{cB}{c-a(1-B)}$（$a<c$）。规模经济：同样负载率下台数越多等待越少（合并队列优于分开排队）。
+\end{结论}
+
+\begin{结论}{Brown 运动的最大值与首达时}
+$M_t=\max_{s\le t}B_s$：\重点{P(M_t\ge a)=2P(B_t\ge a)}（反射原理），即 $M_t\overset d=|B_t|$。首达 $\tau_a$ 的密度与 Laplace 变换：
+\[
+f_{\tau_a}(t)=\frac{a}{\sqrt{2\pi t^3}}\ee^{-a^2/2t},\qquad \E\ee^{-\lambda\tau_a}=\ee^{-a\sqrt{2\lambda}},\qquad \E\tau_a=\infty .
+\]
+带漂移 $\mu>0$：$\E\tau_a=\frac a\mu$，$\tau_a$ 服从逆 Gauss 分布；$\mu<0$ 时 $P(\tau_a<\infty)=\ee^{-2|\mu|a}$。
+\end{结论}
+
+\begin{结论}{连续时间反正弦律}
+$[0,1]$ 上 Brown 运动：最后零点 $g$、正侧时间 $\int_0^1\mathbf 1_{B_s>0}\dd s$、最大值位置 $\arg\max B$ 都服从
+\[
+\重点{P(\cdot\le x)=\frac2\pi\arcsin\sqrt x}.
+\]
+三者同分布是 Lévy 的结论；密度在两端发散，“持续领先”比“势均力敌”常见。
+\end{结论}
+
+\begin{结论}{Brown 桥}
+$X_t=B_t-tB_1$（$0\le t\le1$）：$\Cov(X_s,X_t)=s(1-t)$（$s\le t$），即“给定 $B_1=0$ 的 Brown 运动”。
+\[
+\重点{P\Bigl(\max_{t\le1}X_t\ge a\Bigr)=\ee^{-2a^2}},\qquad P\Bigl(\max|X_t|\ge a\Bigr)=2\sum_{k\ge1}(-1)^{k-1}\ee^{-2k^2a^2}.
+\]
+后者即 Kolmogorov 分布：$\sqrt n\sup|F_n-F|\to\sup|X_t|$，KS 检验的 $p$ 值由此计算。
+\end{结论}
+
+\begin{结论}{Ornstein--Uhlenbeck 过程}
+$\dd X=-\theta X\dd t+\sigma\dd W$：$X_t=X_0\ee^{-\theta t}+\sigma\int_0^t\ee^{-\theta(t-s)}\dd W_s$，
+\[
+\重点{\text{平稳分布 }N\Bigl(0,\frac{\sigma^2}{2\theta}\Bigr)},\qquad \Cov(X_s,X_t)=\frac{\sigma^2}{2\theta}\ee^{-\theta|t-s|}.
+\]
+精确离散化：$X_{t+h}=\ee^{-\theta h}X_t+\sqrt{\frac{\sigma^2}{2\theta}(1-\ee^{-2\theta h})}\,\xi$（AR(1)）。物理中即 Langevin 方程的速度过程，谱为 Lorentz 型。
+\end{结论}
+
+\begin{结论}{二次变差与 Itô 等距}
+$[B]_t=t$：$\sum(B_{t_{i+1}}-B_{t_i})^2\to t$（网格加细，$L^2$ 中），而总变差无穷。由此 $(\dd B)^2=\dd t$，$\dd B\,\dd t=0$。
+\重点{\E\Bigl(\int_0^tH_s\dd B_s\Bigr)^2=\E\int_0^tH_s^2\dd s}，且 Itô 积分是鞅（$H$ 适应、平方可积）。例：$\int_0^tB\dd B=\frac{B_t^2-t}2$；Stratonovich 积分给 $\frac{B_t^2}{2}$（普通链式法则）。
+\end{结论}
+
+\begin{结论}{Girsanov：换测度消去漂移}
+$\frac{\dd Q}{\dd P}\Big|_{\mathcal F_T}=\exp\Bigl(\int_0^T\theta_s\dd B_s-\frac12\int_0^T\theta_s^2\dd s\Bigr)$ $\Rightarrow$ 在 $Q$ 下 \重点{\tilde B_t=B_t-\int_0^t\theta_s\dd s} 是 Brown 运动。
+用途：带漂移过程的概率化为无漂移计算再乘似然比（重要性抽样、风险中性定价）；常数 $\theta=\mu$ 时“给定终点，带漂移 BM 的桥与无漂移相同”。需 Novikov 条件 $\E\ee^{\frac12\int\theta^2}<\infty$。
+\end{结论}
+
+\begin{结论}{Feynman--Kac 公式}
+$\dd X=b\dd t+\sigma\dd W$，生成元 $\mathcal L=b\partial_x+\frac{\sigma^2}2\partial_x^2$。$u(t,x)=\E_{x}\bigl[f(X_t)\ee^{-\int_0^tV(X_s)\dd s}\bigr]$ 满足
+\[
+\重点{\partial_tu=\mathcal Lu-Vu},\qquad u(0,x)=f(x).
+\]
+即虚时 Schrödinger 方程的路径积分表示；$V=r$ 常数时就是期权的贴现期望。逆用：用 Monte Carlo 模拟扩散来解抛物型 PDE。
+\end{结论}
+
+\begin{结论}{Black--Scholes 公式}
+风险中性下 $\dd S=rS\dd t+\sigma S\dd W$：欧式看涨
+\[
+\重点{C=S_0\Phi(d_1)-K\ee^{-rT}\Phi(d_2)},\qquad d_{1,2}=\frac{\ln(S_0/K)+(r\pm\frac{\sigma^2}2)T}{\sigma\sqrt T}.
+\]
+看跌由平价 $C-P=S_0-K\ee^{-rT}$ 得到。$\Delta=\Phi(d_1)$；平值期权 $C\approx0.4S_0\sigma\sqrt T$（$r=0$）。$\Phi(d_2)$ 是到期行权的风险中性概率。
+\end{结论}
+
+\begin{结论}{Gauss 过程：核与谱}
+平稳 Gauss 过程由协方差核决定；Bochner：连续正定函数 $k(\tau)$ 是非负谱测度的 Fourier 变换。
+平方指数核 $\ee^{-\tau^2/2\ell^2}$（样本路径 $C^\infty$）；Matérn-$\nu$ 核（样本路径 $\lceil\nu\rceil-1$ 次可导，谱 $\propto(\frac{2\nu}{\ell^2}+\omega^2)^{-\nu-1/2}$）；$\nu=\frac12$ 即 OU 核 $\ee^{-|\tau|/\ell}$。\重点{\text{核的光滑度}=\text{谱的衰减速度}}。GP 回归后验均值 $k_*^{\mathsf T}(K+\sigma^2I)^{-1}y$。
+\end{结论}
+
+\begin{结论}{分支过程的矩与总后代}
+$Z_0=1$，后代均值 $\mu$、方差 $\sigma^2$：
+\[
+\E Z_n=\mu^n,\qquad \重点{\Var Z_n=\sigma^2\mu^{n-1}\frac{\mu^n-1}{\mu-1}}\ (\mu\ne1),\quad =n\sigma^2\ (\mu=1).
+\]
+次临界总后代 $\E T=\frac1{1-\mu}$；分布由 Otter--Dwass（Lagrange 反演）：$P(T=n)=\frac1nP(S_n=n-1)$，$S_n$ 为 $n$ 个后代数之和。Poisson(1) 后代：$P(T=n)=\frac{n^{n-1}\ee^{-n}}{n!}$（Borel 分布）。
+\end{结论}
+
+\begin{结论}{优先连接与 Yule 过程：幂律从哪里来}
+Barabási--Albert：新节点按度数成比例连接 $m$ 条边，度分布 \重点{P(k)\sim2m^2k^{-3}}。Yule 过程（纯生，率 $\lambda$）：$N(t)\sim\mathrm{Geo}(\ee^{-\lambda t})$；以不同年龄采样的混合产生幂律。
+机制：“富者更富” $+$ 指数增长 $\times$ 指数年龄分布 $\Rightarrow$ 幂律（Simon 模型）。拟合指数用极大似然而非对数直方图。
+\end{结论}
+
+\begin{结论}{Ehrenfest 罐与 Kac 回访时间}
+$N$ 个球在两罐间随机移动：平稳分布 $\mathrm{Bin}(N,\frac12)$；从“全部在左罐”出发的回访时间期望 \重点{2^N}（$=\frac1{\pi_0}$），而从平衡态 $N/2$ 回访只需 $\sim\sqrt{\pi N/2}$。
+这是 Boltzmann 与 Zermelo 之争的解答：Poincaré 回归存在但对宏观 $N$ 时间天文数字，不违背热力学第二定律。
+\end{结论}
+
+\begin{结论}{更新--报酬定理}
+每个更新周期长 $T_i$、报酬 $R_i$（$(T_i,R_i)$ i.i.d.）：
+\[
+\重点{\lim_{t\to\infty}\frac{R(t)}t=\frac{\E R}{\E T}}\quad\text{a.s.}
+\]
+用法：设备更换策略的长期平均成本、交通灯排队、“检查悖论”中观测到的周期长度期望 $\frac{\E T^2}{\E T}$（以时间计的长度偏倚）。
+\end{结论}
+
+\begin{结论}{等待两个事件：竞争指数与“谁先发生”}
+连续时间链中从状态 $i$ 出发，各可能跳跃是独立指数钟竞争：下一跳为 $j$ 的概率 $\frac{q_{ij}}{q_i}$，与停留时间\textbf{独立}。
+例：两个灯泡寿命 $\mathrm{Exp}(\lambda_1),\mathrm{Exp}(\lambda_2)$，都坏掉的期望时间 \重点{\frac1{\lambda_1}+\frac1{\lambda_2}-\frac1{\lambda_1+\lambda_2}}（$\E\max=\E X+\E Y-\E\min$）。
+\end{结论}
+
+\参考{Ross, \emph{Stochastic Processes}；Norris, \emph{Markov Chains}；Karatzas--Shreve, \emph{Brownian Motion and Stochastic Calculus}；Øksendal, \emph{Stochastic Differential Equations}；Doyle--Snell, \emph{Random Walks and Electric Networks}；MIT 6.262、18.445、15.070。}

@@ -1,0 +1,137 @@
+\subsection{收敛与极限定理补充}
+
+\begin{结论}{收敛方式之间的蕴含与反例}
+a.s.\ $\Rightarrow$ 依概率 $\Rightarrow$ 依分布；$L^p\Rightarrow$ 依概率；依分布到\textbf{常数} $\Rightarrow$ 依概率。
+反例：$X_n=n\mathbf 1_{(0,1/n)}$ a.s.\ $\to0$ 但 $\E X_n=1$；独立 $X_n\sim\mathrm{Bern}(\frac1n)$ 依概率 $\to0$ 但不 a.s.（第二 Borel--Cantelli）；$X_n=-X$（$X$ 对称）依分布 $\to X$ 但不依概率。\重点{\text{依概率收敛}\Rightarrow\text{有子列 a.s. 收敛}}。
+\end{结论}
+
+\begin{结论}{Slutsky 与连续映射}
+$X_n\xrightarrow dX$，$Y_n\xrightarrow pc$（常数）$\Rightarrow$ \重点{X_n+Y_n\xrightarrow dX+c,\ X_nY_n\xrightarrow dcX,\ X_n/Y_n\xrightarrow dX/c\ (c\ne0)}；$g$ 在 $X$ 的支撑上（几乎处处）连续 $\Rightarrow g(X_n)\xrightarrow dg(X)$。
+典型用法：$\frac{\sqrt n(\bar X-\mu)}{S}\xrightarrow dN(0,1)$（$S\xrightarrow p\sigma$），所以大样本 $t$ 统计量近似正态而不需正态总体。\注意 $Y_n$ 收敛到随机变量时 Slutsky 不成立。
+\end{结论}
+
+\begin{结论}{Lindeberg 与 Lyapunov 条件}
+独立、$\E X_i=0$，$s_n^2=\sum\Var X_i$。Lindeberg：$\forall\varepsilon>0$，$\frac1{s_n^2}\sum\E[X_i^2\mathbf 1_{|X_i|>\varepsilon s_n}]\to0$ $\Rightarrow\frac{S_n}{s_n}\xrightarrow dN(0,1)$。
+Lyapunov（易验）：\重点{\frac{1}{s_n^{2+\delta}}\sum\E|X_i|^{2+\delta}\to0}。反例：$X_i=\pm2^i$ 时最后一项主导，和不近似正态。例：$\sum\mathrm{Bern}(p_i)$ 只要 $\sum p_i(1-p_i)=\infty$ 就渐近正态。
+\end{结论}
+
+\begin{结论}{多元 CLT 与 Cramér--Wold}
+$\mathbf X_n\xrightarrow d\mathbf X\iff$ 对所有固定 $\mathbf t$，$\mathbf t^{\mathsf T}\mathbf X_n\xrightarrow d\mathbf t^{\mathsf T}\mathbf X$（Cramér--Wold）。故 i.i.d. 随机向量 \重点{\sqrt n(\bar{\mathbf X}-\boldsymbol\mu)\xrightarrow dN(0,\Sigma)}。
+多项计数：$\sqrt n(\hat p-p)\to N(0,\diag(p)-pp^{\mathsf T})$（协方差奇异，秩 $k-1$），由此 Pearson $\chi^2$ 的自由度是 $k-1$。
+\end{结论}
+
+\begin{结论}{局部极限定理与连续性修正}
+$\mathrm{Bin}(n,p)$，$x=\frac{k-np}{\sqrt{npq}}$ 有界：
+\[
+\重点{P(S_n=k)=\frac{1}{\sqrt{2\pi npq}}\ee^{-x^2/2}\bigl(1+O(n^{-1/2})\bigr)}.
+\]
+区间概率用 $\Phi\bigl(\frac{b+\frac12-np}{\sqrt{npq}}\bigr)-\Phi\bigl(\frac{a-\frac12-np}{\sqrt{npq}}\bigr)$，误差从 $O(n^{-1/2})$ 降到 $O(n^{-1})$（$p=\frac12$ 时）。格点分布的 CLT 误差主项正是半格距。
+\end{结论}
+
+\begin{结论}{零一律}
+Kolmogorov：独立序列的尾事件（不依赖任何有限个变量）概率为 $0$ 或 $1$：$\sum X_n$ 收敛、$\limsup\frac{S_n}{a_n}>c$ 等。
+Hewitt--Savage：i.i.d. 序列的可交换事件（对有限置换不变）概率 $0$ 或 $1$：\重点{\{S_n=0\text{ i.o.}\}}。所以“游走无穷次返回”的概率不是 $0$ 就是 $1$，只需判断哪一个。
+\end{结论}
+
+\begin{结论}{Kolmogorov 三级数定理与随机调和级数}
+独立 $X_n$，$\sum X_n$ a.s.\ 收敛 $\iff$ 对某 $A>0$：$\sum P(|X_n|>A)$、$\sum\E[X_n\mathbf 1_{|X_n|\le A}]$、$\sum\Var(X_n\mathbf 1_{|X_n|\le A})$ 都收敛。
+推论（零均值）：\重点{\sum\Var X_n<\infty\Rightarrow\sum X_n\text{ a.s. 收敛}}。随机符号级数 $\sum\pm\frac1n$ a.s.\ 收敛，$\sum\pm\frac1{\sqrt n}$ a.s.\ 发散；$\sum\pm a_n$ 收敛 $\iff\sum a_n^2<\infty$。
+\end{结论}
+
+\begin{结论}{鞅收敛定理及其典型应用}
+$\sup_n\E|M_n|<\infty$ 的鞅 a.s.\ 收敛；一致可积时还 $L^1$ 收敛且 $M_n=\E[M_\infty\mid\mathcal F_n]$。非负上鞅总 a.s.\ 收敛。
+例：Pólya 罐中红球比例（鞅）$\to\mathrm{Beta}$；分支过程 $W_n=\frac{Z_n}{\mu^n}\to W$（$\mu>1$，$\E Z_1\ln Z_1<\infty$ 时 $W$ 非退化，Kesten--Stigum）；似然比 $\prod\frac{q(X_i)}{p(X_i)}$ 在 $p$ 下 $\to0$（\重点{\text{鞅收敛到 }0\text{ 但期望恒为 }1}，非一致可积）。
+\end{结论}
+
+\begin{结论}{Wald 恒等式}
+i.i.d.\ $X_i$（均值 $\mu$、方差 $\sigma^2$），$\tau$ 为停时、$\E\tau<\infty$：
+\[
+\重点{\E S_\tau=\mu\,\E\tau},\qquad \E(S_\tau-\mu\tau)^2=\sigma^2\E\tau,\qquad \E\Bigl[\frac{\ee^{\theta S_\tau}}{M(\theta)^\tau}\Bigr]=1
+\]
+（第三式需适当有界条件）。用法：对称游走离开 $(-a,b)$ 的期望时间 $ab$；第一式推出“首次达到 $+1$”的期望时间无穷（否则 $1=0\cdot\E\tau$）。
+\end{结论}
+
+\begin{结论}{Glivenko--Cantelli 与 DKW}
+经验分布 $F_n$：$\sup_x|F_n(x)-F(x)|\to0$ a.s.；定量（Dvoretzky--Kiefer--Wolfowitz，Massart 常数）：
+\[
+\重点{P\Bigl(\sup_x|F_n-F|>\varepsilon\Bigr)\le2\ee^{-2n\varepsilon^2}}.
+\]
+给出整条 CDF 的同时置信带：$\varepsilon=\sqrt{\ln(2/\alpha)/2n}$，$n=1000$、$\alpha=0.05$ 时 $\varepsilon\approx0.043$，与 $F$ 无关。$\sqrt n\sup|F_n-F|$ 极限为 Kolmogorov 分布。
+\end{结论}
+
+\begin{结论}{Scheffé 引理与总变差}
+密度 $f_n\to f$ a.e. $\Rightarrow$ \重点{\int|f_n-f|\to0}（总变差收敛，强于依分布）。证：$\int(f-f_n)^+\to0$ 由控制收敛（被 $f$ 控制），而 $\int(f-f_n)=0$。
+$d_{TV}(P,Q)=\sup_A|P(A)-Q(A)|=\frac12\int|p-q|=\inf_{\text{耦合}}P(X\ne Y)$。$t_n$ 密度 $\to$ 正态密度，所以 $t_n\to N(0,1)$ 甚至在总变差意义下。
+\end{结论}
+
+\begin{结论}{Paley--Zygmund：二阶矩给出下界}
+$X\ge0$，$0\le\theta\le1$：
+\[
+\重点{P(X>\theta\,\E X)\ge(1-\theta)^2\frac{(\E X)^2}{\E X^2}}.
+\]
+$\theta=0$ 即“二阶矩法”$P(X>0)\ge\frac{(\E X)^2}{\E X^2}$。用于证明随机图中某结构“以正概率存在”、随机级数不太小、分支过程存活概率下界。
+\end{结论}
+
+\begin{结论}{耦合与总变差}
+$d_{TV}(\mathcal L(X),\mathcal L(Y))\le P(X\ne Y)$ 对任意耦合成立，且存在最优耦合取等。Markov 链：两链用同一随机性运行至相遇（耦合时间 $T$），\重点{d_{TV}(P^t(x,\cdot),\pi)\le P(T>t)}。
+例：Bernoulli$(p)$ 与 Poisson$(p)$ 最优耦合 $P(X\ne Y)=p(1-\ee^{-p})\le p^2$，推出 Le Cam：$d_{TV}(\sum\mathrm{Bern}(p_i),\mathrm{Poi}(\sum p_i))\le\sum p_i^2$。
+\end{结论}
+
+\begin{结论}{极值分布三类型}
+$\frac{M_n-b_n}{a_n}\xrightarrow dG$ 时 $G$ 只能是（Fisher--Tippett--Gnedenko）：Gumbel $\ee^{-\ee^{-x}}$（正态、指数等轻尾）、Fréchet $\ee^{-x^{-\alpha}}$（幂律尾 $1-F\sim x^{-\alpha}$）、反 Weibull（右端点有限）。
+\重点{\text{Pareto}(\alpha)\text{：}M_n/n^{1/\alpha}\to\text{Fréchet}}；$U(0,1)$：$n(1-M_n)\to\mathrm{Exp}(1)$。统一形式 GEV $\exp(-(1+\xi x)^{-1/\xi})$，$\xi$ 为尾指数。
+\end{结论}
+
+\begin{结论}{更新过程的 CLT}
+间隔 i.i.d.（均值 $\mu$、方差 $\sigma^2$），$N(t)$ 为 $t$ 前的更新数：
+\[
+\frac{N(t)}t\to\frac1\mu\ \text{a.s.},\qquad \重点{N(t)\approx N\Bigl(\frac t\mu,\ \frac{\sigma^2t}{\mu^3}\Bigr)}.
+\]
+例：Poisson 过程 $\sigma^2=\mu^2$，回到 $\Var N(t)=t/\mu$。神经元放电的 Fano 因子 $\frac{\Var N}{\E N}\to\frac{\sigma^2}{\mu^2}$（变异系数平方）。
+\end{结论}
+
+\begin{结论}{Markov 链与相关序列的 CLT：渐近方差}
+平稳、遍历的链（或相关序列）$f(X_t)$：$\sqrt n(\bar f-\pi f)\to N(0,\sigma_f^2)$，
+\[
+\重点{\sigma_f^2=\Var_\pi f\Bigl(1+2\sum_{k\ge1}\rho_k\Bigr)}=\Var_\pi f\cdot\tau_{\mathrm{int}},
+\]
+$\rho_k$ 为 lag-$k$ 自相关。MCMC 的有效样本量 $n/\tau_{\mathrm{int}}$；AR(1) 时 $\tau_{\mathrm{int}}=\frac{1+\phi}{1-\phi}$。估计 $\sigma_f^2$ 用分批均值（batch means）。
+\end{结论}
+
+\begin{结论}{用四阶矩 $+$ Borel--Cantelli 证强大数律}
+i.i.d.\ 零均值、$\E X^4<\infty$：$\E S_n^4=n\E X^4+3n(n-1)\sigma^4\le Cn^2$，Markov 给 $P(|S_n|>n\varepsilon)\le\frac{C}{n^2\varepsilon^4}$，求和收敛 $\Rightarrow$ \重点{\frac{S_n}n\to0\text{ a.s.}}。
+同一技巧：$\sum_nP(|Y_n|>\varepsilon)<\infty$ 对每个 $\varepsilon$ 成立 $\Rightarrow Y_n\to0$ a.s.（“完全收敛”）。一般 $L^1$ 情形需截断（Etemadi）。
+\end{结论}
+
+\begin{结论}{依分布收敛何时保证矩收敛}
+$X_n\xrightarrow dX$ 且 $\{X_n\}$ 一致可积 $\Rightarrow\E X_n\to\E X$；充分条件 \重点{\sup_n\E|X_n|^{1+\delta}<\infty}。
+反例：$X_n=n$ 以概率 $\frac1n$，否则 $0$：$X_n\xrightarrow d0$ 但 $\E X_n=1$。所以“$\hat\theta_n$ 渐近正态”不意味着 $\E\hat\theta_n\to\theta$ 或方差 $\to$ 渐近方差（如 $1/\bar X$ 在 $\bar X$ 可能为 $0$ 时期望无穷）。
+\end{结论}
+
+\begin{结论}{Lévy 连续性与反演公式}
+$\varphi_n\to\varphi$ 逐点且 $\varphi$ 在 $0$ 连续 $\Rightarrow$ $\varphi$ 是某分布的特征函数且依分布收敛。
+反演：$\int|\varphi|<\infty\Rightarrow f(x)=\frac1{2\pi}\int\ee^{-\ii tx}\varphi(t)\dd t$；一般 $P(a<X<b)+\frac12P(X\in\{a,b\})=\lim_T\frac1{2\pi}\int_{-T}^T\frac{\ee^{-\ii ta}-\ee^{-\ii tb}}{\ii t}\varphi(t)\dd t$；原子 \重点{P(X=x)=\lim_T\frac1{2T}\int_{-T}^T\ee^{-\ii tx}\varphi(t)\dd t}。
+\end{结论}
+
+\begin{结论}{泊松极限的多种形式}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 稀有事件：$\mathrm{Bin}(n,\frac\lambda n)\to\mathrm{Poi}(\lambda)$，$d_{TV}\le\frac{\lambda^2}{n}$。
+\item 弱相依：Chen--Stein 方法给 $d_{TV}\le(b_1+b_2+b_3)$（邻域依赖结构），用于随机图小子图计数、DNA 序列匹配。
+\item 点过程：$n$ 个均匀点放在 $[0,n]$ 上 $\to$ 率 $1$ 的 Poisson 过程；\重点{\text{叠加大量稀疏独立更新过程}\to\text{Poisson 过程}}（Palm--Khinchin）——到达流常近似 Poisson 的理由。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{重对数律与 Chung 的“另一个”重对数律}
+i.i.d.\ 方差 $\sigma^2$：$\limsup\frac{S_n}{\sqrt{2n\ln\ln n}}=\sigma$ a.s.；Chung：\重点{\liminf_n\frac{\max_{k\le n}|S_k|}{\sqrt{n/\ln\ln n}}=\frac{\pi\sigma}{\sqrt8}}\ a.s.。
+前者说游走偶尔走得比 $\sqrt n$ 远一点（$\sqrt{\ln\ln n}$ 倍），后者说它的最大偏离偶尔小得出奇。
+\end{结论}
+
+\begin{结论}{Delta 方法的二阶形式}
+$\sqrt n(T_n-\theta)\xrightarrow dN(0,\sigma^2)$，$g'(\theta)=0\ne g''(\theta)$：
+\[
+\重点{n\bigl(g(T_n)-g(\theta)\bigr)\xrightarrow d\frac{\sigma^2g''(\theta)}{2}\chi^2_1}.
+\]
+例：$\bar X^2$ 在 $\mu=0$ 处；检验统计量在零假设边界上的非正态极限。一阶 Delta 方法在 $g'(\theta)=0$ 时只给出“方差为 $0$”，必须进二阶。
+\end{结论}
+
+\参考{Durrett, \emph{Probability: Theory and Examples}；Billingsley, \emph{Probability and Measure}；van der Vaart, \emph{Asymptotic Statistics}；Levin--Peres, \emph{Markov Chains and Mixing Times}；Embrechts 等, \emph{Modelling Extremal Events}；MIT 18.175、18.176。}

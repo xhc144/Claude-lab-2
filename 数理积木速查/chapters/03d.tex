@@ -1,0 +1,165 @@
+\subsection{离散分布与计数概率}
+
+\begin{结论}{尾和公式}
+非负整数值 $X$：\重点{\E X=\sum_{k\ge1}P(X\ge k)}，$\E X^2=\sum_{k\ge1}(2k-1)P(X\ge k)$；非负连续 $\E X=\int_0^\infty P(X>t)\dd t$，$\E X^p=\int_0^\infty pt^{p-1}P(X>t)\dd t$。
+例：掷骰子直到出现 $6$ 的次数，$P(X\ge k)=(\frac56)^{k-1}$，$\E X=6$；$n$ 个均匀变量的最大值 $\E\max=\int_0^1(1-t^n)\dd t=\frac n{n+1}$。
+\end{结论}
+
+\begin{结论}{常用离散分布的矩}
+\[
+\begin{array}{llll}
+&\E&\Var&\text{PGF }\E s^X\\
+\text{Bin}(n,p)&np&np(1-p)&(1-p+ps)^n\\
+\text{Poi}(\lambda)&\lambda&\lambda&\ee^{\lambda(s-1)}\\
+\text{Geo}(p)\ (\ge1)&1/p&(1-p)/p^2&\frac{ps}{1-(1-p)s}\\
+\text{NB}(r,p)\ (\text{第 }r\text{ 次成功的试验数})&r/p&r(1-p)/p^2&\bigl(\frac{ps}{1-(1-p)s}\bigr)^r\\
+\text{HG}(N,K,n)&nK/N&n\frac KN\frac{N-K}{N}\cdot\重点{\frac{N-n}{N-1}}&
+\end{array}
+\]
+超几何方差多了有限总体修正 $\frac{N-n}{N-1}$。阶乘矩：$\E[X^{\underline k}]=n^{\underline k}p^k$（二项）、$\lambda^k$（Poisson）。
+\end{结论}
+
+\begin{结论}{Poisson 的分裂、合并与条件化}
+$N\sim\mathrm{Poi}(\lambda)$，每个独立地以概率 $p_i$ 归入第 $i$ 类 $\Rightarrow$ 各类计数\重点文{相互独立}，$\sim\mathrm{Poi}(\lambda p_i)$（Poisson 化：固定总数时的多项分布难题变成独立问题）。
+独立 Poisson 之和仍 Poisson；反过来 $X_1\mid X_1+X_2=n\sim\mathrm{Bin}\bigl(n,\frac{\lambda_1}{\lambda_1+\lambda_2}\bigr)$。
+\end{结论}
+
+\begin{结论}{配对问题：不动点数近似 Poisson(1)}
+随机置换的不动点数 $F_n$：$\E F_n=\Var F_n=1$（$n\ge2$），且
+\[
+\重点{P(F_n=k)=\frac1{k!}\sum_{j=0}^{n-k}\frac{(-1)^j}{j!}\to\frac{\ee^{-1}}{k!}}.
+\]
+$P(\text{无配对})\to\ee^{-1}\approx0.368$，误差 $<\frac1{(n+1)!}$。前 $n$ 阶矩与 $\mathrm{Poi}(1)$ 完全相同（第 $m$ 阶矩为 $B_m$，$m\le n$）。
+\end{结论}
+
+\begin{结论}{占位问题：空盒数}
+$n$ 个球独立均匀放入 $m$ 盒，空盒数 $E$：
+\[
+\重点{\E E=m\Bigl(1-\frac1m\Bigr)^n},\qquad \Var E=m(m-1)\Bigl(1-\frac2m\Bigr)^n+m\Bigl(1-\frac1m\Bigr)^n-m^2\Bigl(1-\frac1m\Bigr)^{2n}.
+\]
+非空盒数（不同值个数）期望 $m(1-(1-\frac1m)^n)$；$n=m$ 时约 $(1-\frac1\ee)m$。$P(\text{无空盒})=\frac{m!S(n,m)}{m^n}$。
+\end{结论}
+
+\begin{结论}{首次重复与碰撞}
+从 $m$ 个值中独立均匀抽取，首次出现重复的时刻 $T$：
+\[
+P(T>k)=\prod_{j<k}\Bigl(1-\frac jm\Bigr)\approx\ee^{-k^2/2m},\qquad \重点{\E T\approx\sqrt{\frac{\pi m}2}+\frac23}.
+\]
+生日问题 $m=365$：$\E T\approx24.6$；哈希碰撞的“生日界” $\sim\sqrt m$；Pollard $\rho$ 分解的复杂度 $O(\sqrt p)$ 同理。
+\end{结论}
+
+\begin{结论}{Penney 游戏：Conway 算法}
+公平硬币，图案 $A,B$（等长），定义相关数 $AB=\sum_{k}2^{k-1}[\,A\text{ 的后 }k\text{ 位}=B\text{ 的前 }k\text{ 位}\,]$。
+\[
+\重点{\frac{P(B\text{ 先于 }A)}{P(A\text{ 先于 }B)}=\frac{AA-AB}{BB-BA}},\qquad \E T_A=2\,AA .
+\]
+$\E T_{HH}=6$，$\E T_{HT}=4$；长 $3$ 的任何图案都被某个图案以至少 $2:1$ 击败（非传递）：$THH$ 胜 $HHT$ 的比 $3:1$。
+\end{结论}
+
+\begin{结论}{简单随机游走的几个精确量}
+对称 $\pm1$ 游走 $S_n$：
+\[
+u_{2n}=P(S_{2n}=0)=\frac{\binom{2n}n}{4^n}\sim\frac{1}{\sqrt{\pi n}},\qquad \重点{f_{2n}=P(\text{首次返回在 }2n)=\frac{u_{2n}}{2n-1}},
+\]
+$P(S_1\cdots S_{2n}\ne0)=u_{2n}$；最大值 $P(M_n\ge k)=P(S_n\ge k)+P(S_n>k)$（反射）；$\E|S_n|\sim\sqrt{2n/\pi}$。首次返回时间期望无穷（零常返）。
+\end{结论}
+
+\begin{结论}{反正弦律（离散）}
+$2n$ 步对称游走中最后一次在 $0$ 的时刻 $2k$：
+\[
+P(L_{2n}=2k)=u_{2k}u_{2n-2k},\qquad \重点{\frac{L_{2n}}{2n}\xrightarrow{d}\text{Arcsine},\ \ \frac{\dd x}{\pi\sqrt{x(1-x)}}}.
+\]
+正侧时间所占比例同分布。反直觉：一方长期领先是常态，“领先权频繁交替”反而少见；指定一方领先时间 $\ge90\%$ 的概率约 $0.2$（任一方约 $0.4$）。
+\end{结论}
+
+\begin{结论}{记录值、上升与逆序}
+随机排列（或连续 i.i.d. 序列）：第 $k$ 项是记录的示性变量\重点文{相互独立}，概率 $\frac1k$；记录数 $\E=H_n$，$\Var=H_n-\sum\frac1{k^2}$。
+上升数 $\E=\frac{n-1}2$；逆序数 $\E=\frac{n(n-1)}4$，$\Var=\frac{n(n-1)(2n+5)}{72}$（Kendall $\tau$ 的零分布）。
+\end{结论}
+
+\begin{结论}{Bonferroni 不等式}
+$S_k=\sum_{|I|=k}P(\bigcap_{i\in I}A_i)$：容斥部分和交替给出上下界，
+\[
+\重点{S_1-S_2\le P\Bigl(\bigcup A_i\Bigr)\le S_1},\qquad S_1-S_2+S_3\ \text{为上界},\ \dots
+\]
+第二个下界常与 Chung--Erdős $P(\bigcup A_i)\ge\frac{(\sum P(A_i))^2}{\sum_{i,j}P(A_i\cap A_j)}$ 配合，用于证明“至少一个事件发生”的概率不太小。
+\end{结论}
+
+\begin{结论}{无放回抽样的极值与“均匀间隔”}
+从 $\{1,\dots,N\}$ 无放回抽 $k$ 个：
+\[
+\重点{\E\min=\frac{N+1}{k+1}},\qquad \E\max=\frac{k(N+1)}{k+1}.
+\]
+理由：$k$ 个点把 $N+1$ 个“间隔”平均分割（与连续情形 $\E U_{(1)}=\frac1{k+1}$ 同理）。德国坦克问题的无偏估计 $\hat N=\frac{k+1}k\max-1$ 由此得到。
+\end{结论}
+
+\begin{结论}{用 PGF 求奇偶概率与模 $m$ 概率}
+$G(s)=\E s^X$：\重点{P(X\text{ 偶})=\frac{1+G(-1)}2}；一般 $P(X\equiv r\pmod m)=\frac1m\sum_{j=0}^{m-1}\omega^{-jr}G(\omega^j)$，$\omega=\ee^{2\pi\ii/m}$。
+二项 $P(\text{偶})=\frac{1+(1-2p)^n}2$；Poisson $P(\text{偶})=\frac{1+\ee^{-2\lambda}}2$。
+\end{结论}
+
+\begin{结论}{几何分布的最小值与最大值}
+独立 $\mathrm{Geo}(p_i)$：$\min\sim\mathrm{Geo}\bigl(1-\prod(1-p_i)\bigr)$（无记忆的离散版）。
+$n$ 个独立 $\mathrm{Geo}(p)$ 的最大值：$\E\max=\sum_{k\ge1}\bigl[1-(1-q^{k-1})^n\bigr]$，$q=1-p$，\重点{\E\max\approx\frac{H_n}{-\ln q}+\frac12}（与指数分布 $\frac{H_n}\lambda$ 对应，加半个格点修正）。
+\end{结论}
+
+\begin{结论}{Monty Hall 的推广}
+$n$ 扇门，主持人知情地打开 $k$ 扇空门（$k\le n-2$），换到剩余某扇门的中奖概率
+\[
+\重点{\frac{n-1}{n(n-k-1)}}>\frac1n\quad(\text{不换}).
+\]
+$n=3,k=1$ 给 $\frac23$。关键：主持人的行动依赖于奖品位置；若主持人随机开门且恰好为空，则换不换都一样。
+\end{结论}
+
+\begin{结论}{Simpson 悖论：分层与合并的方向相反}
+每个层内 A 的成功率都高于 B，合并后却低于 B：发生于\重点文{处理分配与分层变量相关}时。经典肾结石数据：小结石 $93\%$ vs $87\%$，大结石 $73\%$ vs $69\%$，合计 $78\%$ vs $83\%$。
+该取哪个取决于因果结构：分层变量是混杂因素时看分层结果；是中介变量时看合并结果。
+\end{结论}
+
+\begin{结论}{Banach 火柴盒问题}
+两盒各 $N$ 根，每次随机选一盒取一根，首次发现所选盒为空时另一盒剩 $k$ 根的概率
+\[
+\重点{u_k=\binom{2N-k}{N}2^{-(2N-k)}},\qquad \E k=(2N+1)\frac{\binom{2N}N}{4^N}-1\approx2\sqrt{N/\pi}-1 .
+\]
+负二项计数：第 $N+1$ 次选中某一盒发生在第 $2N-k+1$ 次选择。
+\end{结论}
+
+\begin{结论}{二项分布的众数、中位数与偏态}
+$\mathrm{Bin}(n,p)$ 众数 $\lfloor(n+1)p\rfloor$（$(n+1)p$ 为整数时两个）；中位数是 $\lfloor np\rfloor$ 或 $\lceil np\rceil$。偏度 $\frac{1-2p}{\sqrt{np(1-p)}}$。
+正态近似经验条件 $np(1-p)\ge10$；\重点{\text{连续性修正 }P(X\le k)\approx\Phi\bigl(\frac{k+\frac12-np}{\sqrt{np(1-p)}}\bigr)}；$p$ 很小时改用 Poisson。
+\end{结论}
+
+\begin{结论}{示性变量的方差：两两协方差}
+$X=\sum\mathbf 1_{A_i}$：$\Var X=\sum P(A_i)(1-P(A_i))+\sum_{i\ne j}\bigl(P(A_iA_j)-P(A_i)P(A_j)\bigr)$。
+例：$n$ 人随机互赠礼物的不动点（前述配对）、随机图三角形数（$\Var=\binom n3p^3(1-p^3)+\ldots$）、$k$ 个连续正面的“游程”计数。\重点{\text{负相关事件的和比独立情形更集中}}（如无放回抽样）。
+\end{结论}
+
+\begin{结论}{游程与最长连续成功}
+$n$ 次 Bernoulli($p$) 中以成功开始的游程数 $\E=p+(n-1)p(1-p)$；最长成功游程 $L_n$：
+\[
+\重点{L_n\approx\log_{1/p}\bigl(n(1-p)\bigr)}，\ \text{波动 }O(1)\text{（不收敛，Gumbel 型振荡）}.
+\]
+公平硬币 $200$ 次最长连续正面约 $7$ 次。随机性检验中“连续太少”比“连续太多”更能暴露伪造数据。
+\end{结论}
+
+\begin{结论}{对称性论证：第 $k$ 张与第一张同分布}
+洗匀的牌中第 $k$ 张与第 $1$ 张同分布；“第一张 A 之前的牌数”期望 $\frac{48}{5}$（48 张非 A 被 4 张 A 分成 5 段，期望相等）。
+一般：$n$ 个白球与 $m$ 个黑球随机排列，第一个黑球前的白球数期望 \重点{\frac{n}{m+1}}；第 $j$ 个黑球位置期望 $j\frac{n+m+1}{m+1}$。
+\end{结论}
+
+\begin{结论}{条件化在“至少一个”上：男孩女孩问题}
+两孩家庭：“至少一个男孩”时两男的概率 $\frac13$；“年长的是男孩”时 $\frac12$；“至少一个周二出生的男孩”时 $\frac{13}{27}$。
+差别来自\重点{\text{信息是如何产生的}}：条件事件越“具体”，越接近独立的 $\frac12$。写出全样本空间和条件事件再数，不要凭直觉。
+\end{结论}
+
+\begin{结论}{多项分布的协方差与 Poisson 化技巧}
+$(N_1,\dots,N_k)\sim\mathrm{Mult}(n;p)$：$\Cov(N_i,N_j)=-np_ip_j$（$i\ne j$），\重点{\Var(\textstyle\sum c_iN_i)=n\bigl(\sum c_i^2p_i-(\sum c_ip_i)^2\bigr)}。
+总数固定带来负相关；把 $n$ 换成 $\mathrm{Poi}(n)$ 后各分量独立，再用“de-Poissonization”（总数集中在 $n\pm O(\sqrt n)$）回到原问题。
+\end{结论}
+
+\begin{结论}{等待时间的“Wald”算法}
+重复独立试验直到事件 $A$ 出现，期间累计代价 $C_i$：\重点{\E\Bigl[\sum_{i\le T}C_i\Bigr]=\E T\cdot\E C}（Wald，要求 $T$ 是停时、$\E T<\infty$）。
+例：每次掷骰子得分相加直到出 $6$，总分期望 $6\times3.5=21$（含最后的 $6$）；但“直到出 $6$ 且之前全是偶数”的条件期望不能这样算（条件改变了每次的分布：$\E T=\frac32$）。
+\end{结论}
+
+\参考{Feller, \emph{An Introduction to Probability Theory} I；Blitzstein--Hwang, \emph{Introduction to Probability}；Grimmett--Stirzaker, \emph{Probability and Random Processes}；Mosteller, \emph{Fifty Challenging Problems in Probability}；MIT 6.041、18.600。}

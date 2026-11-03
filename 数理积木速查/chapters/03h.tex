@@ -1,0 +1,128 @@
+\subsection{信息论与概率方法}
+
+\begin{结论}{熵、条件熵与互信息的恒等式}
+$H(X,Y)=H(X)+H(Y\mid X)$；\重点{I(X;Y)=H(X)-H(X\mid Y)=D(P_{XY}\|P_XP_Y)\ge0}；条件降低熵 $H(X\mid Y)\le H(X)$；$H(X)\le\log|\mathcal X|$。
+数据处理：$X\to Y\to Z$ 成 Markov 链 $\Rightarrow I(X;Z)\le I(X;Y)$——任何后处理都不能增加关于源的信息。链式法则 $I(X;Y,Z)=I(X;Y)+I(X;Z\mid Y)$。
+\end{结论}
+
+\begin{结论}{Fano 不等式}
+由 $Y$ 估计 $X$（取值 $|\mathcal X|$ 个），错误率 $P_e$：
+\[
+\重点{H(X\mid Y)\le h(P_e)+P_e\log(|\mathcal X|-1)},\qquad P_e\ge\frac{H(X\mid Y)-1}{\log|\mathcal X|}.
+\]
+用法：信道编码逆定理（速率超过容量时错误率有下界）；统计中的极小极大下界（Fano 方法：构造 $M$ 个彼此分得开但 KL 很近的假设）。
+\end{结论}
+
+\begin{结论}{无前缀码：Kraft 与 Shannon 界}
+无前缀码码长 $l_i$ 存在 $\iff$ \重点{\sum2^{-l_i}\le1}（Kraft；唯一可译码同样满足，McMillan）。
+最优平均码长 $H(X)\le L^*<H(X)+1$；按块编码 $\frac{L_n}{n}\to H$。Huffman 合并最小两概率得最优码；Shannon 码 $l_i=\lceil-\log p_i\rceil$ 次优但满足上界。用错分布 $q$ 设计码，多付 $D(p\|q)$ 比特。
+\end{结论}
+
+\begin{结论}{离散信道的容量}
+$C=\max_{P_X}I(X;Y)$：
+\[
+\text{BSC}(p):\ \重点{C=1-h(p)},\qquad \text{BEC}(\varepsilon):\ C=1-\varepsilon,\qquad \text{Z 信道}(p):\ C=\log_2\bigl(1+(1-p)p^{p/(1-p)}\bigr).
+\]
+$h(p)=-p\log_2p-(1-p)\log_2(1-p)$。对称信道的最优输入是均匀分布；BSC 在 $p=0.11$ 时容量恰为 $0.5$。
+\end{结论}
+
+\begin{结论}{渐近等分性与典型集}
+i.i.d.：$-\frac1n\log p(X_1,\dots,X_n)\to H$ a.s.。典型集 $A_\varepsilon^{(n)}$：概率 $\to1$，大小 \重点{\approx2^{nH}}，其中每个序列概率 $\approx2^{-nH}$。
+推论：$n$ 个 Bernoulli$(p)$ 的“典型序列”数 $\approx\binom{n}{np}\approx2^{nh(p)}$——这正是压缩到 $nh(p)$ 比特的理由；最可能的单个序列（全 $0$）不在典型集里。
+\end{结论}
+
+\begin{结论}{微分熵与熵幂不等式}
+$h(N(\mu,\Sigma))=\frac12\log\bigl((2\pi\ee)^n\det\Sigma\bigr)$；给定协方差时正态熵最大；给定支撑 $[a,b]$ 时均匀最大；给定均值的正变量时指数最大。
+微分熵可负，且 $h(aX)=h(X)+\log|a|$。熵幂不等式：\重点{\ee^{2h(X+Y)/n}\ge\ee^{2h(X)/n}+\ee^{2h(Y)/n}}（独立），正态取等——CLT 的“熵单调增”视角。
+\end{结论}
+
+\begin{结论}{分布距离之间的不等式}
+\[
+\重点{d_{TV}\le\sqrt{\tfrac12D_{KL}}}\ (\text{Pinsker}),\qquad H^2\le d_{TV}\le\sqrt2H,\qquad D_{KL}\le\log(1+\chi^2)\le\chi^2,
+\]
+$H^2=\frac12\int(\sqrt p-\sqrt q)^2$（Hellinger）。乘积测度：$D_{KL}$ 可加、$1-H^2$ 可乘，故 $n$ 个样本区分两分布需 $n\gtrsim\frac1{H^2}$。Bretagnolle--Huber：$d_{TV}\le\sqrt{1-\ee^{-D}}$（$D$ 大时比 Pinsker 好）。
+\end{结论}
+
+\begin{结论}{正态分布之间的 KL 与互信息}
+\[
+D\bigl(N(\mu_1,\Sigma_1)\|N(\mu_2,\Sigma_2)\bigr)=\frac12\Bigl[\tr(\Sigma_2^{-1}\Sigma_1)+(\mu_2-\mu_1)^{\mathsf T}\Sigma_2^{-1}(\mu_2-\mu_1)-n+\ln\frac{\det\Sigma_2}{\det\Sigma_1}\Bigr].
+\]
+二元正态相关 $\rho$：\重点{I(X;Y)=-\frac12\ln(1-\rho^2)}；高斯信道 $Y=X+N$：$I=\frac12\log(1+\frac PN)$。
+\end{结论}
+
+\begin{结论}{Gauss 源的率失真函数}
+$X\sim N(0,\sigma^2)$，平方误差失真 $D$：
+\[
+\重点{R(D)=\frac12\log_2\frac{\sigma^2}{D}}\ (D\le\sigma^2),\qquad D(R)=\sigma^22^{-2R}.
+\]
+每多 $1$ 比特，均方误差降为 $\frac14$（$6.02$ dB/比特，与 ADC 量化噪声规律一致）。多个独立分量时“反注水”：方差小于水位的分量直接不编码。
+\end{结论}
+
+\begin{结论}{Markov 链的熵率}
+平稳 Markov 链 \重点{H=-\sum_i\pi_i\sum_jP_{ij}\log P_{ij}}（$=H(X_2\mid X_1)$）。
+例：两状态链 $P=\begin{pmatrix}1-a&a\\b&1-b\end{pmatrix}$：$H=\frac{b\,h(a)+a\,h(b)}{a+b}$。英文字母的熵率估计约 $1$ 比特/字母（远小于 $\log_226\approx4.7$），压缩的空间来自上下文。
+\end{结论}
+
+\begin{结论}{期望论证与修改法}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 期望：随机二分顶点，每条边以 $\frac12$ 被切，故\重点{\text{存在割}\ge\frac m2}；随机赋值满足 $k$-SAT 每个子句概率 $1-2^{-k}$，故存在满足 $\ge(1-2^{-k})m$ 个子句的赋值。
+\item 修改法：平均度 $d$ 的图，以概率 $p=\frac1d$ 选点再删去每条内部边的一端，得独立集 $\ge\frac n{2d}$。
+\item Caro--Wei：$\alpha(G)\ge\sum_v\frac1{\deg v+1}$（随机顺序中比所有邻居先出现的点组成独立集）。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{Lovász 局部引理}
+事件 $A_i$ 各自概率 $\le p$，每个与至多 $d$ 个其他事件不独立，\重点{\ee p(d+1)\le1} $\Rightarrow P(\bigcap\bar A_i)>0$。
+例：每个子句恰 $k$ 个变量、每变量出现在 $\le\frac{2^k}{\ee k}$ 个子句中的 $k$-SAT 可满足；Moser--Tardos 给出构造性算法（坏事件发生就重抽其变量）。
+\end{结论}
+
+\begin{结论}{Johnson--Lindenstrauss 引理}
+$n$ 个点 $\subset\mathbb R^D$，$0<\varepsilon<1$，随机 Gauss 投影到
+\[
+\重点{k\ge\frac{4\ln n}{\varepsilon^2/2-\varepsilon^3/3}}\quad(\text{小 }\varepsilon\text{ 时}\approx\tfrac{8\ln n}{\varepsilon^2})
+\]
+维（矩阵元 $N(0,\frac1k)$，Dasgupta--Gupta 常数），以正概率所有两两距离保持在 $(1\pm\varepsilon)$ 倍内。与 $D$ 无关；证明：单个向量范数平方是 $\chi^2_k/k$，Chernoff 界后对 $\binom n2$ 对取并。
+\end{结论}
+
+\begin{结论}{McDiarmid 有界差不等式}
+$f(X_1,\dots,X_n)$，$X_i$ 独立，改变第 $i$ 个坐标 $f$ 至多变 $c_i$：
+\[
+\重点{P(f-\E f\ge t)\le\exp\Bigl(-\frac{2t^2}{\sum c_i^2}\Bigr)}.
+\]
+例：$n$ 球 $m$ 盒的空盒数（$c_i=1$）集中在均值 $\pm O(\sqrt n)$；随机图色数集中（逐点暴露，$c_i=1$）；经验风险的一致偏差。是 Azuma 对 Doob 鞅的应用。
+\end{结论}
+
+\begin{结论}{Gauss 集中与 Bernstein 不等式}
+$Z\sim N(0,I_n)$，$f$ 为 $L$-Lipschitz：\重点{P(f(Z)-\E f\ge t)\le\ee^{-t^2/2L^2}}，与维数无关。例：$\|Z\|$ 集中在 $\sqrt n\pm O(1)$。
+Bernstein：独立零均值 $|X_i|\le M$，$\sum\Var X_i=v$：$P(\sum X_i\ge t)\le\exp\bigl(-\frac{t^2/2}{v+Mt/3}\bigr)$——小偏差时像 Gauss（看方差），大偏差时像指数（看界 $M$），方差小时远好于 Hoeffding。
+\end{结论}
+
+\begin{结论}{球入盒的最大负载与“两个选择”}
+$n$ 球随机放入 $n$ 盒，最大负载
+\[
+\重点{\sim\frac{\ln n}{\ln\ln n}};\qquad \text{每球看 }d\ge2\text{ 个随机盒放入较空者：}\frac{\ln\ln n}{\ln d}+O(1).
+\]
+只多一次随机选择，负载从对数级降到双对数级（负载均衡、哈希表的“$d$-choice”）。
+\end{结论}
+
+\begin{结论}{二阶矩方法：阈值的上半部分}
+$X$ 为某结构的计数：$\E X\to0\Rightarrow P(X>0)\to0$（一阶）；$\Var X=o((\E X)^2)\Rightarrow P(X>0)\to1$（Chebyshev 或 Paley--Zygmund）。
+随机图 $G(n,p)$ 中含 $K_4$ 的阈值 $p=n^{-2/3}$：$\E X\asymp n^4p^6$；\重点{\text{阈值由最稠密子图的密度决定}}（平衡图时即本身的 $\frac{v}{e}$）。
+\end{结论}
+
+\begin{结论}{Fisher 信息的可加性与 Cramér--Rao 的信息形式}
+$I_X(\theta)=\E[(\partial_\theta\ln p)^2]=-\E[\partial_\theta^2\ln p]$；独立样本可加 $I_n=nI_1$；数据处理 $I_{T(X)}\le I_X$，等号 $\iff$ $T$ 充分。
+位置族 $p(x-\theta)$：$I=\int\frac{p'^2}{p}$，\重点{\text{给定方差时正态的 }I\text{ 最小}}（$=\frac1{\sigma^2}$）——与“正态熵最大”对偶（Stam 不等式 $I\cdot\ee^{2h}/(2\pi\ee)\ge1$）。
+\end{结论}
+
+\begin{结论}{假设检验的信息论极限}
+区分 $P$ 与 $Q$（$n$ 个 i.i.d. 样本）：固定一类错误时二类错误 $\approx\ee^{-nD(P\|Q)}$（Stein 引理）；两类错误均衡时 \重点{P_e\approx\ee^{-nC(P,Q)}}，$C=-\min_{0\le\lambda\le1}\ln\int p^\lambda q^{1-\lambda}$（Chernoff 信息）。
+正态均值差 $\delta$、方差 $\sigma^2$：$D=\frac{\delta^2}{2\sigma^2}$，$C=\frac{\delta^2}{8\sigma^2}$。
+\end{结论}
+
+\begin{结论}{随机编码与随机图中的“几乎所有”}
+Shannon 证明容量可达的方法：\重点{\text{随机码本的平均错误率}\to0\Rightarrow\text{存在好码}}，再删去最差的一半码字得到最大错误率小的码（修改法）。
+同样：几乎所有图的色数 $\sim\frac{n}{2\log_2n}$；几乎所有 $n\times n$ 的 $\pm1$ 矩阵可逆；几乎所有布尔函数需要 $\sim\frac{2^n}n$ 个门（Shannon 计数论证）。
+\end{结论}
+
+\参考{Cover--Thomas, \emph{Elements of Information Theory}；MacKay, \emph{Information Theory, Inference, and Learning Algorithms}；Alon--Spencer, \emph{The Probabilistic Method}；Boucheron--Lugosi--Massart, \emph{Concentration Inequalities}；Mitzenmacher--Upfal；MIT 6.441、18.218。}

@@ -1,0 +1,101 @@
+\subsection{测度论概率与条件期望}
+
+\begin{结论}{$\pi$--$\lambda$ 定理：只需在生成类上验证}
+$\mathcal P$ 为 $\pi$ 系（对有限交封闭），$\mathcal L\supseteq\mathcal P$ 为 $\lambda$ 系 $\Rightarrow$ $\sigma(\mathcal P)\subseteq\mathcal L$。
+推论：\重点{\text{两个概率测度在 }\pi\text{ 系上相等}\Rightarrow\text{在生成的 }\sigma\text{ 代数上相等}}——分布函数决定分布；$P(X\le x,Y\le y)=P(X\le x)P(Y\le y)$ 对所有 $x,y$ 成立即推出独立。
+\end{结论}
+
+\begin{结论}{两两独立不等于相互独立}
+掷两枚公平硬币，$A=\{\text{第一枚正}\}$，$B=\{\text{第二枚正}\}$，$C=\{\text{两枚相同}\}$：两两独立，但 $P(ABC)=\frac14\ne\frac18$。
+$X,Y$ 独立 $\iff$ \重点{\E f(X)g(Y)=\E f(X)\E g(Y)}（所有有界可测 $f,g$）；不相关（只对 $f,g$ 为恒等）弱得多：$X\sim N(0,1)$，$Y=X^2$ 不相关而强相依。联合正态时不相关 $\iff$ 独立（\textbf{联合}正态是关键，边缘正态不够）。
+\end{结论}
+
+\begin{结论}{条件期望的五条运算律}
+$\E[X\mid\mathcal G]$ 是 $\mathcal G$ 可测且 $\E[X\mathbf 1_G]=\E[\E[X\mid\mathcal G]\mathbf 1_G]$（$\forall G\in\mathcal G$）的唯一（a.s.）随机变量：
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 塔性 $\E[\E[X\mid\mathcal G]\mid\mathcal H]=\E[X\mid\mathcal H]$（$\mathcal H\subseteq\mathcal G$）；\重点{\E[ZX\mid\mathcal G]=Z\E[X\mid\mathcal G]}（$Z$ 为 $\mathcal G$ 可测，“已知的提出来”）。
+\item $X$ 与 $\mathcal G$ 独立 $\Rightarrow\E[X\mid\mathcal G]=\E X$；条件 Jensen；$L^2$ 中它是到 $L^2(\mathcal G)$ 的正交投影（最小均方误差预测）。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{冻结引理}
+$X$ 是 $\mathcal G$ 可测、$Y$ 与 $\mathcal G$ 独立：
+\[
+\重点{\E[f(X,Y)\mid\mathcal G]=g(X),\qquad g(x)=\E f(x,Y)}.
+\]
+例：$\E[\ee^{X+Y}\mid X]=\ee^X\E\ee^Y$；Markov 性的证明、“给定当前状态，下一步的分布只依赖当前值”的计算都用它。\注意 $Y$ 与 $X$ 不独立时不能这样“冻结”。
+\end{结论}
+
+\begin{结论}{Borel--Kolmogorov 悖论：条件于零概率事件}
+球面上均匀点，条件于“在赤道上”与条件于“在某条经线（大圆）上”给出不同的分布：沿经线的纬度条件密度 $\propto\cos\varphi$，而沿赤道的经度条件密度均匀。
+原因：\重点{\text{零测事件上的条件分布依赖于用哪族事件去逼近它}}（$|\varphi|<\varepsilon$ 与 $|\lambda-\lambda_0|<\varepsilon$ 的楔形不同）。正确做法：指定条件的随机变量 $\E[\cdot\mid Y]$，再在 $Y=y$ 取值。
+\end{结论}
+
+\begin{结论}{Kolmogorov 连续性准则}
+$\E|X_t-X_s|^\alpha\le C|t-s|^{1+\beta}$（$\alpha,\beta>0$）$\Rightarrow$ 有连续修正，且路径 \重点{\gamma\text{-Hölder 连续},\ \gamma<\frac\beta\alpha}。
+Brown 运动 $\E|B_t-B_s|^{2m}=C_m|t-s|^m$：$\gamma<\frac{m-1}{2m}\to\frac12$，所以路径对任何 $\gamma<\frac12$ 是 Hölder 的，而在 $\frac12$ 处不是（重对数律）。
+\end{结论}
+
+\begin{结论}{Portmanteau、Skorokhod 与 Prokhorov}
+$X_n\xrightarrow dX$ $\iff$ $\E f(X_n)\to\E f(X)$ 对所有有界连续 $f$ $\iff$ $\limsup P(X_n\in F)\le P(X\in F)$（闭集）$\iff$ $P(X_n\in A)\to P(X\in A)$（$P(X\in\partial A)=0$）。
+Skorokhod：可在同一概率空间上构造 $Y_n\overset d=X_n$ 且 $Y_n\to Y$ a.s.（一维取 $F_n^{-1}(U)$）。Prokhorov：\重点{\text{紧（tight）}\iff\text{相对序列紧}}——证明函数空间中的收敛先证紧再识别极限。
+\end{结论}
+
+\begin{结论}{似然比、重要性抽样与换测度}
+$Q\ll P$，$L=\frac{\dd Q}{\dd P}$：$\E_Q[X]=\E_P[XL]$。重要性抽样估计 $\frac1n\sum f(Y_i)\frac{p(Y_i)}{q(Y_i)}$（$Y_i\sim q$），方差最小的 $q^*\propto|f|p$。
+稀有事件 $P(S_n>na)$：指数倾斜 $q\propto\ee^{\theta x}p$，$\theta$ 使倾斜后均值为 $a$，相对误差从 $\ee^{nI(a)}$ 降到多项式级。\重点{\text{权重方差爆炸是重要性抽样失败的信号}}：有效样本量 $\frac{(\sum w_i)^2}{\sum w_i^2}$。
+\end{结论}
+
+\begin{结论}{一致可积：de la Vallée-Poussin 判据}
+$\{X_\alpha\}$ 一致可积 $\iff$ 存在凸增函数 $G$，$\frac{G(t)}t\to\infty$，且 \重点{\sup_\alpha\E G(|X_\alpha|)<\infty}（常取 $G(t)=t^{1+\delta}$ 或 $t\ln t$）。
+被单个可积变量控制的族、$L^p$ 有界族（$p>1$）、$\{\E[X\mid\mathcal G]:\mathcal G\}$（对固定可积 $X$）都一致可积。最后一条保证 Doob 鞅一致可积。
+\end{结论}
+
+\begin{结论}{Birkhoff 遍历定理}
+保测变换 $T$（或平稳序列），$f\in L^1$：
+\[
+\重点{\frac1n\sum_{k<n}f(T^kx)\to\E[f\mid\mathcal I](x)}\ \text{a.s.}\ (\mathcal I\text{ 为不变 }\sigma\text{ 代数}),
+\]
+遍历时右边为常数 $\E f$：时间平均 $=$ 空间平均。例：无理旋转遍历（Weyl 等分布的测度版）；i.i.d. 序列平稳且遍历（强大数律是特例）；混合 $\Rightarrow$ 遍历，反之不然（旋转遍历但不混合）。
+\end{结论}
+
+\begin{结论}{Cantor 分布：既不离散也不连续}
+$X=\sum_{k\ge1}\frac{2\varepsilon_k}{3^k}$，$\varepsilon_k$ i.i.d.\ Bernoulli$(\frac12)$：分布函数为 Cantor 函数（连续），但集中在测度零的 Cantor 集上（奇异）。
+\[
+\重点{\E X=\frac12,\quad\Var X=\frac18},\qquad \varphi(t)=\ee^{\ii t/2}\prod_{k\ge1}\cos\frac{t}{3^k}.
+\]
+$\varphi(t)\not\to0$（$t=2\pi3^m$ 上不衰减），说明 Riemann--Lebesgue 对奇异测度失效。
+\end{结论}
+
+\begin{结论}{Kakutani 二分定理}
+乘积测度 $P=\bigotimes P_n$、$Q=\bigotimes Q_n$（$Q_n\sim P_n$）：二者要么等价、要么互相奇异，依据
+\[
+\重点{\prod_n\int\sqrt{\dd P_n\dd Q_n}>0\ \text{（等价）}\quad\text{或}\quad=0\ \text{（奇异）}}.
+\]
+例：$N(\mu_n,1)$ 序列：等价 $\iff\sum\mu_n^2<\infty$（Cameron--Martin 空间的离散版）。无穷维中“稍微平移就奇异”很常见，这是 Girsanov 定理需要条件的根源。
+\end{结论}
+
+\begin{结论}{Borel 正规数定理}
+几乎所有 $x\in[0,1]$ 在每个进制下都是正规数：每个长 $k$ 的数字串频率为 $b^{-k}$（对二进制数字用强大数律，再对可数多个进制和串取交）。
+然而\重点{\text{没有一个“自然”的常数被证明是正规的}}（$\pi$、$\ee$、$\sqrt2$ 都未知）；可构造的例子是 Champernowne 数 $0.123456789101112\ldots$（十进制正规）。
+\end{结论}
+
+\begin{结论}{条件方差与“剩余信息”}
+$\Var X=\E\Var(X\mid Y)+\Var\E[X\mid Y]$，且 $\E[X\mid Y]$ 是 $Y$ 的所有函数中均方误差最小的预测：
+\[
+\重点{\min_g\E(X-g(Y))^2=\E\Var(X\mid Y)}.
+\]
+联合正态时它就是线性回归 $\E[X\mid Y]=\mu_X+\frac{\Cov(X,Y)}{\Var Y}(Y-\mu_Y)$，残差方差 $\Var X(1-\rho^2)$；非正态时最优线性预测与条件期望不同。
+\end{结论}
+
+\begin{结论}{停时与停时 $\sigma$ 代数}
+$\tau$ 为停时 $\iff\{\tau\le n\}\in\mathcal F_n$。首达时是停时；“最后一次离开”不是（需要未来信息）。
+\重点{\mathcal F_\tau=\{A:A\cap\{\tau\le n\}\in\mathcal F_n\ \forall n\}}；强 Markov 性：在停时之后过程重新开始，与 $\mathcal F_\tau$ 独立（反射原理、首步分析的严格基础）。停时的最小、最大、和都是停时。
+\end{结论}
+
+\begin{结论}{可测性陷阱：上确界与不可数操作}
+可数个可测函数的 $\sup$、$\liminf$ 可测；不可数族的 $\sup$ 未必可测。连续过程 $\sup_{t\le1}X_t=\sup_{t\in\mathbb Q\cap[0,1]}X_t$ 可测——\重点{\text{路径连续性（或可分性）是让}\sup\text{可测的关键}}。
+Vitali 集说明不是所有子集都可测；在概率论中只对 Borel（或完备化）集合谈概率，从不需要选择公理构造的病态集合。
+\end{结论}
+
+\参考{Williams, \emph{Probability with Martingales}；Durrett, \emph{Probability: Theory and Examples}；Kallenberg, \emph{Foundations of Modern Probability}；Billingsley, \emph{Convergence of Probability Measures}；MIT 18.175、18.177。}

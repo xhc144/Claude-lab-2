@@ -1,0 +1,173 @@
+\subsection{连续分布与变换}
+
+\begin{结论}{正态派生分布的关系网}
+$Z\sim N(0,1)$，$V_k\sim\chi^2_k$ 独立：
+\[
+\chi^2_k=\Gamma\bigl(\tfrac k2,\text{尺度 }2\bigr),\qquad t_k=\frac{Z}{\sqrt{V_k/k}},\qquad F_{a,b}=\frac{V_a/a}{V_b/b},\qquad \重点{t_k^2=F_{1,k}},
+\]
+$X\sim\Gamma(a)$、$Y\sim\Gamma(b)$ 独立 $\Rightarrow\frac{X}{X+Y}\sim\mathrm{Beta}(a,b)$ 且与 $X+Y$ 独立；$\frac{aF_{a,b}}{aF_{a,b}+b}\sim\mathrm{Beta}(\frac a2,\frac b2)$。$t_1$ 为 Cauchy，$t_\infty=N(0,1)$。
+\end{结论}
+
+\begin{结论}{偏态分布的矩}
+对数正态 $\ee^{N(\mu,\sigma^2)}$：$\E=\ee^{\mu+\sigma^2/2}$，$\Var=(\ee^{\sigma^2}-1)\ee^{2\mu+\sigma^2}$，中位数 $\ee^\mu$，众数 $\ee^{\mu-\sigma^2}$。
+Weibull$(k,\lambda)$：$\E=\lambda\Gamma(1+\frac1k)$，$\E X^2=\lambda^2\Gamma(1+\frac2k)$。Pareto$(\alpha,x_m)$：\重点{\E=\frac{\alpha x_m}{\alpha-1}\ (\alpha>1)}，方差需 $\alpha>2$；$\E X^p<\infty\iff p<\alpha$。
+\end{结论}
+
+\begin{结论}{次序统计量的一般密度}
+i.i.d. 密度 $f$、分布函数 $F$：
+\[
+\重点{f_{(k)}(x)=\frac{n!}{(k-1)!(n-k)!}F(x)^{k-1}(1-F(x))^{n-k}f(x)},
+\]
+\[
+f_{(1),(n)}(x,y)=n(n-1)\bigl(F(y)-F(x)\bigr)^{n-2}f(x)f(y).
+\]
+均匀极差 $R=U_{(n)}-U_{(1)}$ 密度 $n(n-1)r^{n-2}(1-r)$，$\E R=\frac{n-1}{n+1}$。记忆法：$k-1$ 个在左、$n-k$ 个在右、$1$ 个在 $\dd x$，多项系数。
+\end{结论}
+
+\begin{结论}{指数次序统计量：Rényi 表示}
+$E_1,\dots,E_n$ i.i.d. $\mathrm{Exp}(\lambda)$：
+\[
+\重点{E_{(k)}\overset{d}{=}\frac1\lambda\sum_{j=1}^k\frac{\xi_j}{n-j+1}},\quad \xi_j\text{ i.i.d. Exp}(1).
+\]
+间隔 $E_{(k)}-E_{(k-1)}\sim\mathrm{Exp}((n-k+1)\lambda)$ 相互独立；$\E E_{(k)}=\frac{H_n-H_{n-k}}\lambda$。可靠性中“$n$ 取 $k$”系统寿命直接读出。
+\end{结论}
+
+\begin{结论}{Irwin--Hall 与“超过 1 需要几个均匀数”}
+$S_n=U_1+\cdots+U_n$：$f_{S_n}(x)=\frac1{(n-1)!}\sum_{k\le x}(-1)^k\binom nk(x-k)^{n-1}$，$P(S_n\le1)=\frac1{n!}$。
+$N=\min\{n:S_n>1\}$：$P(N>n)=\frac1{n!}$，\重点{\E N=\sum_{n\ge0}\frac1{n!}=\ee}。$P(S_n\in[k,k+1))=\frac{A(n,k)}{n!}$（Euler 数）。
+\end{结论}
+
+\begin{结论}{$\chi$、Rayleigh 与 Maxwell}
+$|Z|$（$Z\in\mathbb R^k$ 标准正态）服从 $\chi_k$：$\E\chi_k=\sqrt2\frac{\Gamma(\frac{k+1}2)}{\Gamma(\frac k2)}\approx\sqrt{k-\frac12}$。
+$k=1$：$\E|Z|=\sqrt{2/\pi}$；$k=2$：Rayleigh，$\E=\sigma\sqrt{\pi/2}$；$k=3$：Maxwell，\重点{\bar v=\sqrt{\frac{8k_BT}{\pi m}}},\ $v_{\mathrm{rms}}=\sqrt{\frac{3k_BT}m}$，$v_p=\sqrt{\frac{2k_BT}m}$。$\E|Z|^p=\frac{2^{p/2}\Gamma(\frac{p+1}2)}{\sqrt\pi}$。
+\end{结论}
+
+\begin{结论}{正态向量的二次型}
+$x\sim N(0,\Sigma)$，$A$ 对称：$x^{\mathsf T}Ax\sim\chi^2_r$ $\iff$ \重点{A\Sigma A=A}（即 $A\Sigma$ 幂等，$r=\rank A\Sigma$）。$x^{\mathsf T}Ax$ 与 $x^{\mathsf T}Bx$ 独立 $\iff A\Sigma B=0$；$Lx$ 与 $x^{\mathsf T}Ax$ 独立 $\iff L\Sigma A=0$。
+Mahalanobis：$(x-\mu)^{\mathsf T}\Sigma^{-1}(x-\mu)\sim\chi^2_n$（置信椭球）；Cochran 定理把 $\sum x_i^2$ 分解为独立 $\chi^2$ 之和（方差分析的基础）。
+\end{结论}
+
+\begin{结论}{Stein 引理（Gauss 分部积分）}
+$Z\sim N(0,1)$，$g$ 弱可导、$\E|g'(Z)|<\infty$：\重点{\E[Zg(Z)]=\E[g'(Z)]}；$X\sim N(\mu,\Sigma)$：$\E[g(X)(X-\mu)]=\Sigma\,\E[\nabla g(X)]$。
+推论：$\E Z^{2k}=(2k-1)!!$ 递推；$\Cov(X,g(Y))=\Cov(X,Y)\E g'(Y)$（二元正态）；SURE 估计与 James--Stein 收缩的证明核心。反之 $\E[Zg(Z)]=\E g'(Z)$ 对所有 $g$ 成立刻画了正态。
+\end{结论}
+
+\begin{结论}{Gauss 尾与 Mills 比}
+$x>0$，$\varphi$ 为标准正态密度：
+\[
+\重点{\frac{x}{1+x^2}\varphi(x)\le1-\Phi(x)\le\frac{\varphi(x)}{x}},\qquad 1-\Phi(x)\sim\frac{\varphi(x)}x\Bigl(1-\frac1{x^2}+\frac{3}{x^4}-\cdots\Bigr).
+\]
+简单上界 $1-\Phi(x)\le\frac12\ee^{-x^2/2}$。逆 Mills 比 $\E[X\mid X>a]=\frac{\varphi(a)}{1-\Phi(a)}$（截断正态均值，Heckman 修正）。
+\end{结论}
+
+\begin{结论}{Copula 与 Fréchet--Hoeffding 界}
+Sklar：联合分布 $F(x,y)=C(F_X(x),F_Y(y))$，连续边缘时 $C$ 唯一。任何 Copula 满足
+\[
+\重点{\max(u+v-1,0)\le C(u,v)\le\min(u,v)},
+\]
+上下界对应完全正、负相依（$Y=g(X)$ 单调）。Kendall $\tau$、Spearman $\rho$ 只依赖 Copula；Pearson 相关依赖边缘。Gauss Copula 尾部独立，金融中低估联合极端风险。
+\end{结论}
+
+\begin{结论}{给定边缘下相关系数的可达范围}
+边缘固定时 Pearson 相关不一定能取遍 $[-1,1]$。$X=\ee^Z$，$Y=\ee^{\sigma W}$（对数正态）：
+\[
+\重点{\rho_{\max}=\frac{\ee^\sigma-1}{\sqrt{(\ee-1)(\ee^{\sigma^2}-1)}}},\qquad \rho_{\min}=\frac{\ee^{-\sigma}-1}{\sqrt{(\ee-1)(\ee^{\sigma^2}-1)}},
+\]
+$\sigma\to\infty$ 时两者都 $\to0$——“相关接近 $0$”不代表弱相依。
+\end{结论}
+
+\begin{结论}{采样：逆变换与拒绝法}
+$U$ 均匀：$F^{-1}(U)\sim F$；$-\ln U\sim\mathrm{Exp}(1)$；$U^{1/n}\overset d=\max(U_1,\dots,U_n)$；$\tan(\pi(U-\frac12))\sim$ Cauchy。反之 $F(X)\sim U$（概率积分变换，$F$ 连续）。
+拒绝法：$f\le Mg$，从 $g$ 抽 $Y$，以概率 $\frac{f(Y)}{Mg(Y)}$ 接受。\重点{\text{接受率}=\frac1M}，期望尝试次数 $M$；高维时 $M$ 指数增大，改用 MCMC。
+\end{结论}
+
+\begin{结论}{尺度混合：重尾分布的正态/Poisson 表示}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item $X\mid\sigma^2\sim N(0,\sigma^2)$，$\sigma^2\sim\mathrm{InvGamma}(\frac\nu2,\frac\nu2)$ $\Rightarrow$ $X\sim t_\nu$。
+\item $\sigma^2\sim\mathrm{Exp}$（均值 $2b^2$）$\Rightarrow$ Laplace$(b)$（Lasso 的 Bayes 解释）。
+\item $N\mid\Lambda\sim\mathrm{Poi}(\Lambda)$，$\Lambda\sim\Gamma(r,\text{率 }\beta)$ $\Rightarrow$ $N\sim\mathrm{NB}$：\重点{\Var N=\E N+\frac{(\E N)^2}{r}}（过度离散）。
+\end{itemize}
+用于 EM/Gibbs：引入隐变量后条件分布都是共轭的。
+\end{结论}
+
+\begin{结论}{Dirichlet 分布}
+$\mathrm{Dir}(\alpha_1,\dots,\alpha_k)$，$\alpha_0=\sum\alpha_i$：$(\frac{G_1}{\sum G},\dots)$，$G_i\sim\Gamma(\alpha_i)$ 独立。
+\[
+\E p_i=\frac{\alpha_i}{\alpha_0},\qquad \重点{\Cov(p_i,p_j)=\frac{\alpha_i(\delta_{ij}\alpha_0-\alpha_j)}{\alpha_0^2(\alpha_0+1)}},
+\]
+边缘 $p_i\sim\mathrm{Beta}(\alpha_i,\alpha_0-\alpha_i)$；合并分量 $p_i+p_j$ 对应 $\alpha_i+\alpha_j$。多项分布的共轭先验；$\alpha_i=1$ 为单纯形上均匀分布（间隔分布）。
+\end{结论}
+
+\begin{结论}{特征函数速查}
+\[
+N(\mu,\sigma^2):\ \ee^{\ii\mu t-\sigma^2t^2/2};\quad \text{Cauchy}:\ \ee^{-|t|};\quad \mathrm{Exp}(\lambda):\ \frac{\lambda}{\lambda-\ii t};\quad \Gamma(k,\theta):\ (1-\ii\theta t)^{-k};
+\]
+\[
+U[-1,1]:\ \frac{\sin t}{t};\quad \mathrm{Poi}(\lambda):\ \ee^{\lambda(\ee^{\ii t}-1)};\quad \text{Laplace}(b):\ \frac1{1+b^2t^2};\quad \重点{\text{对称}\iff\varphi\text{ 实}}.
+\]
+$\varphi$ 在 $0$ 处 $2k$ 次可导 $\Rightarrow\E X^{2k}<\infty$；$|\varphi|\equiv1$ 在某邻域内 $\Rightarrow$ 退化分布。
+\end{结论}
+
+\begin{结论}{稳定分布}
+i.i.d. 和满足 $X_1+\cdots+X_n\overset d=n^{1/\alpha}X+b_n$，$0<\alpha\le2$。$\alpha=2$ 正态，$\alpha=1$ Cauchy，\重点{\alpha=\tfrac12\text{ 为 Lévy 分布}}：Brown 运动首达 $a$ 的时间，密度 $\frac{a}{\sqrt{2\pi t^3}}\ee^{-a^2/2t}$。
+尾 $P(|X|>x)\sim cx^{-\alpha}$（$\alpha<2$），方差无穷；$\alpha\le1$ 时均值也不存在。广义 CLT：尾指数 $\alpha<2$ 的 i.i.d. 和以 $n^{1/\alpha}$ 归一化收敛到 $\alpha$-稳定。
+\end{结论}
+
+\begin{结论}{对数凹密度}
+$\ln f$ 凹：正态、指数、均匀、Gamma($k\ge1$)、Beta($a,b\ge1$)、Logistic。性质：卷积、边缘、乘积、仿射像都保持对数凹（Prékopa--Leindler）；单峰；\重点{\text{所有矩存在且尾至多指数衰减}}；危险率单调增。
+用处：保证 MLE 唯一、Gibbs/Langevin 采样快速混合、凸优化可解。$t$、Cauchy、对数正态不是对数凹。
+\end{结论}
+
+\begin{结论}{不同速率指数之和（亚指数分布）}
+$X=\sum_iE_i$，$E_i\sim\mathrm{Exp}(\lambda_i)$ 独立、$\lambda_i$ 互异：
+\[
+\重点{f_X(x)=\sum_i\Bigl(\prod_{j\ne i}\frac{\lambda_j}{\lambda_j-\lambda_i}\Bigr)\lambda_i\ee^{-\lambda_ix}}.
+\]
+两项：$\frac{\lambda_1\lambda_2}{\lambda_2-\lambda_1}(\ee^{-\lambda_1x}-\ee^{-\lambda_2x})$，即 Bateman 衰变链。速率相同时退化为 Erlang（Gamma）。
+\end{结论}
+
+\begin{结论}{高维球与球面上的测度集中}
+$n$ 维单位球内均匀点的半径 $r$：$P(r\le s)=s^n$，密度 $nr^{n-1}$——\重点{\text{体积几乎全在表面薄层}}，$\E r=\frac n{n+1}$。
+球面 $S^{n-1}$ 上均匀点的一个坐标 $\approx N(0,\frac1n)$；两随机单位向量内积 $\approx N(0,\frac1n)$，高维中随机方向几乎正交。Lipschitz 函数在球面上集中：$P(|f-\mathrm{med}f|>t)\le2\ee^{-(n-2)t^2/2}$（Lévy）。
+\end{结论}
+
+\begin{结论}{随机矩阵的两个极限谱}
+Wigner：对称矩阵、上三角元 i.i.d. 方差 $1$，$\frac{1}{\sqrt n}W$ 的特征值经验分布 $\to$ 半圆律
+\[
+\重点{\rho(x)=\frac{\sqrt{4-x^2}}{2\pi}},\ |x|\le2 .
+\]
+Marchenko--Pastur：$p\times n$ 数据（元 i.i.d. 方差 $1$）的样本协方差 $\frac1nXX^{\mathsf T}$，$\gamma=\frac pn\le1$，谱密度 $\frac{\sqrt{(\lambda_+-x)(x-\lambda_-)}}{2\pi\gamma x}$，$\lambda_\pm=(1\pm\sqrt\gamma)^2$。高维 PCA 中超出 $\lambda_+$ 的特征值才是信号。
+\end{结论}
+
+\begin{结论}{矩问题：矩何时决定分布}
+Carleman 条件 \重点{\sum_n m_{2n}^{-1/(2n)}=\infty} $\Rightarrow$ 分布由矩唯一决定；有界支撑、正态、指数、Poisson 都满足。
+对数正态不被矩决定：$f(x)(1+\varepsilon\sin(2\pi\ln x))$ 与 $f$ 有相同的全部矩。因此“矩收敛 $\Rightarrow$ 分布收敛”需要极限分布由矩决定。
+\end{结论}
+
+\begin{结论}{乘积与商的分布：用 Mellin 变换}
+独立正变量 $X,Y$：$\E[(XY)^s]=\E X^s\,\E Y^s$。$\Gamma(k)$：$\E X^s=\frac{\Gamma(k+s)}{\Gamma(k)}$；$U$：$\frac1{1+s}$。
+例：$\E\bigl[\frac XY\bigr]=\E X\cdot\E\frac1Y$，而 \重点{\E\frac1Y\ge\frac1{\E Y}}（Jensen），$Y\sim\Gamma(k)$ 时 $\E\frac1Y=\frac1{k-1}$。$-\ln$（均匀乘积）$\sim\Gamma(n)$，即 $n$ 个均匀数之积的对数是 Gamma。
+\end{结论}
+
+\begin{结论}{指数族：对数配分函数的导数}
+$p(x\mid\theta)=h(x)\exp(\theta^{\mathsf T}T(x)-A(\theta))$：
+\[
+\重点{\nabla A(\theta)=\E_\theta T},\qquad \nabla^2A(\theta)=\Cov_\theta T=I(\theta)\ (\text{Fisher 信息}).
+\]
+$A$ 凸，MLE 解 $\nabla A(\hat\theta)=\frac1n\sum T(x_i)$（矩匹配）；累积量生成函数 $K_T(s)=A(\theta+s)-A(\theta)$。正态、Poisson、二项、Gamma、Beta 都是指数族，均匀 $U(0,\theta)$ 不是（支撑依赖参数）。
+\end{结论}
+
+\begin{结论}{两个正态的最大值（Clark 公式）}
+$(X_1,X_2)$ 二元正态，$\theta=\sqrt{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}$，$\alpha=\frac{\mu_1-\mu_2}\theta$：
+\[
+\重点{\E\max(X_1,X_2)=\mu_1\Phi(\alpha)+\mu_2\Phi(-\alpha)+\theta\varphi(\alpha)}.
+\]
+i.i.d. 标准正态：$\E\max=\frac1{\sqrt\pi}$。折叠正态 $\E|X|=\sigma\sqrt{2/\pi}\,\ee^{-\mu^2/2\sigma^2}+\mu(1-2\Phi(-\mu/\sigma))$。用于电路时序分析、期权（交换期权）定价。
+\end{结论}
+
+\begin{结论}{Beta 分布的几何意义}
+$U_{(k)}\sim\mathrm{Beta}(k,n-k+1)$；$\mathrm{Beta}(\frac12,\frac12)$ 为反正弦分布（$\sin^2$ 均匀角）；$\mathrm{Beta}(a,b)$ 均值 $\frac a{a+b}$、方差 $\frac{ab}{(a+b)^2(a+b+1)}$、众数 $\frac{a-1}{a+b-2}$。
+二项分布尾与 Beta 尾的恒等式：\重点{P(\mathrm{Bin}(n,p)\ge k)=P(\mathrm{Beta}(k,n-k+1)\le p)}——Clopper--Pearson 精确区间由此写成 Beta 分位数。
+\end{结论}
+
+\参考{Johnson--Kotz--Balakrishnan, \emph{Continuous Univariate Distributions}；David--Nagaraja, \emph{Order Statistics}；Nelsen, \emph{An Introduction to Copulas}；Anderson--Guionnet--Zeitouni, \emph{Random Matrices}；Vershynin, \emph{High-Dimensional Probability}；MIT 18.650、18.S997。}

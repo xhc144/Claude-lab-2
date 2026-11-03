@@ -1,0 +1,143 @@
+\subsection{常微分方程补充}
+
+\begin{结论}{恰当方程与积分因子}
+$M\dd x+N\dd y=0$ 恰当 $\iff M_y=N_x$，此时 $F=\int M\dd x+\phi(y)$。不恰当时：
+\[
+\frac{M_y-N_x}{N}=h(x)\ \Rightarrow\ \重点{\mu=\ee^{\int h\dd x}};\qquad \frac{N_x-M_y}{M}=g(y)\ \Rightarrow\ \mu=\ee^{\int g\dd y}.
+\]
+一阶线性 $y'+p(x)y=q(x)$ 是第一种情形，$\mu=\ee^{\int p}$。齐次方程 $y'=F(y/x)$ 用 $v=y/x$ 化为可分离。
+\end{结论}
+
+\begin{结论}{Bernoulli 与 Riccati}
+Bernoulli $y'+py=qy^n$：令 \重点{v=y^{1-n}}，得线性方程 $v'+(1-n)pv=(1-n)q$。
+Riccati $y'=q_0+q_1y+q_2y^2$：已知特解 $y_1$ 时 $y=y_1+\frac1v$ 化为线性方程；或令 $y=-\frac{u'}{q_2u}$ 化为二阶线性 $u''-\bigl(q_1+\frac{q_2'}{q_2}\bigr)u'+q_0q_2u=0$——Riccati 与二阶线性方程等价（量子力学中 $\frac{\psi'}{\psi}$ 满足 Riccati）。
+\end{结论}
+
+\begin{结论}{Clairaut 方程与奇解}
+$y=xp+f(p)$，$p=y'$：求导得 $(x+f'(p))p'=0$。通解为直线族 $y=cx+f(c)$；奇解由 \重点{x=-f'(p),\ y=xp+f(p)} 参数给出，是直线族的包络。
+例：$y=xp-\frac{p^2}4$ 的奇解 $y=x^2$。奇解处唯一性失效（每点有两条积分曲线相切）。
+\end{结论}
+
+\begin{结论}{Frobenius 方法与指标方程}
+正则奇点 $x=0$：$x^2y''+xp(x)y'+q(x)y=0$，$p,q$ 解析。试 $y=x^r\sum a_kx^k$：
+\[
+\重点{r(r-1)+p_0r+q_0=0}\quad(\text{指标方程}).
+\]
+两根 $r_1\ge r_2$：差非整数时两个 Frobenius 解；差为整数（含相等）时第二解可能含 $y_1\ln x$（相等时必含）。Bessel 方程 $r=\pm\nu$；$\nu$ 为整数时第二解 $Y_\nu$ 含对数。
+\end{结论}
+
+\begin{结论}{超几何方程：三个正则奇点}
+$z(1-z)w''+[c-(a+b+1)z]w'-abw=0$，奇点 $0,1,\infty$ 处的指数分别为 $\{0,1-c\}$、$\{0,c-a-b\}$、$\{a,b\}$（Riemann P 符号）。
+$w={}_2F_1(a,b;c;z)$ 在 $0$ 处正则。\重点{\text{任何恰有三个正则奇点的二阶方程都可化为它}}；Legendre（$z=\frac{1-x}2$）、Chebyshev、Jacobi 方程都是特例。合流 $z\to z/b$，$b\to\infty$ 得 Kummer 方程（Laguerre、Hermite、Coulomb、Bessel）。
+\end{结论}
+
+\begin{结论}{存在唯一性的边界：不唯一与爆破}
+$f$ 对 $y$ 局部 Lipschitz $\Rightarrow$ 局部存在唯一（Picard）。不 Lipschitz：$y'=\sqrt{|y|}$，$y(0)=0$ 有无穷多解（$0$，及 $\frac{(t-c)^2}{4}$ 在 $t\ge c$）。
+有限时间爆破：$y'=y^2$，$y(0)=y_0>0$：$y=\frac{y_0}{1-y_0t}$ 在 $t=\frac1{y_0}$ 爆破。\重点{\text{线性增长界 }|f|\le a+b|y|\Rightarrow\text{全局存在}}（Grönwall）；超线性增长可能爆破，判据：$\int^\infty\frac{\dd y}{f(y)}<\infty$。
+\end{结论}
+
+\begin{结论}{Sturm 比较定理：零点间距}
+$y''+q(x)y=0$：若 $m^2\le q\le M^2$，相邻零点间距
+\[
+\重点{\frac{\pi}{M}\le\Delta x\le\frac\pi m}.
+\]
+同一方程的两个线性无关解零点严格交错。$q(x)\to\infty$ 时振荡加快（Airy 方程 $y''+xy=0$ 零点间距 $\sim\frac{\pi}{\sqrt x}$）；$\int^\infty q<\infty$ 且 $q\le\frac1{4x^2}$ 时不振荡（Kneser）。
+\end{结论}
+
+\begin{结论}{Floquet 理论与 Hill 方程}
+$\dot x=A(t)x$，$A$ 周期 $T$：基本解阵 $\Phi(t)=P(t)\ee^{Bt}$，$P$ 周期。单值矩阵 $M=\Phi(T)\Phi(0)^{-1}$ 的特征值（Floquet 乘子）决定稳定性，\重点{\det M=\exp\int_0^T\tr A}。
+Hill 方程 $y''+q(t)y=0$：$\det M=1$，稳定 $\iff|\tr M|<2$，$|\tr M|>2$ 时参数共振（指数增长）。只需数值积分一个周期两次即可判定。
+\end{结论}
+
+\begin{结论}{Hopf 分岔}
+复特征值对穿过虚轴（$\mu$ 过 $0$）时，标准形 $\dot r=\mu r+ar^3$，$\dot\theta=\omega+br^2$：
+\[
+\重点{a<0\text{（超临界）：稳定极限环 }r=\sqrt{-\mu/a}}\ (\mu>0);\qquad a>0\text{（亚临界）：不稳定环，跳跃与滞后}.
+\]
+振幅 $\propto\sqrt\mu$，周期 $\approx\frac{2\pi}\omega$。$a$ 的符号由第一 Lyapunov 系数决定（需三阶 Taylor 系数）。例：Brusselator、van der Pol（$\varepsilon$ 过 $0$）。
+\end{结论}
+
+\begin{结论}{van der Pol 振子的两个极限}
+$\ddot x-\mu(1-x^2)\dot x+x=0$：$\mu\ll1$ 时极限环近似圆，\重点{\text{振幅 }2}（平均法：$\dot r=\frac{\mu r}2(1-\frac{r^2}4)$），周期 $2\pi+O(\mu^2)$；
+$\mu\gg1$ 时弛豫振荡，周期 $\approx(3-2\ln2)\mu$（慢流形 $\dot x=\frac{x}{\mu(1-x^2)}$ 的两段之和，Liénard 变量下两次跳跃）。神经元 FitzHugh--Nagumo 模型即其推广。
+\end{结论}
+
+\begin{结论}{Lorenz 系统的可算数据}
+$\dot x=\sigma(y-x)$，$\dot y=x(\rho-z)-y$，$\dot z=xy-\beta z$。相体积收缩率 $-(\sigma+1+\beta)$（经典参数 $-\frac{41}3$）。$\rho>1$ 时原点失稳，出现 $C_\pm=(\pm\sqrt{\beta(\rho-1)},\pm\sqrt{\beta(\rho-1)},\rho-1)$；
+\[
+\重点{\rho_H=\frac{\sigma(\sigma+\beta+3)}{\sigma-\beta-1}}\approx24.74\ (\sigma=10,\beta=\tfrac83)
+\]
+处 $C_\pm$ 亚临界 Hopf 失稳；$\rho=28$ 为混沌吸引子（最大 Lyapunov 指数约 $0.906$，维数约 $2.06$）。
+\end{结论}
+
+\begin{结论}{线性化何时可信：Hartman--Grobman}
+双曲不动点（无零实部特征值）附近，非线性系统与线性化拓扑共轭。非双曲时线性化不足：
+\[
+\dot x=-y+\varepsilon x(x^2+y^2),\ \dot y=x+\varepsilon y(x^2+y^2)\ \Rightarrow\ \重点{\dot r=\varepsilon r^3},
+\]
+线性部分是中心，实际 $\varepsilon>0$ 不稳定螺旋、$\varepsilon<0$ 稳定螺旋。需要中心流形约化或 Lyapunov 函数。梯度系统 $\dot x=-\nabla V$ 没有周期轨道。
+\end{结论}
+
+\begin{结论}{时滞方程：$\dot x=-ax(t-\tau)$}
+特征方程 $\lambda=-a\ee^{-\lambda\tau}$。$a>0$ 时
+\[
+\重点{\text{稳定}\iff a\tau<\frac\pi2},
+\]
+$a\tau=\frac\pi2$ 时一对根 $\pm\ii\frac{\pi}{2\tau}$ 穿过虚轴（Hopf），振荡周期 $4\tau$。反馈控制、种群模型（Hutchinson：$\dot N=rN(1-\frac{N(t-\tau)}K)$ 在 $r\tau>\frac\pi2$ 时振荡）的失稳都来自时滞。
+\end{结论}
+
+\begin{结论}{可控性、可观性与 LQR}
+$\dot x=Ax+Bu$，$y=Cx$：可控 $\iff$ \重点{\rank[B,AB,\dots,A^{n-1}B]=n}（Kalman）；可观 $\iff\rank[C;CA;\dots;CA^{n-1}]=n$（对偶）。可控时极点可任意配置。
+LQR：$\min\int(x^{\mathsf T}Qx+u^{\mathsf T}Ru)$，$u=-R^{-1}B^{\mathsf T}Px$，$P$ 解代数 Riccati 方程 $A^{\mathsf T}P+PA-PBR^{-1}B^{\mathsf T}P+Q=0$；闭环必稳定（$(A,B)$ 可稳、$(A,Q^{1/2})$ 可检）。
+\end{结论}
+
+\begin{结论}{Routh--Hurwitz 判据}
+实系数多项式所有根实部为负：
+\[
+s^2+as+b:\ a,b>0;\qquad \重点{s^3+as^2+bs+c:\ a,b,c>0\ \text{且}\ ab>c};
+\]
+$s^4+a_1s^3+a_2s^2+a_3s+a_4$：系数全正且 $a_1a_2>a_3$、$a_1a_2a_3>a_3^2+a_1^2a_4$。$ab=c$ 时恰有一对纯虚根 $\pm\ii\sqrt b$（Hopf 点）。
+\end{结论}
+
+\begin{结论}{Lyapunov 指数与 Kaplan--Yorke 维数}
+$\lambda_i=\lim\frac1t\ln\frac{\|\delta x_i(t)\|}{\|\delta x_i(0)\|}$（沿轨道，Gram--Schmidt 正交化逐个求）。\重点{\sum\lambda_i=\langle\nabla\cdot f\rangle}（相体积平均收缩率）；连续流至少一个 $\lambda=0$（沿流方向）。
+Kaplan--Yorke：$D_{KY}=j+\frac{\sum_{i\le j}\lambda_i}{|\lambda_{j+1}|}$，$j$ 为部分和仍非负的最大指标。Lorenz：$(0.906,0,-14.57)$，$D\approx2.06$。可预测时间 $\sim\frac1{\lambda_1}\ln\frac{\text{容差}}{\text{初始误差}}$。
+\end{结论}
+
+\begin{结论}{分界线附近的周期对数发散}
+保守系统 $\ddot x=-V'(x)$，能量 $E$ 接近鞍点能量 $E_s$，鞍点处 $V''=-\lambda^2$：每次经过鞍点附近花费时间
+\[
+\重点{\approx\frac1\lambda\ln\frac{C}{|E-E_s|}}.
+\]
+单摆（$\lambda=\omega_0$）在振幅接近 $\pi$ 时 $T\approx\frac{2}{\omega_0}\ln\frac{16}{1-E/E_s}$（每周期两次接近倒立点）。由 $K(k)\approx\ln\frac{4}{\sqrt{1-k^2}}$ 得到。
+\end{结论}
+
+\begin{结论}{拍与共振的包络}
+$\cos\omega_1t-\cos\omega_2t=2\sin\frac{(\omega_1+\omega_2)t}2\sin\frac{(\omega_2-\omega_1)t}2$：拍频 $|\omega_1-\omega_2|$（包络的平方周期）。
+无阻尼受迫振子 $\ddot x+\omega_0^2x=F\cos\omega t$，$x(0)=\dot x(0)=0$：$x=\frac{F(\cos\omega t-\cos\omega_0t)}{\omega_0^2-\omega^2}$，$\omega\to\omega_0$ 极限 \重点{x=\frac{F}{2\omega_0}t\sin\omega_0t}（线性增长的共振）。
+\end{结论}
+
+\begin{结论}{离散映射的不动点与周期 2 轨道}
+$x_{n+1}=f(x_n)$：不动点稳定 $\iff|f'(x^*)|<1$。$f'(x^*)=-1$ 时倍周期分岔，周期 $2$ 轨道 $\{p,q\}$ 稳定 $\iff$ \重点{|f'(p)f'(q)|<1}。
+Logistic $f=rx(1-x)$：不动点 $1-\frac1r$ 在 $1<r<3$ 稳定；周期 $2$ 在 $3<r<1+\sqrt6\approx3.449$ 稳定。周期 $3$ 意味着所有周期（Sharkovskii、Li--Yorke“周期三蕴含混沌”）。
+\end{结论}
+
+\begin{结论}{一阶线性方程组的相图分类（三维）}
+特征值全负实：稳定结点；含复对：稳定螺旋结点；有正有负：鞍点（不稳定流形维数 $=$ 正实部个数）。
+\重点{\tr A<0\text{ 保证相体积收缩，但不保证稳定}}（如 $\diag(-5,1,1)$）。二维用迹--行列式图；高维用 Routh--Hurwitz 判定稳定、用特征值实部分组判定流形维数。
+\end{结论}
+
+\begin{结论}{二阶线性方程的标准化}
+$y''+p(x)y'+q(x)y=0$，令 $y=u\exp(-\frac12\int p)$ 消去一阶项：
+\[
+\重点{u''+\Bigl(q-\frac{p^2}4-\frac{p'}2\Bigr)u=0}.
+\]
+Bessel 方程 $y''+\frac1xy'+(1-\frac{\nu^2}{x^2})y=0$ 化为 $u''+(1-\frac{\nu^2-1/4}{x^2})u=0$（$y=u/\sqrt x$），立即看出 $J_\nu\sim\sqrt{\frac{2}{\pi x}}\cos(\cdots)$ 及 $\nu=\frac12$ 时精确为三角函数。Sturm 比较、WKB 都在这种形式下用。
+\end{结论}
+
+\begin{结论}{常系数线性方程组的指数稳定与能量估计}
+$\dot x=Ax$：$\|x(t)\|\le\kappa(V)\ee^{\alpha t}\|x_0\|$（$\alpha=\max\operatorname{Re}\lambda$，可对角化时）。非正规 $A$ 即使 $\alpha<0$ 也可能\重点{\text{瞬态增长}}：$\begin{pmatrix}-1&100\\0&-2\end{pmatrix}$ 的解先放大约 $25$ 倍再衰减。
+初始增长率由数值横坐标 $\max\lambda\bigl(\frac{A+A^{\mathsf T}}2\bigr)$ 决定（剪切流的亚临界转捩、生态系统的“反应性”）。
+\end{结论}
+
+\参考{Boyce--DiPrima；Coddington--Levinson, \emph{Theory of ODEs}；Strogatz, \emph{Nonlinear Dynamics and Chaos}；Perko, \emph{Differential Equations and Dynamical Systems}；Åström--Murray, \emph{Feedback Systems}；MIT 18.03、18.353、6.241。}

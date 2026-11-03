@@ -1,0 +1,174 @@
+\subsection{变分法、积分方程与特殊函数补充}
+
+\begin{结论}{最速降线：摆线且等时}
+$\min\int\frac{\sqrt{1+y'^2}}{\sqrt{2gy}}\dd x$（$y$ 向下）：Beltrami 给 $y(1+y'^2)=2R$，解为摆线
+\[
+\重点{x=R(\theta-\sin\theta),\quad y=R(1-\cos\theta)}.
+\]
+从静止滑到最低点的时间 $\pi\sqrt{R/g}$，与出发点无关（等时性，Huygens 摆钟）。同起止点时比直线快：$R=1$ m 时摆线 $1.003$ s 对直线 $1.189$ s。
+\end{结论}
+
+\begin{结论}{高阶导数与多函数的 Euler--Lagrange 方程}
+$J=\int F(x,y,y',y'')\dd x$：
+\[
+\重点{F_y-\frac{\dd}{\dd x}F_{y'}+\frac{\dd^2}{\dd x^2}F_{y''}=0},
+\]
+自然边界条件 $F_{y''}=0$、$F_{y'}-\frac{\dd}{\dd x}F_{y''}=0$（自由端）。梁的弯曲能 $\int(\frac{EI}2y''^2-qy)$ 给 $EIy''''=q$。多函数 $y_i$：各自一条方程；多元 $u(x,y)$：$F_u-\partial_xF_{u_x}-\partial_yF_{u_y}=0$（如 $\int|\nabla u|^2\to\Delta u=0$，极小曲面方程）。
+\end{结论}
+
+\begin{结论}{带约束的变分：等周问题与悬链线}
+约束 $\int G\dd x=\ell$：对 $F-\lambda G$ 写 Euler--Lagrange。
+固定长度的绳围最大面积：$\int y\dd x-\lambda\int\sqrt{1+y'^2}$ $\Rightarrow$ 曲率 $=\frac1\lambda$，\重点{\text{圆弧}}。固定长度的悬绳最低势能：$\int(y-\lambda)\sqrt{1+y'^2}$，Beltrami 给 $y-\lambda=a\cosh\frac{x-x_0}a$。$\lambda$ 由约束确定，$\lambda$ 的意义是最优值对约束的灵敏度。
+\end{结论}
+
+\begin{结论}{Noether 定理（力学形式）}
+$L(q,\dot q,t)$ 在 $q\to q+\varepsilon\xi(q)$ 下不变 $\Rightarrow$ \重点{p\cdot\xi=\frac{\partial L}{\partial\dot q}\cdot\xi\text{ 守恒}}；$L$ 不显含 $t$ $\Rightarrow$ 能量 $\dot q\cdot p-L$ 守恒（即 Beltrami 恒等式）。
+平移 $\to$ 动量，转动 $\to$ 角动量；场论中对应守恒流 $\partial_\mu j^\mu=0$。几何中旋转面的 Clairaut 关系也是 Noether 守恒量。
+\end{结论}
+
+\begin{结论}{二阶变分：Jacobi 方程与共轭点}
+极值曲线 $y$ 上，$P=F_{y'y'}$，$Q=F_{yy}-\frac{\dd}{\dd x}F_{yy'}$。Jacobi 方程
+\[
+\重点{-(Ph')'+Qh=0},\quad h(a)=0,\ h'(a)=1 .
+\]
+$P>0$ 且 $h$ 在 $(a,b]$ 内无零点（无共轭点）$\Rightarrow$ 弱极小。球面测地线：$h''+h=0$，共轭点在 $\pi$——超过半个大圆的弧不再最短。悬链面肥皂膜的失稳也是共轭点出现。
+\end{结论}
+
+\begin{结论}{Volterra 第二类方程：Neumann 级数总收敛}
+$u(x)=f(x)+\lambda\int_a^xK(x,t)u(t)\dd t$，$|K|\le M$：迭代核 $|K_n|\le\frac{M^n(x-t)^{n-1}}{(n-1)!}$，级数对\textbf{任何} $\lambda$ 收敛。
+例：$K\equiv1$ 的解 \重点{u=f+\lambda\int_a^x\ee^{\lambda(x-t)}f(t)\dd t}（等价于 $u'=f'+\lambda u$）。卷积核 $K(x-t)$ 用 Laplace 变换：$\hat u=\frac{\hat f}{1-\lambda\hat K}$。
+\end{结论}
+
+\begin{结论}{退化核：Fredholm 方程化为线性代数}
+$K(x,t)=\sum_{i=1}^na_i(x)b_i(t)$：$u=f+\lambda\sum c_ia_i$，$c_i=\int b_iu$ 满足
+\[
+\重点{(I-\lambda A)c=F},\qquad A_{ij}=\int b_ia_j,\quad F_i=\int b_if.
+\]
+$\det(I-\lambda A)=0$ 的 $\lambda$ 是特征值；此时可解当且仅当 $F$ 与 $(I-\lambda A^{\mathsf T})$ 的零空间正交（Fredholm 择一）。一般核可用 Taylor/SVD 截断近似为退化核。
+\end{结论}
+
+\begin{结论}{对称核的 Hilbert--Schmidt 展开}
+$K(x,t)=\sum\mu_n\phi_n(x)\phi_n(t)$（$\int K\phi_n=\mu_n\phi_n$）。$u=f+\lambda\int Ku$ 的解（$\lambda\mu_n\ne1$）：
+\[
+\重点{u=f+\lambda\sum_n\frac{\mu_n(f,\phi_n)}{1-\lambda\mu_n}\phi_n}.
+\]
+第一类方程 $\int Ku=f$ 需 $\sum\frac{(f,\phi_n)^2}{\mu_n^2}<\infty$（Picard 条件），$\mu_n\to0$ 使它不适定。
+\end{结论}
+
+\begin{结论}{$\Gamma$ 的倍元与乘法公式}
+\[
+\重点{\Gamma(z)\Gamma(z+\tfrac12)=2^{1-2z}\sqrt\pi\,\Gamma(2z)},\qquad \prod_{k=0}^{n-1}\Gamma\Bigl(z+\frac kn\Bigr)=(2\pi)^{\frac{n-1}2}n^{\frac12-nz}\Gamma(nz).
+\]
+特值 $\Gamma(\frac12)=\sqrt\pi$，$\Gamma(n+\frac12)=\frac{(2n)!}{4^nn!}\sqrt\pi$；$|\Gamma(\frac12+\ii y)|^2=\frac{\pi}{\cosh\pi y}$，$|\Gamma(\ii y)|^2=\frac{\pi}{y\sinh\pi y}$（由余元公式）。
+\end{结论}
+
+\begin{结论}{双 $\Gamma$ 函数}
+$\psi=\frac{\Gamma'}\Gamma$：$\psi(z+1)=\psi(z)+\frac1z$，$\psi(n+1)=H_n-\gamma$，\重点{\psi(1-z)-\psi(z)=\pi\cot\pi z}，$\psi(\frac12)=-\gamma-2\ln2$。
+$\psi(z)=-\gamma+\sum_{n\ge0}\bigl(\frac1{n+1}-\frac1{n+z}\bigr)$；大 $z$：$\psi(z)=\ln z-\frac1{2z}-\frac{1}{12z^2}+\cdots$。用法：$\sum_{n\ge0}\frac1{(n+a)(n+b)}=\frac{\psi(a)-\psi(b)}{a-b}$。
+\end{结论}
+
+\begin{结论}{Jacobi 椭圆函数与单摆的精确解}
+$u=\int_0^\varphi\frac{\dd\theta}{\sqrt{1-k^2\sin^2\theta}}$，$\operatorname{sn}u=\sin\varphi$，$\operatorname{cn}u=\cos\varphi$，$\operatorname{dn}u=\sqrt{1-k^2\operatorname{sn}^2u}$；周期 $4K$，$(\operatorname{sn})'=\operatorname{cn}\operatorname{dn}$。
+单摆振幅 $\theta_0$、$k=\sin\frac{\theta_0}2$，从最低点出发：
+\[
+\重点{\sin\frac{\theta(t)}{2}=k\,\operatorname{sn}(\omega_0t,k)},\qquad T=\frac{4K(k)}{\omega_0}.
+\]
+$k\to0$ 退化为 $\sin$，$k\to1$ 时 $\operatorname{sn}\to\tanh$（分界线上的运动）。
+\end{结论}
+
+\begin{结论}{${}_2F_1$ 的积分表示与常见特例}
+$\operatorname{Re}c>\operatorname{Re}b>0$：${}_2F_1(a,b;c;z)=\frac{\Gamma(c)}{\Gamma(b)\Gamma(c-b)}\int_0^1t^{b-1}(1-t)^{c-b-1}(1-zt)^{-a}\dd t$。
+\[
+(1-z)^{-a}={}_2F_1(a,b;b;z),\quad \ln(1+z)=z\,{}_2F_1(1,1;2;-z),\quad \重点{\arcsin z=z\,{}_2F_1(\tfrac12,\tfrac12;\tfrac32;z^2)},
+\]
+$\arctan z=z\,{}_2F_1(\frac12,1;\frac32;-z^2)$，$K(k)=\frac\pi2{}_2F_1(\frac12,\frac12;1;k^2)$，Legendre $P_\nu(x)={}_2F_1(-\nu,\nu+1;1;\frac{1-x}2)$。
+\end{结论}
+
+\begin{结论}{合流超几何函数 ${}_1F_1$}
+Kummer 方程 $zw''+(b-z)w'-aw=0$，$M(a,b,z)=\sum\frac{(a)_n}{(b)_n}\frac{z^n}{n!}$。Kummer 变换 \重点{M(a,b,z)=\ee^zM(b-a,b,-z)}。
+$a=-n$ 时为多项式：$L_n^{(\alpha)}(x)=\binom{n+\alpha}nM(-n,\alpha+1,x)$；Hermite、Coulomb 波函数、误差函数（$\erf x=\frac{2x}{\sqrt\pi}M(\frac12,\frac32,-x^2)$）都是特例。氢原子束缚态的量子化来自“$M$ 必须截断为多项式”。
+\end{结论}
+
+\begin{结论}{Fourier--Bessel 级数的正交性}
+$j_{n,k}$ 为 $J_n$ 的第 $k$ 个正零点：
+\[
+\重点{\int_0^ar\,J_n\Bigl(\frac{j_{n,k}r}a\Bigr)J_n\Bigl(\frac{j_{n,l}r}a\Bigr)\dd r=\frac{a^2}{2}J_{n+1}(j_{n,k})^2\delta_{kl}}.
+\]
+圆膜、圆柱热传导的初值展开系数由此计算；Neumann 边界（$J_n'$ 的零点 $j'_{n,k}$）时右边为 $\frac{a^2}2\bigl(1-\frac{n^2}{j'^2_{n,k}}\bigr)J_n(j'_{n,k})^2$。
+\end{结论}
+
+\begin{结论}{球 Bessel 函数与平面波展开}
+$j_0=\frac{\sin x}x$，$j_1=\frac{\sin x}{x^2}-\frac{\cos x}x$，$y_0=-\frac{\cos x}x$；$j_l(x)\approx\frac{x^l}{(2l+1)!!}$（$x\to0$），$\approx\frac{\sin(x-l\pi/2)}x$（$x\to\infty$）。
+\[
+\重点{\ee^{\ii kr\cos\theta}=\sum_{l\ge0}(2l+1)\ii^lj_l(kr)P_l(\cos\theta)}.
+\]
+$j_0$ 零点 $n\pi$，$j_1$ 零点满足 $\tan x=x$（$4.493,7.725,\dots$）。球形势阱、分波法、球腔模式都用它。
+\end{结论}
+
+\begin{结论}{修正 Bessel 函数}
+$I_\nu(x)=\ii^{-\nu}J_\nu(\ii x)$ 指数增长，$K_\nu$ 指数衰减：
+\[
+I_\nu(x)\sim\frac{\ee^x}{\sqrt{2\pi x}},\qquad \重点{K_\nu(x)\sim\sqrt{\frac{\pi}{2x}}\ee^{-x}},\qquad K_0(x)\approx-\ln\frac x2-\gamma\ (x\to0).
+\]
+二维屏蔽 Poisson 方程 $(\Delta-\kappa^2)G=-\delta$ 的解 $\frac1{2\pi}K_0(\kappa r)$；圆柱散热片、von Mises 分布的归一化 $2\pi I_0(\kappa)$。
+\end{结论}
+
+\begin{结论}{Laguerre 多项式}
+$L_n(x)=\frac{\ee^x}{n!}\frac{\dd^n}{\dd x^n}(\ee^{-x}x^n)$，$\int_0^\infty\ee^{-x}L_mL_n=\delta_{mn}$；广义 $\int_0^\infty x^\alpha\ee^{-x}L_m^{(\alpha)}L_n^{(\alpha)}=\frac{\Gamma(n+\alpha+1)}{n!}\delta_{mn}$。
+\[
+\重点{\sum_{n\ge0}L_n(x)t^n=\frac{\ee^{-xt/(1-t)}}{1-t}},\qquad (n+1)L_{n+1}=(2n+1-x)L_n-nL_{n-1}.
+\]
+氢原子径向波函数 $\propto\rho^l\ee^{-\rho/2}L_{n-l-1}^{(2l+1)}(\rho)$；Gauss--Laguerre 求积的节点。
+\end{结论}
+
+\begin{结论}{Chebyshev 多项式的恒等式}
+$T_n(\cos\theta)=\cos n\theta$，$U_n(\cos\theta)=\frac{\sin(n+1)\theta}{\sin\theta}$：
+\[
+T_{n+1}=2xT_n-T_{n-1},\quad T_n'=nU_{n-1},\quad \重点{T_m(T_n(x))=T_{mn}(x)},\quad \sum_nT_nt^n=\frac{1-xt}{1-2xt+t^2}.
+\]
+$T_n$ 的零点 $\cos\frac{(2k-1)\pi}{2n}$、极值点 $\cos\frac{k\pi}n$；$x^n=2^{1-n}\sum'\binom{n}{k}T_{n-2k}$（用于“经济化”幂级数）。
+\end{结论}
+
+\begin{结论}{Christoffel--Darboux 公式}
+正交多项式 $p_k$（首项系数 $k_n$，范数平方 $h_n$）：
+\[
+\重点{\sum_{k=0}^n\frac{p_k(x)p_k(y)}{h_k}=\frac{k_n}{k_{n+1}h_n}\cdot\frac{p_{n+1}(x)p_n(y)-p_n(x)p_{n+1}(y)}{x-y}}.
+\]
+左边是到 $n$ 次多项式空间的投影核（随机矩阵中的相关核）；令 $y\to x$ 得 Gauss 求积权重 $w_i=\frac{k_{n}}{k_{n-1}}\frac{h_{n-1}}{p_{n-1}(x_i)p_n'(x_i)}$。
+\end{结论}
+
+\begin{结论}{指数积分}
+$E_1(x)=\int_x^\infty\frac{\ee^{-t}}t\dd t$：
+\[
+E_1(x)=-\gamma-\ln x-\sum_{k\ge1}\frac{(-x)^k}{k\,k!},\qquad \重点{E_1(x)\sim\frac{\ee^{-x}}{x}\Bigl(1-\frac1x+\frac{2!}{x^2}-\cdots\Bigr)}.
+\]
+界：$\frac12\ee^{-x}\ln(1+\frac2x)<E_1(x)<\ee^{-x}\ln(1+\frac1x)$。$\int_0^\infty\frac{\ee^{-t}}{x+t}\dd t=\ee^xE_1(x)$（Stieltjes 型，渐近级数的经典例子）。辐射传输、井流（Theis）中出现。
+\end{结论}
+
+\begin{结论}{Lambert $W$ 函数}
+$W\ee^W=x$；主支 $W_0\ge-1$，$x\ge-\frac1\ee$。$W'=\frac{W}{x(1+W)}$，$\int W\dd x=x(W-1+\frac1W)+C$。
+\[
+x=a+b\ee^{cx}\ \Rightarrow\ \重点{x=a-\frac1cW\bigl(-bc\,\ee^{ac}\bigr)}.
+\]
+例：$x^x=y\Rightarrow x=\frac{\ln y}{W(\ln y)}$；二极管电路 $I=I_s(\ee^{(V-IR)/V_T}-1)$ 的显式解；Wien 位移律 $x=5(1-\ee^{-x})$ 的解 $5+W(-5\ee^{-5})\approx4.965$。
+\end{结论}
+
+\begin{结论}{多重对数与量子统计积分}
+$\Li_s(z)=\sum_{k\ge1}\frac{z^k}{k^s}$：$\Li_1(z)=-\ln(1-z)$，$\Li_2(1)=\frac{\pi^2}6$，\重点{\Li_2(\tfrac12)=\frac{\pi^2}{12}-\frac{\ln^22}2}，$\Li_2(-1)=-\frac{\pi^2}{12}$。
+Fermi--Dirac 与 Bose--Einstein 积分：$\int_0^\infty\frac{x^{s-1}\dd x}{\ee^{x-\mu}\pm1}=\mp\Gamma(s)\Li_s(\mp\ee^\mu)$（上号 FD）。理想 Bose 气体凝聚温度由 $\Li_{3/2}(1)=\zeta(\frac32)\approx2.612$ 决定。
+\end{结论}
+
+\begin{结论}{误差函数家族}
+$\erfc x\sim\frac{\ee^{-x^2}}{x\sqrt\pi}$；$\int_0^\infty\erfc x\,\dd x=\frac1{\sqrt\pi}$；$\int_0^\infty\erfc^2=\frac{2-\sqrt2}{\sqrt\pi}$；$\frac{\dd}{\dd x}\erf x=\frac2{\sqrt\pi}\ee^{-x^2}$。
+Dawson 函数 $F(x)=\ee^{-x^2}\int_0^x\ee^{t^2}\dd t$：最大值 $\approx0.541$ 于 $x\approx0.924$，大 $x$ 时 $\sim\frac1{2x}$；\重点{\erf(\ii x)=\frac{2\ii}{\sqrt\pi}\ee^{x^2}F(x)}。等离子体色散函数、Voigt 线型都由它们组成。
+\end{结论}
+
+\begin{结论}{Rayleigh--Ritz 的单调性与 min--max}
+自伴算子（离散谱 $\lambda_1\le\lambda_2\le\cdots$）：
+\[
+\重点{\lambda_k=\min_{\dim V=k}\max_{v\in V}\frac{(Lv,v)}{(v,v)}},
+\]
+在 $k$ 维试探子空间上做 Ritz 近似得到的第 $k$ 个近似值 $\ge\lambda_k$，加大子空间单调下降。推论：区域增大时 Dirichlet 本征值下降（单调性）；Dirichlet $\ge$ Neumann；约束（如固定一点）抬高本征值。
+\end{结论}
+
+\参考{Gelfand--Fomin, \emph{Calculus of Variations}；Kress, \emph{Linear Integral Equations}；NIST \emph{Digital Library of Mathematical Functions}；Lebedev, \emph{Special Functions}；Andrews--Askey--Roy, \emph{Special Functions}；MIT 18.305、18.385。}

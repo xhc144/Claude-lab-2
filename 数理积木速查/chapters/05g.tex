@@ -1,0 +1,140 @@
+\subsection{渐近、摄动与积分变换补充}
+
+\begin{结论}{渐近级数的最优截断：Stieltjes 例}
+$S(x)=\int_0^\infty\frac{\ee^{-t}}{1+xt}\dd t\sim\sum_{n\ge0}(-1)^nn!\,x^n$（$x\to0^+$，处处发散）。截断误差不超过首个略去项；最小项在 $n\approx\frac1x$，
+\[
+\重点{\text{最优截断误差}\approx\sqrt{\frac{2\pi}x}\,\ee^{-1/x}}.
+\]
+即渐近级数能达到的精度是指数小的，再多取项反而变差。“超渐近”（对余项再展开）可越过这个界；Stokes 现象正是这种指数小项的突然出现。
+\end{结论}
+
+\begin{结论}{Borel 求和}
+$f\sim\sum a_nx^n$ 发散但 $a_n\sim n!$：令 $B(t)=\sum\frac{a_n}{n!}t^n$（收敛），定义
+\[
+\重点{f(x)=\int_0^\infty\ee^{-t}B(xt)\dd t}.
+\]
+Stieltjes 例：$a_n=(-1)^nn!$，$B=\frac1{1+t}$，精确恢复 $S(x)$。$B$ 在正实轴有奇点时求和有歧义（$\pm\ii0$ 两种路径），歧义量是指数小的——对应非微扰效应（瞬子）。
+\end{结论}
+
+\begin{结论}{最速下降法（复鞍点）}
+$I(\lambda)=\int_Cg(z)\ee^{\lambda f(z)}\dd z$，$f'(z_0)=0$，把围道变形过鞍点、沿 $\operatorname{Im}f$ 不变的最速下降方向：
+\[
+\重点{I\sim g(z_0)\ee^{\lambda f(z_0)}\sqrt{\frac{2\pi}{\lambda|f''(z_0)|}}\,\ee^{\ii\alpha}},\qquad \alpha=\frac{\pi-\arg f''(z_0)}2
+\]
+（$\alpha$ 取通过方向）。实 Laplace 方法与驻相法都是特例。多个鞍点时贡献相加，主导的看 $\operatorname{Re}f(z_0)$。
+\end{结论}
+
+\begin{结论}{多维 Laplace 方法}
+$f$ 在内点 $x_0$ 取严格极小，Hessian $H\succ0$：
+\[
+\重点{\int_{\mathbb R^n}g(x)\ee^{-\lambda f(x)}\dd x\sim g(x_0)\ee^{-\lambda f(x_0)}\Bigl(\frac{2\pi}\lambda\Bigr)^{n/2}\frac{1}{\sqrt{\det H}}}.
+\]
+Bayes 统计的 Laplace 近似、边际似然与 BIC（$\ln$ 后 $-\frac d2\ln n$ 项）、统计力学的鞍点（平均场）都由此而来。极小点在边界上时改为半空间积分，阶数变化。
+\end{结论}
+
+\begin{结论}{WKB 连接公式与量子化条件}
+转折点 $x=a$，左侧经典允许（$p=\sqrt{2m(E-V)}$），右侧禁区：
+\[
+\重点{\frac{2}{\sqrt p}\cos\Bigl(\frac1\hbar\int_x^ap\,\dd x'-\frac\pi4\Bigr)\ \longleftrightarrow\ \frac{1}{\sqrt{|p|}}\exp\Bigl(-\frac1\hbar\int_a^x|p|\dd x'\Bigr)}.
+\]
+两个软转折点：$\oint p\dd q=2\pi\hbar(n+\frac12)$；一软一硬墙：$n+\frac34$；两硬墙：$n+1$。连接的 $\frac\pi4$ 相位来自 Airy 函数渐近。
+\end{结论}
+
+\begin{结论}{代数方程的奇异摄动}
+$\varepsilon x^2+x-1=0$：常规展开只得一根 $x=1-\varepsilon+2\varepsilon^2+\cdots$；另一根在 $\varepsilon\to0$ 时跑到无穷，标度 $x=\frac X\varepsilon$ 后 $X^2+X-\varepsilon=0$：
+\[
+\重点{x=-\frac1\varepsilon-1+\varepsilon+\cdots}.
+\]
+主导平衡（dominant balance）：逐对假设哪两项同阶，检查第三项是否确实更小。同一思路用于 ODE 的边界层与 WKB 的 $S'^2$ 平衡。
+\end{结论}
+
+\begin{结论}{主导平衡求 ODE 的大 $x$ 渐近}
+$y''=xy$（Airy）：令 $y=\ee^{S}$，$S''+S'^2=x$，主平衡 $S'^2\sim x\Rightarrow S\sim\pm\frac23x^{3/2}$；下一阶 $2S'S_1'+S''=0\Rightarrow S_1=-\frac14\ln x$：
+\[
+\重点{y\sim Cx^{-1/4}\exp\Bigl(\pm\frac23x^{3/2}\Bigr)}.
+\]
+一般 $y''=Q(x)y$：$y\sim Q^{-1/4}\exp(\pm\int\sqrt Q)$（就是 WKB）。非正则奇点处解有本质奇异性，必须这样处理而不是 Frobenius。
+\end{结论}
+
+\begin{结论}{Mellin 变换与调和和的渐近}
+$\mathcal M[f](s)=\int_0^\infty x^{s-1}f(x)\dd x$：$\mathcal M[f(ax)]=a^{-s}\mathcal M[f]$。$\mathcal M[f]$ 在 $s=-a$ 的极点（留数 $c$）给出 \重点{f(x)\sim c\,x^{a}\ (x\to0)}。
+调和和 $\sum_k\lambda_kf(\mu_kx)$ 的 Mellin 变换为 $\bigl(\sum\lambda_k\mu_k^{-s}\bigr)\mathcal M[f](s)$。例：$\sum_{n\ge1}\ee^{-n^2x}$，变换 $\Gamma(s)\zeta(2s)$，极点 $s=\frac12$、$s=0$ 给 $\sim\frac{\sqrt\pi}{2\sqrt x}-\frac12$。
+\end{结论}
+
+\begin{结论}{Hilbert 变换与解析信号}
+$\mathcal H[u](t)=\frac1\pi\mathrm{PV}\!\int\frac{u(\tau)}{t-\tau}\dd\tau$，频域乘 $-\ii\sgn\omega$：$\mathcal H[\cos\omega t]=\sin\omega t$，$\mathcal H[\sin\omega t]=-\cos\omega t$（$\omega>0$），\重点{\mathcal H^2=-I}。
+解析信号 $z=u+\ii\mathcal Hu=A(t)\ee^{\ii\phi(t)}$：瞬时振幅 $A$、瞬时频率 $\phi'$（调制信号解调、Hilbert--Huang）。因果函数的 Fourier 变换实虚部互为 Hilbert 变换（Kramers--Kronig）。
+\end{结论}
+
+\begin{结论}{$z$ 变换}
+$X(z)=\sum_{n\ge0}x[n]z^{-n}$：$\mathcal Z\{a^n\}=\frac{z}{z-a}$，$\mathcal Z\{x[n-1]\}=z^{-1}X$，卷积 $\to$ 乘积。
+差分方程 $y[n]=ay[n-1]+x[n]$ 的传递函数 $\frac{1}{1-az^{-1}}$；因果系统稳定 $\iff$ \重点{\text{所有极点在单位圆内}}。终值定理 $\lim x[n]=\lim_{z\to1}(z-1)X(z)$。$z=\ee^{s\Delta t}$ 把 $s$ 平面左半边映到单位圆内（双线性变换 $s=\frac2{\Delta t}\frac{z-1}{z+1}$ 保稳定性）。
+\end{结论}
+
+\begin{结论}{Abel 变换与投影--切片定理}
+径向对称 $f(r)$ 沿直线投影：$F(y)=2\int_y^\infty\frac{f(r)r\dd r}{\sqrt{r^2-y^2}}$，反演 \重点{f(r)=-\frac1\pi\int_r^\infty\frac{F'(y)\dd y}{\sqrt{y^2-r^2}}}。
+投影--切片：二维函数沿某方向投影的一维 Fourier 变换 $=$ 二维 Fourier 变换沿该方向的切片。CT 重建（滤波反投影：投影先乘 $|\omega|$ 斜坡滤波再反投影）、等离子体发射率反演都基于此。
+\end{结论}
+
+\begin{结论}{和的 Laplace 方法}
+$S_n=\sum_ka_k$，$a_k\approx\ee^{n\phi(k/n)}$：主贡献来自 $\phi$ 的极大点，和近似为 Gauss 积分（再乘 $n$ 把 $\dd x$ 换成求和）。
+例：\重点{\sum_k\binom nk^2\sim\frac{4^n}{\sqrt{\pi n}}}（精确值 $\binom{2n}n$）；$\sum_k\binom nk^3\sim\frac{2\cdot8^n}{\sqrt3\pi n}$；$\sum_k\frac{n^k}{k!}\ee^{-n}\mathbf 1_{k\le n}\to\frac12$。
+\end{结论}
+
+\begin{结论}{均匀化：层状与棋盘介质的有效系数}
+导电率（扩散系数）$a(x/\varepsilon)$ 周期振荡，$\varepsilon\to0$ 的有效系数：
+\[
+\text{一维/串联层：}\重点{a^*=\langle a^{-1}\rangle^{-1}}\ (\text{调和平均}),\qquad \text{顺层方向：}\langle a\rangle .
+\]
+二维两相棋盘（各占一半）：$a^*=\sqrt{a_1a_2}$（Keller--Dykhne 对偶）。一般各向同性混合物满足 Hashin--Shtrikman 界，夹在调和与算术平均之间。多孔介质渗透率、复合材料、热阻串并联同理。
+\end{结论}
+
+\begin{结论}{Kramers / Eyring 逃逸率}
+势阱 $a$ 到鞍点 $b$ 的势垒 $\Delta V$，过阻尼 Langevin 动力学（扩散系数 $D=k_BT/\gamma$），$\Delta V\gg k_BT$：
+\[
+\重点{\tau=\frac{2\pi\gamma}{\sqrt{V''(a)|V''(b)|}}\ee^{\Delta V/k_BT}}\quad(\text{平均逃逸时间}).
+\]
+推导：平均首达时间的双重积分，内外层各用一次 Laplace 方法（分别展开阱底与鞍点）。多维时用 Hessian 行列式比替代（Eyring--Kramers 公式）。
+\end{结论}
+
+\begin{结论}{Laplace 变换的初值、终值与 Tauber 定理}
+$f(0^+)=\lim_{s\to\infty}sF(s)$；$f(\infty)=\lim_{s\to0}sF(s)$（$sF$ 的极点全在左半平面时）。
+渐近对应：$f$ 单调（或最终单调），\重点{F(s)\sim s^{-a}\ (s\to0)\iff f(t)\sim\frac{t^{a-1}}{\Gamma(a)}\ (t\to\infty)}（Karamata）。$s\to\infty$ 的展开对应 $t\to0$ 的展开（Watson）。所以长时间行为看 $s=0$ 附近的奇性。
+\end{结论}
+
+\begin{结论}{$\chi^2$ 与 Poisson 的正态化近似}
+Wilson--Hilferty：$\Bigl(\frac{\chi^2_k}k\Bigr)^{1/3}\approx N\Bigl(1-\frac2{9k},\ \frac2{9k}\Bigr)$，$k=5$ 时分位数误差已 $<1\%$。
+Poisson：$\sqrt{X}\approx N(\sqrt\lambda,\frac14)$（方差稳定），Anscombe $2\sqrt{X+\frac38}$ 更准；\重点{\text{Gamma 分布的立方根变换几乎正态}}。用于手算分位数和构造近似区间。
+\end{结论}
+
+\begin{结论}{复 $\Gamma$ 函数的模}
+大 $|y|$：
+\[
+\重点{|\Gamma(x+\ii y)|\sim\sqrt{2\pi}\,|y|^{x-\frac12}\ee^{-\pi|y|/2}}.
+\]
+沿虚方向指数衰减：Mellin--Barnes 积分收敛的理由；结合余元公式给 Coulomb 散射的 Gamow 因子 $|\Gamma(1+\ii\eta)|^2=\frac{\pi\eta}{\sinh\pi\eta}$。
+\end{结论}
+
+\begin{结论}{Watson 引理的推广：端点代数奇性}
+$I(\lambda)=\int_0^\infty t^{\alpha-1}g(t)\ee^{-\lambda t}\dd t$，$g$ 在 $0$ 展开 $\sum g_kt^k$：
+\[
+\重点{I\sim\sum_k\frac{g_k\Gamma(k+\alpha)}{\lambda^{k+\alpha}}}.
+\]
+$\ee^{-\lambda f(t)}$ 型时先换元 $u=f(t)-f(0)$。例：$\int_0^1\frac{\ee^{-\lambda t}}{\sqrt{t(1-t)}}\dd t\sim\sqrt{\frac\pi\lambda}\bigl(1+\frac1{4\lambda}+\cdots\bigr)$（端点 $1$ 的贡献指数小）。
+\end{结论}
+
+\begin{结论}{摄动展开失效的信号}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item 久期项 $t\sin t$：周期解的频率被修正（Lindstedt）或振幅慢变（多尺度）。
+\item 最高阶导数前有小参数：边界层（$\varepsilon y''$）、WKB（$\varepsilon^2y''$）。
+\item 展开系数分母出现 $\omega^2-n^2\omega_0^2$：小除数、共振（KAM 理论处理）。
+\item \重点{\text{展开在无穷远处不一致}}（$\varepsilon x$ 不再小）：需要远场/近场匹配（Oseen 对 Stokes 的修正）。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{小波：时频局部化}
+Haar 小波 $\psi=\mathbf 1_{[0,\frac12)}-\mathbf 1_{[\frac12,1)}$，$\psi_{j,k}=2^{j/2}\psi(2^jx-k)$ 构成 $L^2(\mathbb R)$ 正交基。多分辨分析：$V_j\subset V_{j+1}$，$V_{j+1}=V_j\oplus W_j$。
+快速小波变换 $O(N)$；光滑函数的小波系数随尺度快速衰减、奇异点附近系数大——\重点{\text{分段光滑信号压缩（JPEG2000）}}与去噪（软阈值）。不确定原理限制了时间与频率分辨率的乘积，小波在高频给好的时间分辨、低频给好的频率分辨。
+\end{结论}
+
+\参考{Bender--Orszag, \emph{Advanced Mathematical Methods for Scientists and Engineers}；Olver, \emph{Asymptotics and Special Functions}；Hinch, \emph{Perturbation Methods}；Pavliotis--Stuart, \emph{Multiscale Methods}；Mallat, \emph{A Wavelet Tour of Signal Processing}；MIT 18.305、18.306。}

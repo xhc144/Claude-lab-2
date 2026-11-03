@@ -1,0 +1,133 @@
+\subsection{优化、图论与离散应用}
+
+\begin{结论}{判定凸性的运算规则}
+凸：$\|x\|$、$x^{\mathsf T}Px$（$P\succeq0$）、$\max_i x_i$、\重点{\log\sum\ee^{x_i}}、$-\log\det X$（$X\succ0$）、$\frac{x^2}y$（$y>0$）、$\lambda_{\max}(X)$。凹：$(\prod x_i)^{1/n}$、$\log\det X$、$\min$。
+保凸运算：非负加权和、与仿射映射复合、逐点上确界、部分极小化（$\inf_yf(x,y)$ 对联合凸 $f$）、透视 $tf(x/t)$。复合规则：$h$ 凸且非减、$g$ 凸 $\Rightarrow h(g(x))$ 凸。
+\end{结论}
+
+\begin{结论}{Lagrange 对偶与 Slater 条件}
+$p^*=\min\{f_0:f_i\le0,\ Ax=b\}$，$g(\lambda,\nu)=\inf_x L$，弱对偶 $g\le p^*$ 总成立。凸问题且存在严格可行点（Slater）$\Rightarrow$ \重点{\text{强对偶 }d^*=p^*}，最优对偶变量存在。
+例：最小范数解 $\min\|x\|^2$ s.t.\ $Ax=b$：$g(\nu)=-\frac14\nu^{\mathsf T}AA^{\mathsf T}\nu-b^{\mathsf T}\nu$，得 $x^*=A^{\mathsf T}(AA^{\mathsf T})^{-1}b$。SVM 的对偶只含内积 $x_i^{\mathsf T}x_j$，于是可以换成核函数。
+\end{结论}
+
+\begin{结论}{最大流最小割}
+网络流中 \重点{\text{最大流值}=\text{最小 } s\text{-}t\text{ 割容量}}。增广路算法（Edmonds--Karp，最短增广路）$O(VE^2)$；容量为整数时存在整数最大流。
+推论：König 定理、Menger 定理（边不交路径数 $=$ 最小边割）、二部图匹配、项目选择（闭包问题）、图像分割的图割都化为最小割。
+\end{结论}
+
+\begin{结论}{最短路径算法的适用条件}
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item Dijkstra：\重点{\text{边权非负}}，堆实现 $O((V+E)\log V)$；有负权时会出错。
+\item Bellman--Ford：允许负权，$O(VE)$，第 $V$ 轮仍能松弛 $\Rightarrow$ 存在负环（套利检测：边权 $-\ln$ 汇率）。
+\item Floyd--Warshall：全源 $O(V^3)$；DAG 上按拓扑序一遍 $O(V+E)$（也可求最长路）。
+\end{itemize}
+三者都是 Bellman 最优性原理 $d(v)=\min_u[d(u)+w(u,v)]$ 的不同求解顺序。
+\end{结论}
+
+\begin{结论}{最小生成树：割性质}
+任一割中权最小的边必属于某棵 MST（权互异时属于唯一 MST）；圈中权最大的边不属于任何 MST（圈性质）。
+Kruskal（排序 $+$ 并查集，$O(E\log E)$）、Prim（堆，$O(E\log V)$）都是割性质的贪心实现。MST 也是瓶颈生成树（最大边权最小）；\重点{\text{度量 TSP 的 2-近似：MST 加倍走一遍再跳过重复点}}。
+\end{结论}
+
+\begin{结论}{稳定匹配：Gale--Shapley}
+求婚方依次向未拒绝过自己的最偏好者求婚，被求婚方保留最优者。$O(n^2)$ 终止，结果稳定（无“私奔对”）。
+\重点{\text{求婚方最优、被求婚方最差}}（在所有稳定匹配中）；求婚方说真话是占优策略，被求婚方则可能通过虚报获益。美国住院医师匹配（NRMP）采用此算法（申请者求婚版本）。
+\end{结论}
+
+\begin{结论}{二人零和博弈：极小极大与 $2\times2$ 公式}
+$\max_x\min_yx^{\mathsf T}Ay=\min_y\max_xx^{\mathsf T}Ay$（von Neumann），可由 LP 对偶求出。$2\times2$ 无鞍点时，行玩家混合概率与博弈值
+\[
+\重点{p=\frac{d-c}{a-b-c+d},\qquad v=\frac{ad-bc}{a-b-c+d}}\quad\Bigl(A=\begin{pmatrix}a&b\\c&d\end{pmatrix}\Bigr).
+\]
+原则：均衡混合策略让\textbf{对手}在其支撑上的各纯策略无差异。猜硬币：$v=0$，$p=\frac12$。
+\end{结论}
+
+\begin{结论}{Nash 均衡的无差异原则}
+有限博弈必有混合 Nash 均衡（Kakutani 不动点）。求法：猜支撑，令对手在支撑内各纯策略期望收益相等，解出己方概率，再验证支撑外策略不更优。
+囚徒困境：占优策略均衡（双背叛）帕累托劣于合作。性别之战：两个纯均衡 $+$ 一个混合均衡（各以 $\frac23$ 选偏好项），\重点{\text{混合均衡中双方收益低于任一纯均衡}}。
+\end{结论}
+
+\begin{结论}{Markov 决策过程：Bellman 方程}
+折扣 $\gamma<1$：$V^*(s)=\max_a\bigl[r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')\bigr]$。Bellman 算子是 $\gamma$-压缩（$\sup$ 范数），值迭代误差 \重点{\le\frac{\gamma^k}{1-\gamma}\|r\|_\infty}。
+策略迭代（评估 $+$ 贪心改进）有限步收敛，通常比值迭代快；Q-learning 是 Robbins--Monro 形式的随机值迭代。有效视野 $\sim\frac1{1-\gamma}$。
+\end{结论}
+
+\begin{结论}{动态规划的两个模板}
+0--1 背包：$V[i,w]=\max(V[i-1,w],\ V[i-1,w-w_i]+v_i)$，$O(nW)$——\重点{\text{伪多项式}}（$W$ 以二进制编码是指数大小，问题仍 NP 难）。
+编辑距离：$D[i,j]=\min(D[i-1,j]+1,\ D[i,j-1]+1,\ D[i-1,j-1]+[a_i\ne b_j])$，$O(mn)$；最长公共子序列同构。最优子结构 $+$ 重叠子问题是可用 DP 的标志；状态设计是关键。
+\end{结论}
+
+\begin{结论}{图 Laplace 矩阵的谱与 Cheeger 不等式}
+$L=D-A$：$0=\mu_1\le\mu_2\le\cdots$，$0$ 的重数 $=$ 连通分支数；$\mu_2$（代数连通度）$>0\iff$ 连通。
+归一化 $\mathcal L=I-D^{-1/2}AD^{-1/2}$ 的 $\lambda_2$ 与导率（Cheeger 常数）$h$：
+\[
+\重点{\frac{\lambda_2}2\le h\le\sqrt{2\lambda_2}}.
+\]
+$\lambda_2$ 小 $\iff$ 有“瓶颈”；随机游走混合时间 $\sim\frac1{\lambda_2}\ln n$。路径图 $\mu_2=2(1-\cos\frac\pi n)\approx\frac{\pi^2}{n^2}$，完全图 $\mu_2=n$。
+\end{结论}
+
+\begin{结论}{谱聚类与 Fiedler 向量}
+Fiedler 向量（$L$ 的 $\mu_2$ 特征向量）按符号（或中位数）分割顶点，近似求解比率割 $\min\frac{\mathrm{cut}(S,\bar S)}{|S||\bar S|}$（松弛离散约束得到）。
+$k$ 类：取前 $k$ 个特征向量作为嵌入坐标，再做 k-means。\重点{\text{相似度图的构造（$\varepsilon$-邻域、$k$ 近邻、Gauss 核宽度）比算法本身更影响结果}}；特征值间隙 $\mu_{k+1}-\mu_k$ 大处选 $k$。
+\end{结论}
+
+\begin{结论}{PageRank}
+$\pi=\frac{1-d}{n}\mathbf 1+d\,\pi P$（$P$ 为行随机的链接矩阵，悬挂点均匀补全），$d\approx0.85$：随机冲浪者以 $1-d$ 概率随机跳转。
+幂迭代每步误差乘 \重点{d}（第二特征值 $\le d$），$50$ 步达 $10^{-4}$ 精度，与网页数无关。个性化 PageRank 把均匀跳转换成偏好分布；与随机游走的平稳分布、Katz 中心性同族。
+\end{结论}
+
+\begin{结论}{全幺模矩阵：LP 自动给整数解}
+所有方子式 $\in\{0,\pm1\}$ 的矩阵称全幺模（TU）。$A$ TU、$b$ 整数 $\Rightarrow$ $\{Ax\le b\}$ 的顶点都是整数点，\重点{\text{整数规划可直接用 LP 求解}}。
+TU 例：二部图的点--边关联矩阵（匹配、指派、运输问题）、有向图关联矩阵（网络流）、区间矩阵（连续 $1$）。一般图匹配不是 TU（奇圈），需要 Edmonds 花算法或额外的奇集约束。
+\end{结论}
+
+\begin{结论}{NP 难问题的近似比}
+顶点覆盖：取极大匹配的全部端点，\重点{2}-近似（LP 舍入同样 2）；集合覆盖：贪心 $H_n\approx\ln n$（几乎最优）；度量 TSP：Christofides $\frac32$；欧氏 TSP、背包有 PTAS/FPTAS；MAX-3SAT 随机赋值 $\frac78$ 且不可改进（除非 P$=$NP）；一般 TSP 不可近似。
+背包是弱 NP 难（伪多项式 DP），装箱、3-划分是强 NP 难。
+\end{结论}
+
+\begin{结论}{分治递推的主定理}
+$T(n)=aT(n/b)+f(n)$，$c^*=\log_ba$：
+\[
+\重点{f=O(n^{c^*-\varepsilon})\Rightarrow\Theta(n^{c^*});\quad f=\Theta(n^{c^*}\log^kn)\Rightarrow\Theta(n^{c^*}\log^{k+1}n);\quad f=\Omega(n^{c^*+\varepsilon})\Rightarrow\Theta(f)}
+\]
+（第三种需正则条件）。归并排序 $a=b=2$：$n\log n$；Karatsuba $a=3,b=2$：$n^{1.585}$；Strassen $a=7,b=2$：$n^{2.807}$；二分查找 $\log n$。
+\end{结论}
+
+\begin{结论}{比较排序的下界与 Bloom 过滤器}
+比较排序的决策树有 $n!$ 片叶子，深度 \重点{\ge\log_2n!\approx n\log_2n-1.44n}；所以 $O(n\log n)$ 最优，计数/基数排序靠非比较操作绕过。
+Bloom 过滤器（$m$ 位、$n$ 个元素、$k$ 个哈希）：假阳性率 $\approx(1-\ee^{-kn/m})^k$，最优 $k=\frac mn\ln2$，此时 $\approx0.6185^{m/n}$——每元素 $10$ 位约 $1\%$ 假阳性，无假阴性。
+\end{结论}
+
+\begin{结论}{半定规划松弛：MAX-CUT 的 0.878}
+$\max\frac12\sum_{ij}w_{ij}(1-x_ix_j)$，$x_i=\pm1$：松弛为单位向量 $v_i$，即 SDP $\max\frac12\sum w_{ij}(1-X_{ij})$，$X\succeq0$，$X_{ii}=1$。随机超平面舍入：
+\[
+P(\text{边被切})=\frac{\theta_{ij}}{\pi}\ge\重点{0.878}\cdot\frac{1-\cos\theta_{ij}}{2}
+\]
+（Goemans--Williamson，$0.878=\min_\theta\frac{2\theta}{\pi(1-\cos\theta)}$）。在唯一博弈猜想下不可改进。
+\end{结论}
+
+\begin{结论}{在线算法：滑雪租赁与竞争比}
+租一天 $1$、买 $B$，天数未知：确定性最优策略“租 $B-1$ 天后买”，竞争比 \重点{2-\frac1B}；随机化策略期望竞争比 $\frac{\ee}{\ee-1}\approx1.58$。
+同类问题：缓存替换（LRU 竞争比 $k$）、TCP 拥塞控制、何时停止等待。竞争比衡量“不知道未来”的代价。
+\end{结论}
+
+\begin{结论}{乘法权重（Hedge）与后悔界}
+$n$ 个专家、损失 $\in[0,1]$，权重 $w_i\leftarrow w_i\ee^{-\eta\ell_i}$，按权重随机跟随：
+\[
+\重点{\text{后悔}\le\frac{\ln n}\eta+\frac{\eta T}8=\sqrt{\frac{T\ln n}2}}\quad\Bigl(\eta=\sqrt{\tfrac{8\ln n}T}\Bigr).
+\]
+平均后悔 $\to0$；两个都用 Hedge 的零和博弈玩家的平均策略收敛到极小极大均衡；AdaBoost、在线凸优化、LP 近似求解都是它的变体。
+\end{结论}
+
+\begin{结论}{压缩感知：$\ell_1$ 恢复稀疏信号}
+$y=Ax$，$x$ 为 $s$-稀疏，$A$ 为 $m\times n$ 随机 Gauss 矩阵，\重点{m\gtrsim Cs\ln\frac ns} 时以高概率 $\min\|x\|_1$ s.t.\ $Ax=y$ 精确恢复 $x$。
+条件：RIP（$\delta_{2s}<\sqrt2-1$ 足够）或零空间性质。$\ell_0$ 是 NP 难的，$\ell_1$ 是其凸包络；有噪声时误差 $\lesssim\frac{\sigma_s(x)_1}{\sqrt s}+\varepsilon$。MRI 加速成像、单像素相机。
+\end{结论}
+
+\begin{结论}{一维最优输运：排序即最优}
+两个一维分布间（凸代价 $c(x-y)$）的最优输运是\重点{\text{单调重排}}：$T=G^{-1}\circ F$；经验分布时把两组样本各自排序后一一配对。
+Wasserstein 距离：$W_1=\int|F-G|\dd x$，$W_p^p=\int_0^1|F^{-1}(u)-G^{-1}(u)|^p\dd u$。正态之间 $W_2^2=(\mu_1-\mu_2)^2+(\sigma_1-\sigma_2)^2$。高维用 Sinkhorn（熵正则化）迭代。
+\end{结论}
+
+\参考{Boyd--Vandenberghe, \emph{Convex Optimization}；Kleinberg--Tardos, \emph{Algorithm Design}；Cormen 等, \emph{Introduction to Algorithms}；Williamson--Shmoys, \emph{The Design of Approximation Algorithms}；Osborne--Rubinstein, \emph{A Course in Game Theory}；Chung, \emph{Spectral Graph Theory}；MIT 6.046、6.854、6.253。}

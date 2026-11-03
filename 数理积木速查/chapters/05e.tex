@@ -1,0 +1,144 @@
+\subsection{偏微分方程补充}
+
+\begin{结论}{二阶线性 PDE 的分类与特征线}
+$Au_{xx}+Bu_{xy}+Cu_{yy}+\cdots=0$：$B^2-4AC>0$ 双曲、$=0$ 抛物、$<0$ 椭圆（可随点变化，如 Tricomi 方程 $yu_{xx}+u_{yy}=0$）。
+特征方向 $A\,\dd y^2-B\,\dd x\,\dd y+C\,\dd x^2=0$。双曲型用两族特征坐标 $\xi,\eta$ 化为 \重点{u_{\xi\eta}=\text{低阶项}}；波动方程 $\xi=x-ct$，$\eta=x+ct$ 直接给 d'Alembert 解。椭圆型无实特征，解光滑（解析系数时解析）。
+\end{结论}
+
+\begin{结论}{三维 Kirchhoff 公式与 Huygens 原理}
+$u_{tt}=c^2\Delta u$，$u(0)=g$，$u_t(0)=h$：
+\[
+\重点{u(x,t)=\partial_t\bigl(t\,\overline{g}_{ct}(x)\bigr)+t\,\overline{h}_{ct}(x)},
+\]
+$\overline{g}_r(x)$ 为以 $x$ 为心、半径 $r$ 的\textbf{球面}平均。只依赖球面上的初值：信号尖锐、无尾迹（奇数维 $\ge3$ 的 Huygens 原理）。二维（降维法）依赖整个圆盘，$u\sim\int_{B_{ct}}\frac{h}{\sqrt{c^2t^2-|y-x|^2}}$，有拖尾——平面上听到的声音会“余响”。
+\end{结论}
+
+\begin{结论}{Duhamel 原理}
+$u_t=Lu+f(x,t)$，$u(0)=0$：设 $S(t)$ 为齐次问题的解算子，
+\[
+\重点{u(t)=\int_0^tS(t-s)f(s)\dd s}.
+\]
+波动方程 $u_{tt}=c^2u_{xx}+f$：$u=\frac1{2c}\int_0^t\int_{x-c(t-s)}^{x+c(t-s)}f(y,s)\dd y\dd s$（特征三角形上的积分）。热方程：源项与热核的时空卷积。
+\end{结论}
+
+\begin{结论}{极值原理与能量法：两种唯一性证明}
+热方程/Laplace 方程：最大值在抛物边界/边界上取到 $\Rightarrow$ 比较原理、唯一性、对边界数据的连续依赖（$\max|u_1-u_2|\le\max_{\partial}|g_1-g_2|$）。
+波动方程没有极值原理，用能量 \重点{E(t)=\frac12\int(u_t^2+c^2|\nabla u|^2)\dd x}：齐次边界下 $E'=0$，故差的能量恒为 $0$。热方程能量 $\frac{\dd}{\dd t}\int u^2=-2D\int|\nabla u|^2\le0$。
+\end{结论}
+
+\begin{结论}{调和函数的平均值、Harnack 与 Liouville}
+$\Delta u=0$：$u(x)$ 等于任一球面（或球体）上的平均值；非负调和函数在 $B_R(0)$ 中 $|x|=r$ 处
+\[
+\重点{\frac{R^{n-2}(R-r)}{(R+r)^{n-1}}u(0)\le u(x)\le\frac{R^{n-2}(R+r)}{(R-r)^{n-1}}u(0)}\quad(\text{Harnack}).
+\]
+推论：有界（或单侧有界）的全空间调和函数是常数（Liouville）；调和函数的梯度估计 $|\nabla u(x)|\le\frac nR\max_{B_R}|u|$。
+\end{结论}
+
+\begin{结论}{基本解一览}
+$-\Delta\Phi=\delta$：$\mathbb R^2$ 中 $-\frac1{2\pi}\ln r$，$\mathbb R^3$ 中 $\frac1{4\pi r}$，$\mathbb R^n$（$n\ge3$）中 $\frac{\Gamma(n/2)}{2(n-2)\pi^{n/2}r^{n-2}}$。
+$-(\Delta+k^2)G=\delta$：\重点{G=\frac{\ee^{\ii kr}}{4\pi r}}（三维外行波），二维 $\frac\ii4H_0^{(1)}(kr)$；$-(\Delta-\kappa^2)G=\delta$：$\frac{\ee^{-\kappa r}}{4\pi r}$（屏蔽 Coulomb）。热核 $(4\pi Dt)^{-n/2}\ee^{-r^2/4Dt}$。
+\end{结论}
+
+\begin{结论}{最慢衰减率由几何决定}
+扩散方程 $u_t=D\Delta u$，Dirichlet 边界，长时间 $u\sim\ee^{-\lambda_1Dt}$：
+\[
+\text{边长 }a\text{ 的正方形 }\frac{2\pi^2}{a^2},\quad \text{立方体 }\frac{3\pi^2}{a^2},\quad \text{半径 }a\text{ 的圆盘 }\frac{j_{0,1}^2}{a^2}\ (j_{0,1}\approx2.405),\quad \重点{\text{球 }\frac{\pi^2}{a^2}}.
+\]
+特征时间 $\frac{1}{\lambda_1D}$：半径 $1$ cm 的球内分子扩散（$D=10^{-9}$ m$^2$/s）约 $10^4$ s。Neumann 边界的最慢非零模：圆盘 $\frac{(1.841)^2}{a^2}$。
+\end{结论}
+
+\begin{结论}{Burgers 方程与 Cole--Hopf 变换}
+$u_t+uu_x=\nu u_{xx}$，令 \重点{u=-2\nu\frac{\varphi_x}{\varphi}}，则 $\varphi_t=\nu\varphi_{xx}$（线性热方程）。
+于是 $u=-2\nu\partial_x\ln\int\exp\bigl(-\frac{(x-y)^2}{4\nu t}-\frac1{2\nu}\int_0^yu_0\bigr)\dd y$；$\nu\to0$ 时 Laplace 方法给出带激波的熵解（Lax--Oleinik）。粘性激波厚度 $\sim\frac{\nu}{\Delta u}$。
+\end{结论}
+
+\begin{结论}{KdV 孤立子}
+$u_t+6uu_x+u_{xxx}=0$：
+\[
+\重点{u=\frac c2\operatorname{sech}^2\Bigl(\frac{\sqrt c}{2}(x-ct)\Bigr)},
+\]
+振幅 $\frac c2$、宽度 $\propto c^{-1/2}$：越高越快越窄。非线性陡化与色散平衡。两孤立子碰撞后形状不变，只有相移（可积性，逆散射）。浅水波（Russell 1834）、等离子体离子声波。
+\end{结论}
+
+\begin{结论}{Fisher--KPP 行波速度}
+$u_t=Du_{xx}+ru(1-u)$：行波 $u=U(x-ct)$ 连接 $1$ 与 $0$。在前沿线性化 $U\sim\ee^{-\lambda z}$：$c=D\lambda+\frac r\lambda$，最小值
+\[
+\重点{c_{\min}=2\sqrt{Dr}},
+\]
+紧支初值以 $c_{\min}$ 传播（“拉动”前沿，由线性前沿决定）。基因扩散、流行病空间传播、燃烧前沿的速度估计。$\sqrt{Dr}$ 的量纲分析即可猜到。
+\end{结论}
+
+\begin{结论}{相似解：用标度降维}
+方程在 $x\to\lambda x$，$t\to\lambda^at$，$u\to\lambda^bu$ 下不变时，令 $u=t^{b/a}F(\frac{x}{t^{1/a}})$ 得 ODE。热方程 $a=2$：$\eta=\frac x{\sqrt t}$，阶跃初值的解 $\frac12\operatorname{erfc}\frac{x}{2\sqrt{Dt}}$；点源 $\frac{1}{\sqrt t}F(\eta)$。
+多孔介质方程 $u_t=\Delta(u^m)$ 的 Barenblatt 解有有限传播速度（前沿 \重点{\propto t^{1/(n(m-1)+2)}}）；强爆炸（Taylor--Sedov）$R\propto(Et^2/\rho)^{1/5}$。
+\end{结论}
+
+\begin{结论}{常见区域的 Laplace 本征值}
+\[
+\begin{array}{ll}
+\text{矩形 }a\times b\text{（Dirichlet）} & \pi^2\bigl(\frac{m^2}{a^2}+\frac{n^2}{b^2}\bigr),\ m,n\ge1\\
+\text{半径 }a\text{ 的圆盘} & j_{m,k}^2/a^2\ (m\ge1\text{ 二重})\\
+\text{单位球面（Laplace--Beltrami）} & \重点{l(l+1),\ \text{重数 }2l+1}\\
+\text{半径 }a\text{ 的球（Dirichlet）} & (\text{球 Bessel } j_l\text{ 的零点})^2/a^2
+\end{array}
+\]
+圆盘前几个：$j_{0,1}=2.405$，$j_{1,1}=3.832$，$j_{2,1}=5.136$，$j_{0,2}=5.520$。正方形的简并 $(m,n)\leftrightarrow(n,m)$ 及数论简并（$1^2+7^2=5^2+5^2$）。
+\end{结论}
+
+\begin{结论}{Faber--Krahn、Pólya 与节点域}
+面积固定的平面区域中，\重点{\text{圆盘的 }\lambda_1\text{ 最小}}：$\lambda_1(\Omega)\ge\frac{\pi j_{0,1}^2}{|\Omega|}$（鼓的最低音以圆形最低）。Pólya：可铺砌区域 $\lambda_k\ge\frac{4\pi k}{|\Omega|}$（一般区域为猜想）。
+Courant：第 $k$ 个本征函数至多 $k$ 个节点域；$\phi_1$ 不变号（简单本征值）。Chladni 图形即节点线。
+\end{结论}
+
+\begin{结论}{不适定问题：Hadamard 的例子}
+Laplace 方程的 Cauchy 问题 $u(x,0)=0$，$u_y(x,0)=\frac{\sin nx}{n}$：解 $u=\frac{\sinh ny\,\sin nx}{n^2}$，初值 $\to0$ 而解在 $y>0$ 处 $\to\infty$。
+反向热方程同理：高频模式放大 $\ee^{k^2Dt}$。\重点{\text{适定}=\text{存在}+\text{唯一}+\text{连续依赖}}；去模糊、热传导反问题、外推都是不适定的，必须正则化（Tikhonov、截断）。
+\end{结论}
+
+\begin{结论}{一阶非线性方程：程函方程与 Hamilton--Jacobi}
+$|\nabla u|=\frac1{c(x)}$（程函方程）：特征线即光线；$c\equiv1$、$u=0$ 于 $\Gamma$ 时 \重点{u(x)=\operatorname{dist}(x,\Gamma)}，在中轴（多条最短路相遇处）不可微。
+Hamilton--Jacobi $u_t+H(\nabla u)=0$ 的粘性解由 Hopf--Lax 公式 $u=\min_y\bigl[u_0(y)+tL\bigl(\frac{x-y}t\bigr)\bigr]$ 给出（$L$ 为 $H$ 的 Legendre 变换）。数值：快速推进法 $O(N\log N)$。
+\end{结论}
+
+\begin{结论}{交通流 LWR 模型}
+$\rho_t+(\rho v(\rho))_x=0$，$v=v_{\max}(1-\frac\rho{\rho_{\max}})$，流量 $q=\rho v$ 在 $\rho=\frac{\rho_{\max}}2$ 时最大 $\frac{v_{\max}\rho_{\max}}4$。
+特征速度 \重点{q'(\rho)=v_{\max}\bigl(1-\frac{2\rho}{\rho_{\max}}\bigr)}（可为负：拥堵波向后传），小于车速 $v$。激波（车队尾部）速度 $\frac{q_R-q_L}{\rho_R-\rho_L}=v_{\max}(1-\frac{\rho_L+\rho_R}{\rho_{\max}})$；绿灯启动是膨胀扇（稀疏波）。
+\end{结论}
+
+\begin{结论}{Lax--Milgram 与 Poincaré 不等式}
+Hilbert 空间 $V$ 上有界、强制（$a(v,v)\ge\alpha\|v\|^2$）的双线性型：$a(u,v)=\ell(v)\ \forall v$ 有唯一解，$\|u\|\le\frac{\|\ell\|}\alpha$。
+$-\Delta u=f$、$u|_{\partial\Omega}=0$ 的强制性来自 Poincaré：\重点{\int_\Omega u^2\le\frac{1}{\lambda_1}\int_\Omega|\nabla u|^2}（$u\in H_0^1$），最优常数是 Dirichlet 第一本征值的倒数。纯 Neumann 问题需 $\int f=0$ 且解差常数。
+\end{结论}
+
+\begin{结论}{非齐次边界：先减去稳态}
+$u_t=Du_{xx}$，$u(0,t)=A$，$u(L,t)=B$：令 $u=u_s+v$，$u_s=A+(B-A)\frac xL$，则 $v$ 满足齐次边界，可分离变量。
+时变边界 $u(0,t)=g(t)$：减去任一满足边界的函数 $w$（如 $g(t)(1-\frac xL)$），把边界数据转成源项 $-w_t+Dw_{xx}$，再用特征函数展开或 Duhamel。\重点{\text{分离变量只对齐次边界条件直接适用}}。
+\end{结论}
+
+\begin{结论}{Sommerfeld 辐射条件}
+外问题 $(\Delta+k^2)u=0$ 在无界区域中需加
+\[
+\重点{\lim_{r\to\infty}r^{\frac{n-1}2}\Bigl(\partial_ru-\ii ku\Bigr)=0},
+\]
+（时间因子 $\ee^{-\ii\omega t}$）选出外行波，保证唯一性；否则内行波 $\frac{\ee^{-\ii kr}}r$ 也满足方程。数值上用完美匹配层（PML）或吸收边界模拟。远场 $u\sim\frac{\ee^{\ii kr}}{r}f(\hat x)$，$f$ 为散射振幅。
+\end{结论}
+
+\begin{结论}{本征函数展开构造 Green 函数}
+自伴算子 $L$（齐次边界）的正交本征 $L\phi_n=\lambda_n\phi_n$：
+\[
+\重点{G(x,\xi)=\sum_n\frac{\phi_n(x)\phi_n(\xi)}{\lambda_n}},\qquad (L-\mu)^{-1}:\ \sum_n\frac{\phi_n(x)\phi_n(\xi)}{\lambda_n-\mu}.
+\]
+$\mu$ 接近某 $\lambda_n$ 时单模主导（共振）；$\mu=\lambda_n$ 时需 Fredholm 可解性条件。例：$-u''$ 于 $[0,1]$ 的 Dirichlet Green 函数 $\min(x,\xi)-x\xi=\sum\frac{2\sin n\pi x\sin n\pi\xi}{n^2\pi^2}$。
+\end{结论}
+
+\begin{结论}{由色散关系写 PDE、由 PDE 读色散}
+平面波 $\ee^{\ii(kx-\omega t)}$：$\partial_t\to-\ii\omega$，$\partial_x\to\ii k$。$\omega=ck$ 对应波动方程；$\omega=\frac{\hbar k^2}{2m}$ 对应 Schrödinger；$\omega^2=c^2k^2+m^2$ 对应 Klein--Gordon；$\omega=-ik^2D$ 对应扩散（纯虚 $\omega$ 即衰减）。
+\重点{\operatorname{Im}\omega(k)>0\text{ 的 }k\text{ 不稳定}}（线性稳定性分析）；$\omega''(k)\ne0$ 时波包展宽，色散时间 $\sim\frac{(\Delta x)^2}{|\omega''|}$。
+\end{结论}
+
+\begin{结论}{电报方程：有阻尼的波}
+$u_{tt}+2\gamma u_t=c^2u_{xx}$：模式 $\ee^{\ii kx}$ 的频率 $\omega=-\ii\gamma\pm\sqrt{c^2k^2-\gamma^2}$——长波（$ck<\gamma$）过阻尼像扩散，短波以速度 $c$ 振荡传播。
+\重点{\text{长时间极限为扩散，}D=\frac{c^2}{2\gamma}}，但传播速度有限（$\le c$），克服了热方程“无穷传播速度”。传输线（Heaviside）中加 $LG=RC$ 条件可实现无失真传输。
+\end{结论}
+
+\参考{Evans, \emph{Partial Differential Equations}；Strauss, \emph{Partial Differential Equations: An Introduction}；Whitham, \emph{Linear and Nonlinear Waves}；Courant--Hilbert II；Logan, \emph{Applied Mathematics}；MIT 18.152、18.303、18.311。}

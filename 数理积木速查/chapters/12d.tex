@@ -1,0 +1,114 @@
+\subsection{不确定度评定与拟合补充}
+
+\begin{结论}{B 类不确定度：由分布界限换算}
+只知道量在 $\pm a$ 内：
+\[
+\text{矩形分布 }\重点{u=\frac a{\sqrt3}},\qquad \text{三角形 }\frac a{\sqrt6},\qquad \text{反正弦（U 形，正弦变化量）}\frac a{\sqrt2}.
+\]
+数字仪表末位 $\pm\frac12$ 字按矩形；仪器说明书“最大允许误差”按矩形。扩展不确定度 $U=ku_c$，$k=2$ 约 $95\%$；有效自由度（Welch--Satterthwaite）$\nu_{\text{eff}}=\frac{u_c^4}{\sum u_i^4/\nu_i}$ 小时改用 $t$ 分位数。报告时不确定度取 $1$--$2$ 位有效数字，结果末位与之对齐。
+\end{结论}
+
+\begin{结论}{残差的游程检验}
+$N$ 个残差中 $n_+$ 个正、$n_-$ 个负，游程数 $R$ 的期望与方差（随机符号）：
+\[
+\重点{\E R=\frac{2n_+n_-}{N}+1},\qquad \Var R=\frac{2n_+n_-(2n_+n_--N)}{N^2(N-1)}.
+\]
+游程太少说明模型系统偏离（残差成片同号），太多说明负相关。$\chi^2$ 只看大小不看次序，游程检验与之互补。
+\end{结论}
+
+\begin{结论}{拟合参数的相关与“中心化”}
+直线 $y=a+bx$：$\operatorname{corr}(\hat a,\hat b)=-\frac{\bar x}{\sqrt{\overline{x^2}}}$。把模型写成 \重点{y=a'+b(x-\bar x_w)}（$\bar x_w$ 为加权平均）则 $\hat a'$ 与 $\hat b$ 不相关。
+报告参数时要么给协方差矩阵，要么改用不相关参数化；计算导出量（如 $x$ 截距 $-\frac ab$）时忽略相关会严重错估误差。
+\end{结论}
+
+\begin{结论}{计数数据：别用 Neyman $\chi^2$}
+用 $\sigma_i^2=n_i$（Neyman）拟合会偏低（低计数点权重过大）；用 $\sigma_i^2=\mu_i$（Pearson）偏高。正确做法是 Poisson 似然，等价于最小化
+\[
+\重点{C=2\sum_i\Bigl[\mu_i-n_i+n_i\ln\frac{n_i}{\mu_i}\Bigr]}\quad(\text{Cash/Baker--Cousins}),
+\]
+$n_i=0$ 的项为 $2\mu_i$。大计数时 $C$ 近似 $\chi^2$ 分布，可作拟合优度。拟合总面积时 Poisson 似然自动保证 $\sum\mu_i=\sum n_i$（含常数项的模型）。
+\end{结论}
+
+\begin{结论}{Monte Carlo 误差传递}
+从参数的联合分布（拟合给出的均值与协方差矩阵，必要时非正态）抽样 $\theta^{(k)}$，计算导出量 $f(\theta^{(k)})$，用其分布的分位数作区间。
+\重点{\text{非线性强、相对误差大（}>20\%\text{）、或有边界时}}比线性误差传递可靠；能保留相关性。抽样数 $10^4$ 时 $95\%$ 分位数的相对精度约 $1\%$。
+\end{结论}
+
+\begin{结论}{冗余参数与拉动值（pull）}
+系统误差作为带约束的冗余参数 $\nu$（先验 $N(0,1)$ 罚项 $\nu^2$ 加入 $\chi^2$），与物理参数同时拟合：
+\[
+\chi^2=\sum_i\frac{(y_i-f_i(\theta,\nu))^2}{\sigma_i^2}+\sum_k\nu_k^2 .
+\]
+拉动值 $\frac{\hat\nu_k}{1}$ 与约束后的误差 $\sigma_{\nu_k}<1$ 反映数据对系统误差的“修正”程度；\重点{\text{拉动值 }|\hat\nu|>2\text{ 提示模型或系统误差估计有问题}}。
+\end{结论}
+
+\begin{结论}{盲分析}
+在确定选择条件、拟合方法与系统误差前隐藏结果（加未知偏移、隐藏信号区、或只看部分数据），避免“停在想要的结果上”的确认偏差。
+历史上的“光速”“中子寿命”“电荷”测量值都曾聚集在前人结果附近（\重点{\text{从众效应}}）；粒子物理、宇宙学已普遍采用盲分析。开盲前写下将要做的全部检查。
+\end{结论}
+
+\begin{结论}{Look-elsewhere 效应}
+在 $M$ 个独立位置（质量窗口、频率）搜索峰，局部 $p$ 值 $p_{\text{loc}}$ 对应的全局 $p$ 值
+\[
+\重点{p_{\text{glob}}\approx1-(1-p_{\text{loc}})^M\approx Mp_{\text{loc}}},
+\]
+$M\approx\frac{\text{搜索范围}}{\text{分辨率}}$（更准：Gross--Vitells 上穿次数法）。$3\sigma$ 局部显著在 $100$ 个窗口中几乎必然出现，这是粒子物理采用 $5\sigma$ 的原因之一。
+\end{结论}
+
+\begin{结论}{Chauvenet 准则（及其风险）}
+$N$ 个数据，若某点偏离均值 $z$ 个标准差且 \重点{N\cdot P(|Z|>z)<\frac12} 则剔除（$N=10$ 对应 $z>1.96$，$N=100$ 对应 $z>2.81$）。
+风险：假设正态、用含离群点的 $\bar x,s$、只能用一次；重尾分布下会误删真实数据。现代做法：用稳健估计（中位数、MAD）或混合模型，并报告剔除前后的结果。
+\end{结论}
+
+\begin{结论}{探测限（Currie）}
+本底 $B$ 计数（与样品同时间、配对测量），判定阈与探测限（$\alpha=\beta=5\%$）：
+\[
+L_C=2.33\sqrt B,\qquad \重点{L_D=2.71+4.65\sqrt B}\quad(\text{净计数}).
+\]
+$L_C$：超过它判为“检出”；$L_D$：真实信号达到它时有 $95\%$ 概率被检出。$L_D\approx2L_C$——“刚好检出”的信号有一半会被漏掉。
+\end{结论}
+
+\begin{结论}{反卷积（unfolding）为什么需要正则化}
+测量 $\mathbf n=R\boldsymbol\mu$（$R$ 为响应矩阵，含分辨率与效率）。直接求逆 $R^{-1}\mathbf n$ 放大噪声（$R$ 近奇异，高频振荡）。
+正则化：Tikhonov（惩罚曲率）、截断 SVD、迭代 Bayes（D'Agostini，迭代次数即正则强度）。\重点{\text{正则化引入偏差，必须报告协方差矩阵}}；能用前向折叠（把理论卷积后与数据比较）时优先前向折叠。
+\end{结论}
+
+\begin{结论}{相关系数的显著性与置信区间}
+$H_0:\rho=0$：$t=r\sqrt{\frac{n-2}{1-r^2}}\sim t_{n-2}$。区间用 Fisher 变换：
+\[
+\重点{z=\operatorname{artanh}r\approx N\Bigl(\operatorname{artanh}\rho,\ \frac{1}{n-3}\Bigr)}.
+\]
+$n=20$、$r=0.5$：$95\%$ 区间 $[0.07,0.77]$，很宽。$|r|$ 大不代表斜率大或因果；异常点、分组混合（Simpson）、截断范围都会扭曲 $r$。
+\end{结论}
+
+\begin{结论}{比值的区间：Fieller 方法}
+$\frac{\mu_a}{\mu_b}$ 的估计 $\frac ab$，当 $\frac{\sigma_b}{b}$ 不小时 Delta 方法失效（分布偏斜，$b$ 可能接近 $0$）。Fieller：解
+\[
+\重点{(a-\theta b)^2=t^2(\sigma_a^2-2\theta\sigma_{ab}+\theta^2\sigma_b^2)}
+\]
+关于 $\theta$ 的二次方程得区间；$\frac{b^2}{\sigma_b^2}<t^2$ 时区间无界（分母与 $0$ 不可区分）。效能比、比率测量常用。
+\end{结论}
+
+\begin{结论}{约束拟合（运动学拟合）}
+测量 $\mathbf y$（协方差 $V$）满足已知约束 $g(\boldsymbol\eta)=0$（能量动量守恒、闭合三角形）：最小化 $(\mathbf y-\boldsymbol\eta)^{\mathsf T}V^{-1}(\mathbf y-\boldsymbol\eta)+2\boldsymbol\lambda^{\mathsf T}g(\boldsymbol\eta)$。
+线性约束 $A\boldsymbol\eta=\mathbf c$ 时
+\[
+\重点{\hat{\boldsymbol\eta}=\mathbf y-VA^{\mathsf T}(AVA^{\mathsf T})^{-1}(A\mathbf y-\mathbf c)},
+\]
+拟合后误差变小、$\chi^2$ 自由度 $=$ 约束数。三角形三内角测量调整为和 $180^\circ$ 即最简例。
+\end{结论}
+
+\begin{结论}{对数坐标中的误差棒}
+$y=\log_{10}x$：$\sigma_y\approx\frac{\sigma_x}{x\ln10}=\重点{0.434\frac{\sigma_x}{x}}$；自然对数即相对误差。相对误差大时对数变换后误差棒不对称：上下分别画 $\log(x\pm\sigma_x)$。
+幂律拟合在对数空间做线性回归时，须用变换后的误差作权重；零或负值不能取对数（计数为零的点不能丢弃，应用 Poisson 似然）。
+\end{结论}
+
+\begin{结论}{两次测量是否一致}
+$x_1\pm\sigma_1$，$x_2\pm\sigma_2$，相关系数 $\rho$：
+\[
+\重点{z=\frac{x_1-x_2}{\sqrt{\sigma_1^2+\sigma_2^2-2\rho\sigma_1\sigma_2}}}.
+\]
+同一数据集的两种分析高度正相关，差异的误差远小于各自误差——用不相关公式会误判“一致”。$|z|>2$ 值得追查，$>3$ 通常说明某个误差被低估。
+\end{结论}
+
+\参考{JCGM 100:2008（GUM）；Barlow, \emph{Statistics}；Cowan, \emph{Statistical Data Analysis}；Currie, \emph{Anal. Chem.} 40 (1968)；Klein--Roodman, ``Blind Analysis in Nuclear and Particle Physics''；PDG 统计综述；MIT 8.13。}

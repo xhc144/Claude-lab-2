@@ -1,0 +1,115 @@
+\subsection{数量级估算与标度律}
+
+\begin{结论}{原子尺度全部由 $m_e,e,\hbar$ 决定}
+$a_0=\frac{4\pi\varepsilon_0\hbar^2}{m_ee^2}=0.529$ Å，$E_h=\alpha^2m_ec^2=27.2$ eV，原子速度 $\alpha c$，时间 $\frac{\hbar}{E_h}=24$ as。
+\重点{\text{固体密度}\sim\frac{Am_p}{(2a_0)^3}\sim\text{几 g/cm}^3}；结合能 $\sim$ eV（化学），声速 $\sim\sqrt{\frac{E_{\text{结合}}}{Am_p}}\sim$ km/s；熔点 $\sim0.1$ eV $\approx1000$ K。核尺度把 $m_e$ 换成 $m_\pi$：fm、MeV。
+\end{结论}
+
+\begin{结论}{山的最大高度}
+山高 $h$ 时底部岩石的引力势能 $\sim Am_pgh$（每个分子）不能超过使其熔化/流动所需的能量 $\sim0.1$ eV：
+\[
+\重点{h_{\max}\sim\frac{0.1\text{ eV}}{Am_pg}}\sim10\text{ km}\ (\text{地球},A\sim60).
+\]
+$h_{\max}\propto\frac1g$：火星（$g$ 为地球 $0.38$）的奥林匹斯山 $22$ km。小天体（$g$ 小）不能保持球形的临界半径约 $200$--$300$ km（土豆形小行星）。
+\end{结论}
+
+\begin{结论}{动物的标度律}
+强度 $\propto L^2$、体重 $\propto L^3$：骨骼粗细须 $\propto L^{3/2}$。代谢率（Kleiber）\重点{P\propto M^{3/4}}（人 $\sim80$ W，鼠 $\sim0.5$ W）；寿命 $\propto M^{1/4}$，心率 $\propto M^{-1/4}$，一生心跳约 $10^9$ 次。
+跳跃高度与体型大致无关（肌肉功 $\propto L^3$，重力势能 $\propto L^3$）；跑步临界速度随体型增大缓慢。
+\end{结论}
+
+\begin{结论}{步行速度上限：$Fr=1$}
+步行时质心在腿上作半径 $L$ 的圆弧，向心加速度不能超过 $g$：
+\[
+\重点{v_{\max}\approx\sqrt{gL}}\approx3\text{ m/s}\ (L\approx0.9\text{ m}).
+\]
+超过就必须跑（腾空）；儿童腿短，更早开始跑；月球上（$g/6$）步行上限约 $1.2$ m/s，宇航员改用跳跃。恐龙足迹的步长 $\to$ 速度估计用同一 Froude 相似。
+\end{结论}
+
+\begin{结论}{雨滴的大小与终端速度}
+小雨滴（$<0.1$ mm）Stokes 区；大雨滴阻力 $\frac12C_d\rho_aAv^2$，$v\approx\sqrt{\frac{8\rho_wgr}{3C_d\rho_a}}$。
+直径超过约 $5$ mm 时气动压力超过表面张力而破碎，所以 \重点{v_{\max}\approx9\text{ m/s}}。雨滴不是泪滴形，大雨滴下表面被压平（汉堡形）。冰雹靠上升气流可长到厘米级。
+\end{结论}
+
+\begin{结论}{人体能量与散热}
+基础代谢约 $80$ W（$\approx1700$ kcal/天），日常约 $100$--$120$ W；剧烈运动 $1$ kW 量级（效率约 $25\%$）。
+散热：辐射 $\varepsilon\sigma A(T_s^4-T_e^4)\approx50$--$100$ W（$A\approx2$ m$^2$、温差 $10$ K），蒸发（每克汗 $2.4$ kJ）。\重点{1\text{ kcal}=4.184\text{ kJ}}；一块巧克力（$500$ kcal）够把 $70$ kg 的人举高约 $3$ km（按 $25\%$ 效率约 $750$ m）。
+\end{结论}
+
+\begin{结论}{神经传导：电缆方程}
+无髓鞘轴突：膜电阻 $r_m$（单位长度，$\Omega\cdot$m）、轴浆电阻 $r_i$（$\Omega$/m）、膜电容 $c_m$：长度常数 \重点{\lambda=\sqrt{\frac{r_m}{r_i}}\propto\sqrt d}，时间常数 $\tau=r_mc_m$；传导速度 $\propto\sqrt d$（无髓鞘）。
+有髓鞘纤维跳跃传导，速度 $\propto d$，可达 $100$ m/s；乌贼巨轴突（$0.5$ mm 粗、无髓鞘）约 $25$ m/s——髓鞘让细纤维也很快。
+\end{结论}
+
+\begin{结论}{细胞内的扩散时间}
+$t\sim\frac{L^2}{2dD}$（$d$ 维）。小分子 $D\sim10^{-9}$ m$^2$/s：穿过 $10\ \mu$m 细胞约 $0.02$ s；蛋白质 $D\sim10\ \mu$m$^2$/s（胞质中更慢）：约 $1$--$5$ s；穿过 $1$ m 的神经轴突需要几十年——\重点{\text{长距离必须靠主动运输}}（驱动蛋白约 $1\ \mu$m/s，一天约 $10$ cm）。
+\end{结论}
+
+\begin{结论}{大气逃逸：Jeans 参数}
+分子热速度 $v_{\text{th}}=\sqrt{\frac{2k_BT}m}$，逃逸速度 $v_{\mathrm{esc}}$。经验上 \重点{v_{\mathrm{esc}}>6v_{\text{th}}} 的气体能保留数十亿年（$\lambda=\frac{v_{\mathrm{esc}}^2}{v_{\text{th}}^2}\gtrsim36$）。
+地球外逸层 $T\sim1000$ K：H 的 $v_{\text{th}}\approx4$ km/s（$\frac{11.2}{4}<6$，缓慢逃逸），N$_2$ 约 $0.8$ km/s（保留）。月球（$2.4$ km/s）几乎无法保留任何大气。
+\end{结论}
+
+\begin{结论}{温室效应的一层模型}
+无大气平衡温度 $T_e=\bigl(\frac{(1-A)S}{4\sigma}\bigr)^{1/4}\approx255$ K（$A=0.3$）。一层对可见光透明、对红外全吸收的大气：
+\[
+\重点{T_s=2^{1/4}T_e\approx303\text{ K}},
+\]
+$n$ 层 $T_s=(n+1)^{1/4}T_e$。实际约 $288$ K（大气部分透明且有对流）。CO$_2$ 加倍的辐射强迫 $\Delta F=5.35\ln2\approx3.7$ W/m$^2$。
+\end{结论}
+
+\begin{结论}{平衡潮的高度}
+月球引潮势在地表的变化给出平衡潮的潮差
+\[
+\重点{\Delta h\approx\frac32\frac{M_m}{M_E}\Bigl(\frac{R}{d}\Bigr)^3R}\approx0.54\text{ m}\ (\text{月}),\quad 0.25\text{ m}\ (\text{日})
+\]
+（高潮与低潮之差；高潮比平均海面高其中 $\frac23$）。大小潮比 $\frac{0.54+0.25}{0.54-0.25}\approx2.7$。实际潮差受海盆共振放大（芬地湾 $>15$ m）。两个潮峰（引潮力在近侧和远侧都指向外）。
+\end{结论}
+
+\begin{结论}{能量密度阶梯}
+\[
+\begin{array}{ll}
+\text{锂电池}&\sim0.7\text{ MJ/kg}\\
+\text{TNT}&4.2\text{ MJ/kg}\\
+\text{食物（糖）}&17\text{ MJ/kg}\\
+\text{汽油/氢}&46/142\text{ MJ/kg}\\
+{}^{235}\text{U 裂变}&8\times10^{7}\text{ MJ/kg}\\
+\text{D--T 聚变}&3.4\times10^{8}\text{ MJ/kg}\\
+mc^2&9\times10^{10}\text{ MJ/kg}
+\end{array}
+\]
+化学 $\sim$ eV/原子，核 $\sim$ MeV/核子：\重点{\text{相差约 }10^6\text{ 倍}}。TNT 比汽油“弱”，炸药的威力在于功率（反应速度）而非能量。
+\end{结论}
+
+\begin{结论}{风能的 Betz 极限}
+风机从截面 $A$、风速 $v$ 的气流中提取功率不超过
+\[
+\重点{P_{\max}=\frac{16}{27}\cdot\frac12\rho Av^3}\approx0.59\times\text{来流动能通量},
+\]
+出现在下游速度降为 $\frac v3$（叶片处 $\frac{2v}3$）时。$P\propto v^3$：风速加倍功率八倍；现代风机实际约 $0.45$--$0.5$。$\rho\approx1.2$ kg/m$^3$，$10$ m/s 时动能通量 $600$ W/m$^2$。
+\end{结论}
+
+\begin{结论}{海水中的电磁波穿透：潜艇通信}
+海水 $\sigma\approx4$ S/m：趋肤深度 $\delta\approx\sqrt{\frac{2}{\omega\mu_0\sigma}}$，
+\[
+\重点{\delta\approx\frac{250\text{ m}}{\sqrt{f[\text{Hz}]}}}:\ 10\text{ kHz 约 }2.5\text{ m},\ 100\text{ Hz 约 }25\text{ m}.
+\]
+所以潜艇通信用甚低频/极低频（天线巨大、数据率极低）；可见光蓝绿波段在纯净海水中衰减长度约几十米（另一个“窗口”）。
+\end{结论}
+
+\begin{结论}{分子马达与 ATP 的能量尺度}
+ATP 水解在细胞条件下约 $50$ kJ/mol $\approx$ \重点{20k_BT}（$80$--$100$ pN$\cdot$nm）。驱动蛋白每步 $8$ nm、最大力约 $6$ pN（功 $48$ pN$\cdot$nm，效率约 $50\%$）；肌球蛋白、ATP 合酶类似。
+$k_BT\approx4.1$ pN$\cdot$nm（室温）：生物分子力 pN 级、位移 nm 级恰好对应热能尺度，所以分子机器在热噪声中工作（布朗棘轮）。
+\end{结论}
+
+\begin{结论}{医学超声与成像分辨率}
+软组织声速约 $1540$ m/s：$\lambda=\frac cf$，$5$ MHz 时 \重点{0.3\text{ mm}}（轴向分辨约 $1$--$2$ 个波长的脉冲长度）。
+衰减约 $0.5$ dB/(cm$\cdot$MHz)：高频分辨好但穿透浅（腹部 $3$--$5$ MHz，浅表 $10$--$15$ MHz）。界面反射 $R=\bigl(\frac{Z_2-Z_1}{Z_2+Z_1}\bigr)^2$：组织--空气几乎全反射，故需耦合凝胶。
+\end{结论}
+
+\begin{结论}{地球的若干整体数字}
+地磁偶极矩 $\approx8\times10^{22}$ A$\cdot$m$^2$，地表场 $25$--$65\ \mu$T；地热流 $\approx47$ TW（$\approx0.09$ W/m$^2$）；太阳输入 $1.7\times10^{17}$ W；人类能耗约 $2\times10^{13}$ W（$\approx10^{-4}$ 太阳输入）。
+大气质量 $5\times10^{18}$ kg（\重点{p_0\times4\pi R^2/g}），海洋 $1.4\times10^{21}$ kg；大气标高 $\frac{k_BT}{mg}\approx8.4$ km。
+\end{结论}
+
+\参考{Weisskopf, ``Search for Simplicity''；Purcell, ``Life at Low Reynolds Number''；Mahajan, \emph{Street-Fighting Mathematics}；Phillips 等, \emph{Physical Biology of the Cell}；MacKay, \emph{Sustainable Energy -- without the hot air}；MIT 8.282、6.055。}

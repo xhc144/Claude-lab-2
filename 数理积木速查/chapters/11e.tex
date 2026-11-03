@@ -1,0 +1,129 @@
+\subsection{经典实验与材料测量补充}
+
+\begin{结论}{Cavendish 扭秤测 $G$}
+杆长 $L$（两端小球 $m$），大球 $M$ 与小球中心距 $r$，扭摆周期 $T$，平衡偏转角 $\theta$：
+\[
+\重点{G=\frac{2\pi^2Lr^2\theta}{MT^2}}\quad(\text{与 }m\text{ 无关}).
+\]
+由 $\kappa\theta=\frac{GMmL}{r^2}$ 与 $\kappa=\frac{4\pi^2I}{T^2}$、$I=\frac{mL^2}2$ 消去 $\kappa$ 与 $m$。还需修正另一大球对小球的反向力矩（约几 \%）。光杠杆把 $\theta$ 放大 $2$ 倍读出。
+\end{结论}
+
+\begin{结论}{Kater 可逆摆测 $g$}
+复摆两个刀口（到质心距离 $h_1,h_2$）调到周期相等 $T$：
+\[
+\重点{g=\frac{4\pi^2(h_1+h_2)}{T^2}},
+\]
+只需测两刀口距离 $h_1+h_2$（精确），不必知道质心位置与转动惯量。周期略不等时 $\frac{8\pi^2}{g}=\frac{T_1^2+T_2^2}{h_1+h_2}+\frac{T_1^2-T_2^2}{h_1-h_2}$，第二项对 $h_1-h_2$ 的误差不敏感。
+\end{结论}
+
+\begin{结论}{用 LED 估计 Planck 常数}
+LED 导通阈值电压 $V_{th}$ 约等于带隙对应电压，发射波长 $\lambda$：
+\[
+\重点{h\approx\frac{eV_{th}\lambda}{c}}.
+\]
+多种颜色 LED 作 $V_{th}$ 对 $\frac1\lambda$ 图，斜率 $\frac{hc}e$。系统误差：阈值判据（外推线性段）、发射谱宽、热能 $k_BT$ 与串联电阻；典型精度 $5$--$10\%$。
+\end{结论}
+
+\begin{结论}{Fizeau 齿轮法测光速}
+齿数 $N$、转速 $f$（转/秒）、往返距离 $2L$：光通过齿隙、返回时恰被下一齿挡住（转过半个齿距）：
+\[
+\重点{c=4LNf}.
+\]
+Fizeau（1849）：$L=8.6$ km，$N=720$，$f\approx12.6$ 转/秒，得 $3.15\times10^8$ m/s。Foucault 旋转镜法可在室内完成，并测出光在水中更慢（支持波动说）。
+\end{结论}
+
+\begin{结论}{Michelson--Morley 的预期条纹移动}
+臂长 $L$、地球速度 $v$，干涉仪转 $90^\circ$ 的预期条纹移动
+\[
+\重点{\Delta N=\frac{2Lv^2}{\lambda c^2}}.
+\]
+$L=11$ m（多次反射）、$v=30$ km/s、$\lambda=500$ nm：$\Delta N\approx0.4$，实测 $<0.01$。现代腔光学版本把各向异性限制到 $10^{-17}$ 以下。
+\end{结论}
+
+\begin{结论}{热电子发射：Richardson--Dushman}
+\[
+\重点{J=A_GT^2\ee^{-W/k_BT}},\qquad A_G=\lambda_RA_0,\ A_0=\frac{4\pi mek_B^2}{h^3}=1.20\times10^6\text{ A m}^{-2}\text{K}^{-2}.
+\]
+作 $\ln\frac J{T^2}$ 对 $\frac1T$ 图，斜率 $-\frac W{k_B}$（Richardson 图）。外加电场使功函数降低 $\Delta W=\sqrt{\frac{e^3E}{4\pi\varepsilon_0}}$（Schottky 效应），故须外推到零场。钨 $W=4.5$ eV，敷钍/氧化物阴极更低。
+\end{结论}
+
+\begin{结论}{Gouy 天平测磁化率}
+长样品一端在强场 $B$、另一端在弱场，横截面 $A$：
+\[
+\重点{F=\frac{(\chi-\chi_{\text{air}})AB^2}{2\mu_0}}.
+\]
+顺磁增重、抗磁减重；用已知标准（如 HgCo(SCN)$_4$）定标。由 Curie 定律 $\chi=\frac C T$ 得有效磁矩 $\mu_{\text{eff}}=\sqrt{\frac{3k_BC}{\mu_0N}}$，判断未成对电子数（$\mu_{\text{eff}}\approx\sqrt{n(n+2)}\mu_B$）。
+\end{结论}
+
+\begin{结论}{磁滞回线的测量}
+初级 $N_1$ 匝串取样电阻 $R$，次级 $N_2$ 匝接 $R_iC$ 积分器（$R_iC\gg$ 周期）：
+\[
+H=\frac{N_1V_R}{Rl},\qquad \重点{B=\frac{R_iC}{N_2A}V_C},
+\]
+$l$ 为平均磁路长、$A$ 为截面。$V_R$ 接示波器 $X$、$V_C$ 接 $Y$ 即显示 $B$--$H$ 回线；回线面积 $\times$ 频率 $\times$ 体积 $=$ 磁滞损耗功率。
+\end{结论}
+
+\begin{结论}{NMR 弛豫：反转恢复与自旋回波}
+$T_1$：$\pi$--$\tau$--$\frac\pi2$ 序列，$M_z(\tau)=M_0(1-2\ee^{-\tau/T_1})$，\重点{\text{零点在 }\tau=T_1\ln2}。
+$T_2$：$\frac\pi2$--$\tau$--$\pi$ 自旋回波，回波幅度 $\propto\ee^{-2\tau/T_2}$；CPMG 多回波链消除扩散影响。水 $T_1\approx T_2\approx3$ s；生物组织 $T_1\sim0.5$--$1.5$ s（MRI 对比度来源）。
+\end{结论}
+
+\begin{结论}{共振法测杨氏模量}
+两端自由的梁（长 $L$，截面惯性矩 $I$，线密度 $\rho A$）弯曲振动：
+\[
+\重点{f_n=\frac{(\beta_nL)^2}{2\pi L^2}\sqrt{\frac{EI}{\rho A}}},\qquad \beta_1L=4.730,\ \beta_2L=7.853 .
+\]
+节点在距端 $0.224L$ 处（悬挂点放在节点上）。圆棒 $I=\frac{\pi d^4}{64}$。比静态挠度法精度高；$f_2/f_1=2.757$ 可检验是否激发了正确模式。
+\end{结论}
+
+\begin{结论}{落球粘度计的壁效应}
+半径 $r$ 的球在半径 $R$ 的管中下落（$Re<0.1$）：
+\[
+\重点{\eta=\frac{2(\rho_s-\rho_f)gr^2}{9v}\cdot\frac{1}{1+2.104\frac rR}}\quad(\text{Ladenburg 一阶修正}),
+\]
+有限管长还有端效应。$\frac rR=0.1$ 时修正约 $21\%$——不修正会严重高估粘度。甘油室温约 $1.4$ Pa$\cdot$s（随温度变化很快，约 $-7\%/$K）。
+\end{结论}
+
+\begin{结论}{Rüchardt 法测 $\gamma$}
+大容器（体积 $V$、压强 $p$）上竖直细管中放密合小球（质量 $m$、管截面 $A$），小球绝热振动：
+\[
+\重点{T=2\pi\sqrt{\frac{mV}{\gamma pA^2}}}\ \Rightarrow\ \gamma=\frac{4\pi^2mV}{pA^2T^2}.
+\]
+空气 $\gamma\approx1.40$、氩 $1.67$、CO$_2$ $1.30$。摩擦与漏气使测值偏低；Rinkel 变体用小球下落距离代替周期。
+\end{结论}
+
+\begin{结论}{Ångström 法测热扩散率}
+细长棒一端周期加热（周期 $P$），相距 $L$ 的两点测得温度振幅比 $\frac{A_1}{A_2}$ 与相位滞后 $\Delta t$：
+\[
+\重点{D=\frac{L^2}{2\Delta t\ln(A_1/A_2)}},
+\]
+侧面散热的影响在乘积中抵消（这是此法的优点）。热导率 $\kappa=D\rho c$。地表温度年/日变化的穿透深度 $\sqrt{\frac{DP}{\pi}}$ 用同一模型。
+\end{结论}
+
+\begin{结论}{吸收边测带隙：Tauc 图}
+半导体吸收系数在带边附近 $(\alpha h\nu)^{1/r}\propto(h\nu-E_g)$：直接允许跃迁 $r=\frac12$，间接跃迁 $r=2$。
+作 \重点{(\alpha h\nu)^{1/r}\text{ 对 }h\nu} 图，线性段外推到零得 $E_g$。从透射率 $T$ 估 $\alpha\approx\frac1d\ln\frac{(1-R)^2}{T}$（忽略多次反射）。指数尾（Urbach 尾）反映无序。
+\end{结论}
+
+\begin{结论}{X 射线衍射峰宽：Scherrer 公式}
+晶粒尺寸 $\tau$ 引起的峰宽（半高宽，弧度，扣除仪器展宽后）：
+\[
+\重点{\tau=\frac{K\lambda}{\beta\cos\theta}},\qquad K\approx0.9.
+\]
+适用于 $\lesssim100$ nm 的晶粒；微应变展宽 $\propto\tan\theta$，可用 Williamson--Hall 图（$\beta\cos\theta$ 对 $\sin\theta$）分离尺寸与应变。Cu K$\alpha$：$\lambda=0.15406$ nm。
+\end{结论}
+
+\begin{结论}{Dulong--Petit 与低温比热测量}
+高温固体摩尔热容 $\approx3R=24.9$ J/(mol$\cdot$K)（Dulong--Petit），金刚石室温只有约 $6$（$\Theta_D\approx2200$ K）。
+混合量热法：$m_1c_1(T_1-T_f)=m_2c_2(T_f-T_2)+C_{\text{量热器}}(T_f-T_2)$；散热修正用 Newton 冷却曲线外推（Regnault 修正）。\重点{\text{比较热容测量通常比绝对测量准}}：用已知标准（蓝宝石）同条件测量。
+\end{结论}
+
+\begin{结论}{四探针测薄膜方块电阻}
+等间距共线四探针，薄膜厚 $t\ll$ 探针间距 $s$、面积足够大：
+\[
+\重点{R_\square=\frac{\pi}{\ln2}\frac{V}{I}\approx4.532\frac VI},\qquad \rho=R_\square t .
+\]
+厚样品（半无限）$\rho=2\pi s\frac VI$。有限尺寸、靠近边缘时乘几何修正因子；任意形状薄片用 van der Pauw 法。消除接触电阻正是四探针的目的。
+\end{结论}
+
+\参考{Melissinos--Napolitano, \emph{Experiments in Modern Physics}；Preston--Dietz, \emph{The Art of Experimental Physics}；Kaye--Laby 物理化学常数表；Cullity, \emph{Elements of X-Ray Diffraction}；Schroder, \emph{Semiconductor Material and Device Characterization}；MIT 8.13、3.014。}

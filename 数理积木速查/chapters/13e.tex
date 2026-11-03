@@ -1,0 +1,118 @@
+\subsection{交叉学科模型补充}
+
+\begin{结论}{Turing 不稳定：扩散引起图案}
+$u_t=f(u,v)+D_u\nabla^2u$，$v_t=g(u,v)+D_v\nabla^2v$，均匀态 Jacobi 矩阵 $J=\begin{pmatrix}f_u&f_v\\g_u&g_v\end{pmatrix}$ 稳定（$\tr J<0$，$\det J>0$）。扩散使其失稳 $\iff$
+\[
+\重点{D_vf_u+D_ug_v>2\sqrt{D_uD_v\det J}},
+\]
+需要“短程激活、长程抑制”：$f_u>0$ 且 $D_v\gg D_u$。临界波数 $k_c^2=\sqrt{\frac{\det J}{D_uD_v}}$ 定图案间距（斑马纹、豹斑、化学 CIMA 反应）。
+\end{结论}
+
+\begin{结论}{Kuramoto 同步}
+$\dot\theta_i=\omega_i+\frac KN\sum_j\sin(\theta_j-\theta_i)$，固有频率分布 $g(\omega)$（对称单峰）。序参量 $r=\bigl|\frac1N\sum\ee^{\ii\theta_j}\bigr|$ 在
+\[
+\重点{K_c=\frac{2}{\pi g(0)}}
+\]
+处开始增长；Lorentz 分布（半宽 $\gamma$）$K_c=2\gamma$，$r=\sqrt{1-\frac{K_c}K}$。萤火虫同步、心脏起搏细胞、电网频率、约瑟夫森结阵列。
+\end{结论}
+
+\begin{结论}{SIS 模型与网络上的流行阈值}
+SIS（康复后可再感染）：$\dot i=\beta i(1-i)-\gamma i$，地方病平衡 \重点{i^*=1-\frac1{R_0}}（$R_0=\frac\beta\gamma>1$）。
+异质网络（度分布 $P(k)$）平均场阈值 $\bigl(\frac\beta\gamma\bigr)_c=\frac{\langle k\rangle}{\langle k^2\rangle}$：无标度网络（$P(k)\sim k^{-\gamma}$，$2<\gamma\le3$）$\langle k^2\rangle\to\infty$，阈值趋于零——优先免疫高度节点（“朋友的朋友”免疫策略）。
+\end{结论}
+
+\begin{结论}{渗流阈值与临界指数}
+\[
+\begin{array}{lll}
+&\text{座渗流}&\text{键渗流}\\
+\text{正方格}&0.5927&\tfrac12\\
+\text{三角格}&\tfrac12&2\sin\frac\pi{18}\approx0.3473\\
+\text{简单立方}&0.3116&0.2488\\
+\text{Bethe 格（配位 }z\text{）}&\frac1{z-1}&\frac1{z-1}
+\end{array}
+\]
+二维普适指数 $\beta=\frac5{36}$，$\nu=\frac43$，临界团簇分形维数 \重点{\frac{91}{48}\approx1.896}。电导、渗透率、疫情、森林火灾在阈值处突变。扩散限制聚集（DLA）的二维分形维数约 $1.71$。
+\end{结论}
+
+\begin{结论}{神经网络的存储容量}
+感知机（$N$ 个输入）随机标签可学会的模式数上限 \重点{2N}（Cover 定理）。Hopfield 网络（Hebb 规则）可稳定存储并回忆约 $0.138N$ 个随机模式，超过后“灾难性遗忘”。
+这些计数结果来自高维几何：$p$ 个随机点在 $N$ 维中可被超平面二分的比例在 $p=2N$ 处从 $1$ 跳到 $0$。
+\end{结论}
+
+\begin{结论}{气候敏感度的零阶估计}
+辐射强迫 $\Delta F=5.35\ln\frac{C}{C_0}$ W/m$^2$（CO$_2$ 加倍 $3.7$）。无反馈的 Planck 响应 $\frac{\dd(\sigma T_e^4)}{\dd T}\approx3.8$ W/(m$^2\cdot$K)（考虑大气垂直结构约 $3.2$），
+\[
+\重点{\Delta T_0\approx\frac{3.7}{3.2}\approx1.2\text{ K}};\qquad \Delta T=\frac{\Delta T_0}{1-f},
+\]
+水汽、冰反照率等正反馈 $f\approx0.5$--$0.7$ 把平衡敏感度放大到约 $2.5$--$4$ K。
+\end{结论}
+
+\begin{结论}{地表温度波的穿透：地窖为什么冬暖夏凉}
+表面温度 $T_0\cos\omega t$，热扩散率 $D$：$T(z,t)=T_0\ee^{-z/\delta}\cos(\omega t-z/\delta)$，
+\[
+\重点{\delta=\sqrt{\frac{2D}{\omega}}}:\ \text{土壤 }D\approx5\times10^{-7}\text{ m}^2/\text{s}\Rightarrow\text{日变化 }12\text{ cm},\ \text{年变化 }2.2\text{ m}.
+\]
+深 $\pi\delta\approx7$ m 处年变化相位反转（夏冷冬暖）、振幅仅剩 $4\%$；永久冻土、地源热泵、Kelvin 估算地球年龄都用这一解。
+\end{结论}
+
+\begin{结论}{Murray 定律：血管分叉}
+在泵送功（$\propto\frac{Q^2}{r^4}$，Poiseuille）与维持血液体积的代谢成本（$\propto r^2$）之间优化，得最优流量 $Q\propto r^3$，分叉满足
+\[
+\重点{r_0^3=r_1^3+r_2^3},
+\]
+对称分叉时子管半径 $r_0/2^{1/3}\approx0.79r_0$。管壁剪应力在各级血管中相同。植物木质部、肺支气管、人工微流控网络都近似满足。
+\end{结论}
+
+\begin{结论}{DNA 的蠕虫链模型}
+持续长度 $P\approx50$ nm（双链 DNA），伸长 $x$、轮廓长 $L$：Marko--Siggia 插值
+\[
+\重点{F=\frac{k_BT}{P}\Bigl[\frac1{4(1-x/L)^2}-\frac14+\frac xL\Bigr]}.
+\]
+小力时线性（熵弹簧，刚度 $\frac{3k_BT}{2PL}$），接近完全伸直时发散；约 $65$ pN 出现过度拉伸平台。光镊/磁镊单分子实验的标准拟合式。
+\end{结论}
+
+\begin{结论}{地转平衡与 Rossby 数}
+大尺度大气/海洋：Coriolis 力与压强梯度力平衡，风沿等压线吹（北半球低压在左）：
+\[
+\重点{v_g=\frac1{\rho f}\frac{\partial p}{\partial n}},\qquad f=2\Omega\sin\varphi\approx10^{-4}\text{ s}^{-1}.
+\]
+Rossby 数 $Ro=\frac{U}{fL}\ll1$ 时地转近似成立（天气系统 $L\sim1000$ km）；浴缸排水 $Ro\gg1$，Coriolis 力决定不了旋转方向。Ekman 层厚 $\sqrt{\frac{2\nu}f}$。
+\end{结论}
+
+\begin{结论}{Lotka--Volterra 竞争：共存条件}
+$\dot N_1=r_1N_1\bigl(1-\frac{N_1+\alpha_{12}N_2}{K_1}\bigr)$，$\dot N_2$ 对称。稳定共存 $\iff$
+\[
+\重点{\alpha_{12}<\frac{K_1}{K_2}\ \text{且}\ \alpha_{21}<\frac{K_2}{K_1}}
+\]
+（种内竞争强于种间竞争）；否则一方排除另一方或双稳态（结局依初值）。Gause 竞争排斥原理的数学形式。
+\end{结论}
+
+\begin{结论}{漏积分发放神经元的发放率}
+$\tau\dot V=-V+RI$，到达阈值 $V_{th}$ 后重置为 $0$：恒定输入 $RI>V_{th}$ 时
+\[
+\重点{f=\frac{1}{\tau_{\text{ref}}+\tau\ln\frac{RI}{RI-V_{th}}}},
+\]
+阈下输入不发放（$f=0$），大输入时 $f\to\frac{1}{\tau_{\text{ref}}}$。噪声使 $f$--$I$ 曲线平滑（亚阈值也有发放）；网络模型中常以此为单元。
+\end{结论}
+
+\begin{结论}{Hill 函数与协同性}
+配体结合 $\theta=\frac{L^n}{K^n+L^n}$：$n>1$ 正协同（血红蛋白 $n\approx2.8$），响应从 $10\%$ 到 $90\%$ 只需配体浓度变化 $81^{1/n}$ 倍（$n=1$ 时 $81$ 倍）。
+基因调控的双稳态开关（相互抑制的两个基因）\重点{\text{需要 }n>1\text{ 的协同非线性}}；正反馈 $+$ 协同 $\Rightarrow$ 滞后、记忆、细胞命运决定。
+\end{结论}
+
+\begin{结论}{幂律统计：Gutenberg--Richter 与自组织临界}
+地震 $\log_{10}N(\ge M)=a-bM$，$b\approx1$：震级增 $1$，次数降为 $\frac1{10}$、能量增 $\approx31.6$ 倍（$E\propto10^{1.5M}$），故总能量由最大的地震主导。
+沙堆模型等自组织临界系统无需调参即产生幂律雪崩分布。\重点{\text{幂律意味着没有特征尺度、均值/方差可能发散}}，风险评估不能用正态外推。
+\end{结论}
+
+\begin{结论}{复利与倍增时间}
+连续增长率 $r$：倍增时间 $\frac{\ln2}r\approx\frac{70}{r[\%]}$；年复利常用“72 法则” \重点{T_2\approx\frac{72}{r[\%]}}（$r$ 在 $6$--$10\%$ 时更准）。
+$1\%$ 的年增长 $70$ 年翻倍、$700$ 年增 $1000$ 倍——指数增长不能长期持续（Bartlett：“人类最大的缺点是不理解指数函数”）。对数图上的直线即指数增长。
+\end{结论}
+
+\begin{结论}{交通流的跟驰模型与幽灵堵车}
+最优速度模型 $\ddot x_n=a\bigl[V(\Delta x_n)-\dot x_n\bigr]$：均匀车流线性稳定 $\iff$ \重点{V'(h)<\frac a2}（$h$ 为车距）。
+敏感度 $a$（反应快慢）小或 $V$ 对车距太敏感时，小扰动向后放大成走走停停波（无事故的“幽灵堵车”，Sugiyama 环形实验）。拥堵波以约 $-15$ km/h 向后传播。
+\end{结论}
+
+\参考{Murray, \emph{Mathematical Biology}；Strogatz, \emph{Sync}；Newman, \emph{Networks}；Stauffer--Aharony, \emph{Introduction to Percolation Theory}；Pierrehumbert, \emph{Principles of Planetary Climate}；Nelson, \emph{Biological Physics}；MIT 8.592、12.003、18.353。}

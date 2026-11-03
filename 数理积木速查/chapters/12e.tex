@@ -1,0 +1,119 @@
+\subsection{信号处理与数据实践补充}
+
+\begin{结论}{模拟滤波器族：Butterworth、Chebyshev、Bessel}
+$n$ 阶 Butterworth：\重点{|H|^2=\frac{1}{1+(\omega/\omega_c)^{2n}}}，通带最平坦，阻带 $-20n$ dB/十倍频。Chebyshev：允许通带纹波换取更陡过渡带。Bessel：群延迟最平（线性相位），阶跃响应几乎无过冲，适合保持波形（脉冲）。
+选择：频域分离用 Chebyshev/椭圆，时域保形用 Bessel，折中用 Butterworth。
+\end{结论}
+
+\begin{结论}{FIR、IIR 与零相位滤波}
+FIR（有限冲激响应）可严格线性相位、恒稳定，但同等陡度需要更多阶；IIR（递归）阶数低但相位非线性、可能不稳定。
+离线处理用前后两遍滤波（\texttt{filtfilt}）：\重点{\text{相位抵消（零相位）、幅度响应平方}}，等效阶数加倍，峰位不移动——在线/实时系统不能用（非因果）。
+\end{结论}
+
+\begin{结论}{补零只插值，不提高分辨率}
+$N$ 点数据（时长 $T$）补零到 $M$ 点再 FFT：频谱网格变密（$\frac{1}{M\Delta t}$），但谱峰宽度仍为 \重点{\sim\frac1T}——两个相距小于 $\frac1T$ 的频率仍无法分辨。
+补零用途：更精确地读峰位（插值）、凑 $2$ 的幂、线性卷积防止循环卷积的环绕。提高分辨率只能延长观测时间（或用参数化谱估计，有模型假设）。
+\end{结论}
+
+\begin{结论}{非等间距采样：Lomb--Scargle 周期图}
+时刻 $t_j$ 任意，对每个试验频率做正弦最小二乘拟合，功率
+\[
+P(\omega)=\frac1{2\sigma^2}\Biggl[\frac{\bigl(\sum y_j\cos\omega(t_j-\tau)\bigr)^2}{\sum\cos^2\omega(t_j-\tau)}+\frac{\bigl(\sum y_j\sin\omega(t_j-\tau)\bigr)^2}{\sum\sin^2\omega(t_j-\tau)}\Biggr],
+\]
+$\tan2\omega\tau=\frac{\sum\sin2\omega t_j}{\sum\cos2\omega t_j}$。\重点{\text{等价于逐频率的正弦拟合}}，不需插值补点。天文变星、观测有间隙的数据；采样窗口函数造成的混叠峰（如 $1$ 天）要识别。
+\end{结论}
+
+\begin{结论}{互相关测时延与精度极限}
+两路信号互相关的峰位给时延。白噪声下时延估计的 Cramér--Rao 界
+\[
+\重点{\sigma_\tau\ge\frac{1}{2\pi B_{\mathrm{rms}}\sqrt{2E/N_0}}},
+\]
+$B_{\mathrm{rms}}$ 为信号的均方根带宽，$\frac{2E}{N_0}$ 为能量信噪比。宽带信号定时更准（GPS 码、雷达脉冲压缩、声源定位）；峰附近用抛物线插值得亚采样精度。
+\end{结论}
+
+\begin{结论}{Wiener 反卷积}
+观测 $y=h*x+n$。频域最优线性估计（最小均方误差）：
+\[
+\重点{\hat X=\frac{H^*}{|H|^2+S_n/S_x}Y},
+\]
+信噪比高的频率近似 $\frac YH$，信噪比低处自动压低（不放大噪声）。$S_n/S_x$ 未知时用常数正则参数调节；图像去模糊、光谱去仪器展宽都用。
+\end{结论}
+
+\begin{结论}{相位解卷绕}
+$\arctan$ 只给 $(-\pi,\pi]$；相邻采样相位差超过 $\pi$ 时加减 $2\pi$ 使其连续（\texttt{unwrap}）。前提：真实相位变化每个采样 \重点{<\pi}（相位的“Nyquist 条件”），噪声大时会累计错误跳变。
+二维（干涉图、InSAR）解卷绕依赖路径，要用质量引导或最小范数法。相位对频率的导数给群延迟。
+\end{结论}
+
+\begin{结论}{单分子定位：质心精度}
+光斑（PSF 宽 $\sigma$）由 $N$ 个光子组成，无背景时中心定位精度
+\[
+\重点{\sigma_x\approx\frac{\sigma}{\sqrt N}}
+\]
+（含像素与背景的 Thompson 公式 $\sigma_x^2=\frac{\sigma^2+a^2/12}{N}+\frac{8\pi\sigma^4b^2}{a^2N^2}$）。$N=1000$、$\sigma=100$ nm 时约 $3$ nm——超分辨显微（PALM/STORM）的基础；天体测量同理。
+\end{结论}
+
+\begin{结论}{短时 Fourier 变换的时频权衡}
+窗长 $T_w$：时间分辨 $\sim T_w$，频率分辨 $\sim\frac1{T_w}$，\重点{\Delta t\,\Delta f\ge\frac1{4\pi}}（Gauss 窗取等）。语音分析常用 $20$--$30$ ms 窗；啁啾信号用小波或重排谱图。
+谱图（$|{\rm STFT}|^2$）不能同时精确定位时间与频率，这不是算法缺陷而是不确定原理。
+\end{结论}
+
+\begin{结论}{正弦频率估计的 Cramér--Rao 界}
+$N$ 个样本 $A\cos(\omega n+\phi)+w_n$（白噪声方差 $\sigma^2$），$\eta=\frac{A^2}{2\sigma^2}$：
+\[
+\重点{\Var(\hat\omega)\ge\frac{12}{\eta N(N^2-1)}}\quad(\text{弧度/样本}).
+\]
+精度 $\propto N^{-3/2}$（不是 $N^{-1/2}$）：时长加倍，频率精度提高 $2.8$ 倍。FFT 峰值只给粗估，再用插值或非线性最小二乘逼近此界。
+\end{结论}
+
+\begin{结论}{趋势与伪相关}
+两个独立随机游走的回归常给出“显著”斜率与高 $R^2$（Granger--Newbold 伪回归）：\重点{\text{非平稳序列的相关不可信}}。
+处理：差分（$\Delta y$ 对 $\Delta x$）、去趋势、检验协整；残差自相关（Durbin--Watson $\approx2$ 表示无一阶相关）是警报。股价、气温、人口等时间序列都要先检查平稳性。
+\end{结论}
+
+\begin{结论}{降采样前先抗混叠}
+采样率从 $f_s$ 降到 $\frac{f_s}M$ 之前，必须先低通滤到 $\frac{f_s}{2M}$ 以下，否则高频折叠进低频且无法去除。
+示波器、ADC 前端同理：模拟抗混叠滤波器的截止应低于 Nyquist 频率并留过渡带（过采样 $+$ 数字滤波是现代做法）。\重点{\text{简单抽点（每 }M\text{ 个取 1 个）就是没有滤波的降采样}}。
+\end{结论}
+
+\begin{结论}{中值滤波：去脉冲噪声}
+滑动窗口取中值：去除孤立尖峰（宇宙线击中、坏像素、脉冲干扰）而保留阶跃边缘，线性滤波（均值）做不到。
+对 Gauss 噪声，中值的效率约 $\frac2\pi=64\%$（不如均值）；窗口须大于尖峰宽度的两倍。图像中“椒盐噪声”首选中值滤波；尖峰检测再替换（Hampel 滤波：偏离中值超过 $3\times1.4826\,$MAD）。
+\end{结论}
+
+\begin{结论}{相干函数与传递函数估计}
+两路信号的互谱 $S_{xy}$：传递函数 $\hat H=\frac{S_{xy}}{S_{xx}}$（输入噪声小时）；相干函数
+\[
+\重点{C_{xy}(f)=\frac{|S_{xy}|^2}{S_{xx}S_{yy}}}\in[0,1],
+\]
+衡量 $y$ 中可被 $x$ 线性解释的比例；$C=1$ 线性无噪声，$C<1$ 来自噪声、非线性或其他输入。必须分段平均（单段估计恒等于 $1$）。
+\end{结论}
+
+\begin{结论}{同步叠加平均}
+重复的触发信号叠加 $N$ 次：相干信号加 $N$ 倍，独立噪声加 $\sqrt N$ 倍，\重点{\mathrm{SNR}\propto\sqrt N}。
+脑电诱发电位、Boxcar 积分器、示波器平均模式、雷达脉冲积累都用。前提：触发抖动远小于信号特征时间，否则叠加结果被抖动分布卷积（抹平）。
+\end{结论}
+
+\begin{结论}{分贝换算速查}
+功率 $10\log_{10}$，幅度 $20\log_{10}$：$3$ dB $\approx\times2$ 功率，$6$ dB $\approx\times2$ 幅度，$20$ dB $=\times10$ 幅度。
+dBm：$0$ dBm $=1$ mW，\重点{50\ \Omega\text{ 上 }0\text{ dBm}=0.224\text{ V rms}}（$0.632$ V 峰峰）；$-174$ dBm/Hz 为室温热噪声底。dBc 相对载波；噪声系数 $NF=10\log F$。
+\end{结论}
+
+\begin{结论}{核密度估计的带宽}
+$\hat f(x)=\frac1{nh}\sum K\bigl(\frac{x-x_i}h\bigr)$。Gauss 核、近正态数据的经验带宽（Silverman）
+\[
+\重点{h=1.06\,\hat\sigma n^{-1/5}}\quad(\text{稳健版用 }0.9\min(\hat\sigma,\tfrac{\mathrm{IQR}}{1.34})n^{-1/5}).
+\]
+均方积分误差 $\propto n^{-4/5}$（慢于参数估计的 $n^{-1}$）；多峰数据用交叉验证或 Sheather--Jones 选 $h$。比直方图对分箱起点不敏感。
+\end{结论}
+
+\begin{结论}{SVD 降噪与主成分截断}
+一组相关谱/波形排成矩阵 $Y$，SVD 后奇异值前几个代表信号、其余为噪声平台：保留前 $k$ 个重建 $Y_k$，噪声下降约 $\sqrt{\frac{k}{\min(m,n)}}$。
+选 $k$：奇异值“碎石图”拐点，或与纯噪声矩阵的 Marchenko--Pastur 上界比较。\重点{\text{截断会丢失弱信号分量}}，须检查残差中是否还有结构。时间分辨光谱、阵列信号（MUSIC）都用此法。
+\end{结论}
+
+\begin{结论}{数据合理性检查清单}
+量纲与单位一致；数量级与独立估计相符；极限情形（参数 $\to0$、$\to\infty$）的行为正确；对称性与守恒律（能量、电荷、概率归一）满足；
+\重点{\text{改变不应影响结果的因素（顺序、单位、分箱）结果不变}}；与已知标准样品比较；残差无结构；“好得令人怀疑”的数据（$\chi^2_\nu\ll1$）说明误差被高估或数据被平滑过。
+\end{结论}
+
+\参考{Oppenheim--Schafer, \emph{Discrete-Time Signal Processing}；Press 等, \emph{Numerical Recipes}；Kay, \emph{Fundamentals of Statistical Signal Processing}；VanderPlas, ``Understanding the Lomb--Scargle Periodogram''；Silverman, \emph{Density Estimation}；MIT 6.003、6.011。}

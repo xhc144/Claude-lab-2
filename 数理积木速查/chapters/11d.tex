@@ -1,0 +1,112 @@
+\subsection{实验技术补充}
+
+\begin{结论}{真空：平均自由程与单层时间}
+室温空气 \重点{\lambda\approx\frac{6.6\text{ mm}}{p[\text{Pa}]}}：$1$ Pa 约 $7$ mm，$10^{-4}$ Pa 约 $66$ m（分子流区）。
+气体撞击率 $\frac{p}{\sqrt{2\pi mk_BT}}$：$10^{-4}$ Pa（$\approx10^{-6}$ Torr）下约 $1$ s 形成一个单层（粘附系数 $1$ 时）——表面科学需要 $10^{-8}$ Pa 的超高真空。
+\end{结论}
+
+\begin{结论}{真空管道的流导}
+分子流区圆管（直径 $d$、长 $L$，空气室温）：
+\[
+\重点{C\approx12.1\frac{d^3}{L}\ \text{L/s}}\quad(d,L\text{ 以 cm 计}),\qquad \text{孔口 }C\approx11.6A\ \text{L/s}\ (A\text{ 以 cm}^2\text{ 计}).
+\]
+串联 $\frac1{C}=\sum\frac1{C_i}$，有效抽速 $\frac1{S_{\text{eff}}}=\frac1S+\frac1C$：细长管把大泵变成小泵，\textbf{泵应尽量靠近腔体、管子短而粗}。分子流导与压强无关、$\propto d^3$。
+\end{结论}
+
+\begin{结论}{低温液体的蒸发率}
+液氮 $77$ K，汽化潜热 $199$ kJ/kg（$161$ kJ/L）：每瓦热负载蒸发约 \重点{22\text{ mL/h}}。液氦 $4.2$ K，潜热仅 $20.9$ kJ/kg（$2.6$ kJ/L）：每瓦约 $1.4$ L/h。
+所以液氦杜瓦的漏热须控制在 $\sim0.1$ W 以下；利用冷氦气的显热（$4\to300$ K 约 $1.5$ MJ/kg）可回收大量冷量（蒸汽冷却辐射屏）。
+\end{结论}
+
+\begin{结论}{等效噪声带宽}
+一阶 RC 低通（$f_c=\frac1{2\pi RC}$）的等效噪声带宽
+\[
+\重点{\mathrm{ENBW}=\frac{1}{4RC}=\frac\pi2f_c};
+\]
+锁相放大器滤波器（$\tau=RC$，各级相同）：$6$ dB/oct 为 $\frac1{4\tau}$，$12$ dB/oct 为 $\frac1{8\tau}$，$18$ dB/oct 为 $\frac{3}{32\tau}$，$24$ dB/oct 为 $\frac{5}{64\tau}$。白噪声功率 $=$ 谱密度 $\times$ ENBW；阶数越高，$-3$ dB 带宽与 ENBW 越接近。
+\end{结论}
+
+\begin{结论}{屏蔽：电场、低频磁场与射频}
+静电场：任何闭合导体壳（Faraday 笼）完全屏蔽；低频磁场：导体无效，用高磁导率材料（坡莫合金，$\mu_r\sim10^4$）分流磁通，多层嵌套；射频：导体壳靠趋肤效应，屏蔽效能 $\approx8.7\frac t\delta$ dB（吸收）$+$ 反射损耗。
+\重点{\text{孔缝泄漏}}：长度接近 $\frac\lambda2$ 的缝隙成为缝隙天线，屏蔽失效；通风孔用截止波导（孔径 $\ll\lambda$、深度 $>$ 孔径）。
+\end{结论}
+
+\begin{结论}{刀口法测高斯光束半径}
+刀口横移 $x$，透过功率 $P(x)=\frac{P_0}2\erfc\frac{\sqrt2(x-x_0)}w$。10\%--90\% 透过的距离
+\[
+\重点{\Delta x_{10\text{--}90}=1.28\,w}.
+\]
+沿传播方向多处测量，拟合 $w(z)=w_0\sqrt{1+(z/z_R)^2}$ 得腰斑与 $M^2$。狭缝扫描、相机直接成像（注意饱和与背景）是另两种方法。
+\end{结论}
+
+\begin{结论}{光谱定标线}
+\[
+\begin{array}{ll}
+\text{Hg}&404.66,\ 435.83,\ 546.07,\ 576.96,\ 579.07\text{ nm}\\
+\text{Na D}&588.995,\ 589.592\text{ nm}\\
+\text{H（Balmer）}&656.28,\ 486.13,\ 434.05,\ 410.17\text{ nm}\\
+\text{He--Ne}&632.816\text{ nm（真空 }632.991\text{）}
+\end{array}
+\]
+\重点{\text{区分空气波长与真空波长}}（可见区相差约 $2.8\times10^{-4}$ 倍，$\approx0.17$ nm），文献表格一般给空气波长。
+\end{结论}
+
+\begin{结论}{CCD/CMOS 的信噪比方程}
+信号 $S$（光电子），背景 $B$，暗电流 $D$（e$^-$/s/像素）、曝光 $t$、读出噪声 $R$（e$^-$ rms）、$n$ 个像素：
+\[
+\重点{\mathrm{SNR}=\frac{S}{\sqrt{S+n(B+Dt+R^2)}}}.
+\]
+亮源时 $\sqrt S$（散粒噪声极限），暗源时读出噪声主导（合并像素、延长单次曝光）。量子效率、满阱（$\sim10^4$--$10^5$ e$^-$）决定动态范围。
+\end{结论}
+
+\begin{结论}{PID 控制与 Ziegler--Nichols 整定}
+$u=K_p\bigl(e+\frac1{T_i}\int e+T_d\dot e\bigr)$：比例减小误差但留稳态偏差，积分消除偏差但易振荡，微分抑制超调但放大噪声。
+闭环临界法：只用比例增益增至持续振荡（临界增益 $K_u$、周期 $P_u$），取
+\[
+\重点{K_p=0.6K_u,\quad T_i=\frac{P_u}2,\quad T_d=\frac{P_u}8}.
+\]
+温控等慢过程常只用 PI；积分饱和（windup）需限幅。
+\end{结论}
+
+\begin{结论}{反馈稳定性：相位裕度}
+开环增益 $L(\ii\omega)$ 在 $|L|=1$（穿越频率 $\omega_c$）处相位与 $-180^\circ$ 之差为相位裕度。\重点{\text{相位裕度 }\gtrsim45^\circ}：阶跃响应超调 $<25\%$；$<0$ 则闭环不稳定。
+一阶系统加纯积分器总稳定；每个额外极点贡献 $-90^\circ$，延迟 $\tau$ 贡献 $-\omega\tau$——所以带宽受限于环路延迟（$\omega_c\lesssim\frac1{2\tau}$）。
+\end{结论}
+
+\begin{结论}{应变片与四分之一桥}
+$\frac{\Delta R}R=GF\cdot\varepsilon$，金属箔 $GF\approx2$（半导体可达 $100$ 以上但温漂大）。四分之一桥（一片应变片）：
+\[
+\重点{V_{\text{out}}\approx\frac{V_{\text{ex}}GF\,\varepsilon}{4}},
+\]
+半桥（受拉与受压各一片）加倍并补偿温度，全桥再加倍。$10^{-6}$ 应变（$1\ \mu\varepsilon$）在 $5$ V 激励下仅 $2.5\ \mu$V——需仪表放大器与低漂移。
+\end{结论}
+
+\begin{结论}{放射源剂量与屏蔽}
+活度 $1$ Ci $=3.7\times10^{10}$ Bq。点源 $\gamma$ 剂量率 $\dot D=\Gamma\frac{A}{d^2}$：$^{137}$Cs 约 $0.33$ R$\cdot$m$^2$/(h$\cdot$Ci)，即 \重点{1\text{ mCi 在 }1\text{ m 处约 }3\ \mu\text{Sv/h}}（$\gamma$ 能量 $662$ keV）。
+屏蔽：半值层 $\mathrm{HVL}=\frac{\ln2}\mu$，$662$ keV 铅约 $0.65$ cm、混凝土约 $5$ cm。时间、距离（$\frac1{d^2}$）、屏蔽三原则。天然本底约 $2.4$ mSv/年。
+\end{结论}
+
+\begin{结论}{锁频：Pound--Drever--Hall}
+对激光加相位调制（频率 $\Omega$），检测腔反射光在 $\Omega$ 处的拍频，解调得色散形误差信号；在共振附近
+\[
+\重点{\epsilon\propto-\sqrt{P_cP_s}\,\frac{\Delta f}{\delta\nu}}\quad(\Delta f\ll\delta\nu),
+\]
+$P_c,P_s$ 为载波与边带功率，$\delta\nu$ 为腔线宽（比例常数为 $O(1)$ 量级，取决于约定）。斜率反比于线宽、即正比于精细度；反射信号对激光强度噪声不敏感，响应速度不受腔储能时间限制（边带直接反射）。光钟、引力波探测器的标准技术。
+\end{结论}
+
+\begin{结论}{弱电流测量：静电计与保护}
+$1$ fA $=6000$ e/s。$10^{12}\ \Omega$ 的绝缘泄漏在 $10$ V 下即 $10$ pA——用保护（guard）电极使泄漏路径两端等电位。
+摩擦电（电缆弯曲）、压电、介质吸收、温度梯度的热电势都会产生 pA 级假信号。\重点{\text{测量带宽越窄噪声越小}}，但积分时间长；反馈型跨阻放大器的反馈电容决定带宽 $\frac{1}{2\pi R_fC_f}$。
+\end{结论}
+
+\begin{结论}{热时间常数与热导}
+集总热容 $C$、对环境热导 $G$：$\tau=\frac CG$；加热功率 $P$ 的稳态温升 $\frac PG$。
+低温实验测热容：加热脉冲后指数弛豫（弛豫法）；测热导：稳态两端温差。辐射热导 $4\varepsilon\sigma AT^3$（$300$ K、$1$ cm$^2$、$\varepsilon=1$ 约 $0.6$ mW/K），低温下迅速变小，\重点{\text{所以低温下引线导热常为主导}}（用锰铜、不锈钢细线）。
+\end{结论}
+
+\begin{结论}{可溯源性与校准链}
+测量结果须通过不间断的校准链溯源到 SI 定义（2019 后全部 7 个基本单位由常数定义：$\Delta\nu_{\mathrm{Cs}},c,h,e,k_B,N_A,K_{cd}$）。
+每一级校准都贡献不确定度，\重点{\text{工作仪器的不确定度至少是参考标准的数倍}}（常要求 TUR $\ge4:1$）。现场检查：用两种独立方法测同一量、测已知标准件、改变量程看读数是否一致。
+\end{结论}
+
+\参考{Moore--Davis--Coplan, \emph{Building Scientific Apparatus}；Pobell, \emph{Matter and Methods at Low Temperatures}；Ott, \emph{Electromagnetic Compatibility Engineering}；Keithley, \emph{Low Level Measurements Handbook}；Black, \emph{An Introduction to Pound--Drever--Hall Laser Frequency Stabilization}；MIT 8.13、8.14。}

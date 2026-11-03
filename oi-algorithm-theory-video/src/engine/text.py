@@ -287,6 +287,15 @@ def _tokens(runs, size, maxw=None):
             del prev[5:]
             prev.append(("lat", t[4]))       # 结尾按西文算，决定和下一个词的间距
             continue
+        # 单独的运算符、关系符（如“i − 1”里的“−”）不放行首：粘到前一个词上，断行只在它后面
+        if t[3] == "lat" and t[4].strip() in TX.RELS | TX.BINS and merged and merged[-1] != "\n":
+            prev = merged[-1]
+            prev[1][-1].w += t[2]
+            prev[1].extend(t[1])
+            prev[0] += t[2] + t[0]
+            del prev[5:]
+            prev.append(("lat", t[4]))
+            continue
         merged.append(t)
     out = []
     for t in merged:

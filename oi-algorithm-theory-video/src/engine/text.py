@@ -276,6 +276,17 @@ def _tokens(runs, size, maxw=None):
             prev[0] += t[0]
             prev[3] = prev[3] + "+"
             continue
+        # 西文的点号、逗号、右括号（如“左.L”的“.L”）也不能放在行首：粘到前面的汉字上
+        if t[3] == "lat" and t[4][:1] in _NOSPACE_BEFORE and not t[2] and merged \
+                and merged[-1] != "\n" and merged[-1][3].startswith("cjk"):
+            prev = merged[-1]
+            kern = 0.08 * size
+            prev[1][-1].w -= kern
+            prev[1].extend(t[1])
+            prev[0] += t[0] - kern
+            del prev[5:]
+            prev.append(("lat", t[4]))       # 结尾按西文算，决定和下一个词的间距
+            continue
         merged.append(t)
     out = []
     for t in merged:
@@ -285,6 +296,8 @@ def _tokens(runs, size, maxw=None):
             prev[0] += t[0]
             prev[3] = t[3]
             prev[4] = t[4] if len(t) > 4 else ""
+            del prev[5:]
+            prev.extend(t[5:])
             continue
         out.append(t)
     return out
@@ -403,6 +416,9 @@ def _layout(markup, size, color=None, maxw=None, chain="sans", lh=1.5):
             last_kind = "cjk"
         last_punct = kind.endswith("+") or (kind == "cjk" and tok[4] in _CLOSE)
         last_src = tok[4] if len(tok) > 4 else ""
+        if len(tok) > 5:
+            last_kind, last_src = tok[5]
+            last_punct = False
     if cur or not lines:
         push()
     return Layout(lines, size, lh)

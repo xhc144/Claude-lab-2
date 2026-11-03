@@ -1064,7 +1064,11 @@ class SegTree(Group):
             if show_range:
                 if l != r:
                     nw = c.box.g("w", 0)
-                    t = Text(c.g("x", 0) - nw / 2 - 8, c.g("y", 0), f"[{l},{r}]", size=19, color=C.DIM, anchor="rm")
+                    if (r - l + 1) * w / n - nw >= 60:
+                        t = Text(c.g("x", 0) - nw / 2 - 8, c.g("y", 0), f"[{l},{r}]", size=19, color=C.DIM, anchor="rm")
+                    else:   # 左边没地方（会压到相邻结点）：写在结点左上角的上方
+                        t = Text(c.g("x", 0) - nw / 2 + 4, c.g("y", 0) - node_h / 2 - 4, f"[{l},{r}]", size=17,
+                                 color=C.DIM, anchor="lb")
                 else:
                     t = Text(c.g("x", 0), c.g("y", 0) + node_h / 2 + 16, f"{l}", size=19, color=C.DIM)
                 self.ranges[key] = self.add(t)

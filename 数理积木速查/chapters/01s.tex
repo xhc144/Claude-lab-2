@@ -1,0 +1,110 @@
+\subsection{数论进阶}
+
+\begin{结论}{Dirichlet 特征的正交性：筛出剩余类}
+模 $q$ 的特征 $\chi$（$(\mathbb Z/q)^\times$ 到 $\mathbb C^\times$ 的同态，共 $\varphi(q)$ 个）：
+\[
+\重点{\frac1{\varphi(q)}\sum_\chi\overline{\chi(a)}\chi(n)=\begin{cases}1,&n\equiv a\\0,&\text{否则}\end{cases}}\quad(\gcd(a,q)=1).
+\]
+于是 $\sum_{p\equiv a}p^{-s}$ 化为 $\frac1{\varphi(q)}\sum_\chi\bar\chi(a)\ln L(s,\chi)$ 加有界项；关键是 $L(1,\chi)\ne0$。例：$L(1,\chi_4)=1-\frac13+\frac15-\cdots=\frac\pi4$。
+\end{结论}
+
+\begin{结论}{素数定理的误差与 Riemann 猜想}
+$\psi(x)=\sum_{n\le x}\Lambda(n)\sim x$ 等价于 $\pi(x)\sim\frac{x}{\ln x}$。显式公式
+\[
+\重点{\psi(x)=x-\sum_\rho\frac{x^\rho}\rho-\ln2\pi-\tfrac12\ln(1-x^{-2})},
+\]
+求和遍历 $\zeta$ 的非平凡零点。RH（$\operatorname{Re}\rho=\frac12$）$\iff\pi(x)=\operatorname{li}(x)+O(\sqrt x\ln x)$。零点每个贡献一个振荡项——素数分布的“音乐”。
+\end{结论}
+
+\begin{结论}{Brun 定理与 Goldbach 相关结论}
+孪生素数倒数和收敛：$\sum\bigl(\frac1p+\frac1{p+2}\bigr)=B_2\approx1.902$（Brun 筛法）——与 $\sum\frac1p$ 发散对比，孪生素数“稀少得多”（若无穷多，个数 $\sim2C_2\frac{x}{\ln^2x}$，$C_2\approx0.660$）。
+三素数 Goldbach（奇数 $\ge7$ 为三素数之和）已证（Helfgott 2013）；陈景润：充分大偶数 $=$ 素数 $+$ 至多两个素因子之积。二元 Goldbach 已验证到 \重点{4\times10^{18}}。
+\end{结论}
+
+\begin{结论}{虚二次域的类数与 Heegner 数}
+判别式 $D<0$ 的约化二元二次型个数 $h(D)$。$h=1$ 的 $\mathbb Q(\sqrt{-d})$：
+\[
+\重点{d=1,2,3,7,11,19,43,67,163}\quad(\text{Heegner--Stark--Baker}).
+\]
+推论：$\ee^{\pi\sqrt{163}}=640320^3+743.99999999999925\ldots$ 几乎是整数；$n^2+n+41$ 在 $n=0..39$ 全为素数（与 $163=4\cdot41-1$ 相关）。
+\end{结论}
+
+\begin{结论}{素数的二次型表示}
+奇素数 $p$：
+\[
+p=x^2+y^2\iff p\equiv1\ (4);\quad \重点{p=x^2+2y^2\iff p\equiv1,3\ (8)};\quad p=x^2+3y^2\iff p\equiv1\ (3).
+\]
+一般 $p=x^2+ny^2$ 的判据涉及环类域（$n=5$：$p\equiv1,9\pmod{20}$；$n=27$：$p\equiv1\pmod3$ 且 $2$ 是模 $p$ 的三次剩余）。表示法由 Gauss 整数、$\mathbb Z[\sqrt{-2}]$、Eisenstein 整数的唯一分解直接得到。
+\end{结论}
+
+\begin{结论}{椭圆曲线的基本事实}
+$E:y^2=x^3+ax+b$（$4a^3+27b^2\ne0$）的有理点构成有限生成 Abel 群 $E(\mathbb Q)\cong\mathbb Z^r\oplus T$（Mordell），挠子群只有 $15$ 种（Mazur：$\mathbb Z_n$，$n\le10$ 或 $12$；$\mathbb Z_2\times\mathbb Z_{2m}$，$m\le4$）。
+有限域：\重点{|\#E(\mathbb F_p)-(p+1)|\le2\sqrt p}（Hasse）。$n$ 是同余数（有理直角三角形面积）$\iff y^2=x^3-n^2x$ 秩 $>0$；BSD 猜想把秩与 $L(E,1)$ 的零点阶联系。
+\end{结论}
+
+\begin{结论}{Diophantine 逼近：Liouville 与 Roth}
+$d$ 次代数数 $\alpha$（$d\ge2$）：$\bigl|\alpha-\frac pq\bigr|>\frac{c(\alpha)}{q^d}$（Liouville）。于是 $\sum10^{-n!}$ 逼近得太好、必为超越数。
+Roth：对任意 $\varepsilon>0$，\重点{\bigl|\alpha-\frac pq\bigr|<\frac{1}{q^{2+\varepsilon}}} 只有有限解（指数 $2$ 最优，因 Dirichlet 给出无穷多 $\frac1{q^2}$ 级逼近）。推论：$x^3-2y^3=m$ 型 Thue 方程只有有限解。
+\end{结论}
+
+\begin{结论}{超越数与无理数清单}
+$\ee$（Hermite 1873）、$\pi$（Lindemann 1882 $\Rightarrow$ 化圆为方不可能）超越。Lindemann--Weierstrass：代数数 $\alpha\ne0$ 时 $\ee^\alpha$ 超越。Gelfond--Schneider：$a,b$ 代数、$a\ne0,1$、$b$ 无理 $\Rightarrow a^b$ 超越（$2^{\sqrt2}$、$\ee^\pi=(-1)^{-\ii}$）。
+无理：$\zeta(3)$（Apéry 1978）；\重点{\pi+\ee,\ \pi\ee,\ \gamma,\ \zeta(5)\text{ 的无理性仍未知}}（至少一个 $\pi+\ee$、$\pi\ee$ 超越）。
+\end{结论}
+
+\begin{结论}{$p$ 进数}
+$|x|_p=p^{-v_p(x)}$，超度量；$\mathbb Q$ 上非平凡绝对值只有 $|\cdot|_p$ 与通常绝对值的幂（Ostrowski），积公式 \重点{\prod_{v\le\infty}|x|_v=1}。
+$\mathbb Z_p$ 紧；$\frac1{1-p}=\sum p^n$；$\sum n!$ 在每个 $\mathbb Q_p$ 中收敛。$-1\in\mathbb Q_p^{\times2}\iff p\equiv1\pmod4$；$\sqrt7\in\mathbb Q_3$（Hensel）。$p$ 进分析中 $\ee^x$ 只在 $|x|_p<p^{-1/(p-1)}$ 收敛。
+\end{结论}
+
+\begin{结论}{局部--整体原理：Hasse--Minkowski}
+二次型 $Q$ 在 $\mathbb Q$ 上有非平凡零点 $\iff$ 在 $\mathbb R$ 与所有 $\mathbb Q_p$ 上都有（只需检查有限个 $p$）。例：$x^2+y^2=3z^2$ 在 $\mathbb Q_3$ 中无非平凡解 $\Rightarrow$ 无有理解。
+\重点{\text{三次型可失败}}：Selmer 曲线 $3x^3+4y^3+5z^3=0$ 处处局部可解却无有理点。失败的程度由 Tate--Shafarevich 群度量。
+\end{结论}
+
+\begin{结论}{二次 Gauss 和}
+$p$ 奇素数：
+\[
+\重点{\sum_{k=0}^{p-1}\ee^{2\pi\ii k^2/p}=\begin{cases}\sqrt p,&p\equiv1\ (4)\\\ii\sqrt p,&p\equiv3\ (4)\end{cases}}.
+\]
+$|g|=\sqrt p$ 容易（$|g|^2$ 展开后用正交性），符号困难（Gauss 花了四年）。Gauss 和给出二次互反律的一种证明，也是指数和估计（Weil 界 $\sqrt p$）的原型。
+\end{结论}
+
+\begin{结论}{Ramanujan 分拆同余}
+\[
+\重点{p(5n+4)\equiv0\ (\mathrm{mod}\ 5),\quad p(7n+5)\equiv0\ (\mathrm{mod}\ 7),\quad p(11n+6)\equiv0\ (\mathrm{mod}\ 11)}.
+\]
+例：$p(4)=5$，$p(9)=30$，$p(5)=7$，$p(6)=11$。Dyson 秩、Garvan 曲柄给组合解释；Ono 等证明对每个与 $6$ 互素的素数都有无穷多类同余（模形式理论）。
+\end{结论}
+
+\begin{结论}{完全数与梅森素数}
+偶完全数 $\iff n=2^{p-1}(2^p-1)$，$2^p-1$ 为素数（Euclid--Euler）：$6,28,496,8128$。是否存在奇完全数未知（若存在则 $>10^{1500}$）。
+梅森数检验用 Lucas--Lehmer：$s_0=4$，$s_{k+1}=s_k^2-2$，\重点{M_p\text{ 为素数}\iff s_{p-2}\equiv0\pmod{M_p}}——已知最大素数几乎都是梅森素数。
+\end{结论}
+
+\begin{结论}{Carmichael 数与素性检验}
+合数 $n$ 对所有 $\gcd(a,n)=1$ 满足 $a^{n-1}\equiv1$：Korselt 判据 $\iff n$ 无平方因子且 \重点{p-1\mid n-1}\ 对每个 $p\mid n$。最小 $561=3\cdot11\cdot17$；有无穷多个。
+Miller--Rabin：写 $n-1=2^sd$，检查 $a^d\equiv1$ 或某 $a^{2^rd}\equiv-1$；合数通过一轮的概率 $\le\frac14$，不受 Carmichael 数影响。AKS（2002）给出确定性多项式算法。
+\end{结论}
+
+\begin{结论}{Gauss 圆问题与格点计数}
+$N(r)=\#\{(m,n):m^2+n^2\le r^2\}=\pi r^2+E(r)$：$E(r)=O(r^{2/3})$（初等）；Hardy：$E(r)\ne o(r^{1/2}(\ln r)^{1/4})$；猜想 \重点{E(r)=O(r^{1/2+\varepsilon})}。
+用 Poisson 求和把格点数写成 Bessel 函数级数；一般凸区域 $\lambda K$ 的格点数 $=\lambda^n\vol K+O(\lambda^{n-1})$，曲率为正时误差更小。
+\end{结论}
+
+\begin{结论}{Waring 问题}
+每个正整数是 $g(k)$ 个 $k$ 次幂之和：\重点{g(2)=4,\ g(3)=9,\ g(4)=19},\ $g(5)=37$；一般 $g(k)=2^k+\lfloor(3/2)^k\rfloor-2$（除可能的有限例外）。
+“充分大整数”需要的 $G(k)$ 小得多：$G(2)=4$，$G(4)=16$，$4\le G(3)\le7$。$23=2\cdot8+7\cdot1$ 需要 $9$ 个立方（还有 $239$）。
+\end{结论}
+
+\begin{结论}{von Staudt--Clausen 与 Wolstenholme}
+Bernoulli 数分母：\重点{B_{2n}+\sum_{(p-1)\mid2n}\frac1p\in\mathbb Z}——分母恰为满足 $p-1\mid2n$ 的素数之积（$B_{12}=-\frac{691}{2730}$，$2730=2\cdot3\cdot5\cdot7\cdot13$）。
+Wolstenholme：$p\ge5$ 时 $\binom{2p-1}{p-1}\equiv1\pmod{p^3}$，$H_{p-1}\equiv0\pmod{p^2}$（分子）。正则素数（$p\nmid$ 任何 $B_{2k}$ 分子，$2k\le p-3$）情形 Fermat 大定理由 Kummer 证明。
+\end{结论}
+
+\begin{结论}{Catalan 猜想与 Fermat 大定理}
+$x^a-y^b=1$（$x,y,a,b>1$）唯一解 \重点{3^2-2^3=1}（Mihăilescu 2002）。$x^n+y^n=z^n$（$n\ge3$）无正整数解（Wiles 1995，经由 Frey 曲线与模性定理）。
+初等可证的情形：$n=4$（无穷递降）、$n=3$（Eisenstein 整数）。广义 Fermat 方程 $x^p+y^q=z^r$，$\frac1p+\frac1q+\frac1r<1$ 时只有有限个本原解（Darmon--Granville）。
+\end{结论}
+
+\参考{Apostol, \emph{Introduction to Analytic Number Theory}；Davenport, \emph{Multiplicative Number Theory}；Cox, \emph{Primes of the Form $x^2+ny^2$}；Silverman--Tate, \emph{Rational Points on Elliptic Curves}；Koblitz, \emph{$p$-adic Numbers}；MIT 18.785、18.783。}

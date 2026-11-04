@@ -1,0 +1,195 @@
+\subsection{时间序列分析}
+
+\begin{结论}{因果性与可逆性}
+ARMA：$\phi(B)x_t=\theta(B)\varepsilon_t$（$B$ 为滞后算子）。
+\[
+\重点{\text{因果（平稳）}\iff\phi(z)\ne0\ (|z|\le1),\qquad \text{可逆}\iff\theta(z)\ne0\ (|z|\le1)}.
+\]
+AR(1) 即 $|\phi|<1$。MA(1) 的 $\theta$ 与 $\frac1\theta$ 给出同一自相关函数，约定取可逆的那个（新息可由过去观测恢复）。$\phi,\theta$ 有公共根时要先约去，否则参数不可识别。
+\end{结论}
+
+\begin{结论}{Yule--Walker 方程}
+因果 AR($p$)：
+\[
+\重点{\rho(k)=\sum_{i=1}^p\phi_i\rho(k-i)\ (k\ge1)},\qquad \sigma^2=\gamma(0)\Bigl(1-\sum\phi_i\rho(i)\Bigr).
+\]
+AR(2)：$\rho_1=\frac{\phi_1}{1-\phi_2}$，$\rho_2=\phi_2+\frac{\phi_1^2}{1-\phi_2}$。用样本自相关解它得到的估计总是平稳的，对 AR 渐近有效；但对接近单位根或含 MA 的模型偏差大，那时用极大似然。
+\end{结论}
+
+\begin{结论}{Levinson--Durbin 递推}
+由 $\rho(1),\dots,\rho(p)$ 逐阶求 AR 系数，$O(p^2)$：
+\[
+\phi_{kk}=\frac{\rho(k)-\sum_{j<k}\phi_{k-1,j}\rho(k-j)}{1-\sum_{j<k}\phi_{k-1,j}\rho(j)},\quad \phi_{kj}=\phi_{k-1,j}-\phi_{kk}\phi_{k-1,k-j},\quad \重点{v_k=v_{k-1}(1-\phi_{kk}^2)}.
+\]
+$\phi_{kk}$ 就是偏自相关（反射系数），$|\phi_{kk}|<1$ 保证稳定；$v_k$ 为 $k$ 阶预测误差方差，单调下降。语音编码（LPC）、Toeplitz 方程组都用它。
+\end{结论}
+
+\begin{结论}{AR(2)：平稳三角形与准周期}
+平稳区域
+\[
+\重点{\phi_1+\phi_2<1,\quad \phi_2-\phi_1<1,\quad |\phi_2|<1}.
+\]
+$\phi_1^2+4\phi_2<0$ 时特征根为复数，自相关是衰减余弦：$\rho(k)\propto r^k\cos(k\theta+\psi)$，$r=\sqrt{-\phi_2}$，$\cos\theta=\frac{\phi_1}{2\sqrt{-\phi_2}}$，准周期 $\frac{2\pi}\theta$。Yule 用它拟合太阳黑子的约 $11$ 年周期：随机激励的阻尼振子。
+\end{结论}
+
+\begin{结论}{预测与预测误差}
+因果表示 $x_t=\sum\psi_j\varepsilon_{t-j}$（$\psi_0=1$），$h$ 步最优线性预测的误差方差
+\[
+\重点{\sigma^2\sum_{j=0}^{h-1}\psi_j^2};\qquad \text{AR(1)}:\ \hat x_{t+h}=\phi^hx_t,\ \ \sigma^2\frac{1-\phi^{2h}}{1-\phi^2}\to\gamma(0).
+\]
+平稳序列的长期预测回到均值、误差趋于无条件方差；随机游走误差 $h\sigma^2$ 无界增长——预测区间形状是区分两者的直观方法。
+\end{结论}
+
+\begin{结论}{指数平滑 $=$ ARIMA(0,1,1) 的最优预测}
+$\nabla x_t=\varepsilon_t-\theta\varepsilon_{t-1}$ 的一步最优预测为
+\[
+\重点{\hat x_{t+1}=\alpha x_t+(1-\alpha)\hat x_t,\qquad \alpha=1-\theta}.
+\]
+等价于局部水平模型（随机游走的均值 $+$ 观测噪声）的稳态 Kalman 滤波，信噪比 $q=\frac{\sigma_\eta^2}{\sigma_e^2}=\frac{\alpha^2}{1-\alpha}$。所以“为什么指数平滑好用”：它对缓慢漂移的水平是最优的。
+\end{结论}
+
+\begin{结论}{Holt--Winters：水平、趋势、季节}
+加法形式（周期 $m$）：
+\[
+\begin{aligned}
+\ell_t&=\alpha(x_t-s_{t-m})+(1-\alpha)(\ell_{t-1}+b_{t-1}),\quad b_t=\beta(\ell_t-\ell_{t-1})+(1-\beta)b_{t-1},\\
+s_t&=\gamma(x_t-\ell_t)+(1-\gamma)s_{t-m},\qquad \重点{\hat x_{t+h}=\ell_t+hb_t+s_{t+h-m}}\ (h\le m).
+\end{aligned}
+\]
+季节幅度随水平增长时用乘法形式；长期预测用阻尼趋势 $(\phi+\cdots+\phi^h)b_t$ 通常更准。参数按一步预测误差平方和最小选取。
+\end{结论}
+
+\begin{结论}{单位根与 Dickey--Fuller 检验}
+$x_t=\rho x_{t-1}+\varepsilon_t$，$\rho=1$ 时 OLS 估计以速率 $n$ 收敛（超相合），极限非正态：
+\[
+\重点{n(\hat\rho-1)\ \to\ \frac{W(1)^2-1}{2\int_0^1W(s)^2\dd s}}.
+\]
+$t$ 统计量的 $5\%$ 临界值：无常数 $-1.95$，有常数 $-2.86$，有常数和趋势 $-3.41$（而不是 $-1.645$）。增广 DF 加入滞后差分吸收短期相关；功效低，常与原假设相反的 KPSS 检验配合。
+\end{结论}
+
+\begin{结论}{过度差分的信号}
+白噪声差分后是 MA(1)，$\theta=1$（不可逆），
+\[
+\重点{\rho(1)=-\tfrac12}.
+\]
+样本 ACF 在滞后 $1$ 处接近 $-0.5$、方差反而增大，说明差分过度。趋势平稳序列（确定性趋势 $+$ 平稳噪声）差分后也会出现 MA 单位根；应去趋势而非差分。随机游走中冲击永久存在，方差 $\propto t$。
+\end{结论}
+
+\begin{结论}{样本自相关的方差：Bartlett 公式}
+MA($q$) 过程，滞后 $k>q$：
+\[
+\重点{\Var(\hat\rho_k)\approx\frac1n\Bigl(1+2\sum_{j=1}^{q}\rho_j^2\Bigr)}.
+\]
+白噪声时 $\frac1n$，即 $\pm\frac{1.96}{\sqrt n}$ 带；但对强相关序列，带宽要按上式放宽，否则会把 MA 尾部误判为显著。AR(1) 的 $\Var(\hat\rho_1)\approx\frac{1-\phi^2}n$。
+\end{结论}
+
+\begin{结论}{长期方差与 HAC（Newey--West）标准误}
+相关序列样本均值：$n\Var(\bar x)\to\sigma^2_{\text{LR}}=\sum_{k=-\infty}^\infty\gamma(k)=2\pi f(0)$；AR(1) 为 $\frac{\sigma^2}{(1-\phi)^2}$。估计用 Bartlett 权：
+\[
+\重点{\hat\sigma^2_{\text{LR}}=\hat\gamma(0)+2\sum_{k=1}^{L}\Bigl(1-\frac k{L+1}\Bigr)\hat\gamma(k)},
+\]
+权重保证非负；带宽 $L\sim n^{1/3}$（常用 $4(n/100)^{2/9}$）。回归残差自相关时，系数标准误用同样的三明治修正。
+\end{结论}
+
+\begin{结论}{周期图与 Whittle 似然}
+在 Fourier 频率 $\omega_j=\frac{2\pi j}n$ 上，$I(\omega_j)/f(\omega_j)$ 近似独立的 $\mathrm{Exp}(1)$：周期图无偏但方差不随 $n$ 减小（不相合），平滑 $m$ 个相邻频点方差降为 $\frac{f^2}m$。频域近似似然
+\[
+\重点{\ell(\theta)\approx-\sum_j\Bigl[\ln f_\theta(\omega_j)+\frac{I(\omega_j)}{f_\theta(\omega_j)}\Bigr]}\quad(\text{Whittle}),
+\]
+把长序列的似然计算降为 $O(n\log n)$，长记忆模型尤其方便。
+\end{结论}
+
+\begin{结论}{Kolmogorov--Szegő 公式：可预测性由谱决定}
+平稳过程（$\gamma(0)=\int_{-\pi}^\pi f$）一步预测误差方差
+\[
+\重点{\sigma^2=2\pi\exp\Bigl(\frac1{2\pi}\int_{-\pi}^{\pi}\ln f(\omega)\dd\omega\Bigr)}.
+\]
+$\int\ln f=-\infty$（谱在一段区间为零，如带限信号）时可由过去完全预测；否则有 Wold 分解 $x_t=\sum\psi_j\varepsilon_{t-j}+$ 确定性部分。AR(1) 代入得 $\sigma^2$ 本身（$\int\ln|1-\phi\ee^{-\ii\omega}|^2=0$）。
+\end{结论}
+
+\begin{结论}{协整与误差修正模型}
+$x_t,y_t$ 都是 I(1) 但 $y_t-\beta x_t$ 平稳：长期均衡关系。OLS 的 $\hat\beta$ 超相合；Engle--Granger 两步：对残差做单位根检验（临界值比 DF 更负）。Granger 表示定理：协整 $\iff$
+\[
+\重点{\Delta y_t=\alpha\,(y_{t-1}-\beta x_{t-1})+\sum\text{滞后差分}+\varepsilon_t},\quad \alpha<0 .
+\]
+多变量用 Johansen 秩检验。不协整的 I(1) 变量直接回归就是伪回归。
+\end{结论}
+
+\begin{结论}{Granger 因果}
+在含 $y$ 自身滞后的回归中，$x$ 的滞后能否显著改善对 $y$ 的预测：
+\[
+\重点{H_0:\ y_t=\sum a_iy_{t-i}+\sum b_ix_{t-i}+\varepsilon_t\text{ 中所有 }b_i=0}\quad(F\text{ 检验}).
+\]
+它是“预测上的领先”，不是因果：共同驱动（第三变量）、同期影响、采样间隔过粗、非线性关系都会导致误判；非平稳时要先差分或在协整框架下检验。
+\end{结论}
+
+\begin{结论}{VAR 的稳定性与平稳协方差}
+$x_t=A_1x_{t-1}+\cdots+A_px_{t-p}+\varepsilon_t$ 平稳 $\iff$ 伴随矩阵特征值都在单位圆内 $\iff\det(I-A_1z-\cdots-A_pz^p)\ne0$（$|z|\le1$）。VAR(1) 的平稳协方差满足离散 Lyapunov 方程
+\[
+\重点{\Gamma_0=A\Gamma_0A^{\mathsf T}+\Sigma}.
+\]
+脉冲响应 $\Psi_j=A^j$；正交化脉冲响应用 $\Sigma$ 的 Cholesky 分解，结果依赖变量排序。
+\end{结论}
+
+\begin{结论}{长记忆与分数差分}
+$(1-B)^dx_t=\varepsilon_t$，$0<d<\frac12$：平稳但
+\[
+\重点{\rho(k)\sim Ck^{2d-1},\qquad f(\omega)\sim\omega^{-2d}\ (\omega\to0),\qquad \Var(\bar x_n)\sim n^{2d-1}},
+\]
+自相关不可和。Hurst 指数 $H=d+\frac12$；尼罗河水位、网络流量、波动率都有 $H\approx0.7$--$0.9$。用 $\frac{\sigma}{\sqrt n}$ 算均值误差会严重低估不确定度。
+\end{结论}
+
+\begin{结论}{Hurst 指数的估计：R/S 与 DFA}
+重标极差 $R/S\sim n^H$；去趋势波动分析：对累加序列分窗、每窗减去拟合趋势，残差均方根
+\[
+\重点{F(n)\sim n^{\alpha}}:\quad \text{白噪声 }\alpha=0.5,\ \ 1/f\text{ 噪声 }\alpha=1,\ \ \text{随机游走增量的累加 }\alpha=1.5 .
+\]
+DFA 能去掉多项式趋势的影响；R/S 对短程相关有偏（Lo 的修正）。频域的局部 Whittle 估计效率更高。
+\end{结论}
+
+\begin{结论}{季节模型：航空公司模型}
+季节差分 $1-B^{s}$ 同时去掉确定性季节项与季节单位根。经典的 SARIMA$(0,1,1)(0,1,1)_{12}$：
+\[
+\重点{(1-B)(1-B^{12})x_t=(1-\theta B)(1-\Theta B^{12})\varepsilon_t}
+\]
+（Box--Jenkins 航空旅客数据，先取对数）。只有两个参数，却对大量月度经济数据有效。季节分解另可用 STL（局部回归）。
+\end{结论}
+
+\begin{结论}{Kalman 平滑（Rauch--Tung--Striebel）}
+先前向滤波得 $\hat x_{t|t},P_{t|t},\hat x_{t+1|t},P_{t+1|t}$，再后向：
+\[
+\重点{\hat x_{t|n}=\hat x_{t|t}+J_t\bigl(\hat x_{t+1|n}-\hat x_{t+1|t}\bigr)},\quad J_t=P_{t|t}F^{\mathsf T}P_{t+1|t}^{-1},
+\]
+$P_{t|n}=P_{t|t}+J_t(P_{t+1|n}-P_{t+1|t})J_t^{\mathsf T}$。缺失观测只需跳过更新步；与 EM 结合估计模型参数。平滑方差 $\le$ 滤波方差。
+\end{结论}
+
+\begin{结论}{变点检测：CUSUM}
+检测均值从 $\mu_0$ 变到 $\mu_0+\delta$（单位 $\sigma$）：
+\[
+\重点{S_t=\max\bigl(0,\ S_{t-1}+x_t-\mu_0-k\bigr)},\quad S_t>h\text{ 时报警},\qquad k\approx\frac\delta2 .
+\]
+它是似然比累加的递推形式，在“给定误报间隔下最快发现”意义下最优（Lorden，Moustakides）。$h$ 按期望误报间隔（ARL$_0$）选取；离线多变点用动态规划/PELT 最小化分段代价。
+\end{结论}
+
+\begin{结论}{最大熵谱与 Burg 方法}
+已知 $\rho(0),\dots,\rho(p)$，熵最大的谱正是 AR($p$) 谱
+\[
+\重点{f(\omega)=\frac{\sigma_p^2}{2\pi\bigl|1-\sum_{k=1}^p\phi_k\ee^{-\ii k\omega}\bigr|^2}}.
+\]
+Burg 法直接按前向--后向预测误差最小估计反射系数，保证稳定，短数据下分辨率远高于周期图；阶数过高会出现虚假谱峰与谱线分裂。
+\end{结论}
+
+\begin{结论}{两个相关序列的互相关：先白化}
+两条\emph{独立}的自相关序列，样本互相关的方差
+\[
+\重点{\Var\bigl(r_{xy}(k)\bigr)\approx\frac1n\sum_{j=-\infty}^{\infty}\rho_{xx}(j)\rho_{yy}(j)},
+\]
+远大于 $\frac1n$，容易得到虚假的“显著领先”。做法：对 $x$ 拟合 AR 滤波器使其白化，用同一个滤波器处理 $y$，再看互相关（Box--Jenkins 预白化）。
+\end{结论}
+
+\begin{结论}{时间序列的模型检验：滚动原点}
+不能随机划分训练/测试集（未来信息泄漏到训练中）。滚动原点：用 $1..t$ 拟合、预测 $t+h$，再推进 $t$，汇总误差。
+\重点文{基准先比“朴素预测”}（上一期值、上年同期值）；预测评价用 MASE（以朴素预测误差归一化）避免量纲与零值问题。残差应无自相关（Ljung--Box），否则模型没用尽信息。
+\end{结论}
+
+\参考{Brockwell--Davis, \emph{Time Series: Theory and Methods}；Hamilton, \emph{Time Series Analysis}；Box--Jenkins--Reinsel, \emph{Time Series Analysis: Forecasting and Control}；Hyndman--Athanasopoulos, \emph{Forecasting: Principles and Practice}；Shumway--Stoffer；MIT 14.384、18.S096。}

@@ -1,0 +1,121 @@
+\subsection{复分析补充}
+
+\begin{结论}{最大模原理与开映射}
+非常数全纯函数在区域内部取不到 $|f|$ 的最大值；无零点时也取不到最小值。全纯函数是开映射（$f'(z_0)=0$ 的 $k$ 阶零点处局部 $k$ 对 $1$）。
+推论：$|f|\le M$ 于边界 $\Rightarrow$ 内部同样；\重点{\operatorname{Re}f,\ \operatorname{Im}f\text{ 也满足最大值原理}}（调和函数）；有界区域上全纯且边界上 $|f|=1$ 的函数若无零点则为常数（否则内部有零点）。
+\end{结论}
+
+\begin{结论}{Phragmén--Lindelöf：无界区域上的最大模}
+带形 $|\operatorname{Im}z|<\frac\pi2$ 上 $f$ 全纯，边界 $|f|\le M$，且内部增长 \重点{|f|\le C\exp(A\ee^{\alpha|\operatorname{Re}z|})}，$\alpha<1$ $\Rightarrow$ 内部 $|f|\le M$。
+扇形张角 $\frac\pi\beta$ 中允许增长 $\exp(|z|^{\gamma})$，$\gamma<\beta$。增长阈值不可去：$\exp(\ee^z)$ 在带形边界上有界、内部无界。用于证明 Fourier 变换的唯一性、Carlson 定理（指数型函数在整数点为零则恒为零，若类型 $<\pi$）。
+\end{结论}
+
+\begin{结论}{Hadamard 三圆与三线定理}
+圆环 $r_1<|z|<r_2$ 中全纯，$M(r)=\max_{|z|=r}|f|$：\重点{\ln M(r)\text{ 是 }\ln r\text{ 的凸函数}}，即 $M(r)\le M(r_1)^{1-t}M(r_2)^t$，$t=\frac{\ln(r/r_1)}{\ln(r_2/r_1)}$。
+带形 $0\le\operatorname{Re}z\le1$ 上有界全纯：$\sup_{\operatorname{Re}z=t}|f|\le M_0^{1-t}M_1^t$（三线定理）——Riesz--Thorin 插值定理的核心。
+\end{结论}
+
+\begin{结论}{Jensen 公式：零点与边界平均}
+$f$ 在 $|z|\le R$ 全纯，$f(0)\ne0$，零点 $a_1,\dots,a_n$（$|a_k|<R$）：
+\[
+\重点{\ln|f(0)|=\sum_k\ln\frac{|a_k|}{R}+\frac1{2\pi}\int_0^{2\pi}\ln|f(R\ee^{\ii\theta})|\dd\theta}.
+\]
+推论：$|z|\le r$ 内零点个数 $n(r)\le\ln\frac{M(\ee r)}{|f(0)|}$（取 $R=\ee r$，每个这样的零点在和式中贡献 $\ge1$）——增长慢的函数零点少。Mahler 测度、熵、Szegő 定理都从此出发。
+\end{结论}
+
+\begin{结论}{Weierstrass 因子分解与 $1/\Gamma$}
+整函数可按零点写成乘积；有限阶 $\rho$ 时（Hadamard）$f=z^m\ee^{P(z)}\prod E_p(\frac z{a_n})$，$\deg P\le\rho$，$E_p(u)=(1-u)\ee^{u+\cdots+u^p/p}$。
+\[
+\重点{\frac1{\Gamma(z)}=z\ee^{\gamma z}\prod_{n\ge1}\Bigl(1+\frac zn\Bigr)\ee^{-z/n}},\qquad \sin\pi z=\pi z\prod_{n\ge1}\Bigl(1-\frac{z^2}{n^2}\Bigr).
+\]
+取对数求导即得 $\psi$ 的级数与 $\pi\cot\pi z$ 的部分分式。阶 $\rho$ 的非多项式整函数 $\rho\notin\mathbb Z$ 时必有无穷多零点。
+\end{结论}
+
+\begin{结论}{Hurwitz 定理与零点的连续性}
+$f_n\to f$ 局部一致收敛（全纯）、$f\not\equiv0$：$f$ 在圆盘 $D$ 内（边界无零点）的零点个数等于 $n$ 充分大时 $f_n$ 的零点个数。推论：\重点{\text{处处非零（或单叶）函数的极限要么处处非零（单叶）、要么恒为零（常数）}}。
+用于 Riemann 映射定理的极值论证、多项式根对系数的连续依赖（复根计重数连续变化）。
+\end{结论}
+
+\begin{结论}{本性奇点：Casorati--Weierstrass 与 Picard}
+孤立奇点 $z_0$：可去 $\iff$ 附近有界；极点 $\iff|f|\to\infty$；本性奇点时 $f(B_\varepsilon(z_0)\setminus\{z_0\})$ 在 $\mathbb C$ 中稠密（C--W），且至多漏掉一个值（大 Picard）。
+小 Picard：非常数整函数至多漏掉一个值（$\ee^z$ 漏 $0$）。\重点{\text{判别奇点类型看 Laurent 展开的负幂项个数}}：有限个为极点，无穷个为本性奇点（$\ee^{1/z}$）。
+\end{结论}
+
+\begin{结论}{Riemann 映射定理与 Schwarz 反射}
+单连通真子区域 $\Omega\subsetneq\mathbb C$ 共形等价于单位圆盘，规定 $f(z_0)=0$、$f'(z_0)>0$ 后唯一。边界是 Jordan 曲线时 $f$ 连续延拓为边界同胚（Carathéodory）。
+反射：$f$ 在上半平面全纯、在实轴的一段上连续取实值 $\Rightarrow$ \重点{f(\bar z)=\overline{f(z)}\text{ 给出跨实轴的解析延拓}}。对圆周：$f(1/\bar z)$ 型反射。Schwarz--Christoffel 映射的推导靠反射。
+\end{结论}
+
+\begin{结论}{极坐标下的 Cauchy--Riemann 方程}
+$f=u+\ii v$，$z=r\ee^{\ii\theta}$：
+\[
+\重点{u_r=\frac1rv_\theta,\qquad v_r=-\frac1ru_\theta},\qquad f'(z)=\ee^{-\ii\theta}(u_r+\ii v_r).
+\]
+调和共轭：$v=\int(-u_y\dd x+u_x\dd y)$（单连通区域）。$u=\ln r$ 的共轭 $\theta$ 多值——非单连通区域上调和函数不一定是解析函数的实部。
+\end{结论}
+
+\begin{结论}{钥匙孔围道：$\int_0^\infty x^{a-1}R(x)\dd x$}
+$R$ 有理、在 $[0,\infty)$ 上无极点、$0<a$ 且无穷远衰减足够快。沿正实轴割开：
+\[
+\重点{(1-\ee^{2\pi\ii a})\int_0^\infty x^{a-1}R(x)\dd x=2\pi\ii\sum\Res\bigl(z^{a-1}R(z)\bigr)}
+\]
+（$z^{a-1}$ 取 $0<\arg z<2\pi$）。$a=1$ 时改用 $\ln z$：$\int_0^\infty R(x)\dd x=-\sum\Res(R(z)\ln z)$。例：$\int_0^\infty\frac{\ln x}{(1+x^2)^2}\dd x=-\frac\pi4$。
+\end{结论}
+
+\begin{结论}{多值函数的割线选择}
+$\sqrt{z^2-1}$：割线取 $[-1,1]$ 时在无穷远附近单值且 $\sim z$，取 $(-\infty,-1]\cup[1,\infty)$ 时在 $[-1,1]$ 外两侧异号。$\ln\frac{z-1}{z+1}$ 同理可只割 $[-1,1]$。
+\重点{\text{绕两个分支点一圈的总相位变化决定能否把割线连在一起}}。例：$\oint_{|z|=2}\sqrt{z^2-1}\,\dd z$ 用无穷远留数计算：$\sqrt{z^2-1}=z-\frac1{2z}-\cdots$，结果 $-\pi\ii$。
+\end{结论}
+
+\begin{结论}{Blaschke 乘积与圆盘自同构}
+$B(z)=\ee^{\ii\varphi}\prod_k\frac{z-a_k}{1-\bar a_kz}$（$|a_k|<1$）：在单位圆上 $|B|=1$，零点为 $a_k$。有限 Blaschke 乘积 $=$ 圆盘到自身的真全纯映射。
+无穷乘积收敛 $\iff$ \重点{\sum(1-|a_k|)<\infty}（Blaschke 条件）；有界全纯函数的零点必满足它。$H^\infty$ 函数 $=$ Blaschke 乘积 $\times$ 无零点部分（内外分解）。
+\end{结论}
+
+\begin{结论}{多项式增长的整函数是多项式}
+整函数满足 $|f(z)|\le C(1+|z|)^n$ $\Rightarrow$ $f$ 是至多 $n$ 次多项式（Cauchy 估计：$|a_k|\le\frac{C(1+R)^n}{R^k}\to0$，$k>n$）。
+推论：\重点{\operatorname{Re}f\le C(1+|z|)^n\text{ 也够}}（Borel--Carathéodory）；实部有上界的整函数是常数（$\ee^f$ 有界）。代数基本定理、Liouville 定理是其特例。
+\end{结论}
+
+\begin{结论}{Morera 定理与一致极限}
+$f$ 连续、对区域内所有三角形 $\oint f=0$ $\Rightarrow$ 全纯（Morera）。推论：全纯函数的局部一致极限全纯，且 \重点{f_n'\to f'\text{ 也局部一致收敛}}（实分析中没有这样的好性质）。
+含参积分 $\int g(z,t)\dd t$（$g$ 对 $z$ 全纯、可积性一致）全纯：$\Gamma(z)$、$\zeta(z)$、Laplace 变换在半平面全纯的证明都用它。
+\end{结论}
+
+\begin{结论}{唯一性定理与解析延拓的刚性}
+连通区域上全纯 $f$ 的零点集在区域内有聚点 $\Rightarrow f\equiv0$。所以两个全纯函数在一条曲线段/收敛点列上相等即处处相等。
+例：$\sin^2z+\cos^2z=1$ 由实轴推广到全平面；$\Gamma(z)\Gamma(1-z)=\frac{\pi}{\sin\pi z}$ 只需在 $(0,1)$ 证明。\重点{\text{聚点必须在区域内部}}：$\sin\frac1{1-z}$ 在单位圆盘内零点聚于边界 $z=1$，不恒为零。
+\end{结论}
+
+\begin{结论}{Hankel 围道：$1/\Gamma$ 的整函数表示}
+围道 $H$ 从 $-\infty$ 下方绕原点到 $-\infty$ 上方：
+\[
+\重点{\frac{1}{\Gamma(z)}=\frac1{2\pi\ii}\int_H\ee^tt^{-z}\dd t},
+\]
+对所有 $z$ 成立，直接说明 $\frac1\Gamma$ 为整函数。类似地 $\zeta(s)=\frac{\Gamma(1-s)}{2\pi\ii}\int_H\frac{(-t)^{s-1}}{\ee^t-1}\dd t$ 给出 $\zeta$ 到全平面（除 $s=1$）的延拓。Bessel 函数的 Schläfli 积分同理。
+\end{结论}
+
+\begin{结论}{条带与半平面的标准映射}
+$w=\ee^z$：带形 $0<\operatorname{Im}z<\pi$ $\to$ 上半平面；$w=\frac{z-\ii}{z+\ii}$（Cayley）：上半平面 $\to$ 单位圆盘；$w=z^{\pi/\alpha}$：张角 $\alpha$ 的扇形 $\to$ 上半平面。
+组合使用：带形中的 Dirichlet 问题 $\to$ 上半平面 Poisson 积分。\重点{\text{上半平面的 Poisson 核 }\frac{1}{\pi}\frac{y}{(x-t)^2+y^2}}；带形 $0<y<\pi$ 中边界一侧为 $1$ 另一侧为 $0$ 的调和函数即 $\frac y\pi$。
+\end{结论}
+
+\begin{结论}{对数势与多项式的“电荷”}
+多项式 $p(z)=\prod(z-z_k)$：$\ln|p(z)|=\sum\ln|z-z_k|$ 是 $n$ 个单位点电荷的二维 Coulomb 势；$\frac{p'}{p}=\sum\frac1{z-z_k}$ 的共轭为“电场”。
+推论：$p'$ 的零点是电场的零点，在根的凸包内（Gauss--Lucas）；\重点{\text{Chebyshev 多项式的零点}}使 $[-1,1]$ 上势能平衡（平衡测度 $\frac{\dd x}{\pi\sqrt{1-x^2}}$）——正是插值最优节点的物理解释。
+\end{结论}
+
+\begin{结论}{留数定理计算 $\sum f(n)$ 的另一核：交错和}
+$\sum_{n}(-1)^nf(n)=-\sum_{\text{$f$ 的极点}}\Res\bigl(\pi\csc(\pi z)f(z)\bigr)$（$f$ 衰减足够快）。
+例：$\sum_{n\in\mathbb Z}\frac{(-1)^n}{n^2+a^2}=\frac{\pi}{a\sinh\pi a}$，故 \重点{\sum_{n\ge1}\frac{(-1)^{n}}{n^2+a^2}=\frac{\pi}{2a\sinh\pi a}-\frac1{2a^2}}。$\csc$ 的极点留数 $\frac{(-1)^n}{\pi}$ 正好产生交错符号。
+\end{结论}
+
+\begin{结论}{Laurent 系数的积分公式与 Bessel 函数}
+$a_n=\frac1{2\pi\ii}\oint\frac{f(z)}{z^{n+1}}\dd z$。对 $\exp\bigl(\frac x2(z-\frac1z)\bigr)=\sum J_n(x)z^n$ 取单位圆：
+\[
+\重点{J_n(x)=\frac1\pi\int_0^\pi\cos(n\theta-x\sin\theta)\dd\theta}
+\]
+（Bessel 积分）。由此 $|J_n(x)|\le1$，且 $J_n(x)\approx\frac{(x/2)^n}{n!}$（小 $x$）、驻相法给大 $x$ 渐近。
+\end{结论}
+
+\参考{Ahlfors, \emph{Complex Analysis}；Stein--Shakarchi, \emph{Complex Analysis}；Conway, \emph{Functions of One Complex Variable}；Titchmarsh, \emph{The Theory of Functions}；Needham, \emph{Visual Complex Analysis}；MIT 18.112。}

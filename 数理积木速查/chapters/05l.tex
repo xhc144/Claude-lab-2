@@ -1,0 +1,180 @@
+\subsection{积分变换与 Green 函数补充}
+
+\begin{结论}{Laplace 变换的对照与运算规则}
+\[
+\重点{\mathcal L\{t^n\ee^{at}\}=\frac{n!}{(s-a)^{n+1}}},\qquad \mathcal L\{\sin\omega t\}=\frac\omega{s^2+\omega^2},\qquad \mathcal L\{t^{\nu}\}=\frac{\Gamma(\nu+1)}{s^{\nu+1}} .
+\]
+规则：$f'\to sF-f(0)$；$f(t-a)H(t-a)\to\ee^{-as}F$；$\ee^{at}f\to F(s-a)$；$tf\to-F'$；$\frac ft\to\int_s^\infty F$；$\int_0^tf\to\frac Fs$；$f*g\to FG$。部分分式 $+$ 查表即可解常系数 ODE 的初值问题。
+\end{结论}
+
+\begin{结论}{含 $\sqrt s$ 的反演：扩散问题}
+\[
+\mathcal L^{-1}\Bigl\{\frac1{\sqrt s}\Bigr\}=\frac1{\sqrt{\pi t}},\qquad \mathcal L^{-1}\{\ee^{-a\sqrt s}\}=\frac{a}{2\sqrt\pi\,t^{3/2}}\ee^{-a^2/4t},\qquad \重点{\mathcal L^{-1}\Bigl\{\frac{\ee^{-a\sqrt s}}s\Bigr\}=\erfc\frac a{2\sqrt t}}.
+\]
+半无限介质表面温度突变：$u_t=Du_{xx}$ 变换后 $\hat u=\frac{\ee^{-x\sqrt{s/D}}}s$，得 $u=\erfc\frac x{2\sqrt{Dt}}$；表面热流 $\propto\frac1{\sqrt t}$。Bromwich 围道需绕开 $s\le0$ 的分支割线。
+\end{结论}
+
+\begin{结论}{周期函数的 Laplace 变换}
+周期 $T$：
+\[
+F(s)=\frac{1}{1-\ee^{-sT}}\int_0^T\ee^{-st}f(t)\dd t;\qquad \text{方波（前半周期 }+1\text{、后半 }-1\text{）}:\ \重点{F(s)=\frac1s\tanh\frac{sT}4}.
+\]
+锯齿波 $\frac tT$（$0\le t<T$）：$\frac1{Ts^2}-\frac{\ee^{-sT}}{s(1-\ee^{-sT})}$。分母 $1-\ee^{-sT}$ 的零点 $s=\frac{2\pi\ii k}T$ 对应 Fourier 级数的各谐波。
+\end{结论}
+
+\begin{结论}{卷积型积分方程}
+$f(t)=g(t)+\int_0^tk(t-\tau)f(\tau)\dd\tau$：
+\[
+\重点{F(s)=\frac{G(s)}{1-K(s)}}.
+\]
+例：$f=1+\int_0^t(t-\tau)f(\tau)\dd\tau$，$F=\frac1s+\frac{F}{s^2}$，$F=\frac{s}{s^2-1}$，$f=\cosh t$。更新方程 $m=F+m*f$（更新理论）、记忆核的 Langevin 方程、粘弹性本构都是这种结构。
+\end{结论}
+
+\begin{结论}{用 Laplace 变换求广义积分}
+\[
+\重点{\int_0^\infty\frac{f(t)}t\dd t=\int_0^\infty F(s)\dd s},\qquad \int_0^\infty f(t)\,\mathcal L\{g\}(t)\dd t=\int_0^\infty F(s)g(s)\dd s .
+\]
+例：$\int_0^\infty\frac{\sin t}t=\int_0^\infty\frac{\dd s}{1+s^2}=\frac\pi2$；$\int_0^\infty\ee^{-at}\frac{\sin bt}t\dd t=\arctan\frac ba$；$\int_0^\infty\frac{\sin^2t}{t^2}=\frac\pi2$。把一个难积分换成另一个变量上的易积分。
+\end{结论}
+
+\begin{结论}{Hankel 变换对照}
+$\tilde f(k)=\int_0^\infty f(r)J_0(kr)\,r\dd r$（自逆）；二维径向函数的 Fourier 变换 $=2\pi\tilde f(k)$。
+\[
+\重点{\ee^{-ar^2}\leftrightarrow\frac1{2a}\ee^{-k^2/4a}},\qquad \frac1r\leftrightarrow\frac1k,\qquad \frac{\ee^{-ar}}r\leftrightarrow\frac1{\sqrt{k^2+a^2}},\qquad \ee^{-ar}\leftrightarrow\frac{a}{(k^2+a^2)^{3/2}},
+\]
+圆盘 $\mathbf 1_{r<a}\leftrightarrow\frac{aJ_1(ka)}k$（Airy 斑）。轴对称的扩散、衍射、弹性接触问题用它把 PDE 化为 ODE。
+\end{结论}
+
+\begin{结论}{Mellin 变换与 Ramanujan 主定理}
+$\mathcal M f(s)=\int_0^\infty x^{s-1}f(x)\dd x$：$\ee^{-x}\to\Gamma(s)$，$\frac1{1+x}\to\frac{\pi}{\sin\pi s}$，$\ee^{-x^2}\to\frac12\Gamma(\frac s2)$。若 $f(x)=\sum_{k\ge0}\varphi(k)\frac{(-x)^k}{k!}$，则
+\[
+\重点{\int_0^\infty x^{s-1}f(x)\dd x=\Gamma(s)\varphi(-s)}.
+\]
+例：$(1+x)^{-a}$ 的 $\varphi(k)=\frac{\Gamma(a+k)}{\Gamma(a)}$，给出 $\int_0^\infty\frac{x^{s-1}}{(1+x)^a}\dd x=\frac{\Gamma(s)\Gamma(a-s)}{\Gamma(a)}$。（需要 $\varphi$ 的增长条件，Carlson 定理。）
+\end{结论}
+
+\begin{结论}{幂函数的 $n$ 维 Fourier 变换（Riesz 势）}
+$0<\alpha<n$：
+\[
+\重点{\int_{\mathbb R^n}\frac{\ee^{-\ii\mathbf k\cdot\mathbf x}}{|\mathbf x|^\alpha}\dd^n x=\frac{\pi^{n/2}2^{n-\alpha}\Gamma\bigl(\frac{n-\alpha}2\bigr)}{\Gamma\bigl(\frac\alpha2\bigr)}\,|\mathbf k|^{\alpha-n}}.
+\]
+$n=3,\alpha=1$：$\frac{4\pi}{k^2}$（Coulomb）；$n=3,\alpha=2$：$\frac{2\pi^2}k$。所以 $(-\Delta)^{-s}$ 的核 $\propto|\mathbf x|^{2s-n}$（分数 Laplacian、Riesz 势），由量纲即可猜出幂次。
+\end{结论}
+
+\begin{结论}{波动方程的推迟 Green 函数}
+$\bigl(\frac1{c^2}\partial_t^2-\Delta\bigr)G=\delta(t)\delta(\mathbf x)$：
+\[
+\重点{G_1=\frac c2H(ct-|x|),\qquad G_2=\frac{c}{2\pi}\frac{H(ct-r)}{\sqrt{c^2t^2-r^2}},\qquad G_3=\frac{\delta(t-r/c)}{4\pi r}}.
+\]
+三维信号只在光锥上（清晰的 Huygens 原理），二维有“尾巴”（池塘涟漪中心不静止），一维是阶梯。二维结果可由三维沿一条线积分（降维法）得到。
+\end{结论}
+
+\begin{结论}{阻尼振子的 Green 函数与响应函数}
+$m(\ddot x+\gamma\dot x+\omega_0^2x)=F(t)$，$\omega_1=\sqrt{\omega_0^2-\gamma^2/4}$：
+\[
+\重点{G(t)=\frac{H(t)}{m\omega_1}\ee^{-\gamma t/2}\sin\omega_1t},\qquad \chi(\omega)=\frac{1}{m(\omega_0^2-\omega^2-\ii\gamma\omega)},
+\]
+$x=G*F$。$\chi$ 的极点在下半平面 $\Leftrightarrow$ 因果；$\operatorname{Im}\chi$ 给出吸收（耗散），与涨落谱由涨落--耗散定理相联。过阻尼时 $\sin$ 换成 $\sinh$，临界阻尼为 $t\ee^{-\gamma t/2}$。
+\end{结论}
+
+\begin{结论}{Green 函数的谱表示}
+自伴算子 $L$，本征对 $(\lambda_n,\varphi_n)$：
+\[
+\重点{G(x,y;z)=\sum_n\frac{\varphi_n(x)\overline{\varphi_n(y)}}{\lambda_n-z}},\qquad (L-z)G=\delta .
+\]
+极点就是本征值，留数给出本征函数；连续谱处变成割线。态密度 $\rho(E)=-\frac1\pi\operatorname{Im}\tr G(E+\ii0)$；$z\to\lambda_n$ 附近单项主导——共振、谱线形状都由此来。
+\end{结论}
+
+\begin{结论}{零模问题：广义 Green 函数}
+$-u''=f$，$u'(0)=u'(L)=0$ 可解 $\iff\int_0^Lf=0$。改为 $-G''=\delta(x-y)-\frac1L$，取对称解：
+\[
+\重点{G(x,y)=\frac{x^2+y^2}{2L}-\max(x,y)+C}.
+\]
+解 $u=\int Gf+$ 常数（不唯一）。周期边界、闭曲面上的 Poisson 方程、纯 Neumann 的静电与渗流问题都要这样“减去零模”。
+\end{结论}
+
+\begin{结论}{圆周上的 Green 函数与 $\sum\frac{\cos nx}{n^2}$}
+$2\pi$ 周期、零均值：$-G''=\delta-\frac1{2\pi}$，
+\[
+\重点{G(x)=\frac1{2\pi}\sum_{n\ne0}\frac{\ee^{\ii nx}}{n^2}=\frac1{2\pi}\Bigl(\frac{\pi^2}3-\pi|x|+\frac{x^2}2\Bigr)}\quad(|x|\le\pi).
+\]
+等价于 $\sum_{n\ge1}\frac{\cos nx}{n^2}=\frac{\pi^2}6-\frac{\pi|x|}2+\frac{x^2}4$；$x=0$ 给 $\zeta(2)$，$x=\pi$ 给 $\sum\frac{(-1)^n}{n^2}=-\frac{\pi^2}{12}$。逐次积分得到 $\sum\frac{\sin nx}{n^3}$ 等 Bernoulli 多项式。
+\end{结论}
+
+\begin{结论}{球的 Green 函数与 Poisson 核}
+半径 $R$ 的球，Dirichlet 条件，像点 $\mathbf y^*=\frac{R^2}{|\mathbf y|^2}\mathbf y$（Kelvin 反演）：
+\[
+G=\frac1{4\pi|\mathbf x-\mathbf y|}-\frac{R/|\mathbf y|}{4\pi|\mathbf x-\mathbf y^*|},\qquad \重点{u(\mathbf x)=\oint\frac{R^2-|\mathbf x|^2}{4\pi R|\mathbf x-\boldsymbol\xi|^3}\,u(\boldsymbol\xi)\dd S_\xi}.
+\]
+$\mathbf x=0$ 给平均值性质；Harnack 不等式 $\frac{R(R-r)}{(R+r)^2}u(0)\le u(\mathbf x)\le\frac{R(R+r)}{(R-r)^2}u(0)$ 由核的上下界得到。
+\end{结论}
+
+\begin{结论}{二维 Green 函数：共形映射}
+$f:\Omega\to$ 单位圆盘共形，$-\Delta G=\delta_w$，$G|_{\partial\Omega}=0$：
+\[
+\重点{G_\Omega(z,w)=-\frac1{2\pi}\ln\Bigl|\frac{f(z)-f(w)}{1-\overline{f(w)}f(z)}\Bigr|}.
+\]
+上半平面：$-\frac1{2\pi}\ln\bigl|\frac{z-w}{z-\bar w}\bigr|$；角域、带域用幂函数和指数映射。Green 函数的共形不变性使二维位势问题几乎都能化成圆盘问题。
+\end{结论}
+
+\begin{结论}{双调和方程的基本解}
+$\Delta^2G=\delta$：
+\[
+\重点{G_2=\frac{r^2\ln r}{8\pi},\qquad G_3=-\frac r{8\pi}}.
+\]
+（三维：$\Delta r=\frac2r$，$\Delta\frac1r=-4\pi\delta$。）薄板在集中力 $P$ 下挠度 $w\approx\frac{Pr^2\ln r}{8\pi D}$（$D$ 抗弯刚度）；Stokes 流的流函数满足双调和方程；薄板样条插值（thin-plate spline）的核就是 $r^2\ln r$。
+\end{结论}
+
+\begin{结论}{一维 Green 函数三件套}
+$\mathbb R$ 上，在无穷远有界或外行：
+\[
+-G''=\delta:\ -\frac{|x|}2,\qquad \重点{-G''+\kappa^2G=\delta:\ \frac{\ee^{-\kappa|x|}}{2\kappa}},\qquad -G''-k^2G=\delta:\ \frac{\ii}{2k}\ee^{\ii k|x|}.
+\]
+第二个是一维屏蔽势、扩散--吸收的稳态（衰减长度 $\frac1\kappa$）、Laplace 变换后的热方程（$\kappa=\sqrt{s/D}$）；第三个是 $\kappa=-\ii k$ 的解析延拓，用于一维散射。
+\end{结论}
+
+\begin{结论}{Poisson 求和与 $\theta$ 函数变换}
+\[
+\重点{\sum_{n\in\mathbb Z}\ee^{-\pi n^2t}=\frac1{\sqrt t}\sum_{n\in\mathbb Z}\ee^{-\pi n^2/t}}.
+\]
+圆周上的热核两种写法：镜像和 $\sum_m\frac{1}{\sqrt{4\pi Dt}}\ee^{-(x+2\pi m)^2/4Dt}$（短时快收敛）与模式和 $\frac1{2\pi}\sum_n\ee^{-Dn^2t}\ee^{\ii nx}$（长时快收敛）是同一个函数。Riemann $\zeta$ 的函数方程、Ewald 求和都用这个对偶。
+\end{结论}
+
+\begin{结论}{Fourier 变换的本征函数}
+约定 $\hat f(k)=\frac1{\sqrt{2\pi}}\int f\ee^{-\ii kx}\dd x$（酉）。Hermite 函数 $h_n=H_n(x)\ee^{-x^2/2}$：
+\[
+\重点{\hat h_n=(-\ii)^nh_n}.
+\]
+所以 $\mathcal F^4=I$，特征值只有 $\pm1,\pm\ii$；Gauss 函数是不动点。分数 Fourier 变换 $\mathcal F^a$ 把 $h_n$ 乘以 $\ee^{-\ii n a\pi/2}$，是时频平面的旋转（谐振子的时间演化），用于光学（Fresnel 衍射）与雷达信号处理。
+\end{结论}
+
+\begin{结论}{分数阶积分与导数}
+Riemann--Liouville：$I^\alpha f=\frac1{\Gamma(\alpha)}\int_0^t(t-\tau)^{\alpha-1}f(\tau)\dd\tau$，$\mathcal L\{I^\alpha f\}=s^{-\alpha}F$；
+\[
+\重点{D^\alpha t^\beta=\frac{\Gamma(\beta+1)}{\Gamma(\beta+1-\alpha)}t^{\beta-\alpha}},\qquad D^{1/2}t=2\sqrt{\frac t\pi},\quad D^{1/2}1=\frac1{\sqrt{\pi t}}.
+\]
+Caputo 导数（先求导再积分）对常数为 $0$，初值条件更自然。表面热流 $\propto D^{1/2}$（表面温度），所以半无限导热问题天然是半阶导数。
+\end{结论}
+
+\begin{结论}{数值 Laplace 反演}
+反演是不适定的（$F$ 的微小误差可造成 $f$ 的巨大误差）。Gaver--Stehfest：
+\[
+\重点{f(t)\approx\frac{\ln2}t\sum_{k=1}^NV_kF\Bigl(\frac{k\ln2}t\Bigr)},
+\]
+只用实轴上的值，$V_k$ 交替且很大，双精度下 $N\approx12$--$16$ 最佳，对振荡函数失效。Talbot 法把 Bromwich 围道变形到左半平面，用梯形公式指数收敛（需 $F$ 可复数求值）；高精度时用 \texttt{mpmath.invertlaplace}。
+\end{结论}
+
+\begin{结论}{Green 函数的互易性}
+自伴问题 \重点{G(\mathbf x,\mathbf y)=G(\mathbf y,\mathbf x)}：在 $\mathbf y$ 放源、$\mathbf x$ 处测量，等于在 $\mathbf x$ 放源、$\mathbf y$ 处测量。非自伴时 $G(\mathbf x,\mathbf y)=G^\dagger(\mathbf y,\mathbf x)$（伴随问题的 Green 函数，对流方向反转）。
+声学、电磁天线（发射与接收方向图相同）、弹性力学（Maxwell--Betti）的互易定理都是这一条；地震学用它从台站互相关恢复 Green 函数。
+\end{结论}
+
+\begin{结论}{Wiener--Hopf 方法}
+半直线上的卷积方程 $\int_0^\infty k(x-y)f(y)\dd y=g(x)$（$x>0$），或混合边界的半平面问题。关键：把变换后的核分解为
+\[
+\重点{K(\omega)=K_+(\omega)K_-(\omega)}
+\]
+（分别在上、下半平面解析且无零点），再用 Liouville 定理确定整函数。经典应用：半平面边缘衍射（Sommerfeld）、Milne 辐射输运问题、断裂力学的裂纹尖端、排队论中的 Lindley 方程。
+\end{结论}
+
+\参考{Duffy, \emph{Green's Functions with Applications}；Stakgold, \emph{Green's Functions and Boundary Value Problems}；Davies, \emph{Integral Transforms and Their Applications}；Bracewell, \emph{The Fourier Transform and Its Applications}；Noble, \emph{Methods Based on the Wiener--Hopf Technique}；MIT 18.303、18.305。}

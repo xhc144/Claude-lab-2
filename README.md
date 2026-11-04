@@ -16,6 +16,7 @@
 | [`cheems_video/`](cheems_video/) | 原创动画短片《Cheems 规则怪谈：月光宠物旅馆》的生成代码 |
 | [`statistics_notes/`](statistics_notes/) | 《数理统计自学讲义（重构版）》LaTeX 源码和 PDF |
 | [`statistics_teacher_JX28.pdf`](statistics_teacher_JX28.pdf) | 数理统计讲义（PDF） |
+| [`数理积木速查/`](数理积木速查/) | 《数理积木速查》：数学与物理 13 章、2027 条“条件 → 操作 → 结果”式速查（MIT 本科高年级难度），XeLaTeX 源码、PDF 和数值核验脚本 |
 
 ## 往这里放东西的约定
 

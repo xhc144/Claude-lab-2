@@ -1,0 +1,93 @@
+\subsection{凸几何与离散几何}
+
+\begin{结论}{Helly、Radon、Carathéodory}
+$\mathbb R^d$ 中：
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item Carathéodory：$\operatorname{conv}S$ 中每点是 $S$ 中至多 \重点{d+1} 个点的凸组合。
+\item Radon：任意 $d+2$ 个点可分成两组，凸包相交（由 $d+2$ 个向量的仿射相关得到）。
+\item Helly：有限个凸集，任意 $d+1$ 个有公共点 $\Rightarrow$ 全体有公共点。例：平面上一族线段（区间）两两相交则全部相交（$d=1$）。
+\end{itemize}
+\end{结论}
+
+\begin{结论}{Brunn--Minkowski 不等式}
+紧集 $A,B\subset\mathbb R^n$：
+\[
+\重点{\vol(A+B)^{1/n}\ge\vol(A)^{1/n}+\vol(B)^{1/n}},
+\]
+凸体时等号 $\iff$ 位似。取 $B=\varepsilon\cdot$ 单位球，令 $\varepsilon\to0$ 即得等周不等式 $S\ge nV_n^{1/n}V^{(n-1)/n}$。等价的乘法形式 $\vol(\lambda A+(1-\lambda)B)\ge\vol(A)^\lambda\vol(B)^{1-\lambda}$（Prékopa--Leindler 的特例）。
+\end{结论}
+
+\begin{结论}{John 椭球}
+凸体 $K\subset\mathbb R^n$ 有唯一的最大体积内接椭球 $E$，且 \重点{K\subseteq nE}（中心对称时 $K\subseteq\sqrt nE$），界在单纯形/立方体上取到。
+推论：任何 $n$ 维赋范空间与 Euclid 空间的 Banach--Mazur 距离 $\le\sqrt n$。优化中椭球法的复杂度、实验设计中的 D 最优都与最小外接/最大内接椭球有关。
+\end{结论}
+
+\begin{结论}{支撑函数与宽度}
+$h_K(u)=\max_{x\in K}u\cdot x$：$h_{A+B}=h_A+h_B$，$h_{\lambda K}=\lambda h_K$；$K$ 由 $h_K$ 唯一决定（凸体）。
+方向 $u$ 的宽度 \重点{w(u)=h(u)+h(-u)}；平均宽度 $\bar w$ 在平面上 $=\frac{L}\pi$（Cauchy）。常宽曲线：$w$ 为常数，周长恒为 $\pi w$（Barbier）；Reuleaux 三角形面积 $\frac{\pi-\sqrt3}{2}w^2$ 在常宽曲线中最小（Blaschke--Lebesgue）。
+\end{结论}
+
+\begin{结论}{极体与 Blaschke--Santaló}
+$K^\circ=\{y:x\cdot y\le1,\ \forall x\in K\}$，$(K^\circ)^\circ=K$（含原点的闭凸集）。立方体 $\leftrightarrow$ 正八面体，单位球自对偶。
+中心对称凸体：\重点{\vol(K)\vol(K^\circ)\le\vol(B)^2}，等号仅椭球（Blaschke--Santaló）；下界猜想（Mahler）为立方体乘积 $\frac{4^n}{n!}$（二维已证）。线性规划对偶即极体关系的代数版本。
+\end{结论}
+
+\begin{结论}{球堆积与吻接数}
+最密堆积密度：平面六角 $\frac{\pi}{\sqrt{12}}\approx0.9069$；三维面心立方 \重点{\frac{\pi}{\sqrt{18}}\approx0.7405}（Kepler 猜想，Hales 2005/2017 形式化）；$8$ 维 $E_8$、$24$ 维 Leech 格（Viazovska 2016）。
+吻接数（与一球相切的等球最大数）：$2,6,12,24$（$n=1..4$），$240$（$8$ 维），$196560$（$24$ 维）。三维 $12$ 个球可以绕中心球滚动（Newton--Gregory 之争）。
+\end{结论}
+
+\begin{结论}{Delaunay 三角剖分与 Voronoi 图}
+二者对偶。Delaunay 三角形的外接圆内无其他点（空圆性质）；在所有三角剖分中\重点{\text{使最小角最大}}（避免细长三角形，适合有限元网格）。
+$n$ 点（凸包上 $h$ 点）的平面三角剖分恰有 $2n-2-h$ 个三角形、$3n-3-h$ 条边（Euler 公式）。构造 $O(n\log n)$，与排序同阶（下界）。
+\end{结论}
+
+\begin{结论}{美术馆定理}
+简单 $n$ 边形展厅，\重点{\lfloor n/3\rfloor} 个守卫总够，且有时必需（梳子形）。Fisk 证明：三角剖分的顶点可 $3$-着色（剖分的对偶图是树），最少的颜色类不超过 $\frac n3$ 且看见所有三角形。
+正交多边形 $\lfloor n/4\rfloor$ 足够。每个简单多边形（$n\ge4$）至少有两个不相邻的“耳朵”，所以可逐个切耳三角剖分，得 $n-2$ 个三角形、$n-3$ 条对角线。
+\end{结论}
+
+\begin{结论}{Sylvester--Gallai 与关联上界}
+平面有限点集不全共线 $\Rightarrow$ 存在恰过两点的直线。$m$ 个点、$n$ 条直线的关联数（Szemerédi--Trotter）：
+\[
+\重点{I=O(m^{2/3}n^{2/3}+m+n)},
+\]
+推论：$n$ 点的单位距离对 $O(n^{4/3})$；不同距离数至少 $\Omega(\frac{n}{\ln n})$（Guth--Katz，接近 Erdős 猜想的最优 $\frac{n}{\sqrt{\ln n}}$）。
+\end{结论}
+
+\begin{结论}{Erdős--Szekeres 凸多边形问题}
+一般位置的 $5$ 个点必含凸四边形；$9$ 个点必含凸五边形；$17$ 个点必含凸六边形。猜想：\重点{2^{n-2}+1} 个点必含凸 $n$ 边形（已证 $2^{n+o(n)}$，Suk 2017）。
+与序列版本（单调子列）不同，几何版本的精确值至今只知 $n\le6$。
+\end{结论}
+
+\begin{结论}{Ehrhart 多项式}
+格多面体 $P\subset\mathbb R^d$，$L_P(t)=\#(tP\cap\mathbb Z^d)$ 是 $t$ 的 $d$ 次多项式：首项系数 $\vol P$，次项 $\frac12$（边界的归一化面积），常数项 $1$。
+互反律 $L_{P^\circ}(t)=(-1)^dL_P(-t)$（内部格点数）。二维即 Pick 公式；\重点{\text{三维无 Pick 型公式}}，但 Ehrhart 多项式仍成立（Reeve 四面体：体积变而格点数不变）。
+\end{结论}
+
+\begin{结论}{正多胞体的分类}
+正多面体 $5$ 种（$\{p,q\}$ 满足 $\frac1p+\frac1q>\frac12$）；四维正多胞体 $6$ 种（含 $24$ 胞体、$120$ 胞体、$600$ 胞体）；\重点{n\ge5\text{ 维只有 }3\text{ 种}}（单形、超立方、正轴体）。
+四维 Euler 关系 $f_0-f_1+f_2-f_3=0$（超立方 $16-32+24-8=0$）；一般 $\sum(-1)^if_i=1-(-1)^d$。
+\end{结论}
+
+\begin{结论}{刚性与可剪拼性}
+Cauchy：面对应全等的两个凸多面体全等（凸多面体刚性）；非凸多面体可以是可弯曲的（Connelly），但弯曲时体积不变（风箱定理）。
+平面：面积相等的多边形可剪拼互化（Wallace--Bolyai--Gerwien）；三维：\重点{\text{立方体与正四面体不能剪拼}}（Dehn 不变量 $\sum\ell_e\otimes\theta_e$ 不同，Hilbert 第三问题）。
+\end{结论}
+
+\begin{结论}{凸多边形中随机点的凸包}
+在凸 $r$ 边形内均匀取 $n$ 点，凸包顶点数期望 $\approx\frac{2r}3\ln n$；在圆盘内 $\approx c\,n^{1/3}$（$c\approx3.38$）；在 $d$ 维球内 $\sim n^{\frac{d-1}{d+1}}$（Rényi--Sulanke）。
+所以凸包算法的“输出敏感”复杂度 $O(n\log h)$（Chan）在随机数据上远优于最坏情形。正态点云在高维几乎全部是凸包顶点。
+\end{结论}
+
+\begin{结论}{Borsuk 问题与等直径不等式}
+直径固定的集合中，\重点{\text{球的体积最大}}（等直径不等式，Bieberbach）。Borsuk 猜想：$\mathbb R^d$ 中有界集可分成 $d+1$ 个直径更小的部分——$d\le3$ 成立，$d\ge64$ 被 Kahn--Kalai（1993）推翻（需要指数级个部分）。
+平面常宽集与正三角形的分割：都可分成 $3$ 部分，直径缩为原来的 $\frac{\sqrt3}2$。
+\end{结论}
+
+\begin{结论}{Minkowski 和与混合体积}
+$\vol(\lambda_1K_1+\cdots+\lambda_mK_m)$ 是 $\lambda$ 的齐次多项式，系数为混合体积 $V(K_{i_1},\dots,K_{i_n})$。平面：$\operatorname{area}(K+L)=A_K+2V(K,L)+A_L$，$V(K,L)\ge\sqrt{A_KA_L}$（Minkowski）。
+Steiner 公式（与球的和）、Bernstein--Kushnirenko 定理（多项式方程组的解数 $=$ Newton 多面体的混合体积）都是特例：\重点{\text{代数方程组解的个数是几何体积}}。
+\end{结论}
+
+\参考{Matoušek, \emph{Lectures on Discrete Geometry}；Schneider, \emph{Convex Bodies: The Brunn--Minkowski Theory}；de Berg 等, \emph{Computational Geometry}；Conway--Sloane, \emph{Sphere Packings, Lattices and Groups}；Aigner--Ziegler, \emph{Proofs from THE BOOK}；MIT 18.S997、6.850。}

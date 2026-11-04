@@ -1,0 +1,157 @@
+\subsection{泛函分析与算子补充}
+
+\begin{结论}{Hahn--Banach：延拓与分离}
+$p$ 次线性，子空间 $M$ 上线性泛函 $f\le p$ $\Rightarrow$ 可延拓到全空间且仍 $\le p$；赋范空间中保持范数，于是 $\|x\|=\max_{\|\varphi\|\le1}|\varphi(x)|$。
+几何形式：不交的开凸集与凸集可被闭超平面分开；紧凸集与闭凸集可严格分开。推论（Mazur）\重点文{凸集弱闭 $\iff$ 范数闭}，弱极限是某些凸组合的强极限。LP 对偶、Farkas 引理、凸函数的次梯度存在都是它的有限维特例。
+\end{结论}
+
+\begin{结论}{经典空间的对偶与自反性}
+\[
+\重点{(L^p)^*=L^q,\ \ \frac1p+\frac1q=1\quad(1\le p<\infty)},\qquad c_0^*=\ell^1,\qquad C(K)^*=\{\text{正则带号 Radon 测度}\}.
+\]
+但 $(\ell^\infty)^*\supsetneq\ell^1$（含 Banach 极限）、$(L^\infty)^*\ne L^1$。自反：$L^p$（$1<p<\infty$）、Hilbert 空间；不自反：$\ell^1,c_0,\ell^\infty,C[0,1],L^1$。自反空间的有界序列有弱收敛子列；$L^1$ 中不成立（逼近恒等 $\to\delta$，质量集中到一点）。
+\end{结论}
+
+\begin{结论}{单边平移：谱的三种类型}
+$\ell^2$ 上右移 $S(x_1,x_2,\dots)=(0,x_1,x_2,\dots)$ 是等距但不满射，$S^*$ 为左移。$\sigma(S)=\sigma(S^*)=$ 闭单位圆盘，且
+\[
+\重点{\sigma_p(S)=\varnothing,\quad \sigma_r(S)=\{|\lambda|<1\},\quad \sigma_c(S)=\{|\lambda|=1\}}.
+\]
+左移的每个 $|\lambda|<1$ 都是特征值（$(1,\lambda,\lambda^2,\dots)$），所以 $S-\lambda$ 的值域与之正交、不稠密。有限维直觉“谱 $=$ 特征值”在这里完全失效。
+\end{结论}
+
+\begin{结论}{乘法算子与谱定理的乘法形式}
+$L^2(\mu)$ 上 $(M_\varphi f)(x)=\varphi(x)f(x)$：$\|M_\varphi\|=\|\varphi\|_\infty$，\重点{\sigma(M_\varphi)=\text{本性值域}}，$\lambda$ 是特征值 $\iff\mu\{\varphi=\lambda\}>0$。
+谱定理：任何自伴算子（有界或无界）都酉等价于某个 $L^2(\mu)$ 上的实乘法算子。位置算子是乘以 $x$，动量经 Fourier 变换是乘以 $k$——两者都是纯连续谱 $\mathbb R$。
+\end{结论}
+
+\begin{结论}{Volterra 算子：拟幂零与范数 $\tfrac2\pi$}
+$L^2[0,1]$ 上 $(Vf)(x)=\int_0^xf$：没有特征值，$\sigma(V)=\{0\}$（$V^n$ 的核 $\frac{(x-y)^{n-1}}{(n-1)!}$，谱半径 $0$），但
+\[
+\重点{\|V\|=\frac2\pi}:\qquad V^*Vf=\lambda f\ \Leftrightarrow\ -\lambda f''=f,\ f'(0)=f(1)=0,\ \lambda_n=\frac1{(n+\frac12)^2\pi^2}.
+\]
+奇异值 $\frac1{(n+1/2)\pi}$ 平方可和（$\|V\|_{\mathrm{HS}}^2=\frac12$）但不可和：$V$ 是 Hilbert--Schmidt 而非迹类。谱半径 $\ll$ 范数是非正规算子的典型现象。
+\end{结论}
+
+\begin{结论}{Schatten 类与 Lidskii 迹公式}
+紧算子奇异值 $s_n$，$\|A\|_{S_p}=\bigl(\sum s_n^p\bigr)^{1/p}$：$S_1$ 迹类，$S_2$ Hilbert--Schmidt（$=\iint|k|^2$），$S_\infty$ 为算子范数。Hölder：$\|AB\|_{S_1}\le\|A\|_{S_2}\|B\|_{S_2}$。
+迹类时 \重点{\tr A=\sum_n\lambda_n(A)}（Lidskii，计重数，即使 $A$ 不自伴）；连续半正定核 $\tr A=\int k(x,x)\dd x$（Mercer）。Fredholm 行列式 $\det(I+A)=\prod(1+\lambda_n)$ 对迹类有定义。
+\end{结论}
+
+\begin{结论}{Fredholm 算子与指标}
+$\dim\ker T<\infty$，$\operatorname{codim}\operatorname{ran}T<\infty$：$\operatorname{ind}T=\dim\ker T-\dim\operatorname{coker}T$。在紧扰动与小范数扰动下不变，$\operatorname{ind}(ST)=\operatorname{ind}S+\operatorname{ind}T$；$\operatorname{ind}(I+K)=0$ 即 Fredholm 择一。
+右移指标 $-1$。圆周上连续非零符号 $\varphi$ 的 Toeplitz 算子：\重点{\operatorname{ind}T_\varphi=-\operatorname{wind}(\varphi,0)}（Gohberg--Krein）。有限维中指标恒为 $\dim$ 之差（秩--零化度），只有无穷维才携带拓扑信息（Atiyah--Singer 的原型）。
+\end{结论}
+
+\begin{结论}{对称不等于自伴：亏指数}
+$A\subset A^*$ 为对称，$A=A^*$ 为自伴。亏指数 $n_\pm=\dim\ker(A^*\mp\ii)$；\重点{n_+=n_-\iff\text{有自伴扩张}}，扩张由 $U(n_+)$ 参数化。
+$-\ii\frac{\dd}{\dd x}$ 在 $[0,1]$（端点为零）：$(1,1)$，扩张为 $f(1)=\ee^{\ii\theta}f(0)$（Bloch 相位、AB 磁通）；在 $[0,\infty)$：$(1,0)$，半直线上\emph{没有}自伴的动量算子；在 $\mathbb R$ 上本质自伴。$-\frac{\dd^2}{\dd x^2}$ 在区间上 $(2,2)$：Dirichlet、Neumann、Robin、周期条件都是自伴扩张。
+\end{结论}
+
+\begin{结论}{Stone 定理：酉群 $\leftrightarrow$ 自伴生成元}
+强连续单参数酉群 $U(t)$ 与自伴算子一一对应：
+\[
+\重点{U(t)=\ee^{-\ii tH}},\qquad H\psi=\ii\frac{\dd}{\dd t}U(t)\psi\Big|_{t=0}\ (\text{极限存在处}).
+\]
+平移 $(U(a)f)(x)=f(x-a)=\ee^{-\ii aP}f$，$P=-\ii\partial_x$；绕 $z$ 轴转动由 $L_z$ 生成。这就是“守恒量 $=$ 对称性生成元”的严格版本，也说明 Hamiltonian 必须自伴（否则时间演化不保概率）。
+\end{结论}
+
+\begin{结论}{数值域与数值半径}
+$W(A)=\{\langle Ax,x\rangle:\|x\|=1\}$ 是凸集（Toeplitz--Hausdorff），闭包含 $\sigma(A)$；正规算子时闭包 $=$ 谱的凸包。$2\times2$ 矩阵的 $W$ 是以特征值为焦点的椭圆，$\begin{pmatrix}0&1\\0&0\end{pmatrix}$ 给半径 $\frac12$ 的圆盘。
+\[
+\重点{\tfrac12\|A\|\le w(A)\le\|A\|},\qquad \|\ee^{tA}\|\le\ee^{t\max\operatorname{Re}W(A)}.
+\]
+后者说明：判断瞬态增长要看数值域（对数范数），不是看特征值。
+\end{结论}
+
+\begin{结论}{Riesz 投影与全纯函数演算}
+$\Gamma$ 绕 $\sigma(A)$ 一周（$f$ 在其内全纯）：
+\[
+\重点{f(A)=\frac1{2\pi\ii}\oint_\Gamma f(z)(z-A)^{-1}\dd z},\qquad \sigma(f(A))=f(\sigma(A))\ (\text{谱映射}).
+\]
+只包住谱的一部分 $\sigma_1$ 时（$f=1$）得到投影 $P_1$ 到对应的不变子空间（一般不正交），$\tr P_1$ 数出其中特征值个数。Kato 摄动论、围道积分特征值算法（FEAST）都用它。
+\end{结论}
+
+\begin{结论}{伪谱与瞬态增长}
+\[
+\重点{\sigma_\varepsilon(A)=\{z:\|(z-A)^{-1}\|>\varepsilon^{-1}\}=\bigcup_{\|E\|<\varepsilon}\sigma(A+E)}.
+\]
+正规矩阵的 $\sigma_\varepsilon$ 就是谱的 $\varepsilon$ 邻域；非正规时可大得多：$n$ 阶 Jordan 块受 $\varepsilon$ 扰动，特征值移动 $\varepsilon^{1/n}$。特征值全在左半平面时 $\|\ee^{tA}\|$ 仍可先增长很多（Kreiss 下界 $\sup_t\|\ee^{tA}\|\ge\sup_{\operatorname{Re}z>0}\operatorname{Re}z\,\|(z-A)^{-1}\|$）——剪切流的亚临界转捩、高增益反馈的瞬态。
+\end{结论}
+
+\begin{结论}{强连续半群：Hille--Yosida 与 Lumer--Phillips}
+$A$ 生成压缩 $C_0$ 半群 $T(t)=\ee^{tA}$ $\iff$ $A$ 闭、稠定，且
+\[
+\重点{(0,\infty)\subset\rho(A),\qquad \|(\lambda-A)^{-1}\|\le\frac1\lambda}.
+\]
+等价的可检验形式：$A$ 耗散（$\operatorname{Re}\langle Ax,x\rangle\le0$）且 $\lambda-A$ 满射（Lumer--Phillips）。预解式是半群的 Laplace 变换 $(\lambda-A)^{-1}=\int_0^\infty\ee^{-\lambda t}T(t)\dd t$。热方程、Markov 过程的生成元、阻尼波动方程都这样证明适定。
+\end{结论}
+
+\begin{结论}{本质谱的 Weyl 定理}
+自伴 $A$，紧（或相对紧）扰动 $K$：\重点{\sigma_{\text{ess}}(A+K)=\sigma_{\text{ess}}(A)}。Weyl 判据：$\lambda\in\sigma(A)\iff$ 存在单位向量 $x_n$ 使 $\|(A-\lambda)x_n\|\to0$；能取 $x_n\rightharpoonup0$ 时 $\lambda$ 在本质谱中。
+氢原子：$\frac1r$ 相对于 $-\Delta$ 紧，故连续谱仍是 $[0,\infty)$，势只添加负的离散本征值；周期势则会把连续谱打开成能带（不是紧扰动）。
+\end{结论}
+
+\begin{结论}{Rellich 紧嵌入与离散谱}
+$\Omega$ 有界：\重点{H_0^1(\Omega)\hookrightarrow L^2(\Omega)\text{ 是紧的}}，于是 $(-\Delta_D)^{-1}$ 是紧自伴算子，谱离散 $0<\lambda_1\le\lambda_2\le\cdots\to\infty$，本征函数构成正交基。
+无界区域失效：凸起函数的平移弱收敛到 $0$ 但不强收敛，$\mathbb R^n$ 上 $-\Delta$ 是连续谱。Neumann 情形 $H^1(\Omega)$ 的紧嵌入还需要边界正则（“房间与走廊”区域的 Neumann Laplacian 有本质谱）。
+\end{结论}
+
+\begin{结论}{一致凸、Radon--Riesz 与最佳逼近}
+一致凸：$\|x\|=\|y\|=1$，$\|x-y\|\ge\varepsilon\Rightarrow\|\frac{x+y}2\|\le1-\delta(\varepsilon)$；Hilbert 空间 $\delta=1-\sqrt{1-\varepsilon^2/4}$，$L^p$（$1<p<\infty$）也一致凸（Clarkson），一致凸 $\Rightarrow$ 自反（Milman--Pettis）。
+其中 \重点{x_n\rightharpoonup x\text{ 且 }\|x_n\|\to\|x\|\ \Rightarrow\ x_n\to x}；到闭凸集的最佳逼近存在且唯一。$L^1$、$C[a,b]$ 中最佳逼近可以不唯一（一致逼近的唯一性要靠 Haar 条件）。
+\end{结论}
+
+\begin{结论}{变分直接方法}
+$X$ 自反，$F$ 强制（$\|u\|\to\infty\Rightarrow F(u)\to\infty$）且弱下半连续（如凸 $+$ 连续）：\重点{F\text{ 在 }X\text{ 上取到最小值}}；严格凸则唯一。
+例：$\int(\frac12|\nabla u|^2-fu)$ 在 $H_0^1$ 上的极小元就是 $-\Delta u=f$ 的弱解。失效：Bolza 问题 $\int_0^1\bigl((u'^2-1)^2+u^2\bigr)\dd x$，$u(0)=u(1)=0$，锯齿函数使下确界为 $0$ 但取不到（被积函数对 $u'$ 不凸，极小化序列“振荡”）。
+\end{结论}
+
+\begin{结论}{Hellinger--Toeplitz：无界算子不可避免}
+处处有定义的对称算子必有界（闭图像定理）。而 $[x,p]=\ii\hbar$ 在有界算子中不可能成立（$\|[x,p^n]\|=n\hbar\|p^{n-1}\|$ 推出矛盾），所以
+\重点文{位置、动量、Hamiltonian 都只能定义在稠密子空间上}，量子力学里的定义域问题（边界条件、自伴扩张）是本质的，不是数学洁癖。
+\end{结论}
+
+\begin{结论}{Kato--Rellich：哪些势给出自伴 Hamiltonian}
+$A$ 自伴，$B$ 对称，$D(A)\subset D(B)$，且 $\|Bx\|\le a\|Ax\|+b\|x\|$，\重点{a<1} $\Rightarrow$ $A+B$ 在 $D(A)$ 上自伴；$A$ 下有界时 $A+B$ 也下有界。
+三维中 $V\in L^2+L^\infty$（含 Coulomb $\frac1r$）相对 $-\Delta$ 的界可取任意小（Kato），故原子 Hamiltonian $-\Delta-\sum\frac{Z}{r_i}+\sum\frac1{r_{ij}}$ 在 $H^2$ 上自伴且下有界——物质稳定性的第一步。
+\end{结论}
+
+\begin{结论}{Gelfand 三元组：连续谱的“本征向量”}
+$\Phi\subset H\subset\Phi'$（如 Schwartz 空间 $\subset L^2\subset$ 缓增分布）：
+\[
+\重点{\Phi\subset H\subset\Phi'},\qquad \ee^{\ii kx},\ \delta(x-x_0)\in\Phi'\setminus H .
+\]
+自伴算子在 $\Phi'$ 中有完备的广义本征向量（核谱定理），Dirac 记号 $|x\rangle,|p\rangle$ 与 $\langle x|p\rangle=\frac{\ee^{\ii px/\hbar}}{\sqrt{2\pi\hbar}}$ 由此获得严格意义。
+\end{结论}
+
+\begin{结论}{框架：冗余的“基”}
+$\{\varphi_n\}$ 是框架：$A\|f\|^2\le\sum|\langle f,\varphi_n\rangle|^2\le B\|f\|^2$。框架算子 $Sf=\sum\langle f,\varphi_n\rangle\varphi_n$，重构 $f=\sum\langle f,\varphi_n\rangle S^{-1}\varphi_n$；紧框架（$A=B$）时
+\[
+\重点{f=\frac1A\sum_n\langle f,\varphi_n\rangle\varphi_n}.
+\]
+$\mathbb R^2$ 中三个互成 $120^\circ$ 的单位向量：$A=B=\frac32$。冗余使系数对丢失与噪声更稳健（小波框架、过采样滤波器组、短时 Fourier）；Riesz 基 $=$ 线性无关的框架。
+\end{结论}
+
+\begin{结论}{再生核 Hilbert 空间}
+函数空间中点值泛函有界 $\iff$ 存在核 $K$ 使 \重点{f(x)=\langle f,K(\cdot,x)\rangle}；半正定核与 RKHS 一一对应（Moore--Aronszajn）。
+例：$H^1(\mathbb R)$，范数 $\int(f^2+f'^2)$，核 $\frac12\ee^{-|x-y|}$；$\{f(0)=0,\ \int_0^1f'^2<\infty\}$ 的核 $\min(x,y)$（Brown 运动协方差，Cameron--Martin 空间）。$L^2$ 不是 RKHS（点值无意义）。核方法、Gauss 过程、样条都在 RKHS 中求最小范数插值。
+\end{结论}
+
+\begin{结论}{von Neumann 平均遍历定理}
+$U$ 为 Hilbert 空间上的酉算子（或压缩），$P$ 为到不动向量子空间的正交投影：
+\[
+\重点{\frac1n\sum_{k=0}^{n-1}U^kx\ \to\ Px}\quad(\text{范数收敛}).
+\]
+证：$H=\ker(U-I)\oplus\overline{\operatorname{ran}(U-I)}$，后一部分上平均是伸缩和、趋于 $0$。保测变换 $T$ 取 $Uf=f\circ T$ 得 $L^2$ 平均遍历；逐点版本是 Birkhoff 定理（更难）。
+\end{结论}
+
+\begin{结论}{inf--sup 条件：鞍点问题的适定性}
+混合问题 $a(u,v)+b(v,p)=f(v)$，$b(u,q)=g(q)$（Stokes：$u$ 速度、$p$ 压力）：$a$ 在 $\ker b$ 上强制，且
+\[
+\重点{\inf_{q}\sup_{v}\frac{b(v,q)}{\|v\|\,\|q\|}\ge\beta>0}\quad(\text{Babuška--Brezzi}).
+\]
+离散空间也必须一致满足，否则出现伪压力模式与锁死（等阶 $P_1$--$P_1$ 元不稳定，Taylor--Hood $P_2$--$P_1$ 稳定）。是 Lax--Milgram 对非强制问题的推广。
+\end{结论}
+
+\参考{Reed--Simon, \emph{Methods of Modern Mathematical Physics} I--IV；Brezis, \emph{Functional Analysis, Sobolev Spaces and PDE}；Kato, \emph{Perturbation Theory for Linear Operators}；Trefethen--Embree, \emph{Spectra and Pseudospectra}；Christensen, \emph{Frames and Riesz Bases}；MIT 18.102、18.103。}

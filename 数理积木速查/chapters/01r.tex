@@ -1,0 +1,98 @@
+\subsection{分析中的经典反例}
+
+\begin{结论}{Volterra 函数：导数有界却不 Riemann 可积}
+存在处处可导、导数有界的 $V$，使 $V'$ 的不连续点集是胖 Cantor 集（正测度）——$V'$ 不 Riemann 可积，$\int_a^bV'\dd x=V(b)-V(a)$ 只能用 Lebesgue 积分理解。
+教训：\重点{\text{“导数存在”不保证 Riemann 意义下的微积分基本定理}}；导数有界时 Lebesgue 版总成立。
+\end{结论}
+
+\begin{结论}{处处连续、处处不可导}
+Weierstrass 函数 $W(x)=\sum_{n\ge0}a^n\cos(b^n\pi x)$，$0<a<1$，\重点{ab\ge1}（Hardy 的最优条件）：连续、处处不可导，图像的盒维数 $2+\frac{\ln a}{\ln b}$。
+Takagi 函数 $\sum2^{-n}\operatorname{dist}(2^nx,\mathbb Z)$ 构造更简单。Brown 运动的路径几乎必然处处不可导——这是“典型”而非病态。
+\end{结论}
+
+\begin{结论}{二重极限不能交换：Dirichlet 函数}
+\[
+\重点{\lim_{m\to\infty}\lim_{n\to\infty}\cos^{2n}(m!\pi x)=\mathbf 1_{\mathbb Q}(x)}.
+\]
+内层极限是 $m!x$ 为整数的示性函数（连续函数的点态极限，Baire 1 类），外层再取极限得到处处不连续的 Dirichlet 函数（Baire 2 类）。连续函数的单个点态极限一定有稠密连续点，所以 $\mathbf 1_{\mathbb Q}$ 不是一次极限能得到的。
+\end{结论}
+
+\begin{结论}{一致收敛而导数不收敛}
+$f_n(x)=\frac{\sin nx}{\sqrt n}\rightrightarrows0$，但 $f_n'(x)=\sqrt n\cos nx$ 不收敛。反过来 $f_n=\frac{x^n}{n}$ 的导数 $x^{n-1}$ 在 $[0,1]$ 上不一致收敛，极限导数不连续。
+所以逐项求导要求\重点{\text{导数列一致收敛}}（加某点收敛），而不是函数列一致收敛。
+\end{结论}
+
+\begin{结论}{严格递增而导数几乎处处为零}
+Minkowski 问号函数 $?(x)$、Riesz--Nagy 函数：连续、严格递增、$f'=0$ a.e.（奇异函数，与 Cantor 函数不同之处在于严格单调）。
+其 Lebesgue--Stieltjes 测度与 Lebesgue 测度相互奇异。\重点{\text{单调函数 a.e. 可导}}（Lebesgue），但导数的积分可以远小于增量。
+\end{结论}
+
+\begin{结论}{复合破坏 Riemann 可积性}
+$g$ 为 Thomae 函数（可积，积分 $0$），$f=\mathbf 1_{(0,1]}$（可积，只一个间断点），但
+\[
+\重点{f\circ g=\mathbf 1_{\mathbb Q\cap[0,1]}}\ (\text{不可积}).
+\]
+正面结论：$g$ 可积且 $f$ \textbf{连续} $\Rightarrow f\circ g$ 可积；$f$ 可积、$g$ 连续严格单调且 $g^{-1}$ Lipschitz $\Rightarrow$ 可积。
+\end{结论}
+
+\begin{结论}{处处不局部有界的可积函数}
+$\{q_n\}$ 为有理数列举：$F(x)=\sum_n2^{-n}|x-q_n|^{-1/2}$ 在任何长度 $L$ 的区间上积分 $\le\sum2^{-n}\cdot4\sqrt L=4\sqrt L$（每项 $\int|x-q|^{-1/2}\le4\sqrt L$），所以 $F\in L^1_{\text{loc}}$、a.e.\ 有限，但\重点{\text{在每个区间上无界}}。
+$F^2$ 则在每个区间上不可积。说明 $L^1$ 函数可以“到处有奇点”。
+\end{结论}
+
+\begin{结论}{Fourier 级数的收敛：反例与定理}
+存在连续函数其 Fourier 级数在某点发散（du Bois-Reymond；Baire 范畴给出存在性），甚至在给定零测集上发散；Kolmogorov：存在 $L^1$ 函数其 Fourier 级数\重点{\text{处处发散}}。
+正面：Carleson 定理——$L^2$（乃至 $L^p$，$p>1$）函数的 Fourier 级数 a.e.\ 收敛；分段光滑函数逐点收敛到左右极限平均。
+\end{结论}
+
+\begin{结论}{连续双射不一定是同胚}
+$f:[0,2\pi)\to S^1$，$t\mapsto\ee^{\ii t}$ 连续双射，逆映射在 $1$ 处不连续（$[0,2\pi)$ 不紧，$S^1$ 紧）。$\mathbb Q$ 与 $\mathbb Q\times\mathbb Q$ 之间存在同胚（Sierpiński），而 $\mathbb R\not\cong\mathbb R^2$。
+\重点{\text{紧空间到 Hausdorff 空间的连续双射才保证是同胚}}；区域不变性保证 $\mathbb R^n$ 中开集到 $\mathbb R^n$ 的连续单射是开映射。
+\end{结论}
+
+\begin{结论}{稠密开集的测度可以任意小}
+$U=\bigcup_n\bigl(q_n-\frac{\varepsilon}{2^{n+1}},q_n+\frac{\varepsilon}{2^{n+1}}\bigr)$：开、稠密，测度 $\le\varepsilon$。其补集闭、无处稠密而测度 $\ge1-\varepsilon$（在 $[0,1]$ 中）。
+所以\重点{\text{“大”在拓扑意义（稠密、第二纲）与测度意义下可以完全相反}}：$\mathbb R$ 可分成一个零测集与一个第一纲集之并。
+\end{结论}
+
+\begin{结论}{导数无界的可导函数}
+$f(x)=x^2\sin\frac1{x^2}$（$f(0)=0$）：处处可导，$f'(0)=0$，但 $f'(x)=2x\sin\frac1{x^2}-\frac2x\cos\frac1{x^2}$ 在 $0$ 附近无界——$[-1,1]$ 上 $f'$ 不 Riemann 可积（无界），$\int_0^1f'$ 只能作广义积分。
+对照：$x^2\sin\frac1x$ 导数有界但不连续。\重点{\text{可导}\not\Rightarrow\text{导数局部有界}}。
+\end{结论}
+
+\begin{结论}{无穷维中的级数：无条件收敛 $\ne$ 绝对收敛}
+$\mathbb R^n$ 中两者等价；无穷维 Banach 空间中总存在无条件收敛而不绝对收敛的级数（Dvoretzky--Rogers）。例：$\ell^2$ 中 \重点{\sum\frac{e_n}{n}}，任意重排都收敛到同一元素，但 $\sum\bigl\|\frac{e_n}n\bigr\|=\sum\frac1n=\infty$。
+Hilbert 空间中正交级数 $\sum x_n$ 收敛 $\iff\sum\|x_n\|^2<\infty$。
+\end{结论}
+
+\begin{结论}{不连续的线性泛函与无界算子}
+有限维上线性映射都连续；无穷维赋范空间上存在不连续线性泛函（需 Hamel 基/选择公理，无法显式写出）。
+自然出现的无界算子：$\frac{\dd}{\dd x}$ 在 $C^1[0,1]\subset C[0,1]$（$\sup$ 范数）上，$\|(\sin nx)'\|=n\|\sin nx\|$。\重点{\text{量子力学中的 }\hat p,\hat x,H\text{ 都无界}}，只定义在稠密子空间上，必须区分对称与自伴。
+\end{结论}
+
+\begin{结论}{密度不收敛而分布收敛}
+$[0,1]$ 上密度 $f_n(x)=1+\sin(2\pi nx)$：$f_n$ 不逐点收敛，但对应分布弱收敛到均匀分布（Riemann--Lebesgue）。
+反过来密度逐点收敛 $\Rightarrow$ 总变差收敛（Scheffé）。\重点{\text{依分布收敛不控制密度、矩、尾概率}}；局部极限定理需要额外条件（非格点、光滑性）。
+\end{结论}
+
+\begin{结论}{处处可导却处处不单调}
+存在处处可导的函数，其导数在稠密集上取正、在另一稠密集上取负（Köpcke 1889，Katznelson--Stromberg 构造），因而在任何区间上都不单调。
+对照：导数在区间上恒正 $\Rightarrow$ 单调；\重点{\text{只知 }f'(x_0)>0\text{ 不能推出 }f\text{ 在 }x_0\text{ 附近递增}}（$x+2x^2\sin\frac1x$ 在 $0$ 处导数 $1$，但任何邻域内不单调）。
+\end{结论}
+
+\begin{结论}{收敛级数之积可以发散}
+$\sum a_n$、$\sum b_n$ 收敛 $\not\Rightarrow\sum a_nb_n$ 收敛：$a_n=b_n=\frac{(-1)^n}{\sqrt n}$ 给 $\sum\frac1n$。一个绝对收敛、另一个有界时乘积收敛。
+正项收敛级数不必有 $a_n=o(\frac1n)$：在平方数处 $a_n=\frac1n$、其余 $\frac1{n^2}$；\重点{\text{单调递减时才有 }na_n\to0}（Olivier 定理）。
+\end{结论}
+
+\begin{结论}{Banach--Tarski：为什么需要可测性}
+单位球可分成 $5$ 个（不可测的）子集，经刚体运动重新拼成两个单位球。依赖选择公理与 $SO(3)$ 含自由群 $F_2$。
+二维不可能（平面等距群可解、存在有限可加不变测度）。这说明\重点{\text{“体积”不能对所有子集定义为可数可加、平移旋转不变的函数}}，于是只对 Lebesgue 可测集谈体积。
+\end{结论}
+
+\begin{结论}{Lipschitz 函数：几乎处处可导但可在稠密集不可导}
+Rademacher：$\mathbb R^n$ 上 Lipschitz 函数 a.e.\ 可导；所以 Lipschitz 函数满足微积分基本定理（绝对连续）。
+但不可导点可以稠密：$\sum2^{-n}|x-q_n|$ 是 Lipschitz 的，在每个有理点 $q_n$ 不可导。\重点{\text{凸函数可数个不可导点；Lipschitz 函数零测个不可导点}}；一般连续函数可以处处不可导。
+\end{结论}
+
+\参考{Gelbaum--Olmsted, \emph{Counterexamples in Analysis}；Stoyanov, \emph{Counterexamples in Probability}；Bressoud, \emph{A Radical Approach to Lebesgue's Theory of Integration}；Wagon, \emph{The Banach--Tarski Paradox}；MIT 18.100、18.125。}

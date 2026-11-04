@@ -1,0 +1,192 @@
+\subsection{随机矩阵与高维概率}
+
+\begin{结论}{半圆律的矩方法：Catalan 数}
+Wigner 矩阵 $W=X/\sqrt n$（对称，独立元素，均值 $0$，方差 $1$）：
+\[
+\重点{\frac1n\E\tr W^{2k}\to C_k=\frac1{k+1}\binom{2k}k},\qquad \frac1n\E\tr W^{2k+1}\to0 ,
+\]
+正是半圆密度 $\frac1{2\pi}\sqrt{4-x^2}$ 的矩。$\tr W^{2k}$ 展开成长 $2k$ 的闭路径，主导项是每条边恰走两次、形成平面树的路径——计数为 Catalan 数。只需要二阶矩有限（普适性）。
+\end{结论}
+
+\begin{结论}{Dyson 的三种系综}
+特征值的联合密度
+\[
+\重点{p(\lambda_1,\dots,\lambda_n)\propto\prod_{i<j}|\lambda_i-\lambda_j|^\beta\,\ee^{-\frac{\beta n}4\sum_i\lambda_i^2}}
+\]
+（谱趋于 $[-2,2]$ 上的半圆）。$\beta=1$ GOE（实对称，时间反演对称）、$\beta=2$ GUE（复 Hermite，时间反演破缺）、$\beta=4$ GSE（时间反演 $+$ 半整数自旋）。Vandermonde 因子即能级排斥；可看成温度 $\frac1\beta$ 的二维 Coulomb 气体限制在直线上。
+\end{结论}
+
+\begin{结论}{能级间距：Wigner 猜测式}
+按平均间距归一化的最近邻间距分布（由 $2\times2$ 矩阵算出的近似式，与 $n\to\infty$ 的精确分布相差很小）：
+\[
+\重点{p_{\text{GOE}}(s)=\frac{\pi s}2\ee^{-\pi s^2/4}},\qquad p_{\text{GUE}}(s)=\frac{32s^2}{\pi^2}\ee^{-4s^2/\pi},\qquad p_{\text{Poisson}}(s)=\ee^{-s}.
+\]
+小 $s$ 处 $\propto s^\beta$。经典混沌系统量子化后服从随机矩阵统计（Bohigas--Giannoni--Schmit），可积系统服从 Poisson（Berry--Tabor）；Riemann $\zeta$ 零点间距服从 GUE（Montgomery--Odlyzko）。
+\end{结论}
+
+\begin{结论}{边缘：Tracy--Widom 涨落}
+半圆归一化下 $\lambda_{\max}\to2$（Füredi--Komlós），且
+\[
+\重点{\lambda_{\max}\approx2+n^{-2/3}\,\mathrm{TW}_\beta},\qquad \E\,\mathrm{TW}_1\approx-1.21,\quad \E\,\mathrm{TW}_2\approx-1.77 .
+\]
+边缘涨落 $n^{-2/3}$，而谱中部的间距是 $n^{-1}$。同一分布出现在随机排列最长递增子列 $L_n\approx2\sqrt n+n^{1/6}\mathrm{TW}_2$（Baik--Deift--Johansson）、KPZ 界面生长、主成分分析的最大特征值检验中。
+\end{结论}
+
+\begin{结论}{BBP 相变：信号何时能从噪声谱中“冒出来”}
+Wigner 加秩一信号 $W+\theta vv^{\mathsf T}$：
+\[
+\重点{\theta>1:\ \lambda_{\max}\to\theta+\frac1\theta,\ \ |\langle\hat u,v\rangle|^2\to1-\frac1{\theta^2};\qquad \theta\le1:\ \lambda_{\max}\to2,\ \ \langle\hat u,v\rangle\to0}.
+\]
+样本协方差（$p/n=\gamma$，总体有一个特征值 $\ell$，其余为 $1$）：阈值 $\ell>1+\sqrt\gamma$，此时 $\lambda_{\max}\to\ell\bigl(1+\frac{\gamma}{\ell-1}\bigr)$，否则停在 MP 边缘 $(1+\sqrt\gamma)^2$。阈值以下 PCA 完全看不到信号。
+\end{结论}
+
+\begin{结论}{Gauss 矩阵的极端奇异值}
+$n\times p$ 独立 $N(0,1)$ 矩阵（$n\ge p$）：
+\[
+\重点{\sqrt n-\sqrt p\le\E s_{\min}\le\E s_{\max}\le\sqrt n+\sqrt p}\quad(\text{Gordon}),
+\]
+且偏离是 $O(1)$ 的次 Gauss 涨落。方阵时 $s_{\min}\sim n^{-1/2}$：$P(s_{\min}\le\frac{\varepsilon}{\sqrt n})\le\varepsilon$（Edelman），所以条件数 $\kappa\sim n$。高瘦矩阵近似等距（$\frac pn\to0$ 时 $\kappa\to1$）——随机投影、随机化 SVD 能工作的原因。
+\end{结论}
+
+\begin{结论}{圆律}
+$n\times n$ 独立同分布元素（均值 $0$，方差 $\frac1n$，非对称）：特征值的经验分布趋于
+\[
+\重点{\text{单位圆盘上的均匀分布}}\quad(\text{Girko；Tao--Vu 普适性}).
+\]
+实 Ginibre 矩阵约有 $\sqrt{2n/\pi}$ 个实特征值；元素相关系数 $\tau=\E X_{ij}X_{ji}$ 时变为半轴 $1\pm\tau$ 的椭圆（椭圆律）。生态网络稳定性（May 判据 $\sigma\sqrt{nC}<1$）就是圆盘半径 $<$ 自我调节强度。
+\end{结论}
+
+\begin{结论}{Stieltjes 变换：自洽方程求谱}
+$m(z)=\int\frac{\rho(x)}{x-z}\dd x$，反演 $\rho(x)=\frac1\pi\lim_{\eta\downarrow0}\operatorname{Im}m(x+\ii\eta)$。半圆律满足
+\[
+\重点{m^2+zm+1=0},\qquad m(z)=\frac{-z+\sqrt{z^2-4}}2 .
+\]
+推导：Schur 补给 $G_{11}=\bigl(-z-\sum_{ij}w_{1i}G^{(1)}_{ij}w_{j1}\bigr)^{-1}\approx(-z-m)^{-1}$。MP 律同样得到二次方程；加性模型（如 $A+$ Wigner）得到 Pastur 方程 $m=m_A(z+m)$。
+\end{结论}
+
+\begin{结论}{自由卷积：$R$ 变换相加}
+大随机矩阵 $A$ 与 $UBU^*$（$U$ Haar 随机）渐近自由，$A+UBU^*$ 的谱是自由卷积 $\mu_A\boxplus\mu_B$：
+\[
+\重点{R_{\mu\boxplus\nu}=R_\mu+R_\nu},\qquad G\bigl(R(z)+\tfrac1z\bigr)=z,\quad G(z)=-m(z).
+\]
+半圆（方差 $\sigma^2$）$R(z)=\sigma^2z$，故两个独立 Wigner 之和仍是半圆、方差相加；自由中心极限定理的极限是半圆（不是 Gauss）；自由 Poisson 即 MP 律。
+\end{结论}
+
+\begin{结论}{次 Gauss 变量与一般 Hoeffding}
+$\|X\|_{\psi_2}=\inf\{t:\E\ee^{X^2/t^2}\le2\}$；下列等价（常数差别）：尾 $\le2\ee^{-t^2/K^2}$，$\|X\|_{L^p}\lesssim K\sqrt p$，$\E\ee^{\lambda X}\le\ee^{CK^2\lambda^2}$。独立和 $\|\sum X_i\|_{\psi_2}^2\lesssim\sum\|X_i\|_{\psi_2}^2$。Rademacher 符号 $\varepsilon_i$：
+\[
+\重点{P\Bigl(\Bigl|\sum a_i\varepsilon_i\Bigr|\ge t\Bigr)\le2\exp\Bigl(-\frac{t^2}{2\|a\|_2^2}\Bigr)}.
+\]
+次指数（$\psi_1$）变量如 $\chi^2$ 的和服从 Bernstein 型混合尾。
+\end{结论}
+
+\begin{结论}{Hanson--Wright：二次型的集中}
+$X$ 各分量独立、均值 $0$、$\|X_i\|_{\psi_2}\le K$：
+\[
+\重点{P\bigl(|X^{\mathsf T}AX-\E X^{\mathsf T}AX|>t\bigr)\le2\exp\Bigl[-c\min\Bigl(\frac{t^2}{K^4\|A\|_F^2},\frac{t}{K^2\|A\|}\Bigr)\Bigr]}.
+\]
+推论：$\|X\|_2=\sqrt n+O(1)$（范数集中，涨落与维数无关）；随机向量与固定子空间的投影长度集中；Hutchinson 迹估计的误差界。
+\end{结论}
+
+\begin{结论}{Gauss 最大值}
+$g_1,\dots,g_n$ 均值 $0$、方差 $\le1$（\emph{任意}相关）：
+\[
+\重点{\E\max_ig_i\le\sqrt{2\ln n}},
+\]
+证：$\ee^{\lambda\E\max}\le\E\ee^{\lambda\max}\le n\ee^{\lambda^2/2}$，取 $\lambda=\sqrt{2\ln n}$。独立时渐近相等（$\sqrt{2\ln n}-\frac{\ln\ln n+\ln4\pi}{2\sqrt{2\ln n}}$）。多重检验的 Bonferroni 阈值、稀疏信号检测、$\ell_\infty$ 噪声水平都按 $\sqrt{2\ln n}$ 增长。
+\end{结论}
+
+\begin{结论}{Gauss 比较：Slepian 与 Sudakov--Fernique}
+中心 Gauss 向量 $X,Y$，若 $\E(X_i-X_j)^2\le\E(Y_i-Y_j)^2$ 对所有 $i,j$：
+\[
+\重点{\E\max_iX_i\le\E\max_iY_i}\quad(\text{Sudakov--Fernique}).
+\]
+方差相等且 $\E X_iX_j\ge\E Y_iY_j$ 时还有 $P(\max X>t)\le P(\max Y>t)$（Slepian：正相关让最大值更小）。Sudakov 下界：$\E\sup X_t\ge c\,\varepsilon\sqrt{\ln N(T,d,\varepsilon)}$。Gordon 的 min--max 推广给出奇异值界。
+\end{结论}
+
+\begin{结论}{Dudley 熵积分与链方法}
+$X_t$ 关于 $d(s,t)=\sqrt{\E(X_s-X_t)^2}$ 次 Gauss：
+\[
+\重点{\E\sup_{t\in T}X_t\le C\int_0^\infty\sqrt{\ln N(T,d,\varepsilon)}\,\dd\varepsilon}.
+\]
+逐级细化的 $\varepsilon$ 网（链）把并集界从“一次付清”变成“分层付款”。Brown 运动：$d=\sqrt{|s-t|}$，$N\sim\varepsilon^{-2}$，积分收敛 $\Rightarrow$ 连续性；精确刻画需 Talagrand 的 $\gamma_2$ 泛函（generic chaining）。
+\end{结论}
+
+\begin{结论}{$\varepsilon$ 网与覆盖数}
+单位球 $B^n$（任意范数）：
+\[
+\重点{\Bigl(\frac1\varepsilon\Bigr)^n\le N(B^n,\varepsilon)\le\Bigl(1+\frac2\varepsilon\Bigr)^n}\quad(\text{体积论证}).
+\]
+用法：$\varepsilon$ 网 $\mathcal N$ 上控制再推到全体，$\|A\|\le\frac1{1-\varepsilon}\max_{x\in\mathcal N}\|Ax\|$；取 $\varepsilon=\frac14$（网大小 $\le9^n$）加并集界即得 Gauss 矩阵 $\|A\|\lesssim\sqrt n+\sqrt p$。
+\end{结论}
+
+\begin{结论}{Sauer--Shelah 引理}
+VC 维 $d$ 的集合族在 $n$ 个点上产生的不同子集数
+\[
+\重点{\le\sum_{i=0}^d\binom ni\le\Bigl(\frac{en}d\Bigr)^d},
+\]
+从 $2^n$ 降为多项式——无穷假设类也能一致收敛。样本复杂度 $m\sim\frac{d+\ln(1/\delta)}{\varepsilon^2}$（不可知学习）。半平面（$\mathbb R^k$）VC 维 $k+1$；正弦分类器 $\sgn\sin(\omega x)$ 参数只有一个，VC 维却无穷。
+\end{结论}
+
+\begin{结论}{Efron--Stein 不等式}
+$X_1,\dots,X_n$ 独立，$X^{(i)}$ 为把第 $i$ 个换成独立副本：
+\[
+\重点{\Var f(X)\le\frac12\sum_{i=1}^n\E\bigl(f(X)-f(X^{(i)})\bigr)^2}.
+\]
+有界差 $c_i$ 时 $\Var\le\frac12\sum c_i^2$。例：两条长 $n$ 随机串的最长公共子序列方差 $\le n$；随机图色数、装箱数、TSP 长度的方差界都由此一行得到。对 $f=\sum X_i$ 取等。
+\end{结论}
+
+\begin{结论}{Gauss Poincaré 与对数 Sobolev 不等式}
+$g\sim N(0,I_n)$，光滑 $f$：
+\[
+\重点{\Var f(g)\le\E|\nabla f(g)|^2},\qquad \operatorname{Ent}(f^2)\le2\E|\nabla f|^2 .
+\]
+都与维数无关。对数 Sobolev $+$ Herbst 论证 $\Rightarrow$ $L$-Lipschitz 函数 $P(f-\E f\ge t)\le\ee^{-t^2/2L^2}$。线性 $f$ 时 Poincaré 取等；Ornstein--Uhlenbeck 半群的谱隙 $=1$ 是其本质。
+\end{结论}
+
+\begin{结论}{Gauss 宽度与“逃逸”相变}
+$w(T)=\E\sup_{t\in T}\langle g,t\rangle$。随机余维 $m$ 的子空间以高概率避开 $T\subset S^{n-1}$ 当
+\[
+\重点{m\gtrsim w(T)^2}\quad(\text{Gordon 逃逸定理}).
+\]
+压缩感知：$\ell_1$ 恢复 $s$ 稀疏信号的测量数相变在下降锥的统计维数 $\approx2s\ln\frac ns$（Amelunxen--Lotz--McCoy--Tropp）；低秩矩阵恢复 $\approx3r(n_1+n_2-r)$ 量级。
+\end{结论}
+
+\begin{结论}{Gauss 二次型的矩（Isserlis）}
+$\E[x_1x_2x_3x_4]=\sigma_{12}\sigma_{34}+\sigma_{13}\sigma_{24}+\sigma_{14}\sigma_{23}$（所有配对之和，$\E g^{2k}=(2k-1)!!$）。$x\sim N(0,\Sigma)$，$A$ 对称：
+\[
+\重点{\E x^{\mathsf T}Ax=\tr(A\Sigma),\qquad \Var(x^{\mathsf T}Ax)=2\tr(A\Sigma A\Sigma)}.
+\]
+$\Sigma=I$ 时 $x^{\mathsf T}Ax\sim\sum\lambda_i\chi^2_1$；$\E\|x\|^4=(\tr\Sigma)^2+2\tr\Sigma^2$。
+\end{结论}
+
+\begin{结论}{随机矩阵乘积的 Lyapunov 指数}
+独立同分布矩阵 $A_k$：$\frac1n\ln\|A_n\cdots A_1\|\to\gamma_1$（Furstenberg--Kesten，几乎处处）。$d\times d$ 独立 $N(0,1)$ 元素时有闭式（Newman）：
+\[
+\重点{\gamma_k=\frac12\Bigl[\ln2+\psi\Bigl(\frac{d-k+1}2\Bigr)\Bigr]},\qquad d=2:\ \gamma_1=\tfrac12(\ln2-\gamma_E)\approx0.058 .
+\]
+一维无序系统的转移矩阵乘积给出 Anderson 局域化长度 $\xi=\frac1{\gamma_1}$（任意弱无序都局域化）。
+\end{结论}
+
+\begin{结论}{随机多项式的实根数（Kac--Rice）}
+$\sum_{k=0}^na_kx^k$，$a_k$ 独立 $N(0,1)$：
+\[
+\重点{\E N_{\mathbb R}=\frac2\pi\ln n+C+o(1)},\qquad C\approx0.625 .
+\]
+Kac--Rice 公式：$\E N=\int\E\bigl[|f'(x)|\,\big|\,f(x)=0\bigr]p_{f(x)}(0)\dd x$。系数方差取 $\binom nk$（Kostlan 系综，旋转不变）时恰为 $\E N=\sqrt n$。同一公式数随机场的临界点（宇宙学中的峰计数）。
+\end{结论}
+
+\begin{结论}{样本协方差需要多少样本}
+$x_i$ 独立次 Gauss，协方差 $\Sigma$（$p$ 维），$n$ 个样本：
+\[
+\重点{\|\hat\Sigma-\Sigma\|\lesssim\|\Sigma\|\Bigl(\sqrt{\frac pn}+\frac pn\Bigr)}\quad(\text{高概率}),
+\]
+算子范数相对误差 $\varepsilon$ 需 $n\sim\frac p{\varepsilon^2}$；重尾分布需多一个 $\ln p$（Rudelson）。$p\sim n$ 时样本特征值整体偏离（MP 律），需要收缩估计（Ledoit--Wolf）。
+\end{结论}
+
+\begin{结论}{普适性与 Lindeberg 替换}
+把独立变量逐个换成同均值同方差的 Gauss 变量，Taylor 展开到三阶，每步误差 $O(\E|X|^3)$，累计 $\to0$——一次证明 CLT。
+随机矩阵中：前四阶矩匹配 $\Rightarrow$ 局部特征值统计相同（Tao--Vu 四矩定理）；\重点文{间距分布、边缘涨落只依赖对称类，不依赖元素分布}。这就是能用 GOE/GUE 公式描述核能级、量子混沌、金融相关矩阵的原因。
+\end{结论}
+
+\参考{Vershynin, \emph{High-Dimensional Probability}；Anderson--Guionnet--Zeitouni, \emph{An Introduction to Random Matrices}；Tao, \emph{Topics in Random Matrix Theory}；Mehta, \emph{Random Matrices}；Boucheron--Lugosi--Massart, \emph{Concentration Inequalities}；Potters--Bouchaud, \emph{A First Course in Random Matrix Theory}；MIT 18.338、18.S997。}

@@ -1,0 +1,108 @@
+\subsection{矩阵技巧补充}
+
+\begin{结论}{Toeplitz 矩阵的谱：Szegő 极限}
+$T_n=[c_{j-k}]$，符号 $f(\theta)=\sum c_k\ee^{\ii k\theta}$（实值）。特征值的经验分布趋于 $f$ 的值分布：对连续 $F$，
+\[
+\重点{\frac1n\sum_jF(\lambda_j(T_n))\to\frac1{2\pi}\int_0^{2\pi}F(f(\theta))\dd\theta},
+\]
+$\ln\det T_n\approx\frac n{2\pi}\int\ln f$（强 Szegő 还给常数项）。三对角 $\mathrm{tridiag}(1,-2,1)$ 的符号 $-4\sin^2\frac\theta2$，特征值精确为其在 $\theta_k=\frac{k\pi}{n+1}$ 处的值。
+\end{结论}
+
+\begin{结论}{Hadamard 矩阵}
+$\pm1$ 元素、$HH^{\mathsf T}=nI$：$n=1,2$ 或 $4\mid n$（Hadamard 猜想：所有 $4k$ 都存在，最小未知阶 $668$）。Sylvester 构造 $H_{2n}=\begin{pmatrix}H_n&H_n\\H_n&-H_n\end{pmatrix}$。
+\重点{|\det A|\le n^{n/2}}（$|a_{ij}|\le1$）由 Hadamard 矩阵取等。Walsh--Hadamard 变换 $O(n\log n)$，用于纠错码、称重设计（同时称多个物体，方差降为 $\frac1n$）。
+\end{结论}
+
+\begin{结论}{块三对角与 Kronecker 和的特征值}
+$A\otimes I+I\otimes B$（Kronecker 和）的特征值为 $\lambda_i(A)+\mu_j(B)$，特征向量 $u_i\otimes v_j$。二维 Laplacian $T\otimes I+I\otimes T$：
+\[
+\重点{\lambda_{jk}=-4\sin^2\frac{j\pi}{2(n+1)}-4\sin^2\frac{k\pi}{2(n+1)}}.
+\]
+$\ee^{A\otimes I+I\otimes B}=\ee^A\otimes\ee^B$；Sylvester 方程 $AX+XB=C$ 的向量化即 Kronecker 和。
+\end{结论}
+
+\begin{结论}{矩阵的平方根与几何平均}
+$A\succ0$ 有唯一正定平方根 $A^{1/2}=V\Lambda^{1/2}V^{\mathsf T}$。两个正定矩阵的几何平均
+\[
+\重点{A\#B=A^{1/2}\bigl(A^{-1/2}BA^{-1/2}\bigr)^{1/2}A^{1/2}},
+\]
+满足 $A\#B=B\#A$、$(A\#B)^{-1}=A^{-1}\#B^{-1}$，是 $XA^{-1}X=B$ 的正定解；正定锥上仿射不变度量 $\|\ln(A^{-1/2}BA^{-1/2})\|_F$ 的测地中点。DTI 张量平均、协方差插值用它。
+\end{结论}
+
+\begin{结论}{对称矩阵函数的导数（Daleckii--Krein）}
+$A=V\Lambda V^{\mathsf T}$，扰动 $E$：
+\[
+\重点{\frac{\dd}{\dd t}f(A+tE)\Big|_0=V\bigl(F\circ(V^{\mathsf T}EV)\bigr)V^{\mathsf T}},\qquad F_{ij}=\frac{f(\lambda_i)-f(\lambda_j)}{\lambda_i-\lambda_j}\ (i\ne j),\ F_{ii}=f'(\lambda_i).
+\]
+特例：$\frac{\dd\lambda_i}{\dd t}=v_i^{\mathsf T}Ev_i$（Hellmann--Feynman）；$\frac{\dd}{\dd t}\tr f(A)=\tr(f'(A)E)$。
+\end{结论}
+
+\begin{结论}{随机化迹估计（Hutchinson）}
+$z$ 为 Rademacher（$\pm1$）向量：$\E[z^{\mathsf T}Az]=\tr A$，
+\[
+\重点{\Var(z^{\mathsf T}Az)=2\Bigl(\|A\|_F^2-\sum a_{ii}^2\Bigr)}\quad(\text{对称 }A),
+\]
+只需矩阵--向量乘积。$\ln\det A=\tr\ln A$ 用 Lanczos 求 $z^{\mathsf T}\ln(A)z$（随机 Lanczos 求积）；Gauss 过程超参数优化、网络中三角形计数都用它。
+\end{结论}
+
+\begin{结论}{对角占优与 M 矩阵}
+严格对角占优 $\Rightarrow$ 非奇异（Gershgorin），且 Gauss 消去无需选主元。M 矩阵：$A=sI-B$，$B\ge0$，$s>\rho(B)$ $\iff$ $A^{-1}\ge0$（逐元素）。
+离散 Laplacian $+$ Dirichlet 边界是 M 矩阵：\重点{\text{离散极值原理}}（$Au\ge0\Rightarrow u\ge0$）、热方程隐式格式保正性都源于此。Markov 链生成元、Leontief 投入产出模型 $(I-A)^{-1}\ge0$ 同理。
+\end{结论}
+
+\begin{结论}{矩阵 Chernoff / Bernstein 不等式}
+独立随机对称矩阵 $X_k$（$d\times d$），$\E X_k=0$，$\|X_k\|\le L$，$\sigma^2=\|\sum\E X_k^2\|$：
+\[
+\重点{P\Bigl(\Bigl\|\sum X_k\Bigr\|\ge t\Bigr)\le2d\exp\Bigl(\frac{-t^2/2}{\sigma^2+Lt/3}\Bigr)}.
+\]
+维数 $d$ 只以因子出现。用途：随机采样近似矩阵乘积、谱稀疏化、协方差估计所需样本数 $\sim\frac{d\ln d}{\varepsilon^2}$。
+\end{结论}
+
+\begin{结论}{QR 列选主元与数值秩}
+$A\Pi=QR$，每步选剩余范数最大的列：$|r_{11}|\ge|r_{22}|\ge\cdots$；$|r_{kk}|$ 骤降处即数值秩，前 $k$ 列给出“最独立”的列子集（列子集选择、插值分解 $A\approx CZ$）。
+秩揭示保证不如 SVD 严格，但\重点{\text{成本 }O(mnk)\text{ 且保留原始列}}（可解释性：选出实际的特征/传感器位置）。
+\end{结论}
+
+\begin{结论}{行列式与积和式的计算复杂度}
+行列式 $O(n^3)$（消去）；积和式 $\operatorname{perm}A=\sum_\sigma\prod a_{i\sigma(i)}$ 是 \#P 难（Valiant），最好的精确算法 Ryser 公式 $O(2^nn)$。
+非负矩阵积和式可多项式时间近似（Jerrum--Sinclair--Vigoda）。双随机矩阵 $\operatorname{perm}A\ge\frac{n!}{n^n}$（van der Waerden，Egorychev--Falikman 证明）；\重点{\text{二部图完美匹配数}=\text{邻接矩阵的积和式}}；玻色采样的复杂性来源。
+\end{结论}
+
+\begin{结论}{矩阵的条件数与距离奇异}
+\[
+\重点{\min\Bigl\{\frac{\|E\|_2}{\|A\|_2}:A+E\text{ 奇异}\Bigr\}=\frac{1}{\kappa_2(A)}}\quad(\text{Eckart--Young}).
+\]
+条件数的倒数就是到奇异矩阵的相对距离。多项式求根、特征值问题都有同样的“到病态问题的距离”刻画（Demmel）。$\kappa$ 大不一定意味着结果差：若扰动具有特殊结构（如对角缩放），结构化条件数可能小得多。
+\end{结论}
+
+\begin{结论}{旋转矩阵的指数与对数}
+$R=\ee^{\theta[\mathbf n]_\times}$（Rodrigues），反过来
+\[
+\theta=\arccos\frac{\tr R-1}{2},\qquad \重点{[\mathbf n]_\times=\frac{R-R^{\mathsf T}}{2\sin\theta}}\ (0<\theta<\pi).
+\]
+$\theta\to\pi$ 时由 $R+I=2\mathbf n\mathbf n^{\mathsf T}$ 求轴；$\theta$ 小时用 $\frac{R-R^{\mathsf T}}{2}$ 的级数避免除以小数。两旋转的测地距离 $\|\log(R_1^{\mathsf T}R_2)\|$。
+\end{结论}
+
+\begin{结论}{矩阵的 Cholesky 秩一更新}
+$A=LL^{\mathsf T}$，$\tilde A=A+xx^{\mathsf T}$：用一串 Givens 旋转 $O(n^2)$ 更新 $\tilde L$，无需重新分解（$O(n^3)$）；降秩 $A-xx^{\mathsf T}$ 只要结果仍正定也可（双曲旋转）。
+用于递推最小二乘、Kalman 滤波的平方根形式、拟 Newton 法维护 Hessian 分解。\重点{\text{行列式更新 }\det\tilde A=\det A\,(1+x^{\mathsf T}A^{-1}x)}。
+\end{结论}
+
+\begin{结论}{半正定矩阵的 Gram 表示与补全}
+$A\succeq0$ 秩 $r$ $\iff$ $A=VV^{\mathsf T}$，$V\in\mathbb R^{n\times r}$，即 $a_{ij}=v_i\cdot v_j$。相关矩阵 $\iff$ 单位向量的 Gram 矩阵。
+部分给定元素的矩阵能否补全为半正定：图为弦图时只需检查每个完全给定的主子阵（Grone 等）；\重点{\text{核范数最小化}}$\|X\|_*$ 是低秩补全（Netflix 问题）的凸松弛，样本数 $\sim nr\ln^2n$ 时精确恢复。
+\end{结论}
+
+\begin{结论}{块矩阵的求逆：Woodbury 恒等式}
+\[
+\重点{(A+UCV)^{-1}=A^{-1}-A^{-1}U\bigl(C^{-1}+VA^{-1}U\bigr)^{-1}VA^{-1}}.
+\]
+$A$ 易逆（对角）、$U$ 为 $n\times k$（$k\ll n$）时把 $n\times n$ 求逆化为 $k\times k$。应用：低秩加对角协方差（因子模型）、Gauss 过程的 Nyström 近似、Kalman 增益两种形式的互换。
+\end{结论}
+
+\begin{结论}{非负矩阵分解}
+$V\approx WH$，$W,H\ge0$：Lee--Seung 乘性更新 $H\leftarrow H\odot\frac{W^{\mathsf T}V}{W^{\mathsf T}WH}$，$W\leftarrow W\odot\frac{VH^{\mathsf T}}{WHH^{\mathsf T}}$，目标单调不增。
+非负性产生“部分”表示（人脸的眼、鼻），解一般不唯一、问题 NP 难；\重点{\text{非负秩可大于普通秩}}。用于主题模型、光谱解混、推荐系统。
+\end{结论}
+
+\参考{Horn--Johnson, \emph{Topics in Matrix Analysis}；Gray, ``Toeplitz and Circulant Matrices''；Bhatia, \emph{Positive Definite Matrices}；Tropp, ``An Introduction to Matrix Concentration Inequalities''；Golub--Van Loan；MIT 18.335、18.065。}

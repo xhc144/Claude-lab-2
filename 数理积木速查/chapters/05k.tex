@@ -1,0 +1,198 @@
+\subsection{控制与线性系统}
+
+\begin{结论}{二阶系统的阶跃响应指标}
+$G=\frac{\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2}$（$0<\zeta<1$），$\omega_d=\omega_n\sqrt{1-\zeta^2}$：
+\[
+\重点{M_p=\ee^{-\zeta\pi/\sqrt{1-\zeta^2}}},\qquad t_p=\frac\pi{\omega_d},\qquad t_s(2\%)\approx\frac4{\zeta\omega_n},\qquad t_r(10\text{--}90\%)\approx\frac{1.8}{\omega_n}.
+\]
+$\zeta=0.5$ 超调 $16\%$，$\zeta=0.7$ 约 $5\%$。设计时把指标翻译成 $s$ 平面区域：超调 $\to$ 阻尼角，调节时间 $\to$ 实部 $\le-\frac4{t_s}$。
+\end{结论}
+
+\begin{结论}{系统型别与稳态误差}
+单位反馈，开环 $L(s)$ 含 $N$ 个积分器（型别 $N$）：
+\[
+\重点{e_{\text{step}}=\frac1{1+K_p},\quad e_{\text{ramp}}=\frac1{K_v},\quad e_{\text{para}}=\frac1{K_a}},\qquad K_p=L(0),\ K_v=\lim_{s\to0}sL,\ K_a=\lim_{s\to0}s^2L .
+\]
+0 型对阶跃有静差，1 型对阶跃无差、对斜坡有 $\frac1{K_v}$，2 型对斜坡无差。前提：闭环稳定（终值定理才适用）。
+\end{结论}
+
+\begin{结论}{Bode 图的渐近线}
+每个实极点：转折频率后 $-20\,$dB/dec，相位从 $\frac a{10}$ 到 $10a$ 由 $0$ 变到 $-90^\circ$（转折处 $-45^\circ$、幅值低 $3\,$dB）；零点相反。二阶欠阻尼在 $\omega_r=\omega_n\sqrt{1-2\zeta^2}$ 处有谐振峰
+\[
+\重点{M_r=\frac1{2\zeta\sqrt{1-\zeta^2}}}\quad\Bigl(\zeta<\tfrac1{\sqrt2}\Bigr).
+\]
+积分器 $\frac1s$：全频 $-20\,$dB/dec、$-90^\circ$。时延只改相位不改幅值。
+\end{结论}
+
+\begin{结论}{Nyquist 判据}
+$L(\ii\omega)$ 沿 $\omega:-\infty\to\infty$ 顺时针绕 $-1$ 点 $N$ 圈，$P$ 为开环右半平面极点数：
+\[
+\重点{Z=N+P}\quad(Z=\text{闭环右半平面极点数}).
+\]
+闭环稳定 $\iff$ 逆时针绕 $-1$ 恰好 $P$ 圈；开环稳定时即“不绕 $-1$”。增益裕度 $\frac1{|L(\ii\omega_{180})|}$，相位裕度 $180^\circ+\angle L(\ii\omega_c)$。虚轴上的开环极点要用小半圆绕开。
+\end{结论}
+
+\begin{结论}{根轨迹的作图规则}
+$1+KG(s)=0$，$G$ 有 $n$ 个极点、$m$ 个零点：分支从极点出发，$m$ 支终止于零点，其余沿渐近线趋于无穷，
+\[
+\重点{\theta_k=\frac{(2k+1)\pi}{n-m},\qquad \sigma_a=\frac{\sum p_i-\sum z_j}{n-m}}.
+\]
+实轴上右侧实极点与实零点总数为奇数的区段属于根轨迹；分离点满足 $\frac{\dd K}{\dd s}=0$；与虚轴交点用 Routh 表求。$n-m\ge3$ 时增益足够大必然不稳定。
+\end{结论}
+
+\begin{结论}{超前与滞后校正}
+超前 $C(s)=K\frac{1+s/\omega_z}{1+s/\omega_p}$，$\alpha=\frac{\omega_z}{\omega_p}<1$：在 $\omega_m=\sqrt{\omega_z\omega_p}$ 处提供最大相位
+\[
+\重点{\sin\varphi_{\max}=\frac{1-\alpha}{1+\alpha}},
+\]
+高频增益抬高 $\frac1\alpha$（放大噪声），单级一般不超过 $60^\circ$。滞后校正（$\alpha>1$）在低频提高增益以减小稳态误差，转折频率放在穿越频率以下十倍左右以免损失相位裕度。
+\end{结论}
+
+\begin{结论}{相位裕度与阻尼比}
+标准二阶环 $L=\frac{\omega_n^2}{s(s+2\zeta\omega_n)}$：
+\[
+\重点{\mathrm{PM}=\arctan\frac{2\zeta}{\sqrt{\sqrt{1+4\zeta^4}-2\zeta^2}}\approx100\zeta\ (\text{度，}\zeta\lesssim0.6)},
+\]
+穿越频率 $\omega_c=\omega_n\sqrt{\sqrt{1+4\zeta^4}-2\zeta^2}$。由此“$\mathrm{PM}=45^\circ$--$60^\circ$”对应 $\zeta\approx0.45$--$0.6$、超调约 $10$--$20\%$；此范围内闭环带宽约为 $1.5$--$1.6$ 倍 $\omega_c$。
+\end{结论}
+
+\begin{结论}{时延：相位的无底洞}
+$\ee^{-sT}$ 幅值为 $1$、相位 $-\omega T$ 无界下降；一阶 Padé 近似 $\frac{1-sT/2}{1+sT/2}$（引入右半平面零点）。积分控制加时延 $L=\frac k s\ee^{-sT}$：
+\[
+\重点{\text{闭环稳定}\iff kT<\frac\pi2}.
+\]
+所以带宽 $\lesssim\frac1T$；大时延过程用 Smith 预估器（用模型把时延移出环外）。数字控制的采样--保持相当于额外 $\frac T2$ 的时延。
+\end{结论}
+
+\begin{结论}{灵敏度函数与 Bode 积分（“水床效应”）}
+$S=\frac1{1+L}$，$T=\frac L{1+L}$，$S+T=1$：不能在同一频率同时让 $S$（扰动抑制）和 $T$（噪声抑制）都小。$L$ 相对阶 $\ge2$、闭环稳定时
+\[
+\重点{\int_0^\infty\ln|S(\ii\omega)|\,\dd\omega=\pi\sum_{\operatorname{Re}p_k>0}p_k}
+\]
+（$p_k$ 为开环不稳定极点）。低频把 $|S|$ 压下去，必在别处鼓起来；开环不稳定还要额外付出 $\pi\sum p_k$。
+\end{结论}
+
+\begin{结论}{右半平面零点与极点的根本限制}
+右半平面零点 $z$：阶跃响应先反向（负调），可达带宽 $\omega_c\lesssim\frac z2$；右半平面极点 $p$：必须 $\omega_c\gtrsim2p$。两者同时存在且接近时无法做好：
+\[
+\重点{\|S\|_\infty\ge\Bigl|\frac{z+p}{z-p}\Bigr|}.
+\]
+例：倒立摆小车只测小车位置时就有这种零极点对。换传感器/执行器位置（改变零点）比换控制算法更有效。
+\end{结论}
+
+\begin{结论}{Bode 增益--相位关系}
+最小相位系统的相位由幅频完全决定（$u=\ln\frac\omega{\omega_0}$）：
+\[
+\angle G(\ii\omega_0)=\frac1\pi\int_{-\infty}^{\infty}\frac{\dd\ln|G|}{\dd u}\ln\coth\frac{|u|}2\,\dd u\ \approx\ \重点{\frac\pi2\times\frac{\dd\ln|G|}{\dd\ln\omega}\Big|_{\omega_0}}.
+\]
+斜率 $-20n\,$dB/dec 对应约 $-90n^\circ$。所以穿越频率附近幅频斜率应约 $-20\,$dB/dec（裕度 $\approx90^\circ$），$-40\,$dB/dec 则几乎没有裕度——“快速下降的环增益”与“稳定”天然矛盾。
+\end{结论}
+
+\begin{结论}{小增益定理与鲁棒稳定}
+$G_1,G_2$ 稳定，\重点{\|G_1\|_\infty\|G_2\|_\infty<1\Rightarrow\text{反馈环稳定}}。乘性不确定性 $P=P_0(1+W\Delta)$，$\|\Delta\|_\infty\le1$：鲁棒稳定 $\iff\|WT\|_\infty<1$。
+高频模型不确定性大（$|W|$ 大）$\Rightarrow$ 那里必须 $|T|$ 小，即环增益要在模型可信的频率以下就降下来。结构化不确定性用 $\mu$ 分析。
+\end{结论}
+
+\begin{结论}{内模原理}
+要无静差地跟踪参考信号或抑制扰动，环路中必须含有该信号的生成模型：
+\[
+\重点{\text{阶跃}\to\frac1s,\qquad \text{斜坡}\to\frac1{s^2},\qquad \text{正弦 }\omega_0\to\frac1{s^2+\omega_0^2}}.
+\]
+积分作用消除阶跃静差是特例；交流电源、电机的谐波抑制用谐振控制器，周期扰动用重复控制（$\frac{1}{1-\ee^{-sT}}$ 含全部谐波的极点）。
+\end{结论}
+
+\begin{结论}{极点配置：Ackermann 公式}
+单输入可控系统 $\dot x=Ax+Bu$，$u=-Kx$，期望闭环特征多项式 $\alpha_c(s)$：
+\[
+\重点{K=\begin{bmatrix}0&\cdots&0&1\end{bmatrix}\mathcal C^{-1}\alpha_c(A)},\qquad \mathcal C=\begin{bmatrix}B&AB&\cdots&A^{n-1}B\end{bmatrix}.
+\]
+可控 $\iff$ 极点可任意配置。极点放得越远增益越大（执行器饱和、噪声放大）；多输入时解不唯一，常用 LQR 代替“指定极点”。
+\end{结论}
+
+\begin{结论}{观测器与分离原理}
+$\dot{\hat x}=A\hat x+Bu+L(y-C\hat x)$，误差 $\dot e=(A-LC)e$；用 $u=-K\hat x$ 反馈：
+\[
+\重点{\text{闭环特征值}=\operatorname{eig}(A-BK)\cup\operatorname{eig}(A-LC)},
+\]
+控制器与观测器可分别设计（可观 $\iff$ $A-LC$ 极点可任意配置）。观测器极点一般取控制极点的 $2$--$5$ 倍快。LQG（LQR $+$ Kalman）没有保证的稳定裕度（Doyle 1978），需回路传递恢复。
+\end{结论}
+
+\begin{结论}{状态空间实现与最小实现}
+\[
+\重点{G(s)=C(sI-A)^{-1}B+D}.
+\]
+$G=\frac{b_{n-1}s^{n-1}+\cdots+b_0}{s^n+a_{n-1}s^{n-1}+\cdots+a_0}$ 的可控标准形：$A$ 为伴随矩阵（末行 $-a_0,\dots,-a_{n-1}$），$B=e_n$，$C=(b_0,\dots,b_{n-1})$。实现最小 $\iff$ 可控且可观；传递函数中零极点对消 $=$ 丢失可控或可观的模态——被对消的不稳定模态仍会在内部发散。
+\end{结论}
+
+\begin{结论}{Gram 矩阵与平衡截断}
+稳定系统的可控、可观 Gram 矩阵满足 Lyapunov 方程
+\[
+AW_c+W_cA^{\mathsf T}+BB^{\mathsf T}=0,\qquad A^{\mathsf T}W_o+W_oA+C^{\mathsf T}C=0 .
+\]
+Hankel 奇异值 $\sigma_i=\sqrt{\lambda_i(W_cW_o)}$ 衡量各状态“既好激励又好观测”的程度；平衡截断保留前 $r$ 个：\重点{\|G-G_r\|_\infty\le2\sum_{i>r}\sigma_i}，且保持稳定。大型结构、电路、流体模型降阶的标准方法。
+\end{结论}
+
+\begin{结论}{$H_2$ 范数：白噪声下的输出方差}
+\[
+\重点{\|G\|_2^2=\frac1{2\pi}\int_{-\infty}^\infty\|G(\ii\omega)\|_F^2\dd\omega=\tr(CW_cC^{\mathsf T})},
+\]
+即单位强度白噪声输入时稳态输出方差（或脉冲响应能量）。$G=\frac1{s+a}$：$\frac1{2a}$。LQR、Kalman 滤波都是 $H_2$ 最优问题；$H_\infty$ 范数则是最坏频率的增益（鲁棒性）。
+\end{结论}
+
+\begin{结论}{离散化：零阶保持与 Tustin}
+零阶保持精确离散化：$A_d=\ee^{AT}$，$B_d=\int_0^T\ee^{A\tau}\dd\tau\,B$，极点 $z=\ee^{sT}$。Tustin（双线性）：
+\[
+\重点{s\approx\frac2T\,\frac{z-1}{z+1}},\qquad \omega_a=\frac2T\tan\frac{\omega_dT}2\ (\text{频率畸变}).
+\]
+它把左半平面映到单位圆内（保稳定），但频率轴被压缩；要保证某个关键频率（陷波、转折）准确时先预畸变。采样频率一般取闭环带宽的 $10$--$30$ 倍。
+\end{结论}
+
+\begin{结论}{离散系统的稳定判据}
+所有极点在单位圆内。二阶特征多项式 $z^2+a_1z+a_0$：
+\[
+\重点{|a_0|<1,\qquad |a_1|<1+a_0}.
+\]
+一般阶用 Jury 表，或代入 $z=\frac{1+w}{1-w}$ 化成 $w$ 的多项式后用 Routh 判据。连续系统稳定、离散化后可能不稳定（采样太慢）；反之 $z=-1$ 附近的极点在连续时间里没有对应（振铃）。
+\end{结论}
+
+\begin{结论}{描述函数与极限环}
+非线性元件对正弦输入 $A\sin\omega t$ 的基波增益 $N(A)$；理想继电器 $\pm M$：
+\[
+\重点{N(A)=\frac{4M}{\pi A}}.
+\]
+线性部分 $G(\ii\omega)$ 与 $-\frac1{N(A)}$ 相交处预测极限环的幅值与频率。继电器自整定（Åström--Hägglund）：用继电器反馈激起振荡，测得周期 $T_u$、幅值 $A$，临界增益 $K_u=\frac{4M}{\pi A}$，再按 Ziegler--Nichols 规则整定。
+\end{结论}
+
+\begin{结论}{Mason 增益公式}
+信号流图从输入到输出的传递函数
+\[
+\重点{T=\frac{\sum_kP_k\Delta_k}{\Delta}},\qquad \Delta=1-\sum L_i+\sum_{\text{不接触}}L_iL_j-\sum_{\text{不接触}}L_iL_jL_k+\cdots,
+\]
+$P_k$ 为第 $k$ 条前向通路增益，$\Delta_k$ 为去掉与之接触的回路后的 $\Delta$。单回路即 $\frac G{1+GH}$。$\Delta=0$ 就是特征方程。
+\end{结论}
+
+\begin{结论}{BIBO 稳定与冲激响应}
+LTI 系统 $y=h*u$：
+\[
+\重点{\|y\|_\infty\le\|h\|_1\|u\|_\infty},\qquad \text{BIBO 稳定}\iff\int_0^\infty|h|\dd t<\infty,
+\]
+界是紧的（取 $u=\sgn h(t_0-\cdot)$）。有理传递函数即“所有极点实部 $<0$”。积分器不是 BIBO 稳定（阶跃 $\to$ 斜坡）；虚轴上的极点被同频输入激励会发散（共振）。
+\end{结论}
+
+\begin{结论}{积分饱和与抗饱和}
+执行器饱和时积分器继续累积误差，退出饱和后产生大超调与振荡。反算法（back-calculation）：
+\[
+\重点{\dot I=\frac{K}{T_i}e+\frac1{T_t}\bigl(u_{\text{sat}}-u\bigr)},\qquad T_t\approx\sqrt{T_iT_d},
+\]
+饱和时把积分器“拉回”到与实际输出一致的位置；或条件积分（饱和且误差同号时停止积分）。设定值突变时对比例、微分作用采用设定值加权。
+\end{结论}
+
+\begin{结论}{互补滤波器：两个传感器的频域融合}
+陀螺仪（低频漂移）与加速度计（高频噪声）测同一角度：
+\[
+\hat\theta=\frac1{\tau s+1}\theta_{\text{acc}}+\frac{\tau s}{\tau s+1}\cdot\frac{\omega_{\text{gyro}}}s,\qquad \重点{H_L+H_H=1}.
+\]
+真实信号无失真通过，每个传感器只在它可信的频段起作用；离散形式 $\theta_k=\alpha(\theta_{k-1}+\omega_k\Delta t)+(1-\alpha)\theta_{\text{acc},k}$，$\alpha=\frac\tau{\tau+\Delta t}$。交叉频率 $\frac1\tau$ 取在两者噪声谱相交处；它是稳态 Kalman 滤波的简化版。
+\end{结论}
+
+\参考{Åström--Murray, \emph{Feedback Systems}；Franklin--Powell--Emami-Naeini, \emph{Feedback Control of Dynamic Systems}；Skogestad--Postlethwaite, \emph{Multivariable Feedback Control}；Doyle--Francis--Tannenbaum, \emph{Feedback Control Theory}；Antoulas, \emph{Approximation of Large-Scale Dynamical Systems}；MIT 6.302、16.30、2.14。}

@@ -1,0 +1,112 @@
+\subsection{张量与指标运算}
+
+\begin{结论}{$\varepsilon$--$\delta$ 恒等式}
+三维：
+\[
+\重点{\varepsilon_{ijk}\varepsilon_{imn}=\delta_{jm}\delta_{kn}-\delta_{jn}\delta_{km}},\qquad \varepsilon_{ijk}\varepsilon_{ijn}=2\delta_{kn},\qquad \varepsilon_{ijk}\varepsilon_{ijk}=6 .
+\]
+一般 $\varepsilon_{i_1\cdots i_n}\varepsilon_{j_1\cdots j_n}=\det[\delta_{i_aj_b}]$。行列式 $\det A=\varepsilon_{ijk}A_{1i}A_{2j}A_{3k}$，$\varepsilon_{lmn}\det A=\varepsilon_{ijk}A_{il}A_{jm}A_{kn}$。矢量恒等式全部可由第一式推出。
+\end{结论}
+
+\begin{结论}{各向同性张量}
+在所有转动下不变的张量：二阶 $\delta_{ij}$；三阶 $\varepsilon_{ijk}$；四阶
+\[
+\重点{T_{ijkl}=\lambda\delta_{ij}\delta_{kl}+\mu\delta_{ik}\delta_{jl}+\nu\delta_{il}\delta_{jk}}.
+\]
+各向同性弹性张量只有两个独立常数（加上对称性 $\mu=\nu$）；各向同性材料的电导率、介电常数是标量乘 $\delta_{ij}$。立方晶体的二阶张量性质也各向同性，但弹性张量有 $3$ 个常数。
+\end{结论}
+
+\begin{结论}{二阶张量的主不变量}
+\[
+I_1=\tr A,\qquad I_2=\tfrac12\bigl[(\tr A)^2-\tr(A^2)\bigr],\qquad I_3=\det A,
+\]
+特征方程 $\lambda^3-I_1\lambda^2+I_2\lambda-I_3=0$，Cayley--Hamilton $A^3-I_1A^2+I_2A-I_3I=0$。在旋转 \重点{A'=RAR^{\mathsf T}} 下不变；本构关系（各向同性材料）只能依赖不变量。
+\end{结论}
+
+\begin{结论}{偏量分解与 von Mises 等效应力}
+$\sigma_{ij}=\frac13\sigma_{kk}\delta_{ij}+s_{ij}$（静水 $+$ 偏应力，$\tr s=0$）。屈服判据（金属）：
+\[
+\重点{\sigma_{\text{vM}}=\sqrt{3J_2}=\sqrt{\tfrac32s_{ij}s_{ij}}=\sqrt{\tfrac12\bigl[(\sigma_1-\sigma_2)^2+(\sigma_2-\sigma_3)^2+(\sigma_3-\sigma_1)^2\bigr]}}\ \ge\sigma_Y .
+\]
+静水压不引起塑性屈服（只改变体积）；纯剪 $\tau$ 时 $\sigma_{\text{vM}}=\sqrt3\tau$，剪切屈服强度 $\frac{\sigma_Y}{\sqrt3}$。
+\end{结论}
+
+\begin{结论}{反对称张量 $\leftrightarrow$ 轴矢量}
+三维反对称 $A_{ij}=-A_{ji}$ 只有三个分量：$A_{ij}=-\varepsilon_{ijk}\omega_k$，$\omega_k=-\frac12\varepsilon_{kij}A_{ij}$，且 \重点{A\mathbf v=\boldsymbol\omega\times\mathbf v}。
+速度梯度 $\partial_jv_i=$ 应变率（对称）$+$ 旋转（反对称，$\boldsymbol\omega=\frac12\nabla\times\mathbf v$）；角速度张量 $\dot RR^{\mathsf T}$ 是反对称的。四维中反对称张量有 $6$ 个分量（电磁场 $\mathbf E,\mathbf B$）。
+\end{结论}
+
+\begin{结论}{平面应力的 Mohr 圆}
+\[
+\重点{\sigma_{1,2}=\frac{\sigma_x+\sigma_y}2\pm\sqrt{\Bigl(\frac{\sigma_x-\sigma_y}2\Bigr)^2+\tau_{xy}^2}},\qquad \tan2\theta_p=\frac{2\tau_{xy}}{\sigma_x-\sigma_y},
+\]
+最大剪应力 $\frac{\sigma_1-\sigma_2}2$，作用在与主方向成 $45^\circ$ 的面上。截面转 $\theta$ 对应 Mohr 圆上转 $2\theta$。脆性材料沿最大主应力垂直面断裂（扭断粉笔呈 $45^\circ$ 螺旋面）。
+\end{结论}
+
+\begin{结论}{小应变张量与相容条件}
+$\varepsilon_{ij}=\frac12(\partial_iu_j+\partial_ju_i)$；体应变 $\varepsilon_{kk}=\nabla\cdot\mathbf u=\frac{\Delta V}V$。给定 $\varepsilon_{ij}$ 能否积分出位移场：
+\[
+\重点{\nabla\times(\nabla\times\varepsilon)^{\mathsf T}=0}\quad(\text{Saint-Venant 相容方程}),
+\]
+二维即 $\partial_y^2\varepsilon_{xx}+\partial_x^2\varepsilon_{yy}=2\partial_x\partial_y\varepsilon_{xy}$。几何上：应变给出的度量的曲率为零。
+\end{结论}
+
+\begin{结论}{各向同性 Hooke 定律与 Lamé 常数}
+\[
+\重点{\sigma_{ij}=\lambda\varepsilon_{kk}\delta_{ij}+2\mu\varepsilon_{ij}},\qquad \lambda=\frac{E\nu}{(1+\nu)(1-2\nu)},\quad \mu=G=\frac{E}{2(1+\nu)},\quad K=\lambda+\frac23\mu .
+\]
+逆关系 $\varepsilon_{ij}=\frac{1+\nu}E\sigma_{ij}-\frac\nu E\sigma_{kk}\delta_{ij}$。弹性动力学 Navier 方程 $\rho\ddot{\mathbf u}=(\lambda+\mu)\nabla(\nabla\cdot\mathbf u)+\mu\nabla^2\mathbf u$ 分解出纵波与横波。
+\end{结论}
+
+\begin{结论}{张量形式的 Gauss 定理与面力}
+$\int_V\partial_jT_{ij}\dd V=\oint T_{ij}n_j\dd S$。应力张量：面元 $\mathbf n$ 上的力 $t_i=\sigma_{ij}n_j$；平衡 $\partial_j\sigma_{ij}+f_i=0$；角动量守恒 $\Rightarrow$ \重点{\sigma_{ij}=\sigma_{ji}}（无体力偶时）。
+Maxwell 应力张量同理：$\mathbf F=\oint\overleftrightarrow T\cdot\dd\mathbf S$（静态）。
+\end{结论}
+
+\begin{结论}{曲线坐标中的协变与逆变分量}
+基矢 $\mathbf e_i=\frac{\partial\mathbf r}{\partial q^i}$（协变），对偶基 $\mathbf e^i=\nabla q^i$，$\mathbf e^i\cdot\mathbf e_j=\delta^i_j$；度量 $g_{ij}=\mathbf e_i\cdot\mathbf e_j$。
+$\mathbf v=v^i\mathbf e_i=v_i\mathbf e^i$，\重点{v_i=g_{ij}v^j}。正交坐标中物理分量 $\hat v_i=h_iv^i=\frac{v_i}{h_i}$（$h_i=\sqrt{g_{ii}}$）；斜坐标系（晶体）中协变与逆变分量必须区分（倒格子即对偶基）。
+\end{结论}
+
+\begin{结论}{电磁场张量及其不变量}
+$F^{\mu\nu}$：$F^{0i}=-\frac{E_i}{c}$，$F^{ij}=-\varepsilon_{ijk}B_k$（度规 $(+,-,-,-)$，符号约定因书而异）。两个不变量
+\[
+\重点{F_{\mu\nu}F^{\mu\nu}=2\Bigl(B^2-\frac{E^2}{c^2}\Bigr)},\qquad F_{\mu\nu}\tilde F^{\mu\nu}=-\frac4c\mathbf E\cdot\mathbf B .
+\]
+Maxwell 方程：$\partial_\mu F^{\mu\nu}=\mu_0J^\nu$，$\partial_{[\lambda}F_{\mu\nu]}=0$。Lorentz 力 $\frac{\dd p^\mu}{\dd\tau}=qF^{\mu\nu}u_\nu$。
+\end{结论}
+
+\begin{结论}{电磁场的能量--动量张量}
+\[
+T^{00}=\frac{\varepsilon_0E^2}2+\frac{B^2}{2\mu_0}=u,\qquad T^{0i}=\frac{S_i}c,\qquad \重点{T^{ij}=-\sigma^{\text{Maxwell}}_{ij}},
+\]
+$\partial_\mu T^{\mu\nu}=-F^{\nu\lambda}J_\lambda$ 同时给出 Poynting 定理（$\nu=0$）与动量守恒（$\nu=i$）。$T^\mu{}_\mu=0$（无质量场的标度不变性），所以辐射压 $p=\frac u3$。
+\end{结论}
+
+\begin{结论}{Riemann 张量的对称性与独立分量}
+$R_{abcd}=-R_{bacd}=-R_{abdc}=R_{cdab}$，$R_{a[bcd]}=0$（第一 Bianchi）。$n$ 维独立分量数
+\[
+\重点{\frac{n^2(n^2-1)}{12}}:\ n=2\text{ 为 }1,\ n=3\text{ 为 }6,\ n=4\text{ 为 }20 .
+\]
+$n\le3$ 时 Weyl 张量为零，曲率完全由 Ricci 张量决定（三维真空引力无局部自由度）；四维中 $10$ 个 Ricci $+$ $10$ 个 Weyl（引力波、潮汐自由部分）。
+\end{结论}
+
+\begin{结论}{笛卡尔张量的不可约分解}
+二阶张量 $9=1\oplus3\oplus5$：$T_{ij}=\frac13T_{kk}\delta_{ij}+\frac12(T_{ij}-T_{ji})+\bigl[\frac12(T_{ij}+T_{ji})-\frac13T_{kk}\delta_{ij}\bigr]$，分别是标量、矢量（反对称）、无迹对称（$l=2$）部分。
+对应角动量 $1\otimes1=0\oplus1\oplus2$。\重点{\text{电四极矩、核四极矩、各向异性极化率的“各向异性部分”都是 }l=2\text{ 分量}}，与球谐 $Y_{2m}$ 一一对应（5 个分量）。
+\end{结论}
+
+\begin{结论}{张量的转动与主轴}
+$T'=RTR^{\mathsf T}$；对称张量有正交主轴，转到主轴系后对角。二维对称张量转角 $\theta$：
+\[
+\重点{\begin{pmatrix}T'_{xx}\\T'_{xy}\end{pmatrix}=\begin{pmatrix}\frac{T_{xx}+T_{yy}}2+\frac{T_{xx}-T_{yy}}2\cos2\theta+T_{xy}\sin2\theta\\-\frac{T_{xx}-T_{yy}}2\sin2\theta+T_{xy}\cos2\theta\end{pmatrix}},
+\]
+即依赖 $2\theta$（自旋 $2$ 量：应力、惯量、引力波偏振、CMB 偏振 $E/B$ 模）。
+\end{结论}
+
+\begin{结论}{商定理：判断一个量是不是张量}
+若 $A_{ij}B_j$ 对任意矢量 $B$ 都是矢量，则 $A_{ij}$ 是二阶张量；若 $T_{ij}u_iv_j$ 对任意矢量 $u,v$ 都是标量，则 $T_{ij}$ 是张量。
+用法：由 $\mathbf p=\overleftrightarrow\alpha\mathbf E$ 判定极化率是张量；由 $L_i=I_{ij}\omega_j$ 判定惯量是张量。\重点{\text{伪张量}}（$\varepsilon_{ijk}$、角动量、磁场）在反射下多一个负号。
+\end{结论}
+
+\参考{Arfken--Weber, \emph{Mathematical Methods for Physicists} 第 4 章；Jeffreys, \emph{Cartesian Tensors}；Landau--Lifshitz, \emph{Theory of Elasticity}；Misner--Thorne--Wheeler, \emph{Gravitation}；MIT 2.002、8.962。}

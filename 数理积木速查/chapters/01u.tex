@@ -1,0 +1,91 @@
+\subsection{竞赛型分析与代数技巧}
+
+\begin{结论}{普遍弦定理}
+$f\in C[0,1]$，$f(0)=f(1)$：对每个 $n\ge1$ 存在 $x$ 使 \重点{f\bigl(x+\tfrac1n\bigr)=f(x)}（长 $\frac1n$ 的水平弦）。证：$g(x)=f(x+\frac1n)-f(x)$ 在 $0,\frac1n,\dots,\frac{n-1}n$ 处之和为 $0$，必有变号。
+长度不是 $\frac1n$ 的弦不一定存在（Lévy 反例 $\sin^2\frac{\pi x}{a}-x\sin^2\frac\pi a$）。
+\end{结论}
+
+\begin{结论}{逐点最大化求泛函极值}
+$\max_f\int_0^1(x^2f-xf^2)\dd x$：被积函数对每个 $x$ 是 $f$ 的二次函数，取 $f=\frac x2$ 得 $\frac{x^3}4$，积分 \重点{\frac1{16}}。
+套路：泛函不含导数时，逐点优化被积函数；含约束 $\int g(f)=c$ 时加乘子后逐点优化（Lagrange 对每个 $x$ 独立）。
+\end{结论}
+
+\begin{结论}{嵌套根式与迭代}
+$x_{n+1}=\sqrt{a+x_n}$ 单调收敛到 $\frac{1+\sqrt{1+4a}}2$。Ramanujan：
+\[
+\重点{3=\sqrt{1+2\sqrt{1+3\sqrt{1+4\sqrt{\cdots}}}}},
+\]
+由 $n+2=\sqrt{1+(n+1)(n+3)}$ 反复展开（还需论证截断的极限确实是 $3$）。$\sqrt{2+\sqrt{2+\cdots}}$（$k$ 层）$=2\cos\frac{\pi}{2^{k+1}}$。
+\end{结论}
+
+\begin{结论}{取整函数的三个恒等式}
+Hermite：\重点{\sum_{k=0}^{n-1}\Bigl\lfloor x+\frac kn\Bigr\rfloor=\lfloor nx\rfloor}。互素 $p,q$：$\sum_{k=1}^{p-1}\bigl\lfloor\frac{kq}p\bigr\rfloor=\frac{(p-1)(q-1)}2$（矩形对角线下格点计数）。
+Beatty：$\alpha,\beta>1$ 无理且 $\frac1\alpha+\frac1\beta=1$ $\Rightarrow$ $\{\lfloor n\alpha\rfloor\}$ 与 $\{\lfloor n\beta\rfloor\}$ 恰好划分正整数（Wythoff 博弈中 $\alpha=\varphi$，$\beta=\varphi^2$）。
+\end{结论}
+
+\begin{结论}{取整差的平均值}
+\[
+\lim_{n\to\infty}\frac1n\sum_{k=1}^n\Bigl(\Bigl\lfloor\frac{2n}k\Bigr\rfloor-2\Bigl\lfloor\frac nk\Bigr\rfloor\Bigr)=\重点{2\ln2-1}.
+\]
+括号是 $\{\frac nk\}\ge\frac12$ 的示性函数，Riemann 和化为 $\int_0^1\mathbf 1\{\{1/x\}\ge\frac12\}\dd x=\sum_{j\ge1}\bigl(\frac2{2j+1}-\frac1{j+1}\bigr)$。同法：$\frac1n\sum_k\{\frac nk\}\to1-\gamma$。
+\end{结论}
+
+\begin{结论}{Smith 行列式：$\gcd$ 矩阵}
+\[
+\重点{\det\bigl[\gcd(i,j)\bigr]_{i,j=1}^n=\prod_{k=1}^n\varphi(k)}.
+\]
+证：$\gcd(i,j)=\sum_{d\mid i,d\mid j}\varphi(d)$，即 $G=E\,\diag(\varphi)\,E^{\mathsf T}$，$E_{id}=[d\mid i]$ 为下三角、对角为 $1$。同法 $\det[f(\gcd(i,j))]=\prod(f*\mu)(k)$；$\operatorname{lcm}$ 矩阵类似。
+\end{结论}
+
+\begin{结论}{分母因式分解的伸缩求和}
+$n^4+n^2+1=(n^2-n+1)(n^2+n+1)$，且 $(n+1)^2-(n+1)+1=n^2+n+1$：
+\[
+\sum_{n\ge1}\frac{n}{n^4+n^2+1}=\frac12\sum_{n\ge1}\Bigl(\frac1{n^2-n+1}-\frac1{n^2+n+1}\Bigr)=\重点{\frac12}.
+\]
+类似 $\prod_{k\ge0}\bigl(1+\frac1{2^{2^k}}\bigr)=2$（乘以 $1-\frac12$ 后逐项伸缩）；$\sum\frac{2^k}{x^{2^k}+1}$ 型用 $\frac1{y-1}-\frac{2}{y^2-1}=\frac1{y+1}$。
+\end{结论}
+
+\begin{结论}{生成函数 $+$ 单位根：子集和整除计数}
+$\{1,\dots,2000\}$ 中元素和被 $5$ 整除的子集个数：$\prod_{k}(1+x^k)$ 在 $x=\omega^j$ 处的平均，
+\[
+\重点{\frac{2^{2000}+4\cdot2^{400}}{5}}
+\]
+（$j\ne0$ 时 $\prod_{k=1}^5(1+\omega^{jk})=2$，共 $400$ 组）。核心恒等式 $\prod_{k=0}^{p-1}(1+\omega^k)=2$（$p$ 奇素数）。
+\end{结论}
+
+\begin{结论}{$|f'|\le C|f|$ 且有零点则恒为零}
+$f$ 可导，$f(x_0)=0$，$|f'(x)|\le C|f(x)|$：令 $g=f^2$，$|g'|\le2Cg$，于是 $(\ee^{-2Cx}g)'\le0$ 且 $(\ee^{2Cx}g)'\ge0$，从 $x_0$ 两侧推出 \重点{g\equiv0}。
+这是线性 ODE 唯一性（Grönwall）的最简形式；条件 $|f'|\le C|f|^{\alpha}$（$\alpha<1$）时不成立（$f=x^2$ 型反例对 $\alpha=\frac12$）。
+\end{结论}
+
+\begin{结论}{凸函数在多面体上的最大值}
+凸函数在紧凸集上的最大值在端点（多面体为顶点）处取到；凹函数最小值同理。
+用法：证 $\sum f(x_i)\le M$（$x_i\in[a,b]$，$f$ 凸）只需检查各 $x_i\in\{a,b\}$ 的 $2^n$ 种组合，再利用对称性；\重点{\text{线性函数在单纯形上的极值在顶点}}（LP）。与 Karamata 配合处理“和固定、求凸函数和的最大值”（取尽量极端的分布）。
+\end{结论}
+
+\begin{结论}{反证与极端原理：选最大/最小的对象}
+无穷递降（Fermat）：$\sqrt2=\frac pq$ 取最小 $q$；Markov 数、Vieta 跳跃（IMO 1988：$\frac{a^2+b^2}{ab+1}$ 为整数则是平方数）——由一个解生成更小的解，与最小性矛盾。
+\重点{\text{Vieta 跳跃}}：把方程看成某变量的二次方程，另一根 $a'=\frac{b^2-k}{a}=kb-a$ 仍为非负整数且更小。
+\end{结论}
+
+\begin{结论}{对称化与平滑法}
+证明 $F(x_1,\dots,x_n)\ge F(\bar x,\dots,\bar x)$（和固定）：若把两个不等的变量都换成其平均值时 $F$ 不增（平滑一步），反复平滑收敛到全相等（需连续性与紧性论证）。
+SOS 法：把 $F-F_{\min}$ 写成 $\sum S_{ij}(x_i-x_j)^2$，证明 \重点{S_{ij}\ge0}（或适当组合非负）。三元对称不等式常用 $pqr$ 方法（用 $p=\sum x$，$q=\sum xy$，$r=xyz$ 表示）。
+\end{结论}
+
+\begin{结论}{矩阵的奇偶与模 $2$ 论证}
+$n$ 阶整数矩阵、$A^{\mathsf T}=A$、对角全为偶数、$n$ 奇 $\Rightarrow$ \重点{\det A\equiv0\pmod2}：模 $2$ 下它是交错矩阵（对称且对角为零），交错矩阵的秩为偶数，奇数阶必奇异。
+类似：整数矩阵 $A$ 满足 $A^2=0\pmod p$ 等问题在有限域上用秩论证；行列式模 $2$ 等于积和式模 $2$。
+\end{结论}
+
+\begin{结论}{积分条件下的中值点：乘 $\ee^{-x}$}
+$f\in C[0,1]$，$\int_0^1f=0$ $\Rightarrow$ 存在 $c\in(0,1)$ 使 \重点{f(c)=\int_0^cf}。证：$G(x)=\ee^{-x}\int_0^xf$，$G(0)=G(1)=0$，Rolle 给 $G'(c)=\ee^{-c}\bigl(f(c)-\int_0^cf\bigr)=0$。
+\注意 看似相近的“$cf(c)=\int_0^cf$”一般不成立（$f=1-2x$ 只在 $c=0$ 处成立）。把待证等式写成 $(\text{积分因子}\times\text{某函数})'=0$ 是这类题的通法，积分因子按 Rolle 对照表选。
+\end{结论}
+
+\begin{结论}{Putnam 式的“恰好”构造：多项式插值存在性}
+需要构造满足有限个条件的函数时，Lagrange/Hermite 插值多项式通常直接给出存在性；需要整系数时用 Chinese 剩余或 $\binom xk$ 基。
+例：存在多项式 $p$ 使 $p(n)=$ 第 $n$ 个素数对 $n=1..N$ 成立（插值），但\重点{\text{不存在}}对所有 $n$ 成立的多项式（增长与整除性矛盾）。区分“对有限多个点”与“对所有点”是很多题的关键。
+\end{结论}
+
+\参考{Kedlaya--Poonen--Vakil, \emph{The William Lowell Putnam Mathematical Competition 1985--2000}；Gelca--Andreescu, \emph{Putnam and Beyond}；Engel, \emph{Problem-Solving Strategies}；Pólya--Szegő；MIT 18.A34。}

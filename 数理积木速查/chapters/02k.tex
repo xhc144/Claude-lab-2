@@ -1,0 +1,83 @@
+\subsection{Lie 代数与表示论}
+
+\begin{结论}{$SU(2)$ 不可约表示与特征标}
+自旋 $j=0,\frac12,1,\dots$，维数 $2j+1$，Casimir $J^2=j(j+1)\hbar^2$。绕任意轴转 $\theta$ 的特征标
+\[
+\重点{\chi_j(\theta)=\frac{\sin\bigl((2j+1)\theta/2\bigr)}{\sin(\theta/2)}}.
+\]
+半整数 $j$ 转 $2\pi$ 时 $\chi=-(2j+1)$（旋量变号），整数 $j$ 才是 $SO(3)$ 的表示。正交性 $\frac2\pi\int_0^{2\pi}\chi_j\chi_{j'}\sin^2\frac\theta2\,\frac{\dd\theta}{2}=\delta_{jj'}$。
+\end{结论}
+
+\begin{结论}{张量积分解：特征标法}
+$j_1\otimes j_2=\bigoplus_{J=|j_1-j_2|}^{j_1+j_2}J$，证明：$\chi_{j_1}\chi_{j_2}=\sum_J\chi_J$（把特征标写成 $\sum_m\ee^{\ii m\theta}$ 相乘）。
+维数检验 $(2j_1+1)(2j_2+1)=\sum(2J+1)$。三个自旋 $\frac12$：\重点{\tfrac12\otimes\tfrac12\otimes\tfrac12=\tfrac32\oplus\tfrac12\oplus\tfrac12}（两个独立的 $\frac12$ 多重态——质子与中子“混合对称”的自旋--味道波函数来源）。
+\end{结论}
+
+\begin{结论}{$SU(3)$：夸克模型的表示}
+不可约表示 $(p,q)$ 维数 \重点{\frac{(p+1)(q+1)(p+q+2)}2}：$\mathbf3=(1,0)$，$\bar{\mathbf3}$，$\mathbf8=(1,1)$，$\mathbf{10}=(3,0)$，$\mathbf6=(2,0)$。
+\[
+\mathbf3\otimes\bar{\mathbf3}=\mathbf8\oplus\mathbf1,\qquad \mathbf3\otimes\mathbf3=\mathbf6\oplus\bar{\mathbf3},\qquad \mathbf3\otimes\mathbf3\otimes\mathbf3=\mathbf{10}\oplus\mathbf8\oplus\mathbf8\oplus\mathbf1 .
+\]
+介子 $q\bar q$：八重态 $+$ 单态；重子 $qqq$：十重态（$\Omega^-$ 的预言）与八重态。色单态只在 $\mathbf3\otimes\bar{\mathbf3}$ 与 $\mathbf3^{\otimes3}$ 中出现——强子只有介子和重子（及其组合）。
+\end{结论}
+
+\begin{结论}{$SU(N)$ 的 Young 图维数公式}
+Young 图 $\lambda$ 对应 $SU(N)$ 不可约表示，维数（钩长--内容公式）
+\[
+\重点{\dim=\prod_{\text{格子}}\frac{N+c}{h}},\qquad c=\text{列号}-\text{行号},\ h=\text{钩长}.
+\]
+一行 $k$ 格（全对称）：$\binom{N+k-1}k$；一列 $k$ 格（全反对称）：$\binom Nk$。$SU(3)$ 中 $\square\!\square$ 为 $\frac{3\cdot4}{2\cdot1}=6$。张量积按 Littlewood--Richardson 规则加格子。
+\end{结论}
+
+\begin{结论}{单 Lie 代数的分类与维数}
+复单 Lie 代数：$A_n=\mathfrak{sl}_{n+1}$（维数 $n(n+2)$），$B_n=\mathfrak{so}_{2n+1}$（$n(2n+1)$），$C_n=\mathfrak{sp}_{2n}$（$n(2n+1)$），$D_n=\mathfrak{so}_{2n}$（$n(2n-1)$），例外 \重点{G_2(14),F_4(52),E_6(78),E_7(133),E_8(248)}。
+由 Dynkin 图（根系）完全决定。低秩同构：$A_1=B_1=C_1$，$B_2=C_2$，$D_2=A_1\oplus A_1$，$D_3=A_3$（$\mathfrak{so}_6\cong\mathfrak{su}_4$）。
+\end{结论}
+
+\begin{结论}{Weyl 维数公式}
+最高权 $\lambda$ 的不可约表示：
+\[
+\重点{\dim V_\lambda=\prod_{\alpha>0}\frac{\langle\lambda+\rho,\alpha\rangle}{\langle\rho,\alpha\rangle}},\qquad \rho=\frac12\sum_{\alpha>0}\alpha .
+\]
+$\mathfrak{su}_2$：唯一正根，得 $2j+1$；$\mathfrak{su}_3$ 三个正根，得 $\frac{(p+1)(q+1)(p+q+2)}2$。Weyl 特征标公式给出完整特征标。
+\end{结论}
+
+\begin{结论}{Schur 引理与简并}
+算子 $A$ 与不可约表示 $D(g)$ 全部对易 $\Rightarrow$ $A=c\,I$（复表示）。推论：对称群 $G$ 下不变的 Hamiltonian 的能级简并度 $=$ 不可约表示维数（“偶然简并”另有隐藏对称性）。
+不同不可约表示间的不变算子为零 $\Rightarrow$ 选择定则。\重点{\text{交换群的不可约表示都是一维的}}（平移对称 $\Rightarrow$ Bloch 定理 $\ee^{\ii ka}$）。
+\end{结论}
+
+\begin{结论}{投影到不可约表示}
+有限群（或紧群，求和换成 Haar 积分）：
+\[
+\重点{P^{(\mu)}=\frac{d_\mu}{|G|}\sum_{g\in G}\overline{\chi^{(\mu)}(g)}D(g)}
+\]
+把任意向量投影到第 $\mu$ 个不可约表示的同型分量；重数 $m_\mu=\frac1{|G|}\sum\overline{\chi^{(\mu)}}\chi$。用途：分子振动模式按对称性分类、构造对称性匹配的轨道（SALC）、简化久期行列式（分块对角）。
+\end{结论}
+
+\begin{结论}{隐藏对称性：氢原子 $SO(4)$ 与谐振子 $SU(3)$}
+氢原子：角动量 $\mathbf L$ 与 Runge--Lenz 矢量 $\mathbf A$ 生成 $SO(4)\cong SU(2)\times SU(2)/\mathbb Z_2$，能级 $n$ 对应 $(j,j)$，$2j+1=n$，\重点{\text{简并度 }n^2}（不含自旋），解释了 $l$ 简并。
+三维各向同性谐振子：$a_i^\dagger a_j$ 生成 $U(3)$，第 $N$ 能级是 $SU(3)$ 的对称表示 $(N,0)$，简并度 $\frac{(N+1)(N+2)}2$。
+\end{结论}
+
+\begin{结论}{Lorentz 群的表示 $(j_1,j_2)$}
+$\mathfrak{so}(3,1)_{\mathbb C}\cong\mathfrak{sl}_2\oplus\mathfrak{sl}_2$：不可约有限维表示由 $(j_1,j_2)$ 标记，维数 $(2j_1+1)(2j_2+1)$，自旋 $j_1+j_2,\dots,|j_1-j_2|$。
+$(\frac12,0)$、$(0,\frac12)$ 左右手 Weyl 旋量；$(\frac12,\frac12)$ 四矢量；$(1,0)\oplus(0,1)$ 反对称张量（$\mathbf E\pm\ii c\mathbf B$）；Dirac 旋量 \重点{(\tfrac12,0)\oplus(0,\tfrac12)}。有限维表示都不是幺正的（非紧群）。
+\end{结论}
+
+\begin{结论}{指数映射何时满射}
+紧连通 Lie 群：$\exp$ 满射（每个元素在某个极大环面上）。非紧时可失败：$SL(2,\mathbb R)$ 中 $\begin{pmatrix}-2&0\\0&-\frac12\end{pmatrix}$ 不是任何 $\ee^X$（$\tr X=0$ 时 $\tr\ee^X\ge-2$，等号仅 $-I$）。
+所以\重点{\text{由 Lie 代数生成的元素是一般元素的有限乘积}}，不一定是单个指数。$GL(n,\mathbb C)$ 的 $\exp$ 满射（复对数存在），$GL^+(n,\mathbb R)$ 不满射。
+\end{结论}
+
+\begin{结论}{Heisenberg 代数的唯一性}
+$[x,p]=\ii\hbar$ 的不可约幺正表示（取指数形式 $\ee^{\ii ax}\ee^{\ii bp}$ 的 Weyl 关系）在幺正等价意义下唯一（Stone--von Neumann）：任何满足正则对易关系的量子力学都等价于 $L^2(\mathbb R)$ 上的 $x$、$-\ii\hbar\partial_x$。
+有限维中不存在（取迹得 $0=\ii\hbar n$），所以 $x,p$ \重点{\text{必为无界算子}}。无穷自由度（场论）时唯一性失效——不等价表示对应不同真空（相变、对称破缺）。
+\end{结论}
+
+\begin{结论}{伴随表示与结构常数}
+$\operatorname{ad}_X(Y)=[X,Y]$，维数 $=$ 群维数。$[T_a,T_b]=\ii f_{abc}T_c$；$\mathfrak{su}_2$ 的伴随表示是自旋 $1$（$f=\varepsilon$），$\mathfrak{su}_3$ 的伴随是八重态（胶子）。
+Killing 型 $K(X,Y)=\tr(\operatorname{ad}_X\operatorname{ad}_Y)$：半单 $\iff K$ 非退化（Cartan 判据）；紧 $\iff K$ 负定。规范理论中规范玻色子按伴随表示变换，\重点{\text{数目}=\dim G}（$SU(3)$ 有 $8$ 个胶子）。
+\end{结论}
+
+\参考{Georgi, \emph{Lie Algebras in Particle Physics}；Hall, \emph{Lie Groups, Lie Algebras, and Representations}；Fulton--Harris, \emph{Representation Theory}；Tinkham, \emph{Group Theory and Quantum Mechanics}；Zee, \emph{Group Theory in a Nutshell}；MIT 18.745、8.325。}

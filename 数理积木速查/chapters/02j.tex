@@ -1,0 +1,118 @@
+\subsection{三角形与圆的几何}
+
+\begin{结论}{三角形中的三角恒等式}
+$A+B+C=\pi$：
+\[
+\sum\cos A=1+\frac rR,\qquad \sum\sin A=\frac sR,\qquad \prod\sin\frac A2=\frac r{4R},\qquad \重点{\sum\cot A=\frac{a^2+b^2+c^2}{4K}}.
+\]
+还有 $\tan A+\tan B+\tan C=\tan A\tan B\tan C$，$\cos^2A+\cos^2B+\cos^2C+2\cos A\cos B\cos C=1$。半角 $\tan\frac A2=\frac{r}{s-a}$。
+\end{结论}
+
+\begin{结论}{面积公式一览}
+\[
+K=\frac12ab\sin C=\frac{abc}{4R}=rs=\sqrt{s(s-a)(s-b)(s-c)}=\重点{2R^2\sin A\sin B\sin C}=r_a(s-a).
+\]
+坐标：$\frac12|\det(B-A,C-A)|$；向量 $\frac12|\mathbf u\times\mathbf v|$。$K=\sqrt{rr_ar_br_c}$。由 $K=rs$ 与 $\frac1r=\sum\frac1{r_a}$ 可互相推出。
+\end{结论}
+
+\begin{结论}{三角形的经典不等式}
+\[
+\sum\cos A\le\frac32,\quad \sum\sin A\le\frac{3\sqrt3}2,\quad \重点{a^2+b^2+c^2\ge4\sqrt3K}\ (\text{Weitzenböck}),\quad R\ge2r .
+\]
+加强（Hadwiger--Finsler）：$a^2+b^2+c^2\ge4\sqrt3K+(a-b)^2+(b-c)^2+(c-a)^2$。等号都在正三角形。$\sum\cos A\le\frac32$ 等价于 $R\ge2r$（由 $\sum\cos A=1+\frac rR$）。
+\end{结论}
+
+\begin{结论}{Erdős--Mordell 不等式}
+三角形内一点 $P$ 到三顶点距离 $x,y,z$、到三边距离 $p,q,r$：
+\[
+\重点{x+y+z\ge2(p+q+r)},
+\]
+等号仅正三角形中心。证明关键：$x\sin A\ge q\sin C+r\sin B$（把 $P$ 到两边的垂足连线投影到 $BC$ 方向），再用 $\frac{\sin B}{\sin C}+\frac{\sin C}{\sin B}\ge2$。
+\end{结论}
+
+\begin{结论}{九点圆与 Feuerbach 定理}
+三边中点、三高足、垂心到三顶点连线的中点共圆，半径 \重点{\frac R2}，圆心为 $OH$ 中点。
+Feuerbach：九点圆与内切圆内切、与三个旁切圆外切。九点圆是外接圆以重心为位似中心、比 $-\frac12$ 的像（也是以垂心为中心、比 $\frac12$ 的像）。
+\end{结论}
+
+\begin{结论}{Simson 线与垂足三角形}
+$P$ 在外接圆上 $\iff$ $P$ 到三边的垂足共线（Simson 线）。一般 $P$ 的垂足三角形面积
+\[
+\重点{K_{\text{垂足}}=\frac{|R^2-OP^2|}{4R^2}K}\quad(\text{Euler}),
+\]
+$P$ 在外接圆上时退化为零（共线）；$P=O$ 时为中点三角形，面积 $\frac K4$。
+\end{结论}
+
+\begin{结论}{圆幂、根轴与根心}
+点 $P$ 对圆 $(O,r)$ 的幂 $\mathrm{pow}(P)=OP^2-r^2$，等于过 $P$ 的任一割线两交点距离之积（带号）。
+两圆幂相等的点构成直线（根轴，垂直于连心线）；三圆两两根轴共点（根心）或平行。\重点{\text{共轴圆系}}；正交圆：$d^2=r_1^2+r_2^2$。切线长 $\sqrt{\mathrm{pow}}$。
+\end{结论}
+
+\begin{结论}{Apollonius 圆}
+到两定点距离之比为常数 $k\ne1$ 的点的轨迹是圆，圆心在两点连线上，且两定点关于此圆互为反演点：$A,B$ 相距 $d$ 时半径 \重点{\frac{kd}{|1-k^2|}}。
+应用：等电势线（两异号点电荷的零势面是球）、无线定位的等功率比曲线、追及问题中先到达区域的边界。
+\end{结论}
+
+\begin{结论}{Fermat 点}
+各角 $<120^\circ$ 时，到三顶点距离和最小的点 $F$ 使三边张角均为 $120^\circ$；最小值满足
+\[
+\重点{(FA+FB+FC)^2=\frac{a^2+b^2+c^2}2+2\sqrt3K}.
+\]
+某角 $\ge120^\circ$ 时最小点为该顶点。构造：在各边外作正三角形，顶点与对角顶点连线交于 $F$，且三条连线等长（$=$ 最小和）。Steiner 树问题的三点情形。
+\end{结论}
+
+\begin{结论}{Napoleon、Morley 与 Miquel}
+Napoleon：在三边外作正三角形，其中心构成正三角形，且该正三角形与原三角形同重心；内外两种 Napoleon 三角形面积差 $=K$。
+Morley：\重点{\text{三内角三等分线相邻交点构成正三角形}}，边长 $8R\sin\frac A3\sin\frac B3\sin\frac C3$。Miquel：在三边上各取一点，三个“顶点圆”共点。
+\end{结论}
+
+\begin{结论}{Brocard 角}
+存在唯一点 $\Omega$ 使 $\angle\Omega AB=\angle\Omega BC=\angle\Omega CA=\omega$：
+\[
+\重点{\cot\omega=\cot A+\cot B+\cot C=\frac{a^2+b^2+c^2}{4K}},\qquad \omega\le30^\circ .
+\]
+（$\omega\le30^\circ$ 即 Weitzenböck。）三只虫子从正三角形顶点出发互相追逐的轨迹是对数螺线，汇聚于中心——Brocard 点的动力学版本。
+\end{结论}
+
+\begin{结论}{三角形中心的重心坐标}
+\[
+\begin{array}{ll}
+\text{重心 }G&1:1:1\\
+\text{内心 }I&a:b:c\\
+\text{外心 }O&\sin2A:\sin2B:\sin2C\\
+\text{垂心 }H&\tan A:\tan B:\tan C\\
+\text{类似重心（Lemoine）}K&a^2:b^2:c^2
+\end{array}
+\]
+等角共轭（关于各角平分线反射）：\重点{O\leftrightarrow H,\ G\leftrightarrow K}，坐标 $x:y:z\mapsto\frac{a^2}x:\frac{b^2}y:\frac{c^2}z$。
+\end{结论}
+
+\begin{结论}{角元 Ceva 与 Steiner--Lehmus}
+$AD,BE,CF$ 共点 $\iff$
+\[
+\重点{\frac{\sin\angle BAD}{\sin\angle DAC}\cdot\frac{\sin\angle CBE}{\sin\angle EBA}\cdot\frac{\sin\angle ACF}{\sin\angle FCB}=1}.
+\]
+比边长形式更适合角度条件（如证明三条高、角平分线共点）。Steiner--Lehmus：两条内角平分线相等的三角形是等腰三角形（直接证明出人意料地困难）。
+\end{结论}
+
+\begin{结论}{蝴蝶定理}
+弦 $PQ$ 的中点 $M$，过 $M$ 作两弦 $AB,CD$，$AD$、$BC$ 交 $PQ$ 于 $X,Y$，则 \重点{MX=MY}。
+推广到任意圆锥曲线；坐标证法：以 $M$ 为原点、$PQ$ 为 $x$ 轴，曲线 $x^2+(y-c)^2=r^2$ 与两直线的交点用 Vieta 关系。射影证法：对合（involution）。
+\end{结论}
+
+\begin{结论}{四面体：内切球与外接球}
+内切球半径 \重点{r=\frac{3V}{S}}（$S$ 为总表面积，三维版 $K=rs$）；正四面体（棱 $a$）：$r=\frac{a}{2\sqrt6}$，$R=\frac{\sqrt6}4a=3r$。
+四面体的四条高一般不共点（只有“正交四面体”才共点）；四个面的重心与对顶点连线共点于重心，分比 $3:1$。Euler 不等式三维版 $R\ge3r$。
+\end{结论}
+
+\begin{结论}{共圆与角度追踪}
+四点共圆 $\iff$ 对角互补 $\iff$ 同弧所对圆周角相等 $\iff$ 相交弦/割线的乘积相等（圆幂）。弦切角等于所夹弧的圆周角。
+\重点{\text{有向角模 }\pi}（$\measuredangle(\ell,m)$）可避免图形位置分类讨论：$A,B,C,D$ 共圆 $\iff\measuredangle ACB=\measuredangle ADB$。复数判据：交比为实数。
+\end{结论}
+
+\begin{结论}{三角形中的距离公式}
+内心到顶点 $AI=\frac{r}{\sin(A/2)}$；外心到垂心 $OH^2=9R^2-(a^2+b^2+c^2)$；重心到外心 $OG=\frac13OH$；内心到垂心 $IH^2=2r^2-4R^2\cos A\cos B\cos C$。
+旁心 $I_a$：$II_a=4R\sin\frac A2$；\重点{OI_a^2=R^2+2Rr_a}（与 Euler 的 $OI^2=R^2-2Rr$ 对应）。$AH=2R\cos A$。
+\end{结论}
+
+\参考{Coxeter--Greitzer, \emph{Geometry Revisited}；Johnson, \emph{Advanced Euclidean Geometry}；Chen, \emph{Euclidean Geometry in Mathematical Olympiads}；Kimberling, \emph{Encyclopedia of Triangle Centers}；MIT 18.S34。}

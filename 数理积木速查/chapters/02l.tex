@@ -1,0 +1,173 @@
+\subsection{图论补充}
+
+\begin{结论}{Menger 定理与连通度}
+不相邻的 $s,t$：分开它们所需的最少顶点数 $=$ 内部不交的 $s$--$t$ 路的最大条数；边版本即单位容量的最大流最小割。
+\[
+\重点{\kappa(G)\le\lambda(G)\le\delta(G)}\quad(\text{点连通度}\le\text{边连通度}\le\text{最小度，Whitney}),
+\]
+第一个不等号可以严格（两个 $K_4$ 共用一个点：$\kappa=1$，$\lambda=\delta=3$）。$k$ 连通 $\iff$ 任意两点间有 $k$ 条内部不交路；$k$ 连通图中任意 $k$ 个点在同一个圈上（Dirac）。
+\end{结论}
+
+\begin{结论}{Kuratowski、Wagner 与完全图的亏格}
+平面图 $\iff$ 不含 $K_5$、$K_{3,3}$ 的细分（Kuratowski）$\iff$ 不含它们作为子式（Wagner），可线性时间判定。曲面上 $V-E+F=2-2g$，由此 $E\le3(V-2+2g)$，以及
+\[
+\重点{g(K_n)=\Bigl\lceil\frac{(n-3)(n-4)}{12}\Bigr\rceil}\quad(\text{Ringel--Youngs}),
+\]
+$K_5,K_6,K_7$ 可嵌入环面，$K_8$ 需要亏格 $2$；$g(K_{m,n})=\bigl\lceil\frac{(m-2)(n-2)}4\bigr\rceil$。
+\end{结论}
+
+\begin{结论}{边着色：Vizing 与 König}
+\[
+\重点{\Delta\le\chi'(G)\le\Delta+1}\quad(\text{Vizing}),
+\]
+二部图 $\chi'=\Delta$（König，由 Hall 定理反复取匹配）；$K_n$：$n$ 偶时 $n-1$（循环赛排程），$n$ 奇时 $n$。Petersen 图 $\chi'=4$（“snark”：无桥 $3$ 正则但不能 $3$ 边着色）。判断 $\chi'=\Delta$ 还是 $\Delta+1$ 是 NP 难的。
+\end{结论}
+
+\begin{结论}{Tutte 完美匹配定理与 Petersen 定理}
+$G$ 有完美匹配 $\iff$ 对每个 $S\subseteq V$，
+\[
+\重点{o(G-S)\le|S|}\quad(o=\text{奇数阶连通分支个数}).
+\]
+推论（Petersen 1891）：无桥 $3$ 正则图有完美匹配。最大匹配数 $=\frac12\min_S\bigl(|V|-o(G-S)+|S|\bigr)$（Tutte--Berge）；算法用 Edmonds 开花算法 $O(V^3)$ 或更快。
+\end{结论}
+
+\begin{结论}{度序列何时可图化}
+$d_1\ge\cdots\ge d_n$，和为偶数，可图化 $\iff$ 对每个 $k$：
+\[
+\重点{\sum_{i=1}^kd_i\le k(k-1)+\sum_{i=k+1}^n\min(d_i,k)}\quad(\text{Erdős--Gallai}).
+\]
+算法（Havel--Hakimi）：删去 $d_1$，把接下来 $d_1$ 个度各减 $1$，重排后递归，能走到全零即可图化。例：$(3,3,3,1)$ 不可图化（$k=3$：$9>6+1$）。
+\end{结论}
+
+\begin{结论}{Moore 界}
+最大度 $d$、直径 $k$ 的图顶点数
+\[
+\重点{n\le1+d\sum_{i=0}^{k-1}(d-1)^i};
+\]
+直径 $2$ 时 $n\le d^2+1$，取等（Moore 图）只可能 $d=2$（$C_5$）、$3$（Petersen）、$7$（Hoffman--Singleton，$50$ 点）、$57$（未知）——由强正则图特征值重数必须为整数推出（Hoffman--Singleton 定理）。同理给出围长 $g$ 的 $d$ 正则图的顶点下界（笼问题）。
+\end{结论}
+
+\begin{结论}{强正则图的特征值}
+$\mathrm{srg}(n,k,\lambda,\mu)$：$A^2=kI+\lambda A+\mu(J-I-A)$，除 $k$ 外的特征值是
+\[
+\重点{\theta,\tau=\frac{(\lambda-\mu)\pm\sqrt{(\lambda-\mu)^2+4(k-\mu)}}2},
+\]
+重数 $\frac12\Bigl[(n-1)\mp\frac{2k+(n-1)(\lambda-\mu)}{\sqrt{(\lambda-\mu)^2+4(k-\mu)}}\Bigr]$ 必须是非负整数（强有力的存在性判据）。Petersen 图 $\mathrm{srg}(10,3,0,1)$：$3,1^{(5)},(-2)^{(4)}$；Paley 图 $\mathrm{srg}(q,\frac{q-1}2,\frac{q-5}4,\frac{q-1}4)$。
+\end{结论}
+
+\begin{结论}{谱界：独立数与色数}
+$k$ 正则图（Hoffman 比值界）与一般图：
+\[
+\重点{\alpha(G)\le\frac{n(-\lambda_{\min})}{k-\lambda_{\min}}},\qquad 1-\frac{\lambda_{\max}}{\lambda_{\min}}\le\chi(G)\le1+\lambda_{\max}\ (\text{Wilf}).
+\]
+Petersen 图：$\alpha\le\frac{10\cdot2}{5}=4$，取等。$\lambda_{\max}\ge$ 平均度，等号仅当正则；Wilf 界改进了 $\chi\le1+\Delta$。
+\end{结论}
+
+\begin{结论}{扩张混合引理}
+$k$ 正则 $n$ 点图，$\lambda=\max(|\lambda_2|,|\lambda_n|)$，任意顶点集 $S,T$：
+\[
+\重点{\Bigl|e(S,T)-\frac{k|S||T|}{n}\Bigr|\le\lambda\sqrt{|S||T|}}.
+\]
+谱隙大 $\Rightarrow$ 边分布“像随机图”。推论：独立集 $\le\frac{\lambda n}{k}$；随机游走混合快；扩张图用于纠错码（Tanner 码）、去随机化、网络设计。
+\end{结论}
+
+\begin{结论}{Alon--Boppana 与 Ramanujan 图}
+任何 $k$ 正则图族（$n\to\infty$）：\重点{\lambda_2\ge2\sqrt{k-1}-o(1)}（$k$ 正则树的谱半径）。达到 $|\lambda_i|\le2\sqrt{k-1}$（$i\ge2$）的称 Ramanujan 图：Lubotzky--Phillips--Sarnak 的显式构造，Marcus--Spielman--Srivastava 证明所有度数的二部 Ramanujan 图存在。
+随机 $k$ 正则图几乎都有 $\lambda_2\le2\sqrt{k-1}+\varepsilon$（Friedman）——随机构造几乎最优。
+\end{结论}
+
+\begin{结论}{二部图禁止：Kővári--Sós--Turán}
+$\mathrm{ex}(n,K_{s,t})\le c_{s,t}\,n^{2-1/s}$。无 $C_4$ 图（计数“樱桃” $\sum\binom{d_i}2\le\binom n2$）：
+\[
+\重点{\mathrm{ex}(n,C_4)\le\frac n4\bigl(1+\sqrt{4n-3}\bigr)},
+\]
+有限射影平面的极图（点--线关联的极性图）给出匹配的下界 $\sim\frac12n^{3/2}$。与 Turán 定理对照：禁止二部图时极值是 $o(n^2)$。
+\end{结论}
+
+\begin{结论}{Erdős--Stone--Simonovits：极值数由色数决定}
+\[
+\重点{\mathrm{ex}(n,H)=\Bigl(1-\frac1{\chi(H)-1}+o(1)\Bigr)\frac{n^2}2}.
+\]
+$H$ 非二部时首项完全由 $\chi(H)$ 决定（Petersen 图 $\chi=3$，极值 $\approx\frac{n^2}4$，与三角形同阶）；二部图时只得到 $o(n^2)$，精确阶是 Zarankiewicz 型难题。证明用 Szemerédi 正则性引理。
+\end{结论}
+
+\begin{结论}{交叉数引理}
+$n$ 点 $e$ 边的图，$e\ge4n$：
+\[
+\重点{\operatorname{cr}(G)\ge\frac{e^3}{64n^2}}.
+\]
+证：平面性给 $\operatorname{cr}\ge e-3n$，再对随机保留的点（概率 $p=\frac{4n}e$）取期望放大。Székely 用它一行证明 Szemerédi--Trotter 关联界、单位距离数 $O(n^{4/3})$。
+\end{结论}
+
+\begin{结论}{无三角形而色数任意大}
+Mycielski 构造：$M_2=K_2$，$M_3=C_5$，$M_4$ 为 Grötzsch 图（$11$ 点），每步色数 $+1$ 且保持无三角形，$M_k$ 有 \重点{3\cdot2^{k-2}-1} 个顶点。
+Erdős（概率方法）：对任意 $g,k$ 存在围长 $>g$ 且 $\chi>k$ 的图——色数是全局性质，不能由局部结构决定。
+\end{结论}
+
+\begin{结论}{竞赛图}
+每个竞赛图有 Hamilton 路（Rédei，且条数为奇数）；强连通 $\iff$ 有 Hamilton 圈（Camion）；出度最大的点是“王”（两步内到达所有点）。得分序列 $s_1\le\cdots\le s_n$ 可实现 $\iff$
+\[
+\重点{\sum_{i=1}^ks_i\ge\binom k2\ (k<n),\qquad \sum_{i=1}^ns_i=\binom n2}\quad(\text{Landau}).
+\]
+循环赛排名的不可传递性：可以每个人都输给某人。
+\end{结论}
+
+\begin{结论}{完美图}
+每个导出子图都有 $\chi=\omega$。强完美图定理（Chudnovsky--Robertson--Seymour--Thomas）：
+\重点文{完美 $\iff$ 不含长度 $\ge5$ 的奇圈及其补图作为导出子图}；弱完美图定理：补图也完美（Lovász）。
+二部图、弦图、区间图、比较图都完美。完美图上最大团、着色可多项式时间（Lovász $\vartheta$ 函数，半定规划），一般图上都是 NP 难。
+\end{结论}
+
+\begin{结论}{弦图与完美消去序}
+没有长度 $\ge4$ 的无弦圈 $\iff$ 存在完美消去序（每个点在后续点中的邻居构成团），可由 LexBFS 线性时间求出；按逆序贪心着色即最优。
+\重点文{树宽 $=\min$（弦补全中的最大团）$-1$}。稀疏 Cholesky 的填充 $=$ 消去图的弦补全，所以最小填充排序与树宽是同一个问题（NP 难，用最小度、嵌套剖分近似）。
+\end{结论}
+
+\begin{结论}{树上动态规划与有界树宽}
+树上最大独立集：$\mathrm{in}(v)=1+\sum_c\mathrm{out}(c)$，$\mathrm{out}(v)=\sum_c\max(\mathrm{in}(c),\mathrm{out}(c))$，$O(n)$。
+推广：树宽 $\le w$ 的图上，许多 NP 难问题（着色、Hamilton 圈、独立集）在树分解上做 DP，时间 \重点{f(w)\cdot n}；Courcelle 定理：任何一元二阶逻辑可表达的性质都如此。平面图树宽 $O(\sqrt n)$，给出次指数算法。
+\end{结论}
+
+\begin{结论}{生成树堆积：Nash-Williams--Tutte}
+$G$ 有 $k$ 棵边不交的生成树 $\iff$ 对顶点的每个划分 $\mathcal P$，跨块边数 $\ge k(|\mathcal P|-1)$。推论：
+\[
+\重点{2k\text{ 边连通}\Rightarrow k\text{ 棵边不交生成树}}.
+\]
+对偶的“荫度”：边集能分成 $\max_H\bigl\lceil\frac{e(H)}{v(H)-1}\bigr\rceil$ 个森林（Nash-Williams）。平面图荫度 $\le3$。用于网络可靠性、刚性理论（Laman 条件）。
+\end{结论}
+
+\begin{结论}{均匀生成树：Kirchhoff 与 Wilson 算法}
+每条边视为单位电阻，均匀随机生成树包含边 $e=uv$ 的概率
+\[
+\重点{P(e\in T)=R_{\text{eff}}(u,v)},
+\]
+对所有边求和得 $n-1$（Foster 定理的来源）。精确抽样：Wilson 算法——从未入树的点出发做随机游走直到碰到树，把擦除圈后的路径加入树，期望时间 $=$ 平均命中时间；Aldous--Broder 用覆盖游走中每点的“首次进入边”。
+\end{结论}
+
+\begin{结论}{2-SAT 与强连通分量}
+每个子句 $a\vee b$ 化为蕴含 $\lnot a\to b$、$\lnot b\to a$：
+\[
+\重点{\text{可满足}\iff\text{没有变量 }x\text{ 与 }\lnot x\text{ 在同一个强连通分量}},
+\]
+线性时间（Tarjan/Kosaraju），按拓扑序反向赋值得到解。3-SAT 则 NP 完全；Max-2-SAT 也 NP 难。
+\end{结论}
+
+\begin{结论}{常见图的生成树数}
+由矩阵树定理与 Laplace 谱 $\tau(G)=\frac1n\prod_{i\ge2}\mu_i$：
+\[
+\重点{\tau(K_{m,n})=m^{n-1}n^{m-1}},\qquad \tau(Q_n)=2^{2^n-n-1}\prod_{k=1}^nk^{\binom nk},\qquad \tau(C_n)=n,
+\]
+$\tau(K_n-e)=(n-2)n^{n-3}$；轮图 $W_n$（$n$ 个外圈点）：$L_{2n}-2$（Lucas 数）。
+\end{结论}
+
+\begin{结论}{图子式定理与 Hadwiger 猜想}
+任何对取子式封闭的图类都由\emph{有限个}禁止子式刻画（Robertson--Seymour），且每个子式检测 $O(n^3)$——所以“可嵌入环面”“无链环嵌入”等性质都有多项式算法（但禁止子式表可能未知）。
+Hadwiger 猜想：\重点文{不含 $K_t$ 子式 $\Rightarrow\chi\le t-1$}，$t\le6$ 已证（$t=5$ 等价于四色定理）。
+\end{结论}
+
+\begin{结论}{Hamilton 性：Bondy--Chvátal 闭包}
+反复连接满足 $d(u)+d(v)\ge n$ 的不相邻点对得到闭包 $\mathrm{cl}(G)$：\重点文{$G$ 有 Hamilton 圈 $\iff\mathrm{cl}(G)$ 有}。闭包为完全图即可断定（推出 Dirac、Ore 条件）。
+Chvátal 度序列条件：$d_k\le k<\frac n2\Rightarrow d_{n-k}\ge n-k$；Chvátal--Erdős：$\kappa\ge\alpha\Rightarrow$ Hamilton。
+\end{结论}
+
+\参考{Diestel, \emph{Graph Theory}；Bondy--Murty, \emph{Graph Theory}；Godsil--Royle, \emph{Algebraic Graph Theory}；Hoory--Linial--Wigderson, ``Expander graphs and their applications''；Lovász, \emph{Combinatorial Problems and Exercises}；MIT 18.217、18.315。}

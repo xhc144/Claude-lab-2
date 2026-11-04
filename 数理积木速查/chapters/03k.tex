@@ -1,0 +1,98 @@
+\subsection{金融数学中的概率}
+
+\begin{结论}{现值与年金}
+利率 $r$（每期），$n$ 期每期末支付 $C$：
+\[
+\重点{PV=C\frac{1-(1+r)^{-n}}{r}},\qquad \text{永续年金 }\frac Cr,\qquad \text{增长永续 }\frac{C}{r-g}\ (g<r).
+\]
+等额本息贷款每期还款 $C=\frac{rL}{1-(1+r)^{-n}}$。连续复利 $\ee^{rt}$；名义年利率 $r$ 按 $m$ 次复利的有效利率 $(1+\frac rm)^m-1$。实际利率（Fisher）$\approx$ 名义利率 $-$ 通胀率。
+\end{结论}
+
+\begin{结论}{远期价格与买卖权平价}
+标的 $S$、连续股息率 $q$、无风险利率 $r$：远期价格 \重点{F=S\ee^{(r-q)T}}（无套利：买现货持有 vs 签远期）。
+欧式期权平价 $C-P=\ee^{-rT}(F-K)=S\ee^{-qT}-K\ee^{-rT}$，与模型无关。无股息时美式看涨不应提前行权（$C\ge S-K\ee^{-rT}>S-K$），所以美式看涨 $=$ 欧式看涨。
+\end{结论}
+
+\begin{结论}{二叉树定价（CRR）}
+每步 $\Delta t$，上涨 $u=\ee^{\sigma\sqrt{\Delta t}}$，下跌 $d=\frac1u$，风险中性概率
+\[
+\重点{p=\frac{\ee^{r\Delta t}-d}{u-d}},
+\]
+期权价格 $=\ee^{-r\Delta t}[pV_u+(1-p)V_d]$ 逆向递推（美式在每节点取与内在价值的较大者）。$\Delta t\to0$ 收敛到 Black--Scholes，误差 $O(\Delta t)$ 并有奇偶振荡。$p$ 与真实上涨概率无关——复制论证。
+\end{结论}
+
+\begin{结论}{希腊字母与 Gamma 损益}
+Black--Scholes 看涨：$\Delta=\Phi(d_1)$，$\Gamma=\frac{\varphi(d_1)}{S\sigma\sqrt T}$，$\mathcal V=S\varphi(d_1)\sqrt T$，$\Theta\approx-\frac{S\varphi(d_1)\sigma}{2\sqrt T}-rK\ee^{-rT}\Phi(d_2)$。
+Delta 对冲组合每一小段时间的损益
+\[
+\重点{\dd\Pi\approx\frac12\Gamma S^2\bigl(\sigma_{\text{实}}^2-\sigma_{\text{隐}}^2\bigr)\dd t},
+\]
+买期权（$\Gamma>0$）赚实际波动率高于隐含波动率的钱。$\Theta$ 与 $\Gamma$ 满足 $\Theta+\frac12\sigma^2S^2\Gamma+rS\Delta=rV$。
+\end{结论}
+
+\begin{结论}{Kelly 准则}
+赔率 $b$（赢得 $b$ 倍下注）、胜率 $p$：最大化长期增长率 $\E\ln(\text{财富})$ 的下注比例
+\[
+\重点{f^*=p-\frac{1-p}b}.
+\]
+连续时间（收益 $\mu$、波动 $\sigma$）：$f^*=\frac{\mu-r}{\sigma^2}$，最大增长率 $r+\frac{(\mu-r)^2}{2\sigma^2}$。下注 $2f^*$ 时增长率归零，超过则必然破产；实践常用“半 Kelly”（增长率仍有 $75\%$，波动减半）。
+\end{结论}
+
+\begin{结论}{均值--方差组合（Markowitz）}
+资产收益均值 $\mu$、协方差 $\Sigma$：最小方差组合 \重点{w=\frac{\Sigma^{-1}\mathbf 1}{\mathbf 1^{\mathsf T}\Sigma^{-1}\mathbf 1}}；有无风险资产时切点组合 $w\propto\Sigma^{-1}(\mu-r\mathbf 1)$，所有有效组合是它与无风险资产的混合（两基金分离）。
+有效前沿在 $(\sigma,\mu)$ 平面是双曲线。$\Sigma^{-1}$ 对估计误差极敏感，实践中需收缩估计或约束（否则“误差最大化”）。
+\end{结论}
+
+\begin{结论}{CAPM 与 Beta}
+均衡下：$\E R_i-r=\beta_i(\E R_m-r)$，\重点{\beta_i=\frac{\Cov(R_i,R_m)}{\Var R_m}}。只有系统性风险（$\beta$）获得补偿，特异风险可分散。
+Sharpe 比率 $\frac{\E R-r}{\sigma}$，年化乘 $\sqrt{252}$（日数据）。估计 Sharpe 比率的标准误 $\approx\sqrt{\frac{1+S^2/2}{n}}$——几年数据很难区分 $0.5$ 与 $1$。
+\end{结论}
+
+\begin{结论}{分散化的极限}
+$n$ 种资产等权，方差都为 $\sigma^2$、两两相关 $\rho$：
+\[
+\重点{\Var=\frac{\sigma^2}n+\Bigl(1-\frac1n\Bigr)\rho\sigma^2\to\rho\sigma^2}.
+\]
+相关性决定可分散的上限；危机中相关性上升（$\rho\to1$）分散化失效。与“$N$ 次测量平均但有共同系统误差”同一数学结构。
+\end{结论}
+
+\begin{结论}{VaR 与预期亏损（ES）}
+损失 $L\sim N(\mu,\sigma^2)$：$\mathrm{VaR}_\alpha=\mu+\sigma z_\alpha$，
+\[
+\重点{\mathrm{ES}_\alpha=\E[L\mid L\ge\mathrm{VaR}_\alpha]=\mu+\sigma\frac{\varphi(z_\alpha)}{1-\alpha}}
+\]
+（$99\%$：VaR $=2.33\sigma$，ES $=2.67\sigma$）。VaR 不满足次可加性（分散化可能“增加”VaR），ES 是一致风险度量；重尾时两者差距大，正态假设严重低估尾部。
+\end{结论}
+
+\begin{结论}{波动率拖累：几何均值 vs 算术均值}
+对数正态价格 $\dd S=\mu S\dd t+\sigma S\dd W$：$\E S_T=S_0\ee^{\mu T}$，但中位数 $S_0\ee^{(\mu-\sigma^2/2)T}$，典型路径的增长率
+\[
+\重点{g=\mu-\frac{\sigma^2}2}.
+\]
+每年 $+50\%$、$-50\%$ 交替：算术平均 $0$，几何 $-13.4\%$/年。杠杆 ETF 长期损耗、Kelly 最优都源于此项。
+\end{结论}
+
+\begin{结论}{债券的久期与凸性}
+价格 $P(y)$ 对收益率：$\frac{\Delta P}P\approx-D_{\text{mod}}\Delta y+\frac12C(\Delta y)^2$，Macaulay 久期 $D=\frac{\sum t\,\mathrm{CF}_t\ee^{-yt}}{P}$（现金流加权平均期限），\重点{D_{\text{mod}}=\frac{D}{1+y/m}}。
+零息债 $D=T$；凸性总为正（价格是收益率的凸函数），利率大幅变化时线性近似低估价格。久期匹配（免疫）使资产负债对小平移不敏感。
+\end{结论}
+
+\begin{结论}{倍投策略为何不成立}
+输了加倍下注直到赢一次：赢 $1$ 元的概率 $1$，但需要无限资本与时间；有限资本 $2^N-1$ 时以概率 $1-2^{-N}$ 赢 $1$、以 $2^{-N}$ 输光 $2^N-1$，\重点{\text{期望恰为 }0}（公平博彩下）。
+这是可选停时定理的直接推论：鞅在有界停时上不能被“策略”变成正期望。赌场限额就是让停时有界。
+\end{结论}
+
+\begin{结论}{随机利率：Vasicek 模型}
+$\dd r=a(b-r)\dd t+\sigma\dd W$（OU 过程，长期均值 $b$、回复速度 $a$）：$r_t$ 正态，长期方差 $\frac{\sigma^2}{2a}$，可以为负。
+零息债 \重点{P(t,T)=A(t,T)\ee^{-B(t,T)r_t}}，$B=\frac{1-\ee^{-a(T-t)}}{a}$（仿射结构）。CIR 模型 $\sigma\sqrt r\dd W$ 保持 $r\ge0$（Feller 条件 $2ab\ge\sigma^2$ 时不触零）。
+\end{结论}
+
+\begin{结论}{收益分布的重尾与波动聚集}
+日收益峰度常 $\gg3$，尾指数约 $3$（立方律）；波动率持续性：$|r_t|$ 的自相关缓慢衰减而 $r_t$ 本身几乎不相关。GARCH(1,1)：
+\[
+\重点{\sigma_t^2=\omega+\alpha r_{t-1}^2+\beta\sigma_{t-1}^2},\quad \alpha+\beta<1,
+\]
+无条件方差 $\frac{\omega}{1-\alpha-\beta}$，持续性由 $\alpha+\beta$（常 $\approx0.98$）决定。正态模型下“$25\sigma$ 事件”在真实市场中并不罕见。
+\end{结论}
+
+\参考{Hull, \emph{Options, Futures, and Other Derivatives}；Shreve, \emph{Stochastic Calculus for Finance} I--II；Luenberger, \emph{Investment Science}；Thorp, ``The Kelly Criterion''；McNeil--Frey--Embrechts, \emph{Quantitative Risk Management}；MIT 15.401、18.S096。}

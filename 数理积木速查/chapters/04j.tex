@@ -1,0 +1,96 @@
+\subsection{机器学习中的数学}
+
+\begin{结论}{偏差--方差分解}
+$y=f(x)+\varepsilon$，$\Var\varepsilon=\sigma^2$，$\hat f$ 依赖于随机训练集：
+\[
+\重点{\E\bigl[(y-\hat f(x))^2\bigr]=\sigma^2+\bigl(f(x)-\E\hat f(x)\bigr)^2+\Var\hat f(x)}.
+\]
+模型越复杂偏差越小、方差越大；集成（bagging）降方差，boosting 降偏差。分类的 0--1 损失没有这样干净的加法分解。
+\end{结论}
+
+\begin{结论}{VC 维与泛化界}
+$\mathbb R^d$ 中线性分类器（含偏置）VC 维 $d+1$；轴对齐矩形 $4$；正弦族 $\sgn\sin(\omega x)$ 无穷。以概率 $1-\delta$：
+\[
+\重点{R(h)\le\hat R(h)+O\Bigl(\sqrt{\frac{d_{VC}\ln(n/d_{VC})+\ln(1/\delta)}{n}}\Bigr)}\quad(\text{对所有 }h).
+\]
+Rademacher 版本 $R\le\hat R+2\mathfrak R_n+\sqrt{\frac{\ln(1/\delta)}{2n}}$ 依赖数据，常更紧。深度网络参数远多于样本，这些界常给出空洞结果——泛化需要其他解释（隐式正则化、平坦极小值）。
+\end{结论}
+
+\begin{结论}{Softmax 交叉熵的梯度}
+$p_k=\frac{\ee^{z_k}}{\sum_j\ee^{z_j}}$，$L=-\sum_ky_k\ln p_k$（$y$ 为 one-hot 或概率）：
+\[
+\重点{\frac{\partial L}{\partial z}=p-y}.
+\]
+数值稳定：先减去 $\max z$ 再算 $\log\sum\exp$。Logistic 回归即二类情形，Hessian $X^{\mathsf T}\diag(p(1-p))X\succeq0$（凸）。交叉熵 $=$ $H(y)+D(y\|p)$，困惑度 $\ee^{L}$。
+\end{结论}
+
+\begin{结论}{反向传播的矩阵求导规则}
+线性层 $y=Wx+b$，上游梯度 $\delta=\frac{\partial L}{\partial y}$：
+\[
+\重点{\frac{\partial L}{\partial W}=\delta x^{\mathsf T},\qquad \frac{\partial L}{\partial x}=W^{\mathsf T}\delta},\qquad \frac{\partial L}{\partial b}=\delta .
+\]
+逐元素激活 $\frac{\partial L}{\partial x}=\delta\odot\sigma'(x)$（ReLU 为示性函数）。批量时对样本求和。梯度消失/爆炸：深层 Jacobi 矩阵连乘，谱半径持续 $<1$ 或 $>1$——残差连接、归一化、梯度裁剪的动机。
+\end{结论}
+
+\begin{结论}{初始化方差：Xavier 与 He}
+保持前向激活与反向梯度方差逐层不变：线性/tanh 层 \重点{\Var w=\frac{2}{n_{\text{in}}+n_{\text{out}}}}（Glorot），ReLU 层 $\Var w=\frac{2}{n_{\text{in}}}$（He，ReLU 丢掉一半方差）。
+原理：$\Var(\sum_iw_ix_i)=n_{\text{in}}\Var w\Var x$。注意力中 $\frac{QK^{\mathsf T}}{\sqrt{d_k}}$ 的缩放同理：$d_k$ 个独立项点积的方差为 $d_k$，不缩放会使 softmax 饱和。
+\end{结论}
+
+\begin{结论}{梯度下降的稳定步长与二次模型}
+在极小值附近 $L\approx\frac12\theta^{\mathsf T}H\theta$：GD 收敛 $\iff$ \重点{\eta<\frac{2}{\lambda_{\max}(H)}}；最优固定步长 $\frac{2}{\lambda_{\max}+\lambda_{\min}}$，速率 $\frac{\kappa-1}{\kappa+1}$。
+神经网络训练中 $\lambda_{\max}$ 常自适应地上升到 $\approx\frac2\eta$ 附近（“稳定性边缘”）。动量把收敛速率改善为 $\frac{\sqrt\kappa-1}{\sqrt\kappa+1}$（Polyak 重球）。
+\end{结论}
+
+\begin{结论}{Adam 与随机梯度噪声}
+Adam：$m\leftarrow\beta_1m+(1-\beta_1)g$，$v\leftarrow\beta_2v+(1-\beta_2)g^2$，偏差修正 $\hat m=\frac{m}{1-\beta_1^t}$，$\hat v=\frac v{1-\beta_2^t}$，更新 $-\eta\frac{\hat m}{\sqrt{\hat v}+\epsilon}$（默认 $0.9,0.999$）。
+小批量 $B$ 的梯度噪声方差 $\propto\frac1B$，SGD 的“温度” $\propto\frac\eta B$：\重点{\text{线性缩放规则 }\eta\propto B}（直到临界批量）。AdamW 把权重衰减与自适应步长解耦。
+\end{结论}
+
+\begin{结论}{正则化的 Bayes 与动力学解释}
+$L_2$ 惩罚 $\lambda\|w\|^2$ $\iff$ Gauss 先验 MAP；$L_1$ $\iff$ Laplace 先验（产生稀疏）；dropout 近似对权重加乘性噪声。
+线性模型上早停与岭回归近似等价：GD 在 $t$ 步后对特征方向 $i$ 的收缩 $1-(1-\eta\lambda_i)^t\approx\frac{\lambda_i}{\lambda_i+\frac{1}{\eta t}}$，即 \重点{\lambda_{\text{ridge}}\approx\frac1{\eta t}}。
+\end{结论}
+
+\begin{结论}{双下降与最小范数插值}
+线性回归 $p$ 个特征、$n$ 个样本：$p<n$ 时最小二乘，$p>n$ 时取最小范数插值解 $X^+y$。测试误差在 \重点{p\approx n}（插值阈值）处发散（$X^{\mathsf T}X$ 的最小非零特征值 $\to0$），$p\gg n$ 时反而下降。
+解释：过参数化时最小范数解有隐式正则化；加入少量岭正则即可消除峰值。“越大越好”的现代经验与经典 U 形曲线并不矛盾。
+\end{结论}
+
+\begin{结论}{分类评价：ROC、AUC 与校准}
+精确率 $\frac{TP}{TP+FP}$，召回率 $\frac{TP}{TP+FN}$，$F_1$ 为两者的调和平均。
+\重点{\mathrm{AUC}=P(s_+>s_-)}（$s_\pm$ 为随机正/负例的得分；$=$ Mann--Whitney $U/(n_+n_-)$）。AUC 不受类别比例影响但不反映校准；校准用可靠性图、Brier 分数 $\frac1n\sum(p_i-y_i)^2$ 或对数损失。类别极不平衡时看 PR 曲线。
+\end{结论}
+
+\begin{结论}{最近邻规则：Cover--Hart 界}
+样本量 $\to\infty$ 时 $1$-NN 的错误率 $R_{1NN}$ 与 Bayes 错误率 $R^*$ 满足
+\[
+\重点{R^*\le R_{1NN}\le2R^*(1-R^*)}\ (\text{二类}),
+\]
+即“最近邻用一半的信息”。$k$-NN（$k\to\infty$，$\frac kn\to0$）相合。高维时距离集中（最近与最远邻距离之比 $\to1$），需要降维或度量学习。
+\end{结论}
+
+\begin{结论}{决策树的不纯度与随机森林的方差}
+节点不纯度：Gini $1-\sum p_k^2$，熵 $-\sum p_k\ln p_k$；选择使加权不纯度下降最大的划分。
+$B$ 棵树平均（每棵方差 $\sigma^2$、两两相关 $\rho$）：\重点{\Var=\rho\sigma^2+\frac{1-\rho}{B}\sigma^2}——随机森林在每次分裂只看随机子集特征以降低 $\rho$。袋外样本给出几乎免费的验证误差（每样本约 $\ee^{-1}\approx37\%$ 的树没用到它）。
+\end{结论}
+
+\begin{结论}{AdaBoost}
+第 $t$ 轮弱分类器加权错误率 $\varepsilon_t=\frac12-\gamma_t$，权重 $\alpha_t=\frac12\ln\frac{1-\varepsilon_t}{\varepsilon_t}$，样本权重乘 $\ee^{\mp\alpha_t}$ 后归一。训练误差
+\[
+\重点{\le\prod_t2\sqrt{\varepsilon_t(1-\varepsilon_t)}\le\exp\Bigl(-2\sum_t\gamma_t^2\Bigr)},
+\]
+弱学习器只要比随机略好（$\gamma_t\ge\gamma>0$）训练误差即指数下降。等价于对指数损失做前向分步加性建模；对标签噪声敏感。
+\end{结论}
+
+\begin{结论}{线性自编码器 $=$ PCA}
+$\min_{W_1,W_2}\|X-W_2W_1X\|_F^2$（瓶颈维数 $k$）的最优解张成的子空间就是前 $k$ 个主成分方向（Baldi--Hornik），但 $W$ 只确定到可逆变换。
+非线性自编码器、变分自编码器（ELBO $=\E_q\ln p(x\mid z)-D(q(z\mid x)\|p(z))$）是推广。\重点{\text{线性情形没有比 PCA 更好的压缩}}（Eckart--Young）。
+\end{结论}
+
+\begin{结论}{多臂老虎机：探索与利用}
+$K$ 臂、$T$ 轮：UCB1 选 $\hat\mu_i+\sqrt{\frac{2\ln t}{n_i}}$，后悔 $O\bigl(\sum_i\frac{\ln T}{\Delta_i}\bigr)$；Lai--Robbins 下界 \重点{\sum_i\frac{\Delta_i\ln T}{D(\mu_i\|\mu^*)}}，对数后悔不可避免。
+Thompson 抽样（按后验概率选臂）达到同阶且实践中更好。与纯 A/B 测试（先探索后利用）相比，自适应分配减少了在差臂上的损失。
+\end{结论}
+
+\参考{Hastie--Tibshirani--Friedman, \emph{Elements of Statistical Learning}；Shalev-Shwartz--Ben-David, \emph{Understanding Machine Learning}；Goodfellow--Bengio--Courville, \emph{Deep Learning}；Bishop, \emph{Pattern Recognition and Machine Learning}；Lattimore--Szepesvári, \emph{Bandit Algorithms}；MIT 6.867、9.520。}

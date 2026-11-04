@@ -1,0 +1,125 @@
+\subsection{多项式与根}
+
+\begin{结论}{Vieta 与根的对称函数速算}
+$p(x)=a_nx^n+\cdots+a_0=a_n\prod(x-r_i)$：$\sum r_i=-\frac{a_{n-1}}{a_n}$，$\prod r_i=(-1)^n\frac{a_0}{a_n}$，
+\[
+\sum\frac1{r_i}=-\frac{a_1}{a_0},\qquad \sum r_i^2=\Bigl(\frac{a_{n-1}}{a_n}\Bigr)^2-\frac{2a_{n-2}}{a_n},\qquad \重点{\sum_i\frac{1}{x-r_i}=\frac{p'(x)}{p(x)}}.
+\]
+最后一式给 $\sum\frac{1}{(x-r_i)^2}=\frac{p'^2-pp''}{p^2}$ 等；求 $\sum f(r_i)$ 时常用留数 $\sum f(r_i)=\frac1{2\pi\ii}\oint f\frac{p'}{p}$。
+\end{结论}
+
+\begin{结论}{插值多项式在新点的值}
+$n$ 次多项式满足 $p(k)=\frac{k}{k+1}$（$k=0,\dots,n$）：令 $q(x)=(x+1)p(x)-x$，它有根 $0,\dots,n$ 且 $q(-1)=1$，于是
+\[
+\重点{p(n+1)=\frac{n+1+(-1)^{n+1}}{n+2}}.
+\]
+套路：把条件改写成“某个次数已知的多项式在已知点为零”，用因式定理写出它，常数由额外一点确定。另一工具：$n$ 次多项式的 $n+1$ 阶差分为零，$p(n+1)=\sum_{k=0}^n(-1)^{n-k}\binom{n+1}{k}p(k)$。
+\end{结论}
+
+\begin{结论}{整值多项式}
+$p(\mathbb Z)\subseteq\mathbb Z$ $\iff$ 在二项式基下系数为整数：\重点{p(x)=\sum_kc_k\binom xk,\ c_k\in\mathbb Z}（$c_k=\Delta^kp(0)$）。
+所以整值多项式的系数可以不是整数（$\frac{x(x-1)}2$），但 $n!p(x)$ 必为整系数。只需检查 $n+1$ 个连续整数处取整数值即可。$\gcd$ 型结论：$\prod_{i<j}(a_j-a_i)$ 能被 $\prod_{k<n}k!$ 整除。
+\end{结论}
+
+\begin{结论}{Descartes 符号法则与 Budan--Fourier}
+实系数多项式正根个数（计重数）$=$ 系数符号变化次数 $V$，或比 $V$ 少一个偶数。负根：对 $p(-x)$ 用同法。
+推论：系数符号变化 $1$ 次 $\Rightarrow$ 恰一个正根。区间 $(a,b]$ 内根数 $\le V(a)-V(b)$，$V$ 为 $p,p',\dots,p^{(n)}$ 在该点的变号数（Budan--Fourier）。\重点{\text{精确计数用 Sturm 序列}}。
+\end{结论}
+
+\begin{结论}{Sturm 序列：精确数实根}
+$p_0=p$，$p_1=p'$，$p_{k+1}=-\operatorname{rem}(p_{k-1},p_k)$ 直到常数。$V(x)$ 为序列在 $x$ 处的变号数：
+\[
+\重点{(a,b]\text{ 内不同实根个数}=V(a)-V(b)}.
+\]
+例：$x^3-3x+1$：$p_1=3x^2-3$，$p_2=2x-1$，$p_3=\frac94$；$V(-\infty)-V(+\infty)=3-0=3$ 个实根。计算机代数中实根隔离的标准方法。
+\end{结论}
+
+\begin{结论}{根的模的界}
+Cauchy：所有根满足 \重点{|z|<1+\max_{k<n}\Bigl|\frac{a_k}{a_n}\Bigr|}；Fujiwara：$|z|\le2\max_k\bigl|\frac{a_{n-k}}{a_n}\bigr|^{1/k}$。
+Eneström--Kakeya：$0<a_0\le a_1\le\cdots\le a_n$ 时 $\sum a_kz^k$ 的根都在 $|z|\le1$；系数递减时根在 $|z|\ge1$。导数的根在原多项式根的凸包内（Gauss--Lucas）。
+\end{结论}
+
+\begin{结论}{分圆多项式}
+$x^n-1=\prod_{d\mid n}\Phi_d(x)$，$\deg\Phi_n=\varphi(n)$，$\Phi_n(x)=\prod_{d\mid n}(x^d-1)^{\mu(n/d)}$。
+\[
+\重点{\Phi_n(1)=\begin{cases}p,&n=p^k\\1,&n\text{ 有两个以上素因子}\end{cases}}\quad(n>1);\qquad \Phi_{2n}(x)=\Phi_n(-x)\ (n>1\text{ 奇}).
+\]
+系数在 $n<105$ 时都 $\in\{0,\pm1\}$，$\Phi_{105}$ 首次出现 $-2$。素数 $p\mid\Phi_n(a)$ 且 $p\nmid n$ $\Rightarrow p\equiv1\pmod n$（无穷多 $\equiv1\pmod n$ 素数的初等证明）。
+\end{结论}
+
+\begin{结论}{单位根过滤：隔项二项式和}
+$\omega=\ee^{2\pi\ii/m}$：$\sum_{k\equiv r\,(m)}\binom nk=\frac1m\sum_{j=0}^{m-1}\omega^{-jr}(1+\omega^j)^n$。
+\[
+\重点{\sum_k\binom n{3k}=\frac{2^n+2\cos\frac{n\pi}3}{3}},\qquad \sum_k\binom n{4k}=\frac{2^n+2^{n/2+1}\cos\frac{n\pi}4}{4}.
+\]
+同法提取生成函数中下标模 $m$ 的部分；离散 Fourier 变换的组合版本。
+\end{结论}
+
+\begin{结论}{整系数多项式的整除性}
+$p\in\mathbb Z[x]$：\重点{a-b\mid p(a)-p(b)}。推论：$p(0),p(1)$ 都是奇数则 $p$ 无整数根；$p(x)\equiv0\pmod m$ 的解数在中国剩余定理下可乘。
+非常数整系数多项式在正整数上必取到合数值（取 $p(n)$ 的一个素因子 $q$，则 $q\mid p(n+kq)$）——没有只产生素数的多项式。
+\end{结论}
+
+\begin{结论}{Kronecker 定理：单位圆上的整系数根}
+首一整系数多项式所有根满足 $|z|\le1$ $\Rightarrow$ 非零根都是单位根。证明：$p_k(x)=\prod(x-z_i^k)$ 系数有界且为整数，只有有限多个，故 $z_i^k$ 周期重复。
+推论：Mahler 测度 $M(p)=\prod\max(1,|z_i|)$ 等于 $1$ 当且仅当（首一整系数）$p$ 是分圆多项式之积与 $x^k$；Lehmer 问题：$M>1$ 时是否 $\ge1.17628\ldots$（Lehmer 多项式）。
+\end{结论}
+
+\begin{结论}{Mason--Stothers（多项式的 abc）}
+互素多项式 $a+b=c$，不全为常数：
+\[
+\重点{\max(\deg a,\deg b,\deg c)\le n_0(abc)-1},
+\]
+$n_0$ 为不同根的个数。推论：$x^n+y^n=z^n$（$n\ge3$）没有非常数互素多项式解（$3n\le3n-1$ 不可能），证明只需一页——数域上的 abc 猜想是其类比。
+\end{结论}
+
+\begin{结论}{三次方程的三角解法}
+$x^3+px+q=0$（先平移消去二次项），判别式 $\Delta=-4p^3-27q^2>0$（三实根）时 Cardano 公式含复数开方（不可约情形），改用
+\[
+\重点{x_k=2\sqrt{-\frac p3}\cos\Bigl(\frac13\arccos\Bigl(\frac{3q}{2p}\sqrt{-\frac3p}\Bigr)-\frac{2\pi k}3\Bigr)},\ k=0,1,2 .
+\]
+来自 $4\cos^3\theta-3\cos\theta=\cos3\theta$。一实根时用 $\cosh$ 版本。四次方程用三次预解式（Ferrari）。
+\end{结论}
+
+\begin{结论}{多项式除以二次式的余式}
+$p(x)$ 除以 $(x-a)(x-b)$（$a\ne b$）的余式
+\[
+\重点{r(x)=\frac{p(a)-p(b)}{a-b}(x-a)+p(a)};
+\]
+除以 $(x-a)^2$ 的余式 $p'(a)(x-a)+p(a)$。一般除以 $\prod(x-a_i)$ 的余式就是在 $a_i$ 处的 Lagrange（重根时 Hermite）插值多项式。求 $x^{100}\bmod(x^2-3x+2)$：$r=(2^{100}-1)x+2-2^{100}$。
+\end{结论}
+
+\begin{结论}{重根检测与无平方分解}
+$a$ 是 $m$ 重根 $\iff p(a)=p'(a)=\cdots=p^{(m-1)}(a)=0\ne p^{(m)}(a)$（特征 $0$）。
+$\gcd(p,p')$ 恰包含所有重根（各降一重），$\frac{p}{\gcd(p,p')}$ 是去掉重数后的多项式（同根、单根）。迭代 $\gcd$ 得无平方分解 $p=\prod q_k^k$。\重点{\text{数值上重根病态}}：$m$ 重根受 $\varepsilon$ 扰动移动 $\varepsilon^{1/m}$。
+\end{结论}
+
+\begin{结论}{Schwartz--Zippel：随机检验多项式恒等式}
+非零 $n$ 元多项式（总次数 $d$）在有限集 $S$ 上随机取点，为零的概率
+\[
+\重点{P\bigl(p(r_1,\dots,r_n)=0\bigr)\le\frac{d}{|S|}}.
+\]
+判断两个巨大表达式（如行列式、电路）是否恒等：随机代入若干次即可，错误概率指数下降。二部图完美匹配的随机算法（Edmonds 矩阵行列式非零）即此。
+\end{结论}
+
+\begin{结论}{Newton 多边形：根的渐近与 $p$ 进赋值}
+$P(x,y)=\sum a_{ij}x^iy^j=0$，求 $x\to0$ 时 $y\sim cx^\mu$ 的分支：在 $(j,i)$ 平面画点 $(j,\operatorname{ord}_x a_{ij})$ 的下凸包，每条边的斜率 $-\mu$ 给一族分支，边上点的系数给 $c$ 满足的方程（Puiseux 级数）。
+同一图解法：$p$ 进多项式各根的赋值 $=$ Newton 多边形各边斜率的相反数，边的水平长度 $=$ 根的个数。\重点{\varepsilon y^2+y-1=0}：两边给 $y\sim1$ 与 $y\sim-\frac1\varepsilon$。
+\end{结论}
+
+\begin{结论}{随机多项式的实根个数}
+$\sum_{k=0}^n\xi_kx^k$，$\xi_k$ i.i.d.\ 标准正态：期望实根数 $\sim\frac2\pi\ln n$（Kac）；系数方差为 $\binom nk$ 时（Kostlan，旋转不变）恰为 \重点{\sqrt n}。
+复根集中在单位圆附近（均匀角分布，径向宽 $\sim\frac1n$）。随机矩阵特征多项式的根则服从圆律。
+\end{结论}
+
+\begin{结论}{实根性的保持：Hermite--Kakeya--Obreschkoff}
+$p$ 只有实根 $\Rightarrow$ $p'$ 只有实根且与 $p$ 的根交错（Rolle）。$p,q$ 的根交错 $\iff$ 对所有实 $\lambda,\mu$，$\lambda p+\mu q$ 只有实根。
+实对称矩阵的特征多项式与其主子阵特征多项式交错（Cauchy 交错）；\重点{\text{正交多项式相邻两项交错}}；稳定多项式（Hurwitz）$p(x)=h(x^2)+xg(x^2)$ 中 $h,g$ 的根交错（Hermite--Biehler）。
+\end{结论}
+
+\begin{结论}{Chebyshev 型极值：首一与有界}
+$[-1,1]$ 上 $|p|\le1$ 的 $n$ 次多项式：首项系数 $\le2^{n-1}$，$|p(x)|\le|T_n(x)|$（$|x|>1$），$|p'|\le n^2$（Markov）。
+推论：\重点{\text{多项式外推指数地放大误差}}：在 $[-1,1]$ 上误差 $\varepsilon$ 的拟合，在 $x=1+\delta$ 处误差可达 $\varepsilon T_n(1+\delta)\approx\frac\varepsilon2\ee^{n\sqrt{2\delta}}$。
+\end{结论}
+
+\参考{Prasolov, \emph{Polynomials}；Pólya--Szegő, \emph{Problems and Theorems in Analysis II}；Marden, \emph{Geometry of Polynomials}；Rahman--Schmeisser, \emph{Analytic Theory of Polynomials}；Lang, \emph{Algebra}；MIT 18.701、18.S34。}

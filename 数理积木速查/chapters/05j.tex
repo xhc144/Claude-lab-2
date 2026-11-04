@@ -1,0 +1,109 @@
+\subsection{Fokker--Planck 方程与随机动力学}
+
+\begin{结论}{从 Langevin 到 Fokker--Planck}
+Itô SDE $\dd X=A(X)\dd t+\sqrt{B(X)}\dd W$ 的概率密度满足
+\[
+\重点{\partial_tp=-\partial_x\bigl(Ap\bigr)+\frac12\partial_x^2\bigl(Bp\bigr)}=-\partial_xJ .
+\]
+多维 $\partial_tp=-\partial_i(A_ip)+\frac12\partial_i\partial_j(B_{ij}p)$，$B=\sigma\sigma^{\mathsf T}$。漂移 $=\lim\frac{\E[\Delta X]}{\Delta t}$，扩散 $=\lim\frac{\E[\Delta X^2]}{\Delta t}$（Kramers--Moyal 展开截到二阶）。
+\end{结论}
+
+\begin{结论}{一维稳态解（零流）}
+自然边界或反射边界下稳态 $J=0$：
+\[
+\重点{p_s(x)=\frac{\mathcal N}{B(x)}\exp\Bigl(\int^x\frac{2A(y)}{B(y)}\dd y\Bigr)}.
+\]
+过阻尼粒子 $A=-\frac{V'}\gamma$，$B=\frac{2k_BT}\gamma$：$p_s\propto\ee^{-V/k_BT}$（Boltzmann），由此 Einstein 关系 $D=\frac{k_BT}{\gamma}$ 是热平衡的必要条件。乘性噪声（$B$ 依赖 $x$）会移动稳态的极值位置——噪声诱导转变。
+\end{结论}
+
+\begin{结论}{Itô 与 Stratonovich 的换算}
+Stratonovich SDE $\dd X=a\,\dd t+b\circ\dd W$ 等价于 Itô SDE
+\[
+\重点{\dd X=\Bigl(a+\frac12bb'\Bigr)\dd t+b\,\dd W}.
+\]
+物理噪声（有限相关时间的极限，Wong--Zakai）给 Stratonovich；数学与金融默认 Itô。加性噪声（$b$ 为常数）两者相同。多维修正项 $\frac12\sum_kb_{jk}\partial_jb_{ik}$。
+\end{结论}
+
+\begin{结论}{平均首达时间}
+扩散系数 $D$、势 $V$（$\beta=\frac1{k_BT}$），$a$ 处反射、$b$ 处吸收，从 $x$ 出发：
+\[
+\重点{T(x)=\frac1D\int_x^b\dd y\,\ee^{\beta V(y)}\int_a^y\ee^{-\beta V(z)}\dd z}.
+\]
+一般满足后向方程 $\mathcal L^\dagger T=-1$（$\mathcal L^\dagger=A\partial_x+\frac B2\partial_x^2$）。无势时 $T=\frac{(b-x)(b+x-2a)}{2D}$；高势垒时外层积分由势垒顶主导、内层由阱底主导，给 Kramers 公式。
+\end{结论}
+
+\begin{结论}{分流概率}
+从 $x\in(a,b)$ 出发先到 $b$ 的概率 $\pi_b(x)$ 满足 $\mathcal L^\dagger\pi_b=0$，$\pi_b(a)=0$，$\pi_b(b)=1$：
+\[
+\重点{\pi_b(x)=\frac{\int_a^x\ee^{\beta V(y)}\dd y}{\int_a^b\ee^{\beta V(y)}\dd y}}\quad(\text{常数 }D).
+\]
+无势时线性 $\frac{x-a}{b-a}$；有漂移 $v$ 时 $\frac{1-\ee^{-v(x-a)/D}}{1-\ee^{-v(b-a)/D}}$。蛋白质折叠“承诺概率” $p_{\text{fold}}=\frac12$ 的面定义过渡态。
+\end{结论}
+
+\begin{结论}{Klein--Kramers 方程与能均分}
+欠阻尼 $m\dot v=-\gamma v-V'(x)+\xi$，$\langle\xi\xi\rangle=2\gamma k_BT\delta$：相空间密度
+\[
+\partial_tP=-v\partial_xP+\frac1m\partial_v\bigl[(\gamma v+V')P\bigr]+\frac{\gamma k_BT}{m^2}\partial_v^2P,
+\]
+稳态 \重点{P\propto\exp\bigl(-\beta(\tfrac12mv^2+V)\bigr)}（Maxwell--Boltzmann）。$\frac\gamma m$ 很大时消去速度得 Smoluchowski 方程（过阻尼极限，时间尺度 $\gg\frac m\gamma$）。
+\end{结论}
+
+\begin{结论}{细致平衡与非平衡稳态}
+平衡稳态：概率流 $J=0$（细致平衡）。多维中 $A$ 不是梯度场（如旋转驱动）时稳态可有环流 $J\ne0$，熵产生率 $\int\frac{J^{\mathsf T}B^{-1}J}{p}\dd x>0$。
+判别：细致平衡 $\iff$ \重点{2B^{-1}A\text{ 是某个函数的梯度}}（常数 $B$ 时）；分子马达、生化循环、湍流都是非平衡稳态。
+\end{结论}
+
+\begin{结论}{Gillespie 随机模拟算法}
+化学主方程：反应 $j$ 的倾向 $a_j(\mathbf n)$，$a_0=\sum a_j$。精确模拟：
+\[
+\重点{\tau=\frac1{a_0}\ln\frac1{r_1},\qquad \text{选反应 }j\text{ 使 }\sum_{i<j}a_i<r_2a_0\le\sum_{i\le j}a_i}.
+\]
+（$r_1,r_2$ 均匀随机数。）分子数少（基因表达、单细胞）时必须用随机模拟；大分子数时退化为速率方程 $+$ $\sqrt{\Omega}$ 量级涨落（线性噪声近似）。$\tau$-leaping 用 Poisson 近似加速。
+\end{结论}
+
+\begin{结论}{基因表达噪声：Poisson 与爆发}
+恒定产生率 $k$、降解率 $\gamma$：稳态分子数 $\sim\mathrm{Poi}(\frac k\gamma)$，Fano 因子 $1$。mRNA 爆发式翻译（每爆发平均 $b$ 个蛋白，几何分布）：
+\[
+\重点{\text{负二项分布},\qquad \frac{\Var}{\text{均值}}=1+b}.
+\]
+实测 Fano 因子 $\gg1$ 即爆发的证据。内在噪声 $\propto\frac1{\sqrt{\text{均值}}}$，外在噪声（细胞间参数差异）设定下限（双报告基因实验分离二者）。
+\end{结论}
+
+\begin{结论}{Jarzynski 等式与 Crooks 关系}
+从平衡态出发、按协议改变参数做功 $W$（任意远离平衡）：
+\[
+\重点{\bigl\langle\ee^{-\beta W}\bigr\rangle=\ee^{-\beta\Delta F}},\qquad \frac{P_F(W)}{P_R(-W)}=\ee^{\beta(W-\Delta F)}\ (\text{Crooks}).
+\]
+Jensen 给 $\langle W\rangle\ge\Delta F$（第二定律）；单分子拉伸实验由非平衡功分布求自由能。平均由罕见的 $W<\Delta F$ 轨道主导，收敛需要样本数 $\sim\ee^{\beta(\langle W\rangle-\Delta F)}$。
+\end{结论}
+
+\begin{结论}{随机共振}
+双稳势中加弱周期驱动（频率 $\Omega$）与噪声：输出信噪比在中等噪声强度处最大，大致在 Kramers 跃迁率满足
+\[
+\重点{2r_K(D)\approx\frac{\Omega}{\pi}}\quad(\text{平均驻留时间}\approx\text{半个驱动周期})
+\]
+时。噪声“帮助”探测弱信号：感觉神经元、气候冰期周期的解释（原始提出背景）。
+\end{结论}
+
+\begin{结论}{反常扩散与连续时间随机游走}
+$\langle x^2\rangle\propto t^\alpha$：$\alpha<1$ 亚扩散（等待时间重尾 $\psi(t)\sim t^{-1-\alpha}$，细胞质、多孔介质），$\alpha>1$ 超扩散（步长重尾的 Lévy 飞行，或长程相关）。
+CTRW：跳跃步长方差有限、等待时间均值无穷 $\Rightarrow$ 分数阶扩散方程 $\partial_t^\alpha p=K\partial_x^2p$；\重点{\text{单粒子时间平均 MSD 与系综平均不同}}（弱遍历性破缺）。
+\end{结论}
+
+\begin{结论}{随机电报噪声与 $1/f$ 噪声}
+两态随机切换（速率 $\lambda$）的谱为 Lorentz 型 $S(f)\propto\frac{\lambda}{\lambda^2+(\pi f)^2}$。大量独立切换器、速率在 $[\lambda_1,\lambda_2]$ 上\重点{\text{按对数均匀分布}}（激活能均匀分布 $+$ Arrhenius）叠加：
+\[
+S(f)\propto\int\frac{\lambda}{\lambda^2+(\pi f)^2}\frac{\dd\lambda}\lambda\propto\frac1f\quad(\lambda_1\ll f\ll\lambda_2),
+\]
+即 McWhorter 模型——半导体、电阻中 $1/f$ 噪声的标准解释。
+\end{结论}
+
+\begin{结论}{线性噪声近似：Ω 展开}
+体积 $\Omega$，浓度 $x=\frac n\Omega$：$n=\Omega\phi(t)+\sqrt\Omega\,\xi$。宏观部分 $\dot\phi=f(\phi)$（速率方程），涨落 $\xi$ 满足线性 Langevin 方程，稳态协方差 $C$ 由 Lyapunov 方程
+\[
+\重点{JC+CJ^{\mathsf T}+D=0}
+\]
+给出（$J$ 为速率方程的 Jacobi 矩阵，$D$ 为扩散矩阵）。相对涨落 $\propto\Omega^{-1/2}$；接近分岔点（$J$ 有特征值 $\to0$）时涨落放大（临界慢化）。
+\end{结论}
+
+\参考{Gardiner, \emph{Stochastic Methods}；Risken, \emph{The Fokker--Planck Equation}；van Kampen, \emph{Stochastic Processes in Physics and Chemistry}；Seifert, ``Stochastic thermodynamics''；Gillespie, \emph{J. Phys. Chem.} 81 (1977)；MIT 8.592、10.626。}
